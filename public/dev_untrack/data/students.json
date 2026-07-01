@@ -1,0 +1,776 @@
+[
+  {
+    "id": 575471,
+    "name": "Salinas Alvarez Marcus",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 575467,
+    "name": "Vega Freire Franco",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 597180,
+    "name": "Aburto López Yanira",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 527061,
+    "name": "Álvarez Cortés Juan",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 540765,
+    "name": "Álvarez Cortés Luis",
+    "status": "Activo",
+    "inicial": 202410
+  },
+  {
+    "id": 491857,
+    "name": "Barona Tovar Benjamín",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 560891,
+    "name": "Barrios Lerma Luis",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 443890,
+    "name": "Bascha Najarro Freddy",
+    "status": "Inactivo",
+    "inicial": 202160
+  },
+  {
+    "id": 609547,
+    "name": "Bedolla Caamal Carlos",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 420871,
+    "name": "Burstyn Martínez Enrico",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 575475,
+    "name": "Bustillo Villatoro Josué",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 407246,
+    "name": "Camargo Peniche Diego",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 553216,
+    "name": "Campos López Esteban",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 596505,
+    "name": "Canto Ávila Paul",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 507889,
+    "name": "Carrión Sosa Alejandro",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 493808,
+    "name": "Castillo Delgado Roberto",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 575447,
+    "name": "Cattaneo Mauricio",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 442745,
+    "name": "Chan Avilez Iván",
+    "status": "Activo",
+    "inicial": 202210
+  },
+  {
+    "id": 423702,
+    "name": "Chávez Mangano Andrés",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 391229,
+    "name": "Corvera Aguilar Francisco",
+    "status": "Baja Académica",
+    "inicial": 201960
+  },
+  {
+    "id": 466481,
+    "name": "De Dios Paredes Jorge",
+    "status": "Activo",
+    "inicial": 202160
+  },
+  {
+    "id": 419398,
+    "name": "De la Rosa Izquierdo Tadeo",
+    "status": "Activo",
+    "inicial": 202110
+  },
+  {
+    "id": 497695,
+    "name": "De Luna Aguilar Emiliano",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 528950,
+    "name": "Del Rivero Perera Berenice",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 368460,
+    "name": "Delgado Izquierdo Jairo",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 420093,
+    "name": "Delgado Salcedo Josué",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 463003,
+    "name": "Díaz Hernández Carlos",
+    "status": "Activo",
+    "inicial": 202210
+  },
+  {
+    "id": 564453,
+    "name": "Diaz Llinas Nicolás",
+    "status": "Baja voluntaria",
+    "inicial": 202460
+  },
+  {
+    "id": 597159,
+    "name": "Díaz Rivera Carlos",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 565047,
+    "name": "Díaz Rosales Rogelio",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 467561,
+    "name": "Díaz Vargas Paula",
+    "status": "Inactivo",
+    "inicial": 202160
+  },
+  {
+    "id": 607061,
+    "name": "Dotchev Berriel Tzvetan",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 583680,
+    "name": "Dzib Cano Rodrigo",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 612557,
+    "name": "Escobar Coajera Daner",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 539331,
+    "name": "Espinosa Eskiliano Sebastián",
+    "status": "Activo",
+    "inicial": 202410
+  },
+  {
+    "id": 597248,
+    "name": "Fonseca Quintero Shahin",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 618609,
+    "name": "Fuentes Marcano Gabriel",
+    "status": "Activo",
+    "inicial": 202610
+  },
+  {
+    "id": 497295,
+    "name": "Gálvez Mandujano Jerónimo",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 515014,
+    "name": "Garcés Vargas Mattias",
+    "status": "Inactivo",
+    "inicial": 202360
+  },
+  {
+    "id": 490263,
+    "name": "García Chávez Carlos",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 557714,
+    "name": "García González Alexa",
+    "status": "Activo",
+    "inicial": 202410
+  },
+  {
+    "id": 489735,
+    "name": "García Hernández Francisco",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 521562,
+    "name": "García Herrera Santiago",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 614038,
+    "name": "González Franco Aude",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 586081,
+    "name": "González Hernández Emilio",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 448510,
+    "name": "González Mancera Oscar",
+    "status": "Baja voluntaria",
+    "inicial": 202160
+  },
+  {
+    "id": 461972,
+    "name": "González Pérez Claudia",
+    "status": "Activo",
+    "inicial": 202160
+  },
+  {
+    "id": 470636,
+    "name": "González Seijas Julián",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 606188,
+    "name": "Granao Delsart Lautaro",
+    "status": "Activo",
+    "inicial": 202610
+  },
+  {
+    "id": 473641,
+    "name": "Guerrero Gamiño Andrea",
+    "status": "Activo",
+    "inicial": 202215
+  },
+  {
+    "id": 561626,
+    "name": "Gutiérrez Amador Ana",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 486967,
+    "name": "Gutiérrez Esnaurrízar Jaime",
+    "status": "Inactivo",
+    "inicial": 202260
+  },
+  {
+    "id": 604995,
+    "name": "Guzmán Fuentes Diego",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 376998,
+    "name": "Heredia Graham Sergio",
+    "status": "Inactivo",
+    "inicial": 202060
+  },
+  {
+    "id": 552283,
+    "name": "Hernández Guerrero Fabrizio",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 494654,
+    "name": "Hernández Sánchez Erick",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 410786,
+    "name": "Hernández Vega Juan",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 511724,
+    "name": "Herrera Medina Fabio",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 550362,
+    "name": "Jorna Ledoux José",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 410885,
+    "name": "Juárez Guerra Danny",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 613229,
+    "name": "Juárez Jiménez Sofia",
+    "status": "Activo",
+    "inicial": 202610
+  },
+  {
+    "id": 460267,
+    "name": "Kril Andrii",
+    "status": "Baja voluntaria",
+    "inicial": 202160
+  },
+  {
+    "id": 490269,
+    "name": "Lagos Camacho Luis",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 443131,
+    "name": "Lecanda Priego Piero",
+    "status": "Inactivo",
+    "inicial": 202110
+  },
+  {
+    "id": 469510,
+    "name": "León Romero Andrés",
+    "status": "Inactivo",
+    "inicial": 202210
+  },
+  {
+    "id": 530428,
+    "name": "López Cámara Romina",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 586843,
+    "name": "Marroquín Larios Hur",
+    "status": "Baja Académica",
+    "inicial": 202510
+  },
+  {
+    "id": 517537,
+    "name": "Martín Sánchez Gabriel",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 559949,
+    "name": "Martínez Moreno Braulio",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 609707,
+    "name": "Martínez Zamora Diego",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 589521,
+    "name": "Mata Ortega Leonardo",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 461740,
+    "name": "Mediavilla Santana Daniel",
+    "status": "Activo",
+    "inicial": 202160
+  },
+  {
+    "id": 486352,
+    "name": "Medina Gasca Swietenia",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 513566,
+    "name": "Mercius Jean",
+    "status": "Inactivo",
+    "inicial": 202360
+  },
+  {
+    "id": 404464,
+    "name": "Millan López Luis",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 583398,
+    "name": "Molina Mercado Santiago",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 568864,
+    "name": "Montufar Soriano Carlos",
+    "status": "Activo",
+    "inicial": 202510
+  },
+  {
+    "id": 485853,
+    "name": "Morales Jara Joel",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 575459,
+    "name": "Musso Lucas",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 563035,
+    "name": "Nedobukh Rangel Andrey",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 540494,
+    "name": "Olmedo Campos Francisco",
+    "status": "Activo",
+    "inicial": 202410
+  },
+  {
+    "id": 531783,
+    "name": "Ordoñez Gutiérrez Valentina",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 512421,
+    "name": "Ordóñez Martínez David",
+    "status": "Activo",
+    "inicial": 202310
+  },
+  {
+    "id": 523129,
+    "name": "Ortega Ávila Azael",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 448802,
+    "name": "Osorno Navas Mario",
+    "status": "Baja voluntaria",
+    "inicial": 202110
+  },
+  {
+    "id": 511700,
+    "name": "Oviedo García Iñaky",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 493919,
+    "name": "Paredes Arceo Julio",
+    "status": "Inactivo",
+    "inicial": 202260
+  },
+  {
+    "id": 603753,
+    "name": "Parra Bazil José",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 554285,
+    "name": "Pérez García Samuel",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 410197,
+    "name": "Pérez Rodríguez Caleb",
+    "status": "Baja voluntaria",
+    "inicial": 202060
+  },
+  {
+    "id": 413171,
+    "name": "Pintos Cornejo Jordan",
+    "status": "Inactivo",
+    "inicial": 202060
+  },
+  {
+    "id": 586673,
+    "name": "Polanco Domínguez Jorge",
+    "status": "Activo",
+    "inicial": 202510
+  },
+  {
+    "id": 436764,
+    "name": "Polo Egas Tamia",
+    "status": "Activo",
+    "inicial": 202110
+  },
+  {
+    "id": 559057,
+    "name": "Puc Escamilla Angel",
+    "status": "Inactivo",
+    "inicial": 202460
+  },
+  {
+    "id": 608972,
+    "name": "Qiu Zhong Diana",
+    "status": "Activo",
+    "inicial": 202610
+  },
+  {
+    "id": 618073,
+    "name": "Ramírez de Arellano Xacur Amyr",
+    "status": "Activo",
+    "inicial": 202610
+  },
+  {
+    "id": 493709,
+    "name": "Ramírez Sodá Jonathan",
+    "status": "Baja Académica",
+    "inicial": 202260
+  },
+  {
+    "id": 424345,
+    "name": "Ramos Valerio Elizabeth",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 565503,
+    "name": "Rivas Cebreco Raymond",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 564141,
+    "name": "Rocha Acevedo Marcos",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 535546,
+    "name": "Rodríguez Vázquez Omar",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 424266,
+    "name": "Romero Solís Fernando",
+    "status": "Baja voluntaria",
+    "inicial": 202160
+  },
+  {
+    "id": 447730,
+    "name": "Rosales Betancourt Santiago",
+    "status": "Baja voluntaria",
+    "inicial": 202110
+  },
+  {
+    "id": 559445,
+    "name": "Rosas Viana Dana",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 576481,
+    "name": "Said Ramírez Hassam",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 530589,
+    "name": "Salazar Mena Osiris",
+    "status": "Inactivo",
+    "inicial": 202360
+  },
+  {
+    "id": 587831,
+    "name": "Salvador Graniel Mariano",
+    "status": "Activo",
+    "inicial": 202560
+  },
+  {
+    "id": 489241,
+    "name": "Sánchez López Omar",
+    "status": "Baja voluntaria",
+    "inicial": 202260
+  },
+  {
+    "id": 405669,
+    "name": "Sánchez Lorenzo Juan",
+    "status": "Inactivo",
+    "inicial": 202060
+  },
+  {
+    "id": 575464,
+    "name": "Sandoval Triviño Luis",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 508730,
+    "name": "Santos Salcedo Bill",
+    "status": "Baja Académica",
+    "inicial": 202360
+  },
+  {
+    "id": 538486,
+    "name": "Sarasa Colina Amaya",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 534866,
+    "name": "Serván Ormaeche Marco",
+    "status": "Inactivo",
+    "inicial": 202410
+  },
+  {
+    "id": 486968,
+    "name": "Silva Velasco Emiliano",
+    "status": "Baja Académica",
+    "inicial": 202260
+  },
+  {
+    "id": 491530,
+    "name": "Suárez Nogami Eduardo",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 624410,
+    "name": "Torres Rodríguez Ian",
+    "status": "Activo",
+    "inicial": 202610
+  },
+  {
+    "id": 471487,
+    "name": "Trejo Delgadillo Karla",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 534450,
+    "name": "Ulpo Guangasi Evelyn",
+    "status": "Activo",
+    "inicial": 202410
+  },
+  {
+    "id": 418628,
+    "name": "Valdes Salinas Jonathan",
+    "status": "Activo",
+    "inicial": 202060
+  },
+  {
+    "id": 516710,
+    "name": "Valladares Estrada Marco",
+    "status": "Activo",
+    "inicial": 202410
+  },
+  {
+    "id": 488460,
+    "name": "Vásquez Hernández Olinto",
+    "status": "Baja voluntaria",
+    "inicial": 202260
+  },
+  {
+    "id": 495090,
+    "name": "Velasco Reyes Luz",
+    "status": "Activo",
+    "inicial": 202260
+  },
+  {
+    "id": 551980,
+    "name": "Vergara Ávila Daniela",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 555114,
+    "name": "Victoria González Ximena",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 524209,
+    "name": "Villa Soriano Fernando",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 481859,
+    "name": "Villa Vera Diego",
+    "status": "Activo",
+    "inicial": 202360
+  },
+  {
+    "id": 540517,
+    "name": "Villagómez Vergara Gretel",
+    "status": "Activo",
+    "inicial": 202410
+  },
+  {
+    "id": 559648,
+    "name": "Vitela Mercado Loreley",
+    "status": "Activo",
+    "inicial": 202460
+  },
+  {
+    "id": 505197,
+    "name": "Zepeda Pérez Leah",
+    "status": "Activo",
+    "inicial": 202360
+  }
+]

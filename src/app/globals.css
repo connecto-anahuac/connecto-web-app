@@ -1,26 +1,115 @@
 @import "tailwindcss";
+@import "./materia_colors.css";
+@import "./color_scheme.css";
 
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --connecto-ink: #231f20;
+  --connecto-sidebar: #231f20;
+  --connecto-surface: #f9f9f9;
+  --connecto-muted-panel: #e3e3e3;
+  --connecto-divider: #d9d9d9;
+  --connecto-muted: #646464;
+  --connecto-success: #7edb87;
 }
 
 @theme inline {
   --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  /* --color-foreground: var(--foreground); */
+  --color-connecto-ink: var(--connecto-ink);
+  --color-connecto-sidebar: var(--connecto-sidebar);
+  --color-connecto-surface: var(--connecto-surface);
+  --color-connecto-muted-panel: var(--connecto-muted-panel);
+  --color-connecto-divider: var(--connecto-divider);
+  --color-connecto-muted: var(--connecto-muted);
+  --color-connecto-success: var(--connecto-success);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
+
+  /*  */
+
+  /* --color-border:#D5D5D5; */
+  --color-divider:#D5D5D5;
+  --color-header:#FAFAFA;
+  --color-header-foreground:#7F7F7F;
+  --color-header-container:#E3E3E3;
+  --color-header-on-container-variant:#A0A0A0;
+  --color-header-on-container:#646464;
+  --color-foreground:#2B2B2B;
+  --color-summer:#BD4B4B;
+  --color-ene-mayo:#BD954B;
+  --color-ago-dec:#4B88BD;
+
+  --spacing-body-frame:0.625rem; /* 10px */
+  --spacing-header-height:3rem; /* 48px */
+
+
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@utility home-shell-max {
+  max-width: 1440px;
+}
+
+@utility home-sidebar-w {
+  width: 204px;
+}
+
+@utility home-avatar-size {
+  width: 161px;
+  height: 161px;
+}
+
+@utility rounded-home-avatar {
+  border-radius: 32px;
+}
+
+@utility home-progress-size {
+  width: 123px;
+  height: 123px;
+}
+
+@utility border-home-progress {
+  border-width: 11px;
+}
+
+@utility home-search-w {
+  width: 571px;
+}
+
+@utility rounded-home-panel {
+  border-radius: 5px;
+}
+
+@utility home-table-min {
+  min-width: 1480px;
+}
+
+@utility home-table-cell {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  border: 1px solid var(--color-connecto-divider);
+  padding-inline: 10px;
+  font-size: 15px;
+  color: var(--color-connecto-ink);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }

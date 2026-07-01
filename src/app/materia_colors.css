@@ -1,0 +1,113 @@
+
+
+:root {
+  --ADM-strong: #1976D2;
+  --CMP-strong: #5E35B1;
+  --CUL-strong: #D81B60;
+  --SOC-strong: #C2185B;
+  --IELC-strong: #E53935;
+  --EMP-strong: #FB8C00;
+  --FIS-strong: #00897B;
+  --HUM-strong: #8D6E63;
+  --IIND-strong: #546E7A;
+  --CON-strong: #00ACC1;
+  --INT-strong: #43A047;
+  --LDR-strong: #FDD835;
+  --MAT-strong: #3949AB;
+  --SIS-strong: #7CB342;
+}
+
+:root {
+  --ADM-light:  #EAF4FE; /* Blue */
+  --CMP-light:  #F0EBFC; /* Deep Purple */
+  --CUL-light:  #FDEAF2; /* Pink */
+  --SOC-light:  #FCE7EF; /* Rose */
+  --IELC-light: #FDECEC; /* Red */
+  --EMP-light:  #FFF3E5; /* Orange */
+  --FIS-light:  #E6F6F4; /* Teal */
+  --HUM-light:  #F3EFED; /* Brown */
+  --IIND-light: #EEF2F4; /* Blue Grey */
+  --CON-light:  #E7F8FB; /* Cyan */
+  --INT-light:  #EDF8EE; /* Green */
+  --LDR-light:  #FFFBE6; /* Yellow */
+  --MAT-light:  #ECEFFD; /* Indigo */
+  --SIS-light:  #F2F8E8; /* Light Green */
+}
+
+
+/* :root {
+  --ADM-strong: #1565C0;
+  --ADM-medium: #64B5F6;
+  --ADM-light: #E3F2FD;
+
+  --CMP-strong: #4527A0;
+  --CMP-medium: #9575CD;
+  --CMP-light: #EDE7F6;
+
+  --CON-strong: #00897B;
+  --CON-medium: #4DB6AC;
+  --CON-light: #E0F2F1;
+
+  --CUL-strong: #8E24AA;
+  --CUL-medium: #BA68C8;
+  --CUL-light: #F3E5F5;
+
+  --EMP-strong: #EF6C00;
+  --EMP-medium: #FFB74D;
+  --EMP-light: #FFF3E0;
+
+  --FIS-strong: #0277BD;
+  --FIS-medium: #4FC3F7;
+  --FIS-light: #E1F5FE;
+
+  --HUM-strong: #6D4C41;
+  --HUM-medium: #A1887F;
+  --HUM-light: #EFEBE9;
+
+  --IELC-strong: #C62828;
+  --IELC-medium: #EF5350;
+  --IELC-light: #FFEBEE;
+
+  --IIND-strong: #455A64;
+  --IIND-medium: #90A4AE;
+  --IIND-light: #ECEFF1;
+
+  --INT-strong: #00838F;
+  --INT-medium: #4DD0E1;
+  --INT-light: #E0F7FA;
+
+  --LDR-strong: #F9A825;
+  --LDR-medium: #FFD54F;
+  --LDR-light: #FFFDE7;
+
+  --MAT-strong: #283593;
+  --MAT-medium: #7986CB;
+  --MAT-light: #E8EAF6;
+
+  --SIS-strong: #00695C;
+  --SIS-medium: #4DB6AC;
+  --SIS-light: #E0F2F1;
+
+  --SOC-strong: #AD1457;
+  --SOC-medium: #F06292;
+  --SOC-light: #FCE4EC;
+}
+
+
+
+:root {
+--FIS-strong: #0277BD;
+--ADM-strong: #1565C0;
+--MAT-strong: #283593;
+--CMP-strong: #4527A0;
+--HUM-strong: #6D4C41;
+--CUL-strong: #8E24AA;
+--IELC-strong: #C62828;
+--SOC-strong: #AD1457;
+--EMP-strong: #EF6C00;
+--LDR-strong: #F9A825;
+--CON-strong: #00897B;
+--INT-strong: #00838F;
+--SIS-strong: #00695C;
+--IIND-strong: #455A64;
+} */

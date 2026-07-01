@@ -1,0 +1,128 @@
+{
+  "ADM": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.098, 0.463, 0.824],
+      "alpha": 1,
+      "hex": "#1976D2"
+    }
+  },
+  "CMP": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.369, 0.208, 0.694],
+      "alpha": 1,
+      "hex": "#5E35B1"
+    }
+  },
+  "CUL": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.847, 0.106, 0.376],
+      "alpha": 1,
+      "hex": "#D81B60"
+    }
+  },
+  "SOC": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.761, 0.094, 0.357],
+      "alpha": 1,
+      "hex": "#C2185B"
+    }
+  },
+  "IELC": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.898, 0.224, 0.208],
+      "alpha": 1,
+      "hex": "#E53935"
+    }
+  },
+  "EMP": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.984, 0.549, 0],
+      "alpha": 1,
+      "hex": "#FB8C00"
+    }
+  },
+  "FIS": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0, 0.537, 0.482],
+      "alpha": 1,
+      "hex": "#00897B"
+    }
+  },
+  "HUM": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.553, 0.431, 0.388],
+      "alpha": 1,
+      "hex": "#8D6E63"
+    }
+  },
+  "IIND": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.329, 0.431, 0.478],
+      "alpha": 1,
+      "hex": "#546E7A"
+    }
+  },
+  "CON": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0, 0.675, 0.757],
+      "alpha": 1,
+      "hex": "#00ACC1"
+    }
+  },
+  "INT": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.263, 0.627, 0.278],
+      "alpha": 1,
+      "hex": "#43A047"
+    }
+  },
+  "LDR": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.992, 0.847, 0.208],
+      "alpha": 1,
+      "hex": "#FDD835"
+    }
+  },
+  "MAT": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.224, 0.286, 0.671],
+      "alpha": 1,
+      "hex": "#3949AB"
+    }
+  },
+  "SIS": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [0.486, 0.702, 0.259],
+      "alpha": 1,
+      "hex": "#7CB342"
+    }
+  }
+}

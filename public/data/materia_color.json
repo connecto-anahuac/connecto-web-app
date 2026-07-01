@@ -1,0 +1,72 @@
+{
+  "ADM": {
+    "strong": "#1565C0",
+    "medium": "#64B5F6",
+    "light": "#E3F2FD"
+  },
+  "CMP": {
+    "strong": "#4527A0",
+    "medium": "#9575CD",
+    "light": "#EDE7F6"
+  },
+  "CON": {
+    "strong": "#00897B",
+    "medium": "#4DB6AC",
+    "light": "#E0F2F1"
+  },
+  "CUL": {
+    "strong": "#8E24AA",
+    "medium": "#BA68C8",
+    "light": "#F3E5F5"
+  },
+  "EMP": {
+    "strong": "#EF6C00",
+    "medium": "#FFB74D",
+    "light": "#FFF3E0"
+  },
+  "FIS": {
+    "strong": "#0277BD",
+    "medium": "#4FC3F7",
+    "light": "#E1F5FE"
+  },
+  "HUM": {
+    "strong": "#6D4C41",
+    "medium": "#A1887F",
+    "light": "#EFEBE9"
+  },
+  "IELC": {
+    "strong": "#C62828",
+    "medium": "#EF5350",
+    "light": "#FFEBEE"
+  },
+  "IIND": {
+    "strong": "#455A64",
+    "medium": "#90A4AE",
+    "light": "#ECEFF1"
+  },
+  "INT": {
+    "strong": "#00838F",
+    "medium": "#4DD0E1",
+    "light": "#E0F7FA"
+  },
+  "LDR": {
+    "strong": "#F9A825",
+    "medium": "#FFD54F",
+    "light": "#FFFDE7"
+  },
+  "MAT": {
+    "strong": "#283593",
+    "medium": "#7986CB",
+    "light": "#E8EAF6"
+  },
+  "SIS": {
+    "strong": "#00695C",
+    "medium": "#4DB6AC",
+    "light": "#E0F2F1"
+  },
+  "SOC": {
+    "strong": "#AD1457",
+    "medium": "#F06292",
+    "light": "#FCE4EC"
+  }
+}

@@ -1,0 +1,46 @@
+import { cn } from "@/lib/util";
+
+
+
+export default function Avator({ fullName ,className}: { fullName: string, className?: string }) { 
+    return (
+        <div className={cn("text-xl relative aspect-square  rounded-full flex items-center justify-center", className)}
+        style={{backgroundColor: getAvatarColorFromPalette()}}>
+           <span className="text-white font-bold leading-none">{getInitials(fullName)}</span>
+         
+        </div>
+    );
+}
+
+
+
+
+function getInitials(fullName: string): string {
+  return fullName
+    .trim()                           // 前後の余計な空白を削除
+    .split(/\s+/)                     // 連続した空白（スペースやタブ）で分割して配列にする
+    .map(word => word.charAt(0))      // 各単語の先頭の1文字を取り出す
+    .slice(0, 2)                      // 先頭の2文字分だけを確保（ミドルネーム等があっても2文字に絞る）
+    .join('')                         // 文字列に結合する
+    .toUpperCase();                   // 大文字に変換する
+}
+
+
+const AVATAR_PALETTE = [
+  '#FF6B6B', // ターメリック・レッド
+  '#4D96FF', // スカイ・ブルー
+  '#6BCB77', // フレッシュ・グリーン
+  '#FFD93D', // サン・イエロー
+  '#9B5DE5', // アメジスト・パープル
+  '#F15BB5', // マゼンタ・ピンク
+  '#00BBF9', // シアン・ブルー
+  '#00F5D4', // ティール・グリーン
+];
+
+/**
+ * 定義されたパレットからランダムに背景色を選択する
+ */
+export function getAvatarColorFromPalette(): string {
+  const randomIndex = Math.floor(Math.random() * AVATAR_PALETTE.length);
+  return AVATAR_PALETTE[randomIndex];
+}
