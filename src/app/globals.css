@@ -95,6 +95,10 @@
   color: var(--color-connecto-ink);
 }
 
+@utility h-23px {
+  height: 23px;
+}
+
 * {
   box-sizing: border-box;
 }

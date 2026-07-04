@@ -1,5 +1,3 @@
-import path from "path";
-
 import {
   META_COLUMNS,
   EXCEPT_COLUMNS,
@@ -11,21 +9,22 @@ import {
   normalize,
   isGrade,
   isPeriod,
-  getCarreraName,
 } from "./domain/validator";
 
 //  import { GradeEntity, StudentEntity } from "./domain/types";
 import { extractRegionals } from "./extractor/regionals_extractor";
-import { saveJson } from "./util/save_jason";
 import { GradeEntity, StudentEntity } from "@/infra/local/entities";
 import { NULL_DATA_STRING } from "@/types/consts";
 
 
 export async function processStudentCsv(
   rows: Record<string, string>[],
-  fileName: string,
-  outputDir: string,
+  _fileName: string,
+  _outputDir: string,
 ) : Promise<{ students: StudentEntity[]; grades: GradeEntity[] }> {
+  void _fileName;
+  void _outputDir;
+
   const students: StudentEntity[] = [];
   const grades: GradeEntity[] = [];
 
@@ -67,12 +66,8 @@ export async function processStudentCsv(
       continue;
     }
 
-    students.push({
-      id: studentId,
-      name: normalize(firstRow.Nombre)??NULL_DATA_STRING,
-      status: normalize(firstRow.Estatus)??NULL_DATA_STRING,
-      enrolledPeriod: normalize(firstRow.Periodo)??NULL_DATA_STRING,
-    });
+    const studentGrades: GradeEntity[] = [];
+    const uniquePeriods = new Set<string>();
 
     //  --------------------------------------------------
     //  process of normal materials
@@ -92,7 +87,7 @@ export async function processStudentCsv(
       if (TINT_PATTERN.test(classCode)) {
         const found = block.some((row) => normalize(row[classCode]) === "3");
 
-        grades.push({
+        studentGrades.push({
           studentId: studentId,
           materiaKey: classCode,
           as: "TINT",
@@ -123,7 +118,11 @@ export async function processStudentCsv(
       }
 
       if (grade !== null || period !== null) {
-        grades.push({
+        if (period) {
+          uniquePeriods.add(period);
+        }
+
+        studentGrades.push({
           studentId: studentId,
           materiaKey: classCode,
           grade,
@@ -137,31 +136,38 @@ export async function processStudentCsv(
   //  --------------------------------------------------
   //  process of REGIONALES
   //  --------------------------------------------------
-    grades.push(
-      ...extractRegionals(
-        studentId,
-        block.map((r) => normalize(r[REGIONALES_COLUMN])),
-      ),
+    const regionalGrades = extractRegionals(
+      studentId,
+      block.map((r) => normalize(r[REGIONALES_COLUMN])),
     );
+
+    regionalGrades.forEach((regionalGrade) => {
+      if (regionalGrade.period) {
+        uniquePeriods.add(regionalGrade.period);
+      }
+    });
+
+    studentGrades.push(...regionalGrades);
+
+    const currentSemester = uniquePeriods.size;
+    const currentSemesterWithoutSummer = [...uniquePeriods].filter(
+      (period) => period.slice(-2) !== "40",
+    ).length;
+
+    students.push({
+      id: studentId,
+      name: normalize(firstRow.Nombre) ?? NULL_DATA_STRING,
+      status: normalize(firstRow.Estatus) ?? NULL_DATA_STRING,
+      enrolledPeriod: normalize(firstRow.Periodo) ?? NULL_DATA_STRING,
+      currentSemester,
+      currentSemesterWithoutSummer,
+    });
+
+    grades.push(...studentGrades);
   }
 
-    // {yyyy}_{mm}_{dd}_{HHMM}
-  const today = new Date().toISOString().replace(/[-:]/g, "_").slice(0, 16);
-
-    const carrera = getCarreraName(fileName) ?? "UnknownCarrier";
-    
     console.log(students);
     console.log(grades);
-
-//   await saveJson(
-//     path.join(outputDir, `${carrera}_students_${today}.json`),
-//     students,
-//   );
-
-//   await saveJson(
-//     path.join(outputDir, `${carrera}_grades_${today}.json`),
-//     grades,
-//   );
 
   return {
     students,

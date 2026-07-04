@@ -1,15 +1,23 @@
 // src/infrastructure/local/database.ts
 
 import Dexie, { Table } from "dexie";
-import { GradeEntity, MateriaEntity, PlanEntity, PreRequisitoEntity, StudentEntity } from "./entities";
+import {
+  GradeEntity,
+  MateriaEntity,
+  OfferingMaterialEntity,
+  PlanEntity,
+  PreRequisitoEntity,
+  StudentEntity,
+} from "./entities";
 
 
 export class UniversityDB extends Dexie {
-    materias!: Table<MateriaEntity>;
-    plans!: Table<PlanEntity>;
+  materias!: Table<MateriaEntity>;
+  plans!: Table<PlanEntity>;
   students!: Table<StudentEntity>;
   grades!: Table<GradeEntity>;
   preRequisitos!: Table<PreRequisitoEntity>;
+  offeringMaterials!: Table<OfferingMaterialEntity>;
 
   constructor() {
     super("UniversityDB");
@@ -24,7 +32,7 @@ export class UniversityDB extends Dexie {
         // "id,name,materiaKey,career,semester,position",
 
       students:
-        "id,name,status",
+        "id,name,status,currentSemester,currentSemesterWithoutSummer",
         // "id,name,status,initialPeriod",
 
       grades:
@@ -33,6 +41,26 @@ export class UniversityDB extends Dexie {
 
       preRequisitos:
         "++id,currentMateriaKey,preMateriaKey",
+    });
+
+    this.version(2).stores({
+      materias:
+        "key,keyCode,keyNumber,name",
+
+      plans:
+        "id,name,materiaKey,career,semester,position",
+
+      students:
+        "id,name,status,currentSemester,currentSemesterWithoutSummer",
+
+      grades:
+        "++id,studentId,materiaKey,period,grade",
+
+      preRequisitos:
+        "++id,currentMateriaKey,preMateriaKey",
+
+      offeringMaterials:
+        "id,period,career,materiaKey,sessionNumber,estimatedNumber,[career+period]",
     });
   }
 }

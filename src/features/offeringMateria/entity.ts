@@ -13,3 +13,5 @@ export type OfferingMaterial = {
   possibleStudentIds: Record<number, string[]>;// semester:studentId
 //   estimatedNumberOfStudents: number;
 };
+
+

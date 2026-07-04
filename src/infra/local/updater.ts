@@ -2,7 +2,14 @@
 
 import { CAPP_META_COLUMNS } from "./consts";
 import { db } from "./databse";
-import { GradeEntity, MateriaEntity, PlanEntity, PreRequisitoEntity, StudentEntity } from "./entities";
+import {
+  GradeEntity,
+  MateriaEntity,
+  OfferingMaterialEntity,
+  PlanEntity,
+  PreRequisitoEntity,
+  StudentEntity,
+} from "./entities";
 
 const STUDENTS_URL = "/dev_untrack/data/students.json";
 const CAPP_URL = "/dev_untrack/data/capp_student_data.json";
@@ -17,20 +24,31 @@ type Prop = {
   plans?: PlanEntity[];
   materias?: MateriaEntity[];
   preRequisitos?: PreRequisitoEntity[];
-}
+  offeringMaterials?: OfferingMaterialEntity[];
+};
 
-export async function upsertWholeBulk({ students, grades, plans, materias, preRequisitos }: Prop) {
+export async function upsertWholeBulk({
+  students,
+  grades,
+  plans,
+  materias,
+  preRequisitos,
+  offeringMaterials,
+}: Prop) {
   try {
 
     console.log("writing-students");
 
     await db.transaction(
       "rw",
-      db.students,
-      db.grades,
-      db.plans,
-      db.materias,
-      db.preRequisitos,
+      [
+        db.students,
+        db.grades,
+        db.plans,
+        db.materias,
+        db.preRequisitos,
+        db.offeringMaterials,
+      ],
       async () => {
         // students
         if (students&&students.length) await db.students.bulkPut(students );
@@ -50,6 +68,12 @@ export async function upsertWholeBulk({ students, grades, plans, materias, preRe
         // preRequisitos
         console.log("fetching-preRequisitos");
         if (preRequisitos && preRequisitos.length) await db.preRequisitos.bulkPut(preRequisitos);
+
+        // offeringMaterials
+        console.log("fetching-offeringMaterials");
+        if (offeringMaterials && offeringMaterials.length) {
+          await db.offeringMaterials.bulkPut(offeringMaterials);
+        }
 
         
       },

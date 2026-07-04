@@ -33,6 +33,8 @@ export type StudentEntity = {
   name: string;
   status: string;
   enrolledPeriod: string;
+  currentSemester: number;
+  currentSemesterWithoutSummer: number;
 };
 
 // src/domain/entities/grade.ts
@@ -48,4 +50,13 @@ export type GradeEntity = {
   period: string | null;
   value: boolean | null;
   as: "default" | "TINT" | "REGIONALES";
+};
+
+export type OfferingMaterialEntity = {
+  id: string;
+  period: string;
+  career: string;
+  materiaKey: string;
+  sessionNumber: number;
+  estimatedNumber: number;
 };
