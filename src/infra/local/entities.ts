@@ -1,6 +1,6 @@
-// src/domain/entities/materia.ts
+// src/domain/entities/course.ts
 
-export type MateriaEntity = {
+export type CourseEntity = {
   key: string;
   keyCode: string;
   keyNumber: string;
@@ -13,7 +13,7 @@ export type PlanEntity = {
   id: string;
   name: string;
   career: string;
-  materiaKey: string;
+  courseKey: string;
   semester: number;
   position: number;
 };
@@ -22,8 +22,8 @@ export type PlanEntity = {
 
 export type PreRequisitoEntity = {
   id: string;
-  currentMateriaKey: string;
-  preMateriaKey: string;
+  currentCourseKey: string;
+  preCourseKey: string;
 };
 
 // src/domain/entities/student.ts
@@ -42,7 +42,7 @@ export type StudentEntity = {
 export type GradeEntity = {
   id?: number;
   studentId: string;
-  materiaKey: string;
+  courseKey: string;
   // period: string;
   // grade: number;
 
@@ -52,11 +52,11 @@ export type GradeEntity = {
   as: "default" | "TINT" | "REGIONALES";
 };
 
-export type OfferingMaterialEntity = {
+export type OfferingCourseEntity = {
   id: string;
   period: string;
   career: string;
-  materiaKey: string;
+  courseKey: string;
   sessionNumber: number;
   estimatedNumber: number;
 };

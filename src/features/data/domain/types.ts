@@ -7,7 +7,7 @@ export interface StudentEntity {
 
 export interface GradeEntity {
   studentId: string | null;
-  materiaKey: string;
+  courseKey: string;
   grade?: number | null;
   period?: string | null;
   value?: boolean;

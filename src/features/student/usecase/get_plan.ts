@@ -1,5 +1,4 @@
-import { StudentEntity } from "@/infra/local/entities";
-import { MateriaRepository } from "@/infra/local/repository/materia.repository";
+import { CourseRepository } from "@/infra/local/repository/course.repository";
 import { PlanRepository } from "@/infra/local/repository/plan.repository";
 import { StudentRepository } from "@/infra/local/repository/student.repository";
 import { GradeRepository } from "@/infra/local/repository/grade.repository";
@@ -9,7 +8,7 @@ import { PreRequisitoRepository } from "@/infra/local/repository/prerequisito.re
 export class GetStudentPlanUseCase {
   constructor(
     private readonly planRepository: PlanRepository,
-    private readonly materiaRepository: MateriaRepository,
+    private readonly courseRepository: CourseRepository,
     private readonly studentRepository: StudentRepository,
     private readonly preRequisitoRepository: PreRequisitoRepository,
     private readonly gradeRepository: GradeRepository,
@@ -26,17 +25,17 @@ export class GetStudentPlanUseCase {
     const result: StudentClassItem[] = [];
 
     for (const p of plans) {
-      const materia = await this.materiaRepository.findById(p.materiaKey as string);
+      const course = await this.courseRepository.findById(p.courseKey as string);
 
-      const grade = await this.gradeRepository.findGrade(studentId, p.materiaKey);
-      // console.log(`Grade for student ${studentId} and materia ${p.materiaId}:`, grade);
-      // fetch prerequisito entries for this materia
-      const prereqs = await this.preRequisitoRepository.findByMateria(p.materiaKey as string);
+      const grade = await this.gradeRepository.findGrade(studentId, p.courseKey);
+      // console.log(`Grade for student ${studentId} and course ${p.courseId}:`, grade);
+      // fetch prerequisito entries for this course
+      const prereqs = await this.preRequisitoRepository.findByCourse(p.courseKey as string);
       const preItems: StudentClassItem[] = [];
       for (const pr of prereqs) {
-        const preMat = await this.materiaRepository.findById(pr.preMateriaKey);
+        const preMat = await this.courseRepository.findById(pr.preCourseKey);
         preItems.push({
-          id: pr.preMateriaKey,
+          id: pr.preCourseKey,
           keyCode: preMat?.keyCode ?? "",
           keyNumber: preMat?.keyNumber ?? "",
           name: preMat?.name ?? "",
@@ -54,13 +53,13 @@ export class GetStudentPlanUseCase {
       }
 
       result.push({
-        id: p.materiaKey ?? p.id,
-        keyCode: materia?.keyCode ?? "",
-        keyNumber: materia?.keyNumber ?? "",
-        name: materia?.name ?? p.name ?? "",
-        hours: materia?.hours ?? 0,
-        credits: materia?.credits ?? 0,
-        block: materia?.block ?? "",
+        id: p.courseKey ?? p.id,
+        keyCode: course?.keyCode ?? "",
+        keyNumber: course?.keyNumber ?? "",
+        name: course?.name ?? p.name ?? "",
+        hours: course?.hours ?? 0,
+        credits: course?.credits ?? 0,
+        block: course?.block ?? "",
         preRequisites: preItems,
 
         period: grade?.period ?? "",

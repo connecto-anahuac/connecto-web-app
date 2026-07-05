@@ -4,8 +4,8 @@ import { CAPP_META_COLUMNS } from "./consts";
 import { db } from "./databse";
 import {
   GradeEntity,
-  MateriaEntity,
-  OfferingMaterialEntity,
+  CourseEntity,
+  OfferingCourseEntity,
   PlanEntity,
   PreRequisitoEntity,
   StudentEntity,
@@ -22,18 +22,18 @@ type Prop = {
   students?: StudentEntity[];
   grades?: GradeEntity[];
   plans?: PlanEntity[];
-  materias?: MateriaEntity[];
+  courses?: CourseEntity[];
   preRequisitos?: PreRequisitoEntity[];
-  offeringMaterials?: OfferingMaterialEntity[];
+  offeringCourses?: OfferingCourseEntity[];
 };
 
 export async function upsertWholeBulk({
   students,
   grades,
   plans,
-  materias,
+  courses,
   preRequisitos,
-  offeringMaterials,
+  offeringCourses,
 }: Prop) {
   try {
 
@@ -45,9 +45,9 @@ export async function upsertWholeBulk({
         db.students,
         db.grades,
         db.plans,
-        db.materias,
+        db.courses,
         db.preRequisitos,
-        db.offeringMaterials,
+        db.offeringCourses,
       ],
       async () => {
         // students
@@ -57,9 +57,9 @@ export async function upsertWholeBulk({
         console.log("fetching-grades");
         if (grades && grades.length) await db.grades.bulkPut(grades);
         
-        // materias
-        console.log("fetching-materias");
-        if (materias && materias.length) await db.materias.bulkPut(materias);
+        // courses
+        console.log("fetching-courses");
+        if (courses && courses.length) await db.courses.bulkPut(courses);
 
         // plans
         console.log("fetching-plans");
@@ -69,10 +69,10 @@ export async function upsertWholeBulk({
         console.log("fetching-preRequisitos");
         if (preRequisitos && preRequisitos.length) await db.preRequisitos.bulkPut(preRequisitos);
 
-        // offeringMaterials
-        console.log("fetching-offeringMaterials");
-        if (offeringMaterials && offeringMaterials.length) {
-          await db.offeringMaterials.bulkPut(offeringMaterials);
+        // offeringCourses
+        console.log("fetching-offeringCourses");
+        if (offeringCourses && offeringCourses.length) {
+          await db.offeringCourses.bulkPut(offeringCourses);
         }
 
         
@@ -93,12 +93,12 @@ export async function upsertWholeBulk({
 /* 
 
 
-        // materias
-        console.log("fetching-materias");
-        const materiasRes = await fetch(MATERIAS_URL);
-        const materiasJson = await materiasRes.json();
+        // courses
+        console.log("fetching-courses");
+        const coursesRes = await fetch(MATERIAS_URL);
+        const coursesJson = await coursesRes.json();
 
-        const materias: Materia[] = (materiasJson || [])
+        const courses: Course[] = (coursesJson || [])
           .filter((m: any) => m && m.clave && m.clave.raw)
           .map((m: any) => ({
             id: String(m.clave.raw),
@@ -107,10 +107,10 @@ export async function upsertWholeBulk({
             hours: typeof m.horas === "number" ? m.horas : null,
             credits: typeof m.creditos === "number" ? m.creditos : null,
             block: m.bloque ?? "",
-            name: m.materia ?? "",
+            name: m.course ?? "",
           }));
 
-        if (materias.length) await db.materias.bulkPut(materias as any);
+        if (courses.length) await db.courses.bulkPut(courses as any);
 
         // plans
         console.log("fetching-plans");
@@ -123,16 +123,16 @@ export async function upsertWholeBulk({
             id: `${String(p.clave.raw)}_${idx}`,
             name: "plan 2020",
             career: "TIND",
-            materiaId: String(p.clave.raw),
+            courseId: String(p.clave.raw),
             semester: p.semester != null ? Number(p.semester) : null,
             position: p.position != null ? Number(p.position) : null,
           }));
 
         if (plans.length) await db.plans.bulkPut(plans as any);
 
-        // preRequisitos: from materiasJson.pre_requisito
+        // preRequisitos: from coursesJson.pre_requisito
         const prereqs: PreRequisito[] = [];
-        (materiasJson || []).forEach((m: any) => {
+        (coursesJson || []).forEach((m: any) => {
           const current = m?.clave?.raw;
           if (!current) return;
           const pres = Array.isArray(m.pre_requisito) ? m.pre_requisito : [];
@@ -141,8 +141,8 @@ export async function upsertWholeBulk({
             if (!preRaw) return;
             prereqs.push({
               id: `${String(current)}_${String(preRaw)}_${i}`,
-              currentMateriaId: String(current),
-              preMateriaId: String(preRaw),
+              currentCourseId: String(current),
+              preCourseId: String(preRaw),
             });
           });
         });

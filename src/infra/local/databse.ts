@@ -3,8 +3,8 @@
 import Dexie, { Table } from "dexie";
 import {
   GradeEntity,
-  MateriaEntity,
-  OfferingMaterialEntity,
+  CourseEntity,
+  OfferingCourseEntity,
   PlanEntity,
   PreRequisitoEntity,
   StudentEntity,
@@ -12,55 +12,55 @@ import {
 
 
 export class UniversityDB extends Dexie {
-  materias!: Table<MateriaEntity>;
+  courses!: Table<CourseEntity>;
   plans!: Table<PlanEntity>;
   students!: Table<StudentEntity>;
   grades!: Table<GradeEntity>;
   preRequisitos!: Table<PreRequisitoEntity>;
-  offeringMaterials!: Table<OfferingMaterialEntity>;
+  offeringCourses!: Table<OfferingCourseEntity>;
 
   constructor() {
     super("UniversityDB");
 
     this.version(1).stores({
-      materias:
+      courses:
         "key,keyCode,keyNumber,name",
         // "id,keyCode,keyNumber,hours,credits,block,name",
       
       plans:
-        "id,name,materiaKey,career,semester,position",
-        // "id,name,materiaKey,career,semester,position",
+        "id,name,courseKey,career,semester,position",
+        // "id,name,courseKey,career,semester,position",
 
       students:
         "id,name,status,currentSemester,currentSemesterWithoutSummer",
         // "id,name,status,initialPeriod",
 
       grades:
-        "++id,studentId,materiaKey,period,grade",
-        // "id,studentId,materiaId,period,grade",
+        "++id,studentId,courseKey,period,grade",
+        // "id,studentId,courseId,period,grade",
 
       preRequisitos:
-        "++id,currentMateriaKey,preMateriaKey",
+        "++id,currentCourseKey,preCourseKey",
     });
 
     this.version(2).stores({
-      materias:
+      courses:
         "key,keyCode,keyNumber,name",
 
       plans:
-        "id,name,materiaKey,career,semester,position",
+        "id,name,courseKey,career,semester,position",
 
       students:
         "id,name,status,currentSemester,currentSemesterWithoutSummer",
 
       grades:
-        "++id,studentId,materiaKey,period,grade",
+        "++id,studentId,courseKey,period,grade",
 
       preRequisitos:
-        "++id,currentMateriaKey,preMateriaKey",
+        "++id,currentCourseKey,preCourseKey",
 
-      offeringMaterials:
-        "id,period,career,materiaKey,sessionNumber,estimatedNumber,[career+period]",
+      offeringCourses:
+        "id,period,career,courseKey,sessionNumber,estimatedNumber,[career+period]",
     });
   }
 }

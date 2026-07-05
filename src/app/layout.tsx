@@ -1,8 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Header from "@/features/header/components/Header";
-import DbInicializer from "@/components/inicializer/DbInicializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,16 +27,7 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-dvh antialiased`}
     >
-      <body className="h-dvh">
-        
-        <div className="w-full h-full relative flex flex-col gap-0 bg-Surface overflow-hidden">
-          <DbInicializer/>
-          <Header className="w-full"/>
-          
-          <div className="w-full h-full min-h-0 flex-1">{children}</div>
-        </div>
-      
-      </body>
+      <body className="h-dvh">{children}</body>
     </html>
   );
 }

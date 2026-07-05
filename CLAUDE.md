@@ -55,7 +55,7 @@ When the task involves implementing or mapping a Figma design, follow these rule
 
 ### Figma Interpretation Rules
 
-- Treat Figma output as reference material, not final production code.
+- Treat Figma output as reference Course, not final production code.
 - Prefer project tokens, CSS variables, and existing component APIs over literal values from Figma.
 - Do not fetch the entire subtree or full token inventory unless the task explicitly requires it.
 - Avoid placeholder assets when Figma provides a usable source.

@@ -1,39 +1,38 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { importCsvAction } from "../actions/import_csv_action";
-import Divider from "@/components/Divider";
-import SourceTable, { RecordProps } from "../component/SourceTable";
 import { cn } from "@/lib/util";
-import FileSelectorPanel from "../component/FileSelectorPanel";
+import FileSelectorPanel from "@/features/data/components/client/FileSelectorPanel/FileSelectorPanelContainer";
+import SourceTable, { type RecordProps } from "@/features/data/components/SourceTable";
 
-export default function DataTemplate() {
-  const cappRecords: RecordProps[] = [{
-    carrera: "Industrial",
+const cappRecords: RecordProps[] = [
+  {
+    career: "Industrial",
     fileName: "CAPP_Industrial(3).csv",
     filePath: "C:/User/Downloads/anahuac/CAPP",
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2),
     updatedBy: "Irving Tlosa",
   },{
-    carrera: "Ambiental",
+    career: "Ambiental",
     fileName: "CAPP_Ambiental.csv",
     filePath: "C:/User/Downloads/anahuac/CAPP",
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 13),
     updatedBy: "Xavier Garcia",
   },{
-    carrera: "TIND",
+    career: "TIND",
     fileName: "CAPP_TIND_(1).csv",
     filePath: "C:/User/Downloads/anahuac/CAPP",
     updatedAt: new Date(),
     updatedBy: "Benjamin Basulto",
   },{
-    carrera: "Civil",
+    career: "Civil",
     fileName: "CAPP_Civil.csv",
     filePath: "C:/User/Downloads/anahuac/CAPP",
     updatedAt: new Date(Date.now() - 1000 * 60 * 2),
     updatedBy: "Ximena Cuevas",
-  }];
+  },
+];
 
+export default function DataTemplate() {
   return (
     <div className="w-full h-full flex gap-3 p-2.5">
       <FileSelectorPanel className="w-80" />
@@ -47,7 +46,7 @@ export default function DataTemplate() {
 
         <div className="flex flex-col gap-10 w-full h-full min-h-0 overflow-y-auto pt-6">
           <TableSection title={"CAPP"} dbNames={["Student", "StudentGrade"]} records={cappRecords}/>
-          <TableSection title={"Plan de Estudios"} dbNames={["Materia", "Prerequisito", "Plan"]} records={cappRecords}/>
+          <TableSection title={"Plan de Estudios"} dbNames={["Course", "Prerequisito", "Plan"]} records={cappRecords}/>
         </div>
 
       </div>

@@ -3,9 +3,7 @@ import { cn } from "@/lib/util";
 import SchoolEmailIcon from "@/components/icon/SchoolEmailIcon";
 import EmailIcon from "@/components/icon/EmailIcon";
 import WhatsAppIcon from "@/components/icon/WhatsAppIcon";
-import Image from "next/image";
 import { Contact } from "@/features/student/types/types";
-import Memo from "@/features/student/components/Memo";
 import Avator from "@/components/Avator";
 
 type Props = {
@@ -16,7 +14,7 @@ type StudentCardViewProps = {
   img: string;
   name: string;
   status: string;
-  carrier: string;
+  career: string;
   plan: string;
   id: string;
   semester: string;
@@ -58,7 +56,7 @@ export default function StudentCardView({ className, student }: Props) {
             )}>
               {student.status}
             </div>
-            <span className="ml-4 text-xs font-medium">{student.carrier}</span>
+            <span className="ml-4 text-xs font-medium">{student.career}</span>
             <StudyPlan plan={student.plan} className={"ml-2.5 text-xs whitespace-nowrap"} />
            
           </div>

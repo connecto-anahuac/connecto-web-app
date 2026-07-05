@@ -10,7 +10,7 @@ export default function ControllPanelRight({ className }: Props) {
         img:"/data/avator.png",
         name: "Ryan Garcia Diaz",
         status: "Active",
-        carrier: "Ingeniería en informática y negocios digitales",
+        career: "Ingeniería en informática y negocios digitales",
         plan: "plan 2016",
         id: "00392461",
         semester: "5th",

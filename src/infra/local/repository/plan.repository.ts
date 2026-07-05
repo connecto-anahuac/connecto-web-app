@@ -46,10 +46,10 @@ export class  PlanRepository {
       .sortBy("position");
   }
 
-  async findByMateriaKey(materiaKey: string) {
+  async findByCourseKey(courseKey: string) {
     return db.plans
-      .where("materiaKey")
-      .equals(materiaKey)
+      .where("courseKey")
+      .equals(courseKey)
       .toArray();
   }
 
@@ -75,10 +75,10 @@ export class  PlanRepository {
     await db.plans.delete(id);
   }
 
-  async deleteByMateriaKey(materiaKey: string) {
+  async deleteByCourseKey(courseKey: string) {
     const plans = await db.plans
-      .where("materiaKey")
-      .equals(materiaKey)
+      .where("courseKey")
+      .equals(courseKey)
       .toArray();
 
     await db.plans.bulkDelete(plans.map(p => p.id));

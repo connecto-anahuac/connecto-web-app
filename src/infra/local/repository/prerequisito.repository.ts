@@ -1,4 +1,4 @@
-// src/infrastructure/local/repositories/materia.repository.ts
+// src/infrastructure/local/repositories/course.repository.ts
 
 import { db } from "../databse";// src/infrastructure/local/repositories/pre-requisito.repository.ts
 import { PreRequisitoEntity } from "../entities";
@@ -46,36 +46,36 @@ export class PreRequisitoRepository {
     return db.preRequisitos.toArray();
   }
 
-  async findByMateria(
-    materiaId: string,
+  async findByCourse(
+    courseId: string,
   ): Promise<PreRequisitoEntity[]> {
     return db.preRequisitos
-      .where("currentMateriaKey")
-      .equals(materiaId)
+      .where("currentCourseKey")
+      .equals(courseId)
       .toArray();
   }
 
   async findRequiredFor(
-    materiaId: string,
+    courseId: string,
   ): Promise<string[]> {
     const rows =
       await db.preRequisitos
-        .where("currentMateriaKey")
-        .equals(materiaId)
+        .where("currentCourseKey")
+        .equals(courseId)
         .toArray();
 
     return rows.map(
-      (x) => x.preMateriaKey,
+      (x) => x.preCourseKey,
     );
   }
 
   async delete(
-    currentMateriaKey: string,
-    preMateriaKey: string,
+    currentCourseKey: string,
+    preCourseKey: string,
   ): Promise<void> {
     await db.preRequisitos.delete([
-      currentMateriaKey,
-      preMateriaKey,
+      currentCourseKey,
+      preCourseKey,
     ]);
   }
 

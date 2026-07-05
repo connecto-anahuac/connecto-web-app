@@ -1,4 +1,4 @@
-// src/infrastructure/local/repositories/materia.repository.ts
+// src/infrastructure/local/repositories/course.repository.ts
 
 import { db } from "../databse";// src/infrastructure/local/repositories/grade.repository.ts
 import { GradeEntity } from "../entities";
@@ -54,12 +54,12 @@ export class GradeRepository {
       .toArray();
   }
 
-  async findMateriaGrades(
-    materiaKey: string,
+  async findCourseGrades(
+    courseKey: string,
   ): Promise<GradeEntity[]> {
     return db.grades
-      .where("materiaKey")
-      .equals(materiaKey)
+      .where("courseKey")
+      .equals(courseKey)
       .toArray();
   }
 
@@ -74,23 +74,23 @@ export class GradeRepository {
 
   async findGrade(
     studentId: string,
-    materiaId: string,
+    courseId: string,
   ): Promise<GradeEntity | undefined> {
-    // grades table uses `id` as primary key; query by studentId + materiaId instead
+    // grades table uses `id` as primary key; query by studentId + courseId instead
     return db.grades
       .where("studentId")
       .equals(studentId)
-      .and((g: GradeEntity) => g.materiaKey === materiaId)
+      .and((g: GradeEntity) => g.courseKey === courseId)
       .first();
   }
 
   async delete(
     studentId: string,
-    materiaId: string,
+    courseId: string,
   ): Promise<void> {
     await db.grades.delete([
       studentId,
-      materiaId,
+      courseId,
     ]);
   }
 

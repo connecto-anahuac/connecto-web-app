@@ -2,7 +2,7 @@
 
 import { CAPP_META_COLUMNS } from "./consts";
 import { db } from "./databse";
-import { GradeEntity, MateriaEntity, PlanEntity, PreRequisitoEntity, StudentEntity } from "./entities";
+import { GradeEntity, CourseEntity, PlanEntity, PreRequisitoEntity, StudentEntity } from "./entities";
 
 const STUDENTS_URL = "/dev_untrack/data/students.json";
 const CAPP_URL = "/dev_untrack/data/capp_student_data.json";
@@ -54,7 +54,7 @@ async function seed() {
           (g: any, idx: number) => ({
             id: `${g.student_id ?? ""}_${g.class_code ?? ""}_${g.period ?? ""}_${idx}`,
             studentId: String(g.student_id ?? ""),
-            materiaId: String(g.class_code ?? ""),
+            courseId: String(g.class_code ?? ""),
             period: String(g.period ?? ""),
             grade: typeof g.grade === "number" ? g.grade : null,
             as: g.as ?? "",
@@ -79,12 +79,12 @@ async function seed() {
 /* 
 
 
-        // materias
-        console.log("fetching-materias");
-        const materiasRes = await fetch(MATERIAS_URL);
-        const materiasJson = await materiasRes.json();
+        // courses
+        console.log("fetching-courses");
+        const coursesRes = await fetch(MATERIAS_URL);
+        const coursesJson = await coursesRes.json();
 
-        const materias: Materia[] = (materiasJson || [])
+        const courses: Course[] = (coursesJson || [])
           .filter((m: any) => m && m.clave && m.clave.raw)
           .map((m: any) => ({
             id: String(m.clave.raw),
@@ -93,10 +93,10 @@ async function seed() {
             hours: typeof m.horas === "number" ? m.horas : null,
             credits: typeof m.creditos === "number" ? m.creditos : null,
             block: m.bloque ?? "",
-            name: m.materia ?? "",
+            name: m.course ?? "",
           }));
 
-        if (materias.length) await db.materias.bulkPut(materias as any);
+        if (courses.length) await db.courses.bulkPut(courses as any);
 
         // plans
         console.log("fetching-plans");
@@ -109,16 +109,16 @@ async function seed() {
             id: `${String(p.clave.raw)}_${idx}`,
             name: "plan 2020",
             career: "TIND",
-            materiaId: String(p.clave.raw),
+            courseId: String(p.clave.raw),
             semester: p.semester != null ? Number(p.semester) : null,
             position: p.position != null ? Number(p.position) : null,
           }));
 
         if (plans.length) await db.plans.bulkPut(plans as any);
 
-        // preRequisitos: from materiasJson.pre_requisito
+        // preRequisitos: from coursesJson.pre_requisito
         const prereqs: PreRequisito[] = [];
-        (materiasJson || []).forEach((m: any) => {
+        (coursesJson || []).forEach((m: any) => {
           const current = m?.clave?.raw;
           if (!current) return;
           const pres = Array.isArray(m.pre_requisito) ? m.pre_requisito : [];
@@ -127,8 +127,8 @@ async function seed() {
             if (!preRaw) return;
             prereqs.push({
               id: `${String(current)}_${String(preRaw)}_${i}`,
-              currentMateriaId: String(current),
-              preMateriaId: String(preRaw),
+              currentCourseId: String(current),
+              preCourseId: String(preRaw),
             });
           });
         });

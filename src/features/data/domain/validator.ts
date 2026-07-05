@@ -35,7 +35,7 @@ export function isPeriod(
   return PERIOD_PATTERN.test(value);
 }
 
-export function getCarreraName(
+export function getcareerName(
   fileName: string,
 ): string | null {
 

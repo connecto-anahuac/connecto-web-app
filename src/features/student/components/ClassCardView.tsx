@@ -1,7 +1,5 @@
-import Image from "next/image";
 import { cn } from "@/lib/util";
 import { ComponentProps } from "react";
-import PersonIcon from "@/components/icon/PersonIcon";
 import CourseKey from "@/components/CourseKey";
 import CourseValues from "@/components/CourseValues";
 import SchoolHatIcon from "@/components/icon/SchoolHatIcon";

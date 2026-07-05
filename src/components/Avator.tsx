@@ -4,9 +4,9 @@ import { cn } from "@/lib/util";
 
 export default function Avator({ fullName ,className}: { fullName: string, className?: string }) { 
     return (
-        <div className={cn("text-xl relative aspect-square  rounded-full flex items-center justify-center", className)}
+        <div className={cn("text-xl relative aspect-square  rounded-full flex items-center justify-center text-white font-bold ", className)}
         style={{backgroundColor: getAvatarColorFromPalette()}}>
-           <span className="text-white font-bold leading-none">{getInitials(fullName)}</span>
+           <span className="leading-none">{getInitials(fullName)}</span>
          
         </div>
     );

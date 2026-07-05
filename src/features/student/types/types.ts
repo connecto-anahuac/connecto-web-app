@@ -4,6 +4,14 @@ export type Contact = {
   phone: string;
 };
 
+export type StudentProfile = {
+  id: string;
+  name: string;
+  status: string;
+  enrolledPeriod: string;
+  currentSemester: number;
+};
+
 export type CurriculumItem = {
   id: string; // clave
   keyCode: string;

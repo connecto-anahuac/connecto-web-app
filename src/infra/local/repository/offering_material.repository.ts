@@ -1,14 +1,14 @@
 import { db } from "../databse";
-import { OfferingMaterialEntity } from "../entities";
+import { OfferingCourseEntity } from "../entities";
 
-export class OfferingMaterialRepository {
-  async UpsertBulk(offeringMaterials: OfferingMaterialEntity[]): Promise<void> {
+export class OfferingCourseRepository {
+  async UpsertBulk(offeringCourses: OfferingCourseEntity[]): Promise<void> {
     try {
-      console.log("writing-offeringMaterials");
+      console.log("writing-offeringCourses");
 
-      await db.transaction("rw", db.offeringMaterials, async () => {
-        if (offeringMaterials.length) {
-          await db.offeringMaterials.bulkPut(offeringMaterials);
+      await db.transaction("rw", db.offeringCourses, async () => {
+        if (offeringCourses.length) {
+          await db.offeringCourses.bulkPut(offeringCourses);
         }
       });
 
@@ -19,47 +19,47 @@ export class OfferingMaterialRepository {
     }
   }
 
-  async findAll(): Promise<OfferingMaterialEntity[]> {
-    return db.offeringMaterials.toArray();
+  async findAll(): Promise<OfferingCourseEntity[]> {
+    return db.offeringCourses.toArray();
   }
 
-  async findById(id: string): Promise<OfferingMaterialEntity | undefined> {
-    return db.offeringMaterials.get(id);
+  async findById(id: string): Promise<OfferingCourseEntity | undefined> {
+    return db.offeringCourses.get(id);
   }
 
-  async findByCareer(career: string): Promise<OfferingMaterialEntity[]> {
-    return db.offeringMaterials.where("career").equals(career).toArray();
+  async findByCareer(career: string): Promise<OfferingCourseEntity[]> {
+    return db.offeringCourses.where("career").equals(career).toArray();
   }
 
-  async findByPeriod(period: string): Promise<OfferingMaterialEntity[]> {
-    return db.offeringMaterials.where("period").equals(period).toArray();
+  async findByPeriod(period: string): Promise<OfferingCourseEntity[]> {
+    return db.offeringCourses.where("period").equals(period).toArray();
   }
 
   async findByCareerAndPeriod(
     career: string,
     period: string,
-  ): Promise<OfferingMaterialEntity[]> {
-    return db.offeringMaterials.where("[career+period]").equals([career, period]).toArray();
+  ): Promise<OfferingCourseEntity[]> {
+    return db.offeringCourses.where("[career+period]").equals([career, period]).toArray();
   }
 
-  async save(offeringMaterial: OfferingMaterialEntity): Promise<void> {
-    await db.offeringMaterials.put(offeringMaterial);
+  async save(offeringCourse: OfferingCourseEntity): Promise<void> {
+    await db.offeringCourses.put(offeringCourse);
   }
 
-  async saveMany(offeringMaterials: OfferingMaterialEntity[]): Promise<void> {
-    await db.offeringMaterials.bulkPut(offeringMaterials);
+  async saveMany(offeringCourses: OfferingCourseEntity[]): Promise<void> {
+    await db.offeringCourses.bulkPut(offeringCourses);
   }
 
   async delete(id: string): Promise<void> {
-    await db.offeringMaterials.delete(id);
+    await db.offeringCourses.delete(id);
   }
 
   async deleteByCareerAndPeriod(career: string, period: string): Promise<void> {
     const scopedRows = await this.findByCareerAndPeriod(career, period);
-    await db.offeringMaterials.bulkDelete(scopedRows.map((row) => row.id));
+    await db.offeringCourses.bulkDelete(scopedRows.map((row) => row.id));
   }
 
   async clear(): Promise<void> {
-    await db.offeringMaterials.clear();
+    await db.offeringCourses.clear();
   }
 }

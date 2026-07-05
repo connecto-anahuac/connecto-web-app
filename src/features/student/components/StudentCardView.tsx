@@ -15,7 +15,7 @@ type StudentCardViewProps = {
   img: string;
   name: string;
   status: string;
-  carrier: string;
+  career: string;
   plan: string;
   id: string;
   semester: string;
@@ -57,7 +57,7 @@ export default function StudentCardView({ className, student }: Props) {
           </div>
 
           <div className="flex flex-col gap-2.5 items-start">
-            <span className="text-[0.8rem] font-medium">{student.carrier}</span>
+            <span className="text-[0.8rem] font-medium">{student.career}</span>
             <StudyPlan plan={student.plan} className={""} />
           </div>
         </div>

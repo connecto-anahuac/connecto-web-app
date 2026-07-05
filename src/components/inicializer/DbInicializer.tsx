@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../../infra/local/databse";
 import {
-  MateriaEntity,
+  CourseEntity,
   PlanEntity,
   PreRequisitoEntity,
 } from "@/infra/local/entities";
@@ -26,12 +26,12 @@ export default function DbInicializer() {
         await db.open();
         console.log("inicialized UniversityDB correctly");
 
-        // materias
-        if (mounted) setStatus("fetching-materias");
-        const materiasRes = await fetch(MATERIAS_URL);
-        const materiasJson = await materiasRes.json();
+        // Courses
+        if (mounted) setStatus("fetching-Courses");
+        const CoursesRes = await fetch(MATERIAS_URL);
+        const CoursesJson = await CoursesRes.json();
 
-        const materias: MateriaEntity[] = (materiasJson || [])
+        const courses: CourseEntity[] = (CoursesJson || [])
           .filter((m: any) => m && m.clave && m.clave.raw)
           .map((m: any) => ({
             key: String(m.clave.raw),
@@ -54,14 +54,14 @@ export default function DbInicializer() {
             id: `${String(p.clave.raw)}_${idx}`,
             name: "plan 2020",
             career: "TIND",
-            materiaKey: String(p.clave.raw),
+            courseKey: String(p.clave.raw),
             semester: p.semester != null ? Number(p.semester) : null,
             position: p.position != null ? Number(p.position) : null,
           }));
 
-        // preRequisitos: from materiasJson.pre_requisito
+        // preRequisitos: from CoursesJson.pre_requisito
         const prereqs: PreRequisitoEntity[] = [];
-        (materiasJson || []).forEach((m: any) => {
+        (CoursesJson || []).forEach((m: any) => {
           const current = m?.clave?.raw;
           if (!current) return;
           const pres = Array.isArray(m.pre_requisito) ? m.pre_requisito : [];
@@ -70,8 +70,8 @@ export default function DbInicializer() {
             if (!preRaw) return;
             prereqs.push({
               id: `${String(current)}_${String(preRaw)}_${i}`,
-              currentMateriaKey: String(current),
-              preMateriaKey: String(preRaw),
+              currentCourseKey: String(current),
+              preCourseKey: String(preRaw),
             });
           });
         });
@@ -80,11 +80,11 @@ export default function DbInicializer() {
           "rw",
           db.students,
           db.grades,
-          db.materias,
+          db.courses,
           db.plans,
           db.preRequisitos,
           async () => {
-            if (materias.length) await db.materias.bulkPut(materias);
+            if (courses.length) await db.courses.bulkPut(courses);
 
             if (plans.length) await db.plans.bulkPut(plans);
 
