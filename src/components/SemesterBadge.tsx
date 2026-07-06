@@ -1,4 +1,4 @@
-import { cn } from '@/lib/util'
+import { cn } from '@/shared/lib/util'
 import React from 'react'
 
 export type Semester = 'ene-mayo' | 'verano' | 'ago-dec' | 'semester'

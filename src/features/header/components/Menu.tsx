@@ -10,7 +10,7 @@ oncontainer
 
 */
 
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 
 export default function Menu() {
   return (

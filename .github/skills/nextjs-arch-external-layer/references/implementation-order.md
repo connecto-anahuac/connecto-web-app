@@ -2,6 +2,7 @@
 
 Add new server-backed functionality in this order:
 
+1. `external/dto/<domain>/<domain>.command.dto.ts` or `external/dto/<domain>/<domain>.query.dto.ts`
 1. `external/dto/<domain>`
 2. `external/repository/<domain or backend>`
 3. `external/service/<domain>`

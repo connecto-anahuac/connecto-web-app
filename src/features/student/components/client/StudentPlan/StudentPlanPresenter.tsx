@@ -1,7 +1,7 @@
 import ColumnTitle from "@/components/ColumnTitle";
 import RowTitle from "@/components/RowTitle";
 import StudentClassCardView from "@/features/student/components/ClassCardView";
-import type { StudentClassItem, StudentProfile } from "@/features/student/types/types";
+import type { StudentClassItem, StudentProfile } from "@/features/student/types";
 
 type Props = {
   loading: boolean;

@@ -6,19 +6,7 @@
 ## 1. この文書の優先順位
 
 - AI が新規実装、修正、レビュー方針を決めるときは、まずこの文書を参照する。
-- 既存の `architecture-complete.md` は背景説明と補足資料として扱う。
 - 原則と現行実装が軽くずれる箇所は、この文書では「原則」と「現行例」を分けて扱う。
-
-## 2. このガイドでの唯一の抽象化
-
-このガイドでは、再利用しやすさのために `src/shared/components` を `src/components` として表現する。
-それ以外の構成、責務、依存方向、実装手順は現行プロジェクトに合わせる。
-
-現行リポジトリ上の対応:
-
-- ガイド上の `src/components/layout/**` = 現行実装の `frontend/src/shared/components/layout/**`
-- ガイド上の `src/components/ui/**` = 現行実装の `frontend/src/shared/components/ui/**`
-- `src/shared/lib/**`, `src/shared/providers/**`, `src/shared/actions/**`, `src/shared/types/**` は現行のまま維持する
 
 ## 3. 標準ディレクトリ構成
 
@@ -27,7 +15,7 @@ src/
 ├─ app/           # App Router: page, layout, error, loading
 ├─ features/      # ドメイン別 UI とフロントロジック
 ├─ components/    # アプリ横断の layout, ui
-├─ shared/        # lib, providers, actions, types など横断モジュール
+├─ shared/        # lib, providers, actions, types など横断モジュール, 共有するクライアント側ビジネスロジック
 ├─ external/      # DTO, handler, service, repository, client
 └─ test/          # テスト共通セットアップ
 ```
@@ -42,7 +30,8 @@ src/
 ### 3.2 `features/`
 
 - 各機能をドメイン単位で閉じ込める。
-- UI、hook、query key、feature 専用 action、型、テストをここに集約する。
+- UI、UI表示用オブジェクト、hook、query key、feature 専用 action、型、テストをここに集約する。
+- クライアント側で実行するビジネスロジックも
 
 ```text
 features/<domain>/
@@ -54,7 +43,9 @@ features/<domain>/
 │  ├─ mutation/
 │  └─ query/
 ├─ queries/
+├─ service/
 ├─ types/
+├─ shared/
 └─ providers/     # その機能に閉じた provider が必要な場合のみ
 ```
 
@@ -73,8 +64,10 @@ components/
 
 ### 3.4 `shared/`
 
-- どの feature にも属さない横断的な TypeScript モジュールを置く。
+- どの feature にも属さない横断的なモジュールを置く。
 - 例: query client, provider, 共通 action, 共通 types。
+- 共有すべきクライアント側で実行するビジネスロジックはここに置く。
+
 
 ### 3.5 `external/`
 
@@ -99,6 +92,7 @@ external/
 - `app -> components`
 - `features -> shared`
 - `features -> external/handler`
+- `features -> external/dto`
 - `components -> shared`
 - `external/handler -> external/service`
 - `external/service -> external/repository`
@@ -112,12 +106,13 @@ external/
 - `features -> external/service`
 - `features -> external/repository`
 - `features -> external/domain`
+- `external -> features`
 - `components -> external/service`
 - `Presenter -> *.action.ts`
 - `Server Component -> Client 専用 hook`
 
 判断に迷ったら、「そのコードは UI か I/O か業務ロジックか」で分ける。
-I/O と業務ロジックは `external/`、UI とユーザー操作は `features/` または `components/` に置く。
+I/O とサーバー側業務ロジックは `external/`、UI とクライアント側業務ロジックとユーザー操作は `features/` または `components/` または `shared/` に置く。
 
 ## 5. ルートグループ規約
 
@@ -185,6 +180,23 @@ features/<domain>/components/server/<Page>/
 - `HydrationBoundary` で client component へ初期キャッシュを渡す。
 - 静的表示だけで足りる場合は hydration しない。
 
+### 6.3 types
+
+```text
+features/<domain>/types/<typeName>.ts
+```
+
+- 必要であれば `external/dto` からUI用のオブジェクトへのmapperを制作。
+- 必要であればUI表示用のオブジェクトを制作する。名前は `<AnyName>UI` 
+
+
+### 6.4 shared
+
+```text
+features/<domain>/shared/
+```
+- const, enum, lib, helperなど、特定のfeature domain 内で共通利用するモジュールを置く。
+
 ## 7. データ取得と更新の標準フロー
 
 ### 7.1 読み取りフロー
@@ -235,13 +247,17 @@ Presenter event
 
 ### 8.1 DTO
 
-- `external/dto/**` に Zod schema と TypeScript 型を置く。
+- `external/dto/<domain>/` に Zod schema と TypeScript 型を置く。
+- domain のDTOは`<domain>.dto.ts`
+- command,queryのDTOは`<domain>.command.dto.ts`、`<domain>.query.dto.ts`
+- 引数は`<anyName>Input`、返り値は `<anyName>Response`
 - 受信値、返却値、入力 payload をここで固定する。
 - UI に渡す前に必ず DTO helper で検証する。
 
 ### 8.2 Handler
 
 - feature から見える唯一のサーバー入口。
+- primitive型でない場合はDTOを返り値とする
 - `query.action.ts` は client から呼ぶ server action。
 - `query.server.ts` は server component から直接使う読み取りロジック。
 - `command.action.ts` は client から呼ぶ変更系 server action。
@@ -296,6 +312,7 @@ Presenter event
 
 1. `features/<domain>/types` に UI が使う型と enum を定義する。
 2. `features/<domain>/queries` に query key factory と DTO helper を作る。
+3. クライアント側で実行するビジネスロジックが必要なら `features/<domain>/service/` にservice を追加する。
 3. 読み取りが必要なら `features/<domain>/hooks/query` に hook を追加する。
 4. 更新が必要なら `features/<domain>/hooks/mutation` に mutation hook を追加する。
 5. `features/<domain>/components/client/<Widget>` に Container / Presenter / local hook を作る。

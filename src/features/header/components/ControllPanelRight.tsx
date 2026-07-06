@@ -1,5 +1,5 @@
 import StudentCardView from "@/features/student/components/StudentCardView";
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 
 type Props = {
   className?: string;

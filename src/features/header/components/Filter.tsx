@@ -1,4 +1,4 @@
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 
 type Props = { className?: string };
 export default function Filter({ className }: Props) {

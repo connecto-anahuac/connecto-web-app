@@ -5,8 +5,12 @@ import {
   fetchSelectedOfferingCourses,
   updateOfferingCourseselection,
 } from "@/external/handler/offering-course/query.client";
-import { getTotalEligibleStudents } from "@/features/offeringCourse/get_total_eligible_students";
-import type { OfferingCourse } from "@/features/offeringCourse/entity";
+import {
+  toOfferingCourseUI,
+  toUpdateOfferingCourseSelectionInput,
+} from "@/features/offeringCourse/types/offering-course";
+import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
+import { getTotalEligibleStudents } from "@/features/offeringCourse/lib/get-total-eligible-students";
 import { useEffect, useState } from "react";
 
 type UseScheduleBuilderResult = {
@@ -43,7 +47,7 @@ export function useScheduleBuilder(career: string): UseScheduleBuilderResult {
           return;
         }
 
-        setOfferingCourses(items);
+        setOfferingCourses(items.map(toOfferingCourseUI));
         setSelectedCourseKeys([
           ...new Set(selectedOfferingCourses.map((item) => item.courseKey)),
         ]);
@@ -84,12 +88,14 @@ export function useScheduleBuilder(career: string): UseScheduleBuilderResult {
     );
 
     try {
-      await updateOfferingCourseselection({
-        career,
-        offeringCourse,
-        estimatedNumber: getTotalEligibleStudents(offeringCourse),
-        isSelected: nextIsSelected,
-      });
+      await updateOfferingCourseselection(
+        toUpdateOfferingCourseSelectionInput(
+          offeringCourse,
+          career,
+          getTotalEligibleStudents(offeringCourse),
+          nextIsSelected,
+        ),
+      );
     } catch (toggleError) {
       console.error("Failed toggling offering Course selection", toggleError);
       setSelectedCourseKeys((currentKeys) =>

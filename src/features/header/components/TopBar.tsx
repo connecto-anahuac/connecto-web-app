@@ -12,7 +12,7 @@ oncontainer
 
 import Arrow from "@/components/icon/Arrow";
 import Divider from "@/components/Divider";
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 import Filter from "./Filter";
 import SearchBar from "./SearchBar";
 

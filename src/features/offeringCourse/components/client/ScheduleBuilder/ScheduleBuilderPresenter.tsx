@@ -1,6 +1,6 @@
-import OfferingClassCardView from "@/features/offeringCourse/ClassCardView";
-import Diagram from "@/features/offeringCourse/Diagram";
-import type { OfferingCourse } from "@/features/offeringCourse/entity";
+import Diagram from "@/features/offeringCourse/components/Diagram";
+import OfferingClassCardView from "@/features/offeringCourse/components/OfferingClassCardView";
+import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 
 type Props = {
   career: string;

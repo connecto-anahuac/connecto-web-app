@@ -1,4 +1,4 @@
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
 import CourseKey from "@/components/CourseKey";
 import CourseValues from "@/components/CourseValues";

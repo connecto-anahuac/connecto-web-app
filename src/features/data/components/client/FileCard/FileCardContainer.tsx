@@ -1,7 +1,8 @@
 "use client";
 
 import { FileCardPresenter } from "./FileCardPresenter";
-import { useFileCard, type FileLike } from "./useFileCard";
+import { useFileCard } from "./useFileCard";
+import type { FileLike } from "@/features/data/types/file";
 
 type Props = {
   className?: string;

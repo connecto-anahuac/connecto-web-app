@@ -1,7 +1,7 @@
 import EditIcon from "@/components/icon/EditIcon";
 import UnvisibleIcon from "@/components/icon/UnvisibleIcon";
 import ZoomInIcon from "@/components/icon/ZoomInIcon";
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 
 type Props = {
   className?: string;

@@ -1,11 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CARRERAS, FILE_TYPES } from "@/features/data/domain/consts";
-import { getcareerName } from "@/features/data/domain/validator";
-
-export type FileLike = File | { name: string; size: number };
-export type FileType = (typeof FILE_TYPES)[number];
+import { type FileLike, type FileType } from "@/features/data/types/file";
+import { getCareerName } from "@/shared/lib/data-import";
+import { CARRERAS } from "@/shared/types/consts";
 
 type UseFileCardResult = {
   career: string;
@@ -21,7 +19,7 @@ function getDefaultFileType(fileName: string): FileType {
 }
 
 export function useFileCard(file: FileLike): UseFileCardResult {
-  const [career, setcareer] = useState(getcareerName(file.name) ?? CARRERAS[0]);
+  const [career, setcareer] = useState(getCareerName(file.name) ?? CARRERAS[0]);
   const [fileType, setFileType] = useState<FileType>(getDefaultFileType(file.name));
 
   return {

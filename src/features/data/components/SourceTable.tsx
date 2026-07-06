@@ -1,5 +1,5 @@
 import Avator from "@/components/Avator";
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
   records: RecordProps[];

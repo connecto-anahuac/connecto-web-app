@@ -3,28 +3,22 @@ import {
   EXCEPT_COLUMNS,
   REGIONALES_COLUMN,
   TINT_PATTERN,
-} from "../../../features/data/domain/consts";
+} from "@/shared/types/data-import";
 
 import {
   normalize,
   isGrade,
   isPeriod,
-} from "../../../features/data/domain/validator";
+} from "@/shared/lib/data-import";
 
-//  import { GradeEntity, StudentEntity } from "./domain/types";
 import { extractRegionals } from "./regionals_extractor";
-import { GradeEntity, StudentEntity } from "@/infra/local/entities";
-import { NULL_DATA_STRING } from "@/types/consts";
+import { GradeEntity, StudentEntity } from "@/external/domain/university";
+import { NULL_DATA_STRING } from "@/shared/types/consts";
 
 
 export async function processStudentCsv(
   rows: Record<string, string>[],
-  _fileName: string,
-  _outputDir: string,
 ) : Promise<{ students: StudentEntity[]; grades: GradeEntity[] }> {
-  void _fileName;
-  void _outputDir;
-
   const students: StudentEntity[] = [];
   const grades: GradeEntity[] = [];
 

@@ -1,11 +1,11 @@
 import StudyPlan from "@/components/StudyPlan";
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 import Memo from "./Memo";
 import SchoolEmailIcon from "@/components/icon/SchoolEmailIcon";
 import EmailIcon from "@/components/icon/EmailIcon";
 import WhatsAppIcon from "@/components/icon/WhatsAppIcon";
 import Image from "next/image";
-import { Contact } from "../types/types";
+import type { Contact } from "../types";
 
 type Props = {
   className?: string;
@@ -69,7 +69,7 @@ export default function StudentCardView({ className, student }: Props) {
         <InfoItem label="semester" value={student.semester} />
         <InfoItem label="advance" value={`${student.advance}%`} />
         <InfoItem label="requisitos" value={`${student.requirements}/2`} />
-        <InfoItemContact value={"student.contact"} />
+        <InfoItemContact />
       </div>
 
       {/* memo */}
@@ -92,10 +92,8 @@ const InfoItem = ({ label, value }: { label: string; value: string }) => {
 
 const InfoItemContact = ({
   label = "contacto",
-  value,
 }: {
   label?: string;
-  value: string;
 }) => {
   return (
     <div className="flex flex-col gap-0 items-start">

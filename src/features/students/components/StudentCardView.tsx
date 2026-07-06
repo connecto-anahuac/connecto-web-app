@@ -1,9 +1,13 @@
 import StudyPlan from "@/components/StudyPlan";
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 import SchoolEmailIcon from "@/components/icon/SchoolEmailIcon";
 import EmailIcon from "@/components/icon/EmailIcon";
 import WhatsAppIcon from "@/components/icon/WhatsAppIcon";
-import { Contact } from "@/features/student/types/types";
+type Contact = {
+  schoolEmail: string;
+  privateEmail: string;
+  phone: string;
+};
 import Avator from "@/components/Avator";
 
 type Props = {

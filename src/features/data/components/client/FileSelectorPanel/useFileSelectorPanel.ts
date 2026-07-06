@@ -1,6 +1,6 @@
 "use client";
 
-import { importCsvAction } from "@/external/handler/data/import-csv.action";
+import { importCsvClient } from "@/external/handler/data/command.client";
 import { useRef, useState } from "react";
 
 type UploadResult = {
@@ -105,7 +105,7 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
         const formData = new FormData();
         formData.append("file", file);
 
-        const response = await importCsvAction(formData);
+        const response = await importCsvClient(formData);
         students += response.studentsCount;
         grades += response.gradesCount;
       }

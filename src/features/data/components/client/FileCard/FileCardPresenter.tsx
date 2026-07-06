@@ -1,7 +1,8 @@
 import { useId } from "react";
-import { CARRERAS, FILE_TYPES } from "@/features/data/domain/consts";
-import { cn } from "@/lib/util";
-import type { FileLike, FileType } from "./useFileCard";
+import { FILE_TYPES } from "@/features/data/types/file";
+import { cn } from "@/shared/lib/util";
+import { CARRERAS } from "@/shared/types/consts";
+import type { FileLike, FileType } from "@/features/data/types/file";
 
 type Props = {
   career: string;

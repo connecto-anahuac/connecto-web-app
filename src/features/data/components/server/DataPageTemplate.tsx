@@ -1,5 +1,5 @@
 
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 import FileSelectorPanel from "@/features/data/components/client/FileSelectorPanel/FileSelectorPanelContainer";
 import SourceTable, { type RecordProps } from "@/features/data/components/SourceTable";
 

@@ -1,6 +1,5 @@
-// import { GradeEntity } from "../domain/types";
-import { GradeEntity } from "@/infra/local/entities";
-import { isGrade, isPeriod } from "../../../features/data/domain/validator";
+import { GradeEntity } from "@/external/domain/university";
+import { isGrade, isPeriod } from "@/shared/lib/data-import";
 
 
 export function extractRegionals(

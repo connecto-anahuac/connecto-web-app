@@ -5,23 +5,18 @@ import {
   fetchStudentPlan,
 } from "@/external/handler/student/query.client";
 import { useEffect, useState } from "react";
-import type { StudentClassItem, StudentProfile } from "@/features/student/types/types";
+import {
+  toStudentClassItemUI,
+  toStudentProfileUI,
+  type StudentClassItem,
+  type StudentProfile,
+} from "@/features/student/types";
 
 type UseStudentPlanResult = {
   loading: boolean;
   plan: StudentClassItem[];
   student: StudentProfile | null;
 };
-
-function mapStudent(student: NonNullable<Awaited<ReturnType<typeof fetchStudentById>>>): StudentProfile {
-  return {
-    id: student.id,
-    name: student.name,
-    status: student.status,
-    enrolledPeriod: student.enrolledPeriod,
-    currentSemester: student.currentSemester,
-  };
-}
 
 export function useStudentPlan(studentId: string): UseStudentPlanResult {
   const [student, setStudent] = useState<StudentProfile | null>(null);
@@ -44,8 +39,8 @@ export function useStudentPlan(studentId: string): UseStudentPlanResult {
           return;
         }
 
-        setStudent(studentResult ? mapStudent(studentResult) : null);
-        setPlan(planResult);
+        setStudent(studentResult ? toStudentProfileUI(studentResult) : null);
+        setPlan(planResult.map(toStudentClassItemUI));
       } catch (error) {
         console.error("Failed loading student plan", error);
       } finally {

@@ -10,7 +10,7 @@ oncontainer
 
 */
 
-import { cn } from "@/lib/util";
+import { cn } from "@/shared/lib/util";
 import Menu from "./Menu";
 import TopBar from "./TopBar";
 import ControllPanelRight from "./ControllPanelRight";

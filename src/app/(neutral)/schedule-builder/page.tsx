@@ -1,5 +1,5 @@
-import { ScheduleBuilderPageTemplate } from "@/features/offeringMateria/components/server/ScheduleBuilderPageTemplate";
-import { CARRERAS } from "@/types/consts";
+import { ScheduleBuilderPageTemplate } from "@/features/offeringCourse/components/server/ScheduleBuilderPageTemplate";
+import { CARRERAS } from "@/shared/types/consts";
 
 type Props = {
   searchParams: Promise<{

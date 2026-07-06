@@ -1,6 +1,6 @@
 ---
 name: nextjs-arch-external-layer
-description: 'External layer rules for this architecture. Use for external/dto, external/handler, external/service, external/repository, server-only boundaries, DTO validation, and handler entry points.'
+description: 'External layer rules for this architecture. Use for external/dto, external/handler, external/service, external/repository, business logics, server-only boundaries, DTO validation, and handler entry points.'
 user-invocable: false
 ---
 
@@ -23,6 +23,7 @@ user-invocable: false
 
 ## Constraints
 
+- Files outside of `external/` folder can import only `external/handler` or `external/dto`.
 - `features/` must not import `external/service` or `external/repository`.
 - Server-only files must stay server-only.
 - DTO boundaries must be explicit and validated.
