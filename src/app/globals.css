@@ -99,6 +99,18 @@
   height: 23px;
 }
 
+
+@layer utilities {
+  /* スクロールバー非表示のクラス */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
 * {
   box-sizing: border-box;
 }

@@ -1,10 +1,10 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from "tailwindcss";
 
-const contentGlobs: Config['content'] = [
-  './app/**/*.{ts,tsx,js,jsx,mdx}',
-  './components/**/*.{ts,tsx,js,jsx,mdx}',
-  './.storybook/**/*.{ts,tsx,js,jsx,mdx}',
-]
+const contentGlobs: Config["content"] = [
+  "./app/**/*.{ts,tsx,js,jsx,mdx}",
+  "./components/**/*.{ts,tsx,js,jsx,mdx}",
+  "./.storybook/**/*.{ts,tsx,js,jsx,mdx}",
+];
 
 const config: Config = {
   content: contentGlobs,
@@ -16,7 +16,20 @@ const config: Config = {
       // notoSansJP: ["var(--font-noto-sans-jp)", "Noto Sans JP", "sans-serif"],
     },
   },
-  plugins: [],
-}
+  plugins: [
+    // function ({ addUtilities }: { addUtilities: any }) {
+    //   addUtilities({
+    //     ".scrollbar-none": {
+    //       background: "transparent" /* 背景を透明に */,
+    //       "-ms-overflow-style": "none" /* IE and Edge */,
+    //       "scrollbar-width": "none" /* Firefox */,
+    //     },
+    //     ".scrollbar-none::-webkit-scrollbar": {
+    //       display: "none" /* Safari and Chrome */,
+    //     },
+    //   });
+    // },
+  ],
+};
 
-export default config
+export default config;

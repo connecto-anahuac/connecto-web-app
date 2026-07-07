@@ -1,6 +1,6 @@
 ---
 description: "Recursively fetches Figma design data in stages and returns a structured FigmaDesignSummary. Use as a subagent when implementing from Figma, when get_design_context is too large, when you need metadata-guided child refetching, or when you need design context plus screenshots before coding. Trigger phrases: recursive figma fetch, staged figma summary, figma metadata fallback, figma child node refetch, design context before implementation."
-name: "Figma Design Fetcher"
+name: "OLD Figma Design Fetcher"
 tools: [figma-desktop/get_design_context, figma-desktop/get_metadata, figma-desktop/get_screenshot, figma-remote/get_design_context, figma-remote/get_metadata, figma-remote/get_screenshot]
 user-invocable: false
 argument-hint: "fileKey=<key optional> nodeId=<id optional> figmaUrl=<url optional>"

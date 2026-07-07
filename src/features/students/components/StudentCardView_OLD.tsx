@@ -29,7 +29,7 @@ type StudentCardViewProps = {
   avatarColorCssVar: string;
 };
 
-export default function StudentCardView({ className, student }: Props) {
+export default function StudentCardView_OLD({ className, student }: Props) {
   return (
     <div
       className={cn(
