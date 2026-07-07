@@ -1,5 +1,5 @@
 import { GradeEntity } from "@/external/domain/university";
-import { isGrade, isPeriod } from "@/shared/lib/data-import";
+import { isGrade, isPeriod } from "@/external/service/data/shared";
 
 
 export function extractRegionals(

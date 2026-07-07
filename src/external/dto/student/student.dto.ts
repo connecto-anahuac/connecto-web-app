@@ -1,3 +1,4 @@
+import { Student } from "@/external/domain/student";
 import type { StudentClassItem } from "@/external/domain/student-plan";
 import type { StudentEntity } from "@/external/domain/university";
 
@@ -5,9 +6,11 @@ export type StudentDto = {
   id: string;
   name: string;
   status: string;
-  enrolledPeriod: string;
+    enrolledPeriod: string;
   currentSemester: number;
-  currentSemesterWithoutSummer: number;
+  regularSemestersCount: number;
+  summerSemestersCount: number;
+  avatarColorRef: number;
 };
 
 export type StudentPlanItemDto = {
@@ -25,18 +28,22 @@ export type StudentPlanItemDto = {
   position: number;
 };
 
-export function toStudentDto(student: StudentEntity): StudentDto {
+export function toStudentDto(student: Student): StudentDto {
   return {
     id: student.id,
     name: student.name,
     status: student.status,
     enrolledPeriod: student.enrolledPeriod,
     currentSemester: student.currentSemester,
-    currentSemesterWithoutSummer: student.currentSemesterWithoutSummer,
+    regularSemestersCount: student.regularSemestersCount,
+    summerSemestersCount: student.summerSemestersCount,
+    avatarColorRef: student.avatarColorRef,
   };
 }
 
-export function toStudentPlanItemDto(studentClassItem: StudentClassItem): StudentPlanItemDto {
+export function toStudentPlanItemDto(
+  studentClassItem: StudentClassItem,
+): StudentPlanItemDto {
   return {
     id: studentClassItem.id,
     keyCode: studentClassItem.keyCode,

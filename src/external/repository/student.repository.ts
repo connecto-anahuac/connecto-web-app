@@ -1,5 +1,6 @@
 import { universityDb } from "@/external/client/university-db";
 import { StudentEntity } from "@/external/domain/university";
+import { Student } from "../domain/student";
 
 export class StudentRepository {
   async upsertBulk(students: StudentEntity[]): Promise<void> {

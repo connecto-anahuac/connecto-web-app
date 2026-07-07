@@ -2,7 +2,7 @@
 
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
-import { useStudentsList } from "@/features/students/hooks/useStudentsList";
+import { useStudentsList } from "@/features/students/components/client/StudentsShell/useStudentsList";
 import { StudentsShellPresenter } from "./StudentsShellPresenter";
 
 type Props = {

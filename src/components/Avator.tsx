@@ -1,11 +1,15 @@
 import { cn } from "@/shared/lib/util";
 
 
+type AvatorProps = React.ComponentPropsWithRef<"div"> & {
+  fullName: string;
+};
 
-export default function Avator({ fullName ,className}: { fullName: string, className?: string }) { 
+export default function Avator({ fullName ,className, ...props}: AvatorProps) { 
     return (
         <div className={cn("text-xl relative aspect-square  rounded-full flex items-center justify-center text-white font-bold ", className)}
-        style={{backgroundColor: getAvatarColorFromPalette()}}>
+        {...props}
+        >
            <span className="leading-none">{getInitials(fullName)}</span>
          
         </div>
@@ -26,21 +30,21 @@ function getInitials(fullName: string): string {
 }
 
 
-const AVATAR_PALETTE = [
-  '#FF6B6B', // ターメリック・レッド
-  '#4D96FF', // スカイ・ブルー
-  '#6BCB77', // フレッシュ・グリーン
-  '#FFD93D', // サン・イエロー
-  '#9B5DE5', // アメジスト・パープル
-  '#F15BB5', // マゼンタ・ピンク
-  '#00BBF9', // シアン・ブルー
-  '#00F5D4', // ティール・グリーン
-];
+// const AVATAR_PALETTE = [
+//   '#FF6B6B', // ターメリック・レッド
+//   '#4D96FF', // スカイ・ブルー
+//   '#6BCB77', // フレッシュ・グリーン
+//   '#FFD93D', // サン・イエロー
+//   '#9B5DE5', // アメジスト・パープル
+//   '#F15BB5', // マゼンタ・ピンク
+//   '#00BBF9', // シアン・ブルー
+//   '#00F5D4', // ティール・グリーン
+// ];
 
-/**
- * 定義されたパレットからランダムに背景色を選択する
- */
-export function getAvatarColorFromPalette(): string {
-  const randomIndex = Math.floor(Math.random() * AVATAR_PALETTE.length);
-  return AVATAR_PALETTE[randomIndex];
-}
+// /**
+//  * 定義されたパレットからランダムに背景色を選択する
+//  */
+// export function getAvatarColorFromPalette(): string {
+//   const randomIndex = Math.floor(Math.random() * AVATAR_PALETTE.length);
+//   return AVATAR_PALETTE[randomIndex];
+// }

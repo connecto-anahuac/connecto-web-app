@@ -4,6 +4,7 @@ import CourseKey from "@/components/CourseKey";
 import CourseValues from "@/components/CourseValues";
 import SchoolHatIcon from "@/components/icon/SchoolHatIcon";
 import SemesterBadge, { Semester } from "@/components/SemesterBadge";
+import { splitPeriod } from "@/shared/lib/tool";
 
 type Props = ComponentProps<"div"> & {
   courseCode: string;
@@ -26,10 +27,11 @@ export default function StudentClassCardView({
   className,
   ...props
 }: Props) {
-  const year = period.slice(0, 4);
-  const semeNum = period.slice(4);
+  // const year = period.slice(0, 4);
+  // const semeNum = period.slice(4);
+const {year, semesterNumber: semeNum} = splitPeriod(period);
   // console.log("period", year, "semeNum", semeNum);
-  const semester = semeNum === "10" ? "ene-mayo" : semeNum === "40" ? "verano" : semeNum === "60" ? "ago-dec" : "semester" as Semester;
+  const semester = semeNum === 10 ? "ene-mayo" : semeNum === 40 ? "verano" : semeNum === 60 ? "ago-dec" : "semester" as Semester;
   const gradeColor =
     grade === null
       ? "#202020"
@@ -79,7 +81,7 @@ export default function StudentClassCardView({
           </div>
 
           <div className="flex items-baseline gap-0.5 text-xs leading-none">
-            <span className="font-normal text-black">{year !== "" ? year : "year"}</span>
+            <span className="font-normal text-black">{year !== null ? year : "año"}</span>
           </div>
         </div>
         {/* <div className="ml-auto">

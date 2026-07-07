@@ -3,22 +3,19 @@ import {
   EXCEPT_COLUMNS,
   REGIONALES_COLUMN,
   TINT_PATTERN,
-} from "@/shared/types/data-import";
+} from "@/external/service/data/const";
 
-import {
-  normalize,
-  isGrade,
-  isPeriod,
-} from "@/shared/lib/data-import";
+import { isGrade, isPeriod } from "@/external/service/data/shared";
 
 import { extractRegionals } from "./regionals_extractor";
 import { GradeEntity, StudentEntity } from "@/external/domain/university";
 import { NULL_DATA_STRING } from "@/shared/types/consts";
-
+import { randomNumber } from "@/shared/lib/util";
+import { splitPeriod } from "@/shared/lib/tool";
 
 export async function processStudentCsv(
   rows: Record<string, string>[],
-) : Promise<{ students: StudentEntity[]; grades: GradeEntity[] }> {
+): Promise<{ students: StudentEntity[]; grades: GradeEntity[] }> {
   const students: StudentEntity[] = [];
   const grades: GradeEntity[] = [];
 
@@ -56,7 +53,9 @@ export async function processStudentCsv(
 
     const studentId = normalize(firstRow.ID);
     if (!studentId) {
-      console.warn(`Skipping student block at index ${start} due to missing ID`);
+      console.warn(
+        `Skipping student block at index ${start} due to missing ID`,
+      );
       continue;
     }
 
@@ -127,9 +126,9 @@ export async function processStudentCsv(
       }
     }
 
-  //  --------------------------------------------------
-  //  process of REGIONALES
-  //  --------------------------------------------------
+    //  --------------------------------------------------
+    //  process of REGIONALES
+    //  --------------------------------------------------
     const regionalGrades = extractRegionals(
       studentId,
       block.map((r) => normalize(r[REGIONALES_COLUMN])),
@@ -153,18 +152,53 @@ export async function processStudentCsv(
       name: normalize(firstRow.Nombre) ?? NULL_DATA_STRING,
       status: normalize(firstRow.Estatus) ?? NULL_DATA_STRING,
       enrolledPeriod: normalize(firstRow.Periodo) ?? NULL_DATA_STRING,
-      currentSemester,
-      currentSemesterWithoutSummer,
+      currentSemester: getCurrentSemester(normalize(firstRow.Periodo) ?? NULL_DATA_STRING),
+      regularSemestersCount: currentSemester,
+      summerSemestersCount: currentSemesterWithoutSummer,
+      avatarColorRef: randomNumber(),
     });
 
     grades.push(...studentGrades);
   }
 
-    console.log(students);
-    console.log(grades);
+  // console.log(students);
+  // console.log(grades);
+  students.forEach((student) => { 
+    console.log(`period: ${student.enrolledPeriod}, Current Semester: ${student.currentSemester}, Regular Semesters: ${student.regularSemestersCount}`);
+  })
 
   return {
     students,
     grades,
   };
+}
+
+function normalize(value: unknown): string | null {
+  if (value === undefined || value === null) {
+    return null;
+  }
+
+  const text = String(value).trim();
+
+  return text === "" ? null : text;
+}
+
+function getCurrentSemester(periods: string): number {
+  const PERIOD_1_MONTH = 1;
+  const PERIOD_2_MONTH = 8;
+
+  // when the students entered in summer, they are considered to be in the August-December semester of the same year
+  const { year, semesterNumber } = splitPeriod(periods);
+  // const enrolledSemester = semesterNumber === 10 ? 1 : 2; //semesterNumber === 40 ? 2 : semesterNumber === 60 ? 2 : 2;
+  let enrolledYear = year;
+  if (semesterNumber === 10) {
+    enrolledYear -= 1;
+  }
+
+  const today = new Date();
+  const currentYear = today.getFullYear();
+  const currentMonth = today.getMonth() + 1; // Months are zero-based
+  const thisYearSemester = currentMonth < PERIOD_2_MONTH ? 1 : 2;
+  const yearDiff = currentYear - enrolledYear;
+  return 2 * (yearDiff - 1) + 1 + thisYearSemester;
 }

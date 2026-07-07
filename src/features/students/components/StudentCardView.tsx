@@ -26,6 +26,7 @@ type StudentCardViewProps = {
   requirements: number;
   contact: Contact;
   memo: string;
+  avatarColorCssVar: string;
 };
 
 export default function StudentCardView({ className, student }: Props) {
@@ -38,7 +39,7 @@ export default function StudentCardView({ className, student }: Props) {
     >
       {/* top */}
       <div className="flex gap-2.5 h-fit w-full">
-        <Avator fullName={student.name} className="w-10 h-10 text-xl"/>
+        <Avator fullName={student.name} className="w-10 h-10 text-xl font-semibold" style={{ backgroundColor: `var(${student.avatarColorCssVar})` }} />
         {/* info */}
         <div className="flex flex-col gap-2 h-fit w-full">
           <div className="flex gap-2.5 items-center">

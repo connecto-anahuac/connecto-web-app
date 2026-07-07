@@ -29,7 +29,9 @@ export type StudentEntity = {
   status: string;
   enrolledPeriod: string;
   currentSemester: number;
-  currentSemesterWithoutSummer: number;
+  regularSemestersCount: number;
+  summerSemestersCount: number;
+  avatarColorRef: number;
 };
 
 export type GradeEntity = {

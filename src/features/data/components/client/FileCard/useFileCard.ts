@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { type FileLike, type FileType } from "@/features/data/types/file";
-import { getCareerName } from "@/shared/lib/data-import";
+// import { getCareerName } from "@/external/service/data/shared";
 import { CARRERAS } from "@/shared/types/consts";
 
 type UseFileCardResult = {
@@ -30,4 +30,13 @@ export function useFileCard(file: FileLike): UseFileCardResult {
     setcareer,
     setFileType,
   };
+}
+
+
+export function getCareerName(fileName: string): string | null {
+  return (
+    CARRERAS.find((career) =>
+      fileName.toLowerCase().includes(career.toLowerCase()),
+    ) ?? null
+  );
 }

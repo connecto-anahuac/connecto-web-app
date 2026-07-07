@@ -2,21 +2,44 @@
 
 import { fetchStudents } from "@/external/handler/students/query.client";
 import { useEffect, useState } from "react";
-import type { StudentListItem } from "../types/student-list-item";
+import type { StudentListItem } from "../../../types/student-list-item";
+import { StudentDto } from "@/external/dto/student/student.dto";
 
 type UseStudentsListResult = {
   students: StudentListItem[];
   loading: boolean;
 };
 
-function mapStudent(student: Awaited<ReturnType<typeof fetchStudents>>[number]): StudentListItem {
+const AVATOR_COLOR_PALETTE = [
+  "--ADM-strong",
+  "--CMP-strong",
+  "--CUL-strong",
+  "--SOC-strong",
+  "--IELC-strong",
+  "--EMP-strong",
+  "--FIS-strong",
+  "--HUM-strong",
+  "--IIND-strong",
+  "--CON-strong",
+  "--INT-strong",
+  "--LDR-strong",
+  "--MAT-strong",
+  "--SIS-strong",
+];
+
+function mapStudent(
+  student: StudentDto,
+): StudentListItem {
   return {
     id: student.id,
     name: student.name,
     status: student.status,
     career: "TIND",
     plan: "plan 2020",
-    semester: String(student.currentSemesterWithoutSummer ?? student.currentSemester ?? "-"),
+    semester: String(
+      student.currentSemester ?? student.regularSemestersCount ?? "-",
+    ),
+    avatarColorCssVar: AVATOR_COLOR_PALETTE[student.avatarColorRef % AVATOR_COLOR_PALETTE.length] ?? AVATOR_COLOR_PALETTE[0],
   };
 }
 
@@ -33,8 +56,9 @@ export function useStudentsList(): UseStudentsListResult {
         if (!mounted) {
           return;
         }
-
-        setStudents(result.map(mapStudent));
+        const studentsList = result.map(mapStudent);
+        
+        setStudents(studentsList);
       } finally {
         if (mounted) {
           setLoading(false);

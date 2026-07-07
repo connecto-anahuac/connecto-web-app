@@ -14,6 +14,6 @@ export function toStudentProfileUI(student: StudentDto): StudentProfile {
     name: student.name,
     status: student.status,
     enrolledPeriod: student.enrolledPeriod,
-    currentSemester: student.currentSemester,
+    currentSemester: student.regularSemestersCount,
   };
 }

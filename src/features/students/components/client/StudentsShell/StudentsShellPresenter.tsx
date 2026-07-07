@@ -47,6 +47,7 @@ export function StudentsShellPresenter({
                   phone: "",
                 },
                 memo: "",
+                avatarColorCssVar: student.avatarColorCssVar,
               }}
             />
           </Link>
