@@ -1,7 +1,7 @@
 import Avator from "@/components/Avator";
-import EmailIcon from "@/components/icon/EmailIcon";
-import SchoolEmailIcon from "@/components/icon/SchoolEmailIcon";
-import WhatsAppIcon from "@/components/icon/WhatsAppIcon";
+import EmailIcon from "@/components/icon/contact/EmailIcon";
+import SchoolEmailIcon from "@/components/icon/contact/SchoolEmailIcon";
+import WhatsAppIcon from "@/components/icon/contact/WhatsAppIcon";
 import StudyPlan from "@/components/StudyPlan";
 import type { StudentListItem } from "@/features/students/types/student-list-item";
 import { cn } from "@/shared/lib/util";

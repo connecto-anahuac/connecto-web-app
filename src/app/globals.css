@@ -3,15 +3,18 @@
 @import "./color_scheme.css";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-  --connecto-ink: #231f20;
-  --connecto-sidebar: #231f20;
-  --connecto-surface: #f9f9f9;
+  /* --background: #ffffff;
+  --foreground: #171717; */
+  --connecto-ink: #202020;
+  /* --connecto-sidebar: #231f20;
+  --connecto-surface: #f9f9f9; */
   --connecto-muted-panel: #e3e3e3;
-  --connecto-divider: #d9d9d9;
+  /* --connecto-divider: #d9d9d9;
   --connecto-muted: #646464;
+  --connecto-muted-strong: #494949;
   --connecto-success: #7edb87;
+  --connecto-select-fill: #f3f3f3;
+  --connecto-select-ink: #494949; */
 }
 
 @theme inline {
@@ -23,7 +26,10 @@
   --color-connecto-muted-panel: var(--connecto-muted-panel);
   --color-connecto-divider: var(--connecto-divider);
   --color-connecto-muted: var(--connecto-muted);
+  --color-connecto-muted-strong: var(--connecto-muted-strong);
   --color-connecto-success: var(--connecto-success);
+  --color-connecto-select-fill: var(--connecto-select-fill);
+  --color-connecto-select-ink: var(--connecto-select-ink);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -97,6 +103,65 @@
 
 @utility h-23px {
   height: 23px;
+}
+
+@utility h-22px {
+  height: 22px;
+}
+
+@utility h-24px {
+  height: 24px;
+}
+
+@utility w-22px {
+  width: 22px;
+}
+
+@utility gap-1px {
+  gap: 1px;
+}
+
+@utility gap-3px {
+  gap: 3px;
+}
+
+@utility px-7px {
+  padding-inline: 7px;
+}
+
+@utility pl-4px {
+  padding-left: 4px;
+}
+
+@utility pr-7px {
+  padding-right: 7px;
+}
+
+@utility px-3px {
+  padding-inline: 3px;
+}
+
+@utility py-5px {
+  padding-block: 5px;
+}
+
+@utility rounded-select-fill-left {
+  border-radius: 4px 2px 2px 4px;
+}
+
+@utility rounded-select-fill-right {
+  border-radius: 2px 4px 4px 2px;
+}
+
+@utility h-17px {
+  height: 17px;
+}
+
+@utility rounded-select-box-unfill {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
 }
 
 

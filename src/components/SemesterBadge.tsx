@@ -1,13 +1,14 @@
 import { cn } from '@/shared/lib/util'
-import React from 'react'
 
 export type Semester = 'ene-mayo' | 'verano' | 'ago-dec' | 'semester'
 
-const ELLIPSE_MAP: Record<Exclude<Semester, 'semester'>, string> = {
-  'ene-mayo': 'https://www.figma.com/api/mcp/asset/06d9165c-0cf7-42b5-ae04-d70c4fc5b4c5',
-  verano: 'https://www.figma.com/api/mcp/asset/be563df9-bef5-414f-9ce9-0600924adea8',
-  'ago-dec': 'https://www.figma.com/api/mcp/asset/c895ab44-b5a7-49a2-8966-941d851053ba',
+const SEMESTER_LABELS: Record<Semester, string> = {
+  'ene-mayo': 'Ene-May',
+  verano: 'Verano',
+  'ago-dec': 'Ago-Dec',
+  semester: 'semestre',
 }
+
 
 interface Props {
   semester?: Semester
@@ -16,8 +17,7 @@ interface Props {
 
 export default function SemesterBadge({ semester = 'semester', className = '' }: Props) {
   const showDot = semester !== 'semester'
-  const label =
-    semester === 'ene-mayo' ? 'Ene-May' : semester === 'verano' ? 'Verano' : semester === 'ago-dec' ? 'Ago-Dec' : 'semestre'
+  const label = SEMESTER_LABELS[semester]
 
   // console.log('semester', semester, 'showDot', showDot, 'label', label)
   return (
@@ -30,7 +30,7 @@ export default function SemesterBadge({ semester = 'semester', className = '' }:
         )}
         />
       )}
-      <span className="text-[12px] font-normal leading-none text-[#202020] whitespace-nowrap">{label}</span>
+      <span className="text-xs font-normal leading-none text-[#202020] whitespace-nowrap">{label}</span>
     </div>
   )
 }

@@ -7,3 +7,11 @@ export const CARRERAS = [
   "TIND",
   "Civil",
 ];
+
+
+export enum StudentStatus {
+  ACTIVE = "activo",
+  INACTIVE = "inactivo",
+  BAJA_ACADEMICA = "baja academica",
+  BAJA_VOLUNTARIA = "baja voluntaria",
+}

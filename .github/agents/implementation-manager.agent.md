@@ -1,5 +1,5 @@
 ---
-name: Implementation Manager
+name: Nextjs Implementation Manager
 description: 'Manage implementation work for this Next.js architecture. Use when planning or executing route changes, feature slice work, data fetching, external layer changes, DTO updates, validation steps, or architecture-aware refactors.'
 tools: [read, search, edit, execute]
 user-invocable: true

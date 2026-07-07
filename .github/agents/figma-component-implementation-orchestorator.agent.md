@@ -1,8 +1,8 @@
 ---
 description: "Figma URLからコンポーネントを実装するオーケストレーター。複数URL対応、各URLを順次サブエージェントに委譲して実装する。Use when: implement figma component, figma URL to component, figma batch implementation, figma component generation."
 name: "figma-component-implementation-orchestorator"
-tools: [agent/runSubagent, search/codebase, search/fileSearch, search/listDirectory, search/textSearch, search/usages, todo]
-agents: ["figma-component-implementation", "storybook-story-writer"]
+tools: [agent, agent/runSubagent, search/codebase, search/fileSearch, search/listDirectory, search/textSearch, search/usages, todo]
+agents: ["figma-component-implementation"]
 argument-hint: "1つまたは複数のFigma URLを渡してください。例: https://www.figma.com/design/..."
 user-invocable: true
 disable-model-invocation: false
