@@ -9,25 +9,11 @@ import {
 import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
 import { applyFilters } from "@/features/search/shared/filter-engine";
 import { useFilterStore } from "@/features/search/shared/filter-store";
-
-const PRESET_KEYS = {
-  alerta: "preset-alerta",
-  advertencia: "preset-advertencia",
-} as const;
-
-const ALERTA_RANGE: [number, number] = [1, 2];
-
-function toArrayValue(value: unknown): string[] {
-  if (Array.isArray(value)) {
-    return value.map(String);
-  }
-
-  if (value === null || value === undefined) {
-    return [];
-  }
-
-  return [String(value)];
-}
+import {
+  getStudentPresetNextConditions,
+  isStudentPresetSelected,
+  type StudentPresetKey,
+} from "./studentPresetSync";
 
 /**
  * Student リストにフィルターを適用するフック。
@@ -82,98 +68,53 @@ export function useStudentFilters(students: StudentListItem[]) {
     return applyFilters(students, definitions, conditions);
   }, [students, definitions, conditions]);
 
-  const careerCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.career,
-  );
-
-  const statusCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.status,
-  );
-
   const isPresetSelected = useCallback(
-    (presetKey: "career" | "status" | keyof typeof PRESET_KEYS) => {
-      switch (presetKey) {
-        case "career":
-          return toArrayValue(careerCondition?.value).includes("TIND");
-        case "status":
-          return toArrayValue(statusCondition?.value).includes("activo");
-        case "alerta":
-        case "advertencia":
-          return conditions.some((condition) => condition.id === PRESET_KEYS[presetKey]);
-      }
-    },
-    [careerCondition?.value, conditions, statusCondition?.value],
+    (presetKey: StudentPresetKey) => isStudentPresetSelected(presetKey, conditions),
+    [conditions],
   );
 
   const togglePreset = useCallback(
-    (presetKey: "career" | "status" | keyof typeof PRESET_KEYS) => {
-      if (presetKey === "career") {
-        const currentValues = toArrayValue(careerCondition?.value);
-        const nextValues = currentValues.includes("TIND")
-          ? currentValues.filter((value) => value !== "TIND")
-          : [...currentValues, "TIND"];
+    (presetKey: StudentPresetKey) => {
+      const nextConditions = getStudentPresetNextConditions(conditions, presetKey);
 
-        if (nextValues.length === 0) {
-          removeCondition(STUDENT_FILTER_KEYS.career);
-          return;
+      const nextCondition = nextConditions.find((condition) => {
+        switch (presetKey) {
+          case "career":
+            return condition.fieldKey === STUDENT_FILTER_KEYS.career;
+          case "status":
+            return condition.fieldKey === STUDENT_FILTER_KEYS.status;
+          case "alerta":
+          case "advertencia":
+            return condition.fieldKey === STUDENT_FILTER_KEYS.reprobado;
         }
-
-        upsertCondition({
-          id: STUDENT_FILTER_KEYS.career,
-          fieldKey: STUDENT_FILTER_KEYS.career,
-          operator: "in",
-          value: nextValues,
-        });
-        return;
-      }
-
-      if (presetKey === "status") {
-        const currentValues = toArrayValue(statusCondition?.value);
-        const nextValues = currentValues.includes("activo")
-          ? currentValues.filter((value) => value !== "activo")
-          : [...currentValues, "activo"];
-
-        if (nextValues.length === 0) {
-          removeCondition(STUDENT_FILTER_KEYS.status);
-          return;
-        }
-
-        upsertCondition({
-          id: STUDENT_FILTER_KEYS.status,
-          fieldKey: STUDENT_FILTER_KEYS.status,
-          operator: "in",
-          value: nextValues,
-        });
-        return;
-      }
-
-      const conditionId = PRESET_KEYS[presetKey];
-
-      if (conditions.some((condition) => condition.id === conditionId)) {
-        removeCondition(conditionId);
-        return;
-      }
+      });
 
       switch (presetKey) {
-        case "alerta":
-          upsertCondition({
-            id: conditionId,
-            fieldKey: STUDENT_FILTER_KEYS.reprobado,
-            operator: "between",
-            value: ALERTA_RANGE,
-          });
+        case "career":
+          if (!nextCondition) {
+            removeCondition(STUDENT_FILTER_KEYS.career);
+            return;
+          }
+          upsertCondition(nextCondition);
           return;
+        case "status":
+          if (!nextCondition) {
+            removeCondition(STUDENT_FILTER_KEYS.status);
+            return;
+          }
+          upsertCondition(nextCondition);
+          return;
+        case "alerta":
         case "advertencia":
-          upsertCondition({
-            id: conditionId,
-            fieldKey: STUDENT_FILTER_KEYS.reprobado,
-            operator: "gte",
-            value: 3,
-          });
+          if (!nextCondition) {
+            removeCondition(STUDENT_FILTER_KEYS.reprobado);
+            return;
+          }
+          upsertCondition(nextCondition);
           return;
       }
     },
-    [careerCondition?.value, conditions, removeCondition, statusCondition?.value, upsertCondition],
+    [conditions, removeCondition, upsertCondition],
   );
 
   const presetState = useMemo(

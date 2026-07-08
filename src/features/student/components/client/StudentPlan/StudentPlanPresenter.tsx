@@ -4,6 +4,7 @@ import StudentClassCardView from "@/features/student/components/ClassCardView";
 import type { StudentClassItem, StudentProfile } from "@/features/student/types";
 import { StudentSummaryPanel } from "./StudentSummaryPanel";
 import type { StudentSummary } from "./student-summary.types";
+import ZoomInIcon from "@/components/icon/ZoomInIcon";
 
 type Props = {
   loading: boolean;
@@ -29,7 +30,104 @@ export function StudentPlanPresenter({ loading, plan, student, summary }: Props)
 
   return (
     <div className="flex min-h-full h-full w-full gap-4 p-0">
-      <div className="min-w-0 flex-1 overflow-auto">
+      
+      <div className="min-w-0 flex-1 h-full flex flex-col gap-2 ">
+        <div className=" size-7 p-1 bg-gray-300/40 text-OnSurface shadow-2xl">
+            <ZoomInIcon className="size-full"/>
+        </div>
+        <div className="min-w-0 flex-1  overflow-auto relative">
+        
+          <div
+            className="w-fit"
+            style={{
+              display: "grid",
+              gridTemplateColumns: `auto repeat(${maxSemester}, minmax(13rem, 1fr))`,
+              gridAutoRows: "min-content",
+              gap: "1rem",
+            }}
+          >
+            <div
+              key="table-edge"
+              className="w-fit"
+              style={{
+                gridColumnStart: 1,
+                gridRowStart: 1,
+                position: "sticky",
+                top: 0,
+                left: 0,
+                zIndex: 30,
+                background: "transparent",
+              }}
+            >
+              <div className="w-4" />
+            </div>
+            {Array.from({ length: maxPosition }, (_, index) => {
+              const position = index + 1;
+              return (
+                <div
+                  key={`position-${position}`}
+                  style={{
+                    gridColumnStart: 1,
+                    gridRowStart: position + 1,
+                    position: "sticky",
+                    left: 0,
+                    zIndex: 20,
+                  }}
+                >
+                  <RowTitle text={String.fromCharCode(64 + position)} />
+                </div>
+              );
+            })}
+            {Array.from({ length: maxSemester }, (_, index) => {
+              const semester = index + 1;
+              return (
+                <div
+                  key={`semester-${semester}`}
+                  style={{
+                    gridColumnStart: semester + 1,
+                    gridRowStart: 1,
+                    position: "sticky",
+                    top: 0,
+                    zIndex: 25,
+                  }}
+                >
+                  <ColumnTitle text={`Semestre ${semester}`} />
+                </div>
+              );
+            })}
+            {plan.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  gridColumnStart: item.semester + 1 || 2,
+                  gridRowStart: item.position + 2 || 2,
+                }}
+              >
+                <StudentClassCardView
+                  className="w-full"
+                  courseCode={item.keyCode || item.id}
+                  courseNumber={item.keyNumber || ""}
+                  title={item.name}
+                  period={item.period}
+                  grade={item.grade}
+                  credits={item.credits ? item.credits.toString() : undefined}
+                  hours={item.hours ? item.hours.toString() : undefined}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <StudentSummaryPanel summary={summary} className="sticky top-4 self-start" />
+    </div>
+  );
+}
+
+
+function Diagram(plan: StudentClassItem[], maxSemester: number, maxPosition: number) {
+  return (
+          <div className="min-w-0 flex-1 overflow-auto">
         <div
           className="w-fit"
           style={{
@@ -113,8 +211,5 @@ export function StudentPlanPresenter({ loading, plan, student, summary }: Props)
           ))}
         </div>
       </div>
-
-      <StudentSummaryPanel summary={summary} className="sticky top-4 self-start" />
-    </div>
-  );
+  )
 }
