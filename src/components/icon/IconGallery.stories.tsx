@@ -21,6 +21,8 @@ import ToolOutlineIcon from './ToolOutlineIcon'
 import UnvisibleIcon from './UnvisibleIcon'
 import WhatsAppIcon from './contact/WhatsAppIcon'
 import ZoomInIcon from './ZoomInIcon'
+import ScheduleIcon from './ScheduleIcon'
+import StatusIcon from './StatusIcon'
 
 type GalleryArgs = {
   iconClassName: string
@@ -53,6 +55,8 @@ const icons: IconEntry[] = [
   { name: 'UnvisibleIcon', Component: UnvisibleIcon },
   { name: 'WhatsAppIcon', Component: WhatsAppIcon },
   { name: 'ZoomInIcon', Component: ZoomInIcon },
+  { name: 'ScheduleIcon', Component: ScheduleIcon },
+  { name: 'StatusIcon', Component: StatusIcon },
 ]
 
 function IconGallery({ iconClassName, arrowDirection }: GalleryArgs) {

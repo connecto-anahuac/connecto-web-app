@@ -25,14 +25,26 @@ export default function TabBadge({
       type={type}
       className={cn(
         "inline-flex w-fit shrink-0 items-center whitespace-nowrap rounded-sm transition-colors",
-        hasIcon ? "h-6 gap-1 pl-1 pr-2 py-1 text-sm font-medium leading-none" : "h-23px px-2 py-1 text-xs font-medium leading-none",
-        selected ? "bg-connecto-muted-panel text-connecto-ink" : "bg-transparent text-connecto-muted",
+        "h-fit px-2 py-1 text-xs font-medium leading-none",
+        hasIcon &&
+          "h-fit gap-1 pl-1 pr-2 py-1 text-sm font-medium leading-none",
+        "bg-transparent text-connecto-muted",
+        selected && "bg-connecto-muted-panel text-connecto-ink",
         className,
       )}
       {...props}
     >
-      {showDot && <span className="size-1 rounded-full bg-current" aria-hidden="true" />}
-      {hasIcon && <span className="flex size-4 items-center justify-center text-current" aria-hidden="true">{icon}</span>}
+      {showDot && (
+        <span className="size-1 rounded-full bg-current" aria-hidden="true" />
+      )}
+      {hasIcon && (
+        <span
+          className="flex size-4 items-center justify-center text-current"
+          aria-hidden="true"
+        >
+          {icon}
+        </span>
+      )}
       <span>{label}</span>
     </button>
   );

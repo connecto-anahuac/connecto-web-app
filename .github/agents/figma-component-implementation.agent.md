@@ -46,5 +46,11 @@ disable-model-invocation: false
 - コンポーネント名
 - 使用した CSS Variables / Tailwind ユーティリティの簡易一覧
 
-
-
+# template
+もしpropsの継承が必要な場合は以下のテンプレートを用いてください
+```tsx
+import type { ComponentProps } from "react";
+type Props = ComponentProps<"div"> & {
+  // any value
+};
+```

@@ -26,3 +26,13 @@ user-invocable: false
 - Presenter files must stay stateless.
 - Feature code must not import service or repository layers directly.
 - Tests should stay colocated with the feature slice.
+
+
+# template
+When props inheritance is needed, use the following template:
+```tsx
+import type { ComponentProps } from "react";
+type Props = ComponentProps<"div"> & {
+  // any value
+};
+```

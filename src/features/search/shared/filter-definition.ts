@@ -1,51 +1,81 @@
 
-export const operators = ["equals", "contains", "moreThan", "lessThan", "orMore", "andLess", "in", "between"] as const;
+export const operators = ["eq", "contains", "gt", "gte", "lt", "lte", "in", "between"] as const;
 export type Operator = (typeof operators)[number];
+export const operatorTextLabels: Record<Operator, string> = {
+  eq: "Es",
+  contains: "Contiene",
+  gt: "Mayor que",
+  gte: "Mayor o igual que",
+  lt: "Menor que",
+  lte: "Menor o igual que",
+  in: "En",
+  between: "Entre",
+}
+export const operatorNumberLabels: Record<Operator, string> = {
+  eq: "=",
+  contains: "Contiene",
+  gt: ">",
+  gte: "≧",
+  lt: "<",
+  lte: "≦",
+  in: "En",
+  between: "Entre",
+}
 
-export const editor = ["text" , "number" , "select" , "multiSelect" , "date"] as const;
+// UIの入力法式
+export const editor = ["text", "number", "select", "multiSelect", "date"] as const;
 export type Editor = (typeof editor)[number];
 
+//valueの型
+export const valueTypes = ["text", "number", "date", "singleSelect", "multiSelect", "boolean"] as const;
+export type ValueType = (typeof valueTypes)[number];
 
-const inputTypes = ["free", "option"] as const;
-type InputType = (typeof inputTypes)[number];
+// filterで使える最小単位
+export type FilterPrimitive = string | number | boolean;
+// 範囲検索用のfilterの型
+export type FilterRangeValue = [FilterPrimitive, FilterPrimitive];
+//filterで使えるすべての型
+export type FilterConditionValue = FilterPrimitive | FilterPrimitive[] | FilterRangeValue | null;
 
-
-type BaseFilterDefinition<T> = {
+type BaseFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = {
   key: string;
   label: string;
-
   editor: Editor;
+  valueType: ValueType;
   operators: Operator[];
+  getValue: (item: TItem) => TValue | TValue[] | null | undefined; //student[definition.key]の回避
+  normalize?: (value: unknown) => TValue | TValue[] | null;
 };
 
 // =============================
 
-type FreeFilterDefinition<T> = BaseFilterDefinition<T> & {
+//自由入力
+type FreeFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = BaseFilterDefinition<TItem, TValue> & {
   inputType: "free";
-
-  parse: (value: string) => T;
 };
 
-type OptionFilterDefinition<T> = BaseFilterDefinition<T> & {
+// 選択肢入力
+type OptionFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = BaseFilterDefinition<TItem, TValue> & {
   inputType: "option";
 
   options: {
     label: string;
-    value: T;
+    value: TValue;
   }[];
 };
 
-export type FilterDefinition<T = unknown> =
-  | FreeFilterDefinition<T>
-  | OptionFilterDefinition<T>;
+//filterの型
+export type FilterDefinition<TItem = unknown, TValue extends FilterPrimitive = FilterPrimitive> =
+  | FreeFilterDefinition<TItem, TValue>
+  | OptionFilterDefinition<TItem, TValue>;
 
-export type FilterValue =
-  | string
-  | number
-  | boolean
-  | Date
-  | string[]
-  | number[]
-  | null;
 
-export type FilterState = Record<string, FilterValue>;
+  // 実際のfilterの値
+export type FilterCondition = {
+  id: string;
+  fieldKey: string;
+  operator: Operator;
+  value: FilterConditionValue;
+};
+
+export type FilterDefinitionMap<TItem> = Record<string, FilterDefinition<TItem>>;

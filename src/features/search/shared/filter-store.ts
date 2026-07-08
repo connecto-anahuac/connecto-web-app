@@ -1,30 +1,36 @@
-
 import { create } from "zustand";
-import { FilterState, FilterValue } from "./filter-definition";
+import { FilterCondition } from "./filter-definition";
 
 export type FilterStore = {
-  values: FilterState;
-
-  setValue: (
-    key: string,
-    value: FilterValue
-  ) => void;
-
+  conditions: FilterCondition[];
+  setConditions: (conditions: FilterCondition[]) => void;
+  upsertCondition: (condition: FilterCondition) => void;
+  removeCondition: (conditionId: string) => void;
   clear: () => void;
 };
 
-const useFilterStore =
-  create<FilterStore>((set) => ({
-    values: {},
+export const useFilterStore = create<FilterStore>((set) => ({
+  conditions: [],
 
-    setValue: (key, value) =>
-      set((state) => ({
-        values: {
-          ...state.values,
-          [key]: value,
-        },
-      })),
+  setConditions: (conditions) =>
+    set({ conditions }),
 
-    clear: () =>
-      set({ values: {} }),
-  }));
+  upsertCondition: (condition) =>
+    set((state) => {
+      const nextConditions = state.conditions.some((current) => current.id === condition.id)
+        ? state.conditions.map((current) => (current.id === condition.id ? condition : current))
+        : [...state.conditions, condition];
+
+      return {
+        conditions: nextConditions,
+      };
+    }),
+
+  removeCondition: (conditionId) =>
+    set((state) => ({
+      conditions: state.conditions.filter((condition) => condition.id !== conditionId),
+    })),
+
+  clear: () =>
+    set({ conditions: [] }),
+}));

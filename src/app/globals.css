@@ -164,6 +164,21 @@
   border-bottom-right-radius: 2px;
 }
 
+@utility w-search-filter-card {
+  width: 260px;
+}
+
+@utility rounded-search-filter-card {
+  border-radius: 6px;
+}
+
+
+
+@utility size-search-filter-dismiss {
+  width: 22px;
+  height: 22px;
+}
+
 
 @layer utilities {
   /* スクロールバー非表示のクラス */

@@ -1,9 +1,14 @@
+import { DateFilter } from "./DateFilter";
+import { MultiSelectFilter } from "./MultiselectFilter";
+import { NumberFilter } from "./NumberFilter";
+import { SelectFilter } from "./SelectFilter";
+import { TextFilter } from "./TextFilter";
 import { FilterDefinition } from "../shared/filter-definition";
 
-function FilterRenderer({
+export function FilterRenderer<TItem>({
   filter,
 }: {
-  filter: FilterDefinition;
+  filter: FilterDefinition<TItem>;
 }) {
   switch (filter.editor) {
     case "text":
