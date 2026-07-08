@@ -9,11 +9,18 @@ import {
 import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
 import { applyFilters } from "@/features/search/shared/filter-engine";
 import { useFilterStore } from "@/features/search/shared/filter-store";
+import type { FilterCondition } from "@/features/search/shared/filter-definition";
 import {
   getStudentPresetNextConditions,
   isStudentPresetSelected,
   type StudentPresetKey,
 } from "./studentPresetSync";
+
+const STUDENT_FILTER_KEY_SET = new Set(Object.values(STUDENT_FILTER_KEYS));
+
+function getRelevantConditions(conditions: FilterCondition[]) {
+  return conditions.filter((condition) => STUDENT_FILTER_KEY_SET.has(condition.fieldKey));
+}
 
 /**
  * Student リストにフィルターを適用するフック。
@@ -26,6 +33,7 @@ export function useStudentFilters(students: StudentListItem[]) {
   const conditions = useFilterStore((state) => state.conditions);
   const upsertCondition = useFilterStore((state) => state.upsertCondition);
   const removeCondition = useFilterStore((state) => state.removeCondition);
+  const relevantConditions = getRelevantConditions(conditions);
 
   const definitions = useMemo(
     () => buildFilterDefinitions(STUDENT_FILTER_FIELDS, students),
@@ -37,7 +45,7 @@ export function useStudentFilters(students: StudentListItem[]) {
     [definitions],
   );
 
-  const nameCondition = conditions.find(
+  const nameCondition = relevantConditions.find(
     (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.name,
   );
 
@@ -65,17 +73,17 @@ export function useStudentFilters(students: StudentListItem[]) {
   );
 
   const filteredStudents = useMemo(() => {
-    return applyFilters(students, definitions, conditions);
-  }, [students, definitions, conditions]);
+    return applyFilters(students, definitions, relevantConditions);
+  }, [students, definitions, relevantConditions]);
 
   const isPresetSelected = useCallback(
-    (presetKey: StudentPresetKey) => isStudentPresetSelected(presetKey, conditions),
-    [conditions],
+    (presetKey: StudentPresetKey) => isStudentPresetSelected(presetKey, relevantConditions),
+    [relevantConditions],
   );
 
   const togglePreset = useCallback(
     (presetKey: StudentPresetKey) => {
-      const nextConditions = getStudentPresetNextConditions(conditions, presetKey);
+      const nextConditions = getStudentPresetNextConditions(relevantConditions, presetKey);
 
       const nextCondition = nextConditions.find((condition) => {
         switch (presetKey) {
@@ -114,7 +122,7 @@ export function useStudentFilters(students: StudentListItem[]) {
           return;
       }
     },
-    [conditions, removeCondition, upsertCondition],
+    [relevantConditions, removeCondition, upsertCondition],
   );
 
   const presetState = useMemo(
