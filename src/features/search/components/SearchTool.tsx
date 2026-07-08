@@ -1,5 +1,8 @@
 import { cn } from "@/shared/lib/util"
 import type { ButtonHTMLAttributes, InputHTMLAttributes } from "react"
+import SearchIcon from "../../../components/icon/SearchIcon"
+import FilterIcon from "../../../components/icon/FilterIcon"
+import ToolOutlineIcon from "../../../components/icon/ToolOutlineIcon"
 
 type SearchToolProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
 	className?: string
@@ -10,30 +13,8 @@ type SearchToolProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
 	onFilterClick?: () => void
 }
 
-function SearchIcon() {
-	return (
-		<svg viewBox="0 0 20 20" fill="none" aria-hidden="true" className="size-5 shrink-0">
-			<circle cx="9" cy="9" r="5.75" stroke="currentColor" strokeWidth="1.5" />
-			<path d="M13.2 13.2L16.5 16.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-		</svg>
-	)
-}
 
-function FilterIcon() {
-	return (
-		<svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className="size-6 shrink-0">
-			<path
-				d="M4 7H10M14 7H20M8 12H20M4 12H4.5M4 17H13M17 17H20"
-				stroke="currentColor"
-				strokeWidth="1.8"
-				strokeLinecap="round"
-			/>
-			<circle cx="12" cy="7" r="1.75" stroke="currentColor" strokeWidth="1.8" />
-			<circle cx="6.5" cy="12" r="1.75" stroke="currentColor" strokeWidth="1.8" />
-			<circle cx="15" cy="17" r="1.75" stroke="currentColor" strokeWidth="1.8" />
-		</svg>
-	)
-}
+
 
 export default function SearchTool({
 	className,
@@ -48,25 +29,26 @@ export default function SearchTool({
 	...inputProps
 }: SearchToolProps) {
 	return (
-		<div className={cn("search-tool-w flex items-center gap-3", className)}>
+		<div className={cn("search-tool-w flex items-center gap-3 text-OnSurface/70", className)}>
 			<label
 				className={cn(
-					"flex-1 py-1.5 pl-3.5 pr-4.5 flex h-8 items-center gap-3.5 rounded-full border-2 border-connecto-divider bg-connecto-muted-panel",
+					"flex-1 py-1.5 pl-2 pr-4.5 flex h-8 items-center gap-1 rounded-full border-2 border-Outline bg-connecto-muted-panel",
 					disabled && "opacity-60",
 					inputWrapperClassName,
 				)}
 			>
-				<span className="text-connecto-muted" aria-hidden="true">
-					<SearchIcon />
+				<span className="h-full w-fit p-px flex items-center justify-center" aria-hidden="true">
+					<SearchIcon className="aspect-square h-full w-auto w-4.5 h-4.5" />
 				</span>
 				<input
+				
 					{...inputProps}
 					type={type}
 					disabled={disabled}
 					placeholder={placeholder}
 					aria-label={inputProps["aria-label"] ?? placeholder}
 					className={cn(
-						"min-w-0 flex-1 bg-transparent text-[12px] font-semibold leading-none text-connecto-ink outline-none placeholder:text-header-on-container-variant",
+						"min-w-0 flex-1 bg-transparent text-sm font-medium leading-none  outline-none placeholder:text-Outline ",
 						disabled && "cursor-not-allowed",
 						inputClassName,
 					)}
@@ -84,7 +66,7 @@ export default function SearchTool({
 					filterButtonProps?.className,
 				)}
 			>
-				<FilterIcon />
+				<ToolOutlineIcon className="size-5" />
 			</button>
 		</div>
 	)

@@ -1,6 +1,6 @@
-import { FilterDefinition } from "../shared/filter-definition";
+import { FilterDefinition } from "../../shared/filter-definition";
 
-export function TextFilter<TItem>({
+export function NumberFilter<TItem>({
   filter,
 }: {
   filter: FilterDefinition<TItem>;
@@ -9,7 +9,7 @@ export function TextFilter<TItem>({
     <input
       aria-label={filter.label}
       placeholder={filter.label}
-      type="text"
+      type="number"
     />
   );
 }

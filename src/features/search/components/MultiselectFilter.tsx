@@ -1,7 +1,7 @@
 import SelectBoxUnfill from "@/components/select-box/SelectBoxUnfill";
 
-import { FilterCard } from "./FilterCard";
-import { FilterSearchInput } from "./FilterSearchInput";
+import { FilterCard } from "./filter/FilterCard";
+import { FilterSearchInput } from "./filter/FilterSearchInput";
 import {
   FilterDefinition,
   operators,

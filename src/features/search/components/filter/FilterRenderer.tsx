@@ -1,9 +1,9 @@
 import { DateFilter } from "./DateFilter";
-import { MultiSelectFilter } from "./MultiselectFilter";
+import { MultiSelectFilter } from "../MultiselectFilter";
 import { NumberFilter } from "./NumberFilter";
-import { SelectFilter } from "./SelectFilter";
+import { SelectFilter } from "../SelectFilter";
 import { TextFilter } from "./TextFilter";
-import { FilterDefinition } from "../shared/filter-definition";
+import { FilterDefinition } from "../../shared/filter-definition";
 
 export function FilterRenderer<TItem>({
   filter,

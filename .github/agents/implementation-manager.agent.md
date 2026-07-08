@@ -48,3 +48,12 @@ Load skills on demand.
 - State which slice is being changed.
 - State which validation was run.
 - If architecture constraints influenced the change, name the relevant skill.
+
+## Template
+if props inheritance is needed, use the following template:
+```tsx
+import type { ComponentProps } from "react";
+type Props = ComponentProps<"div"> & {
+  // any value
+};
+```

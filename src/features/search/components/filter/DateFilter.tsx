@@ -1,4 +1,4 @@
-import { FilterDefinition } from "../shared/filter-definition";
+import { FilterDefinition } from "../../shared/filter-definition";
 
 export function DateFilter<TItem>({
   filter,

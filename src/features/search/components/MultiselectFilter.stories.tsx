@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { expect, userEvent, within } from 'storybook/test'
 
 import { MultiSelectFilter } from './MultiselectFilter'
-import { FILTER_METADATA, FilterMetadataKeys } from '../shared/filter-metadata'
+import { STUDENT_FILTER_METADATA, StudentFilterMetadataKeys } from '../shared/filter-metadata'
 import { FilterDefinition, operators } from '../shared/filter-definition'
 
 const baseFilter:FilterDefinition<string> = {
@@ -32,7 +32,7 @@ const meta = {
   },
   args: {
       filter: baseFilter,
-      filterMetadata:FILTER_METADATA[FilterMetadataKeys.name],
+      filterMetadata:STUDENT_FILTER_METADATA[StudentFilterMetadataKeys.name],
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof MultiSelectFilter<string>>
@@ -44,12 +44,12 @@ export const Default: Story = {}
 
 export const Status: Story = {
   args: {
-   filterMetadata: FILTER_METADATA[FilterMetadataKeys.status],
+   filterMetadata: STUDENT_FILTER_METADATA[StudentFilterMetadataKeys.status],
   },
 }
 export const Semester: Story = {
   args: {
-   filterMetadata: FILTER_METADATA[FilterMetadataKeys.semester],
+   filterMetadata: STUDENT_FILTER_METADATA[StudentFilterMetadataKeys.semester],
   },
 }
 

@@ -2,7 +2,7 @@ import StudentCard from "@/features/students/components/StudentCard";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { StudentListItem } from "@/features/students/types/student-list-item";
-import SearchTool from "@/components/SearchTool";
+import SearchTool from "@/features/search/components/SearchTool";
 import FilterPresetBadge from "@/components/FilterPresetBadge";
 import { FilterIcon } from "@/features/home/components/server/icons";
 import MultiSelect from "@/components/MultiSelect";
