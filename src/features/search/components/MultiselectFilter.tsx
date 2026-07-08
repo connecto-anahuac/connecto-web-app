@@ -1,115 +1,112 @@
-import SelectBoxUnfill from "@/components/select-box/SelectBoxUnfill";
+"use client";
 
+import { useMemo, useState } from "react";
+import type { ReactNode } from "react";
+import CloseButton from "@/components/button/CloseButton";
+import SelectMenu from "@/components/selectMenu";
 import { FilterCard } from "./filter/FilterCard";
 import { FilterSearchInput } from "./filter/FilterSearchInput";
-import {
-  FilterDefinition,
-  operators,
-  operatorTextLabels,
-} from "../shared/filter-definition";
-import CloseButton from "@/components/button/CloseButton";
-import { FilterMetadata } from "../shared/filter-metadata";
-import IconWithText from "@/components/IconWithText";
-import SelectMenu from "@/components/selectMenu";
-import { useSelectBox } from "@/components/select-box/hooks";
+import { FilterFieldHeader } from "./filter/FilterFieldHeader";
+import { FilterDefinition, FilterPrimitive } from "../shared/filter-definition";
+import { useFilterCondition } from "../shared/use-filter-condition";
 
-// function CloseIcon() {
-//   return (
-//     <svg viewBox="0 0 16 16" fill="none" aria-hidden="true" className="size-4">
-//       <path
-//         d="M4.46967 4.46967C4.76256 4.17678 5.23744 4.17678 5.53033 4.46967L8 6.93934L10.4697 4.46967C10.7626 4.17678 11.2374 4.17678 11.5303 4.46967C11.8232 4.76256 11.8232 5.23744 11.5303 5.53033L9.06066 8L11.5303 10.4697C11.8232 10.7626 11.8232 11.2374 11.5303 11.5303C11.2374 11.8232 10.7626 11.8232 10.4697 11.5303L8 9.06066L5.53033 11.5303C5.23744 11.8232 4.76256 11.8232 4.46967 11.5303C4.17678 11.2374 4.17678 10.7626 4.46967 10.4697L6.93934 8L4.46967 5.53033C4.17678 5.23744 4.17678 4.76256 4.46967 4.46967Z"
-//         fill="currentColor"
-//       />
-//     </svg>
-//   );
-// }
-
-export function MultiSelectFilter<TItem>({
-  filter,
-  filterMetadata,
-}: {
+type Props<TItem> = {
   filter: FilterDefinition<TItem>;
-  filterMetadata: FilterMetadata;
-}) {
+  icon?: ReactNode;
+};
+
+/**
+ * option フィールド向けのチェックリスト型フィルター（複数選択 / operator "in"）。
+ */
+export function MultiSelectFilter<TItem>({ filter, icon }: Props<TItem>) {
+  const { condition, operator, setValue, setOperator, clear } =
+    useFilterCondition(filter);
+  const [query, setQuery] = useState("");
+  const [hoveredIndex, setHoveredIndex] = useState(0);
+
+  const options = useMemo(
+    () =>
+      filter.inputType === "option"
+        ? filter.options.map((option) => ({
+            label: option.label,
+            value: String(option.value),
+          }))
+        : [],
+    [filter],
+  );
+
+  const valueByKey = useMemo(() => {
+    const map = new Map<string, FilterPrimitive>();
+    if (filter.inputType === "option") {
+      for (const option of filter.options) {
+        map.set(String(option.value), option.value);
+      }
+    }
+    return map;
+  }, [filter]);
+
+  const selectedValues = useMemo(() => {
+    const value = condition?.value;
+    if (Array.isArray(value)) {
+      return value.map(String);
+    }
+    if (value === null || value === undefined) {
+      return [];
+    }
+    return [String(value)];
+  }, [condition?.value]);
+
+  const filteredOptions = useMemo(
+    () =>
+      options.filter((option) =>
+        option.label.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
+      ),
+    [options, query],
+  );
+
   if (filter.inputType !== "option") {
     return null;
   }
-  const isMulti = true;
-  const options = filter.options.map((option) => ({
-    label: option.label,
-    value: String(option.value),
-  }));
-  const defaultValue = null; // options.map((option) => String(option.value));
 
-  const {
-    // isOpen,
-    hoveredIndex,
-    selectedLabel,
-    // toggleMenu,
-    setHoveredIndex,
-    isSelected,
-    selectValue,
-    containerRef,
-  } = useSelectBox({
-    isMulti,
-    options,
-    defaultValue,
-  });
+  const toggleValue = (key: string) => {
+    const nextKeys = selectedValues.includes(key)
+      ? selectedValues.filter((current) => current !== key)
+      : [...selectedValues, key];
+
+    const nextValues = nextKeys.map((current) => valueByKey.get(current) ?? current);
+    setValue(nextValues, "in");
+  };
 
   return (
     <FilterCard
       aria-label={`${filter.label} filter`}
       header={
-        <div className="flex items-center gap-1 text-OnSurface">
-          {filterMetadata.icon ? (
-            <IconWithText
-              label={filterMetadata.label}
-              icon={filterMetadata.icon}
-            />
-          ) : (
-            <span className="text-xs leading-none font-medium text-OnSurfaceVariant">
-              {filter.label}
-            </span>
-          )}
-
-              <SelectBoxUnfill
-                  className="text-sm"
-                //   label={operatorTextLabels["eq"]}
-                  defaultValue={operators[0]}
-            isMulti={false}
-            options={filter.operators.map((option) => ({
-              label: operatorTextLabels[option] || option,
-              value: String(option),// operatorTextLabels[option] || option,//
-            }))}
-          />
-        </div>
+        <FilterFieldHeader
+          filter={filter}
+          icon={icon}
+          operator={operator}
+          onOperatorChange={setOperator}
+        />
       }
-      trailingAction={<CloseButton />}
+      trailingAction={<CloseButton onClick={clear} />}
     >
       <FilterSearchInput
         aria-label={filter.label}
-        defaultValue="Busacar filtros"
+        placeholder="Buscar opciones"
+        value={query}
+        onChange={(event) => setQuery(event.target.value)}
+        onClear={() => setQuery("")}
       />
 
-      {/* <SelectBoxUnfill
-        label={filter.label}
-        isMulti
-        options={filter.options.map((option) => ({
-          label: option.label,
-          value: String(option.value),
-        }))}
-          /> */}
       <SelectMenu
-        isMulti={isMulti}
+        isMulti
+        isOpen
         hoveredIndex={hoveredIndex}
-        selectedValues={options
-          .filter((option) => isSelected(option.value))
-          .map((option) => option.value)}
+        selectedValues={selectedValues}
         onHoverItem={setHoveredIndex}
-        onSelectItem={selectValue}
-        isOpen={true}
+        onSelectItem={toggleValue}
         className="p-0 border-0 bg-transparent"
-        options={options}
+        options={filteredOptions}
       />
     </FilterCard>
   );

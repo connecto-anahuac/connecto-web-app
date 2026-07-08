@@ -16,7 +16,7 @@ type SearchToolProps = Omit<InputHTMLAttributes<HTMLInputElement>, "size"> & {
 
 
 
-export default function SearchBar({
+export default function SearchTool({
 	className,
 	inputWrapperClassName,
 	inputClassName,
@@ -29,7 +29,7 @@ export default function SearchBar({
 	...inputProps
 }: SearchToolProps) {
 	return (
-		<div className={cn("flex items-center gap-3 text-OnSurface/70", className)}>
+		<div className={cn("search-tool-w flex items-center gap-3 text-OnSurface/70", className)}>
 			<label
 				className={cn(
 					"flex-1 py-1.5 pl-2 pr-4.5 flex h-8 items-center gap-1 rounded-full border-2 border-Outline bg-connecto-muted-panel",
@@ -38,7 +38,7 @@ export default function SearchBar({
 				)}
 			>
 				<span className="h-full w-fit p-px flex items-center justify-center" aria-hidden="true">
-					<SearchIcon className="aspect-square  w-4.5 h-4.5" />
+					<SearchIcon className="aspect-square h-full w-auto w-4.5 h-4.5" />
 				</span>
 				<input
 				
@@ -55,6 +55,19 @@ export default function SearchBar({
 				/>
 			</label>
 
+			<button
+				{...filterButtonProps}
+				type="button"
+				aria-label={filterButtonAriaLabel}
+				onClick={onFilterClick}
+				disabled={disabled || filterButtonProps?.disabled}
+				className={cn(
+					"flex size-7 items-center justify-center text-connecto-ink transition-colors hover:text-connecto-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-connecto-muted/30 disabled:cursor-not-allowed disabled:opacity-60",
+					filterButtonProps?.className,
+				)}
+			>
+				<ToolOutlineIcon className="size-5" />
+			</button>
 		</div>
 	)
 }

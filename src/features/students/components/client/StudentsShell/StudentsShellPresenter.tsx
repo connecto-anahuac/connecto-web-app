@@ -2,16 +2,24 @@ import StudentCard from "@/features/students/components/StudentCard";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import type { StudentListItem } from "@/features/students/types/student-list-item";
-import SearchTool from "@/features/search/components/SearchTool";
+import SearchBar from "@/features/search/components/SearchTool";
+import SearchToolModal from "@/features/search/components/search-tool/SearchToolModal";
+import type { FilterDefinition } from "@/features/search/shared/filter-definition";
 import FilterPresetBadge from "@/components/FilterPresetBadge";
 import { FilterIcon } from "@/features/home/components/server/icons";
 import MultiSelect from "@/components/MultiSelect";
+import SearchTool from "@/features/search/components/search-tool/SearchTool";
 
 type Props = {
   activeStudentId: string | null;
   children: ReactNode;
   loading: boolean;
   students: StudentListItem[];
+  definitions: FilterDefinition<StudentListItem>[];
+  searchText: string;
+  onSearchTextChange: (value: string) => void;
+  isFilterOpen: boolean;
+  onFilterToggle: () => void;
 };
 
 export function StudentsShellPresenter({
@@ -19,6 +27,11 @@ export function StudentsShellPresenter({
   children,
   loading,
   students,
+  definitions,
+  searchText,
+  onSearchTextChange,
+  isFilterOpen,
+  onFilterToggle,
 }: Props) {
   if (loading) {
     return (
@@ -29,9 +42,19 @@ export function StudentsShellPresenter({
   }
 
   return (
-    <div className="flex   h-full w-full max-h-full min-h-0 gap-5 p-2.5">
-      <div className="flex h-full min-h-0 w-80 shrink-0 flex-col gap-2 overflow-y-auto rounded-lg border border-divider bg-header p-2.5">
-        <SearchTool />
+    <div className="flex   h-full w-full max-h-full min-h-0 gap-5 p-2.5 overflow-x-visible">
+      <div className="flex z-50 h-full min-h-0 w-80 shrink-0 flex-col gap-2  rounded-lg border border-divider bg-header p-2.5">
+        <div className="flex items-center gap-3">
+          
+          <SearchBar
+              value={searchText}
+              onChange={(event) => onSearchTextChange(event.target.value)}
+              onFilterClick={onFilterToggle}
+          />
+          <SearchTool definitions={definitions} onClick={onFilterToggle} isSelected={isFilterOpen} />
+        </div>
+
+        
         <div className="flex items-center justify-between gap-1.5">
           <FilterIcon /* className="h-6 w-6 shrink-0 text-Outline" */ />
           <FilterPresetBadge value="TIND" isSelected={true} />
@@ -39,9 +62,6 @@ export function StudentsShellPresenter({
           <FilterPresetBadge value="alerta" isSelected={false} />
           <FilterPresetBadge value="advertencia" isSelected={false} />
         </div>
-        <MultiSelect label={"Industrial"} checked={false}/>
-        <MultiSelect label={"Industrial"} checked={true}/>
-        <MultiSelect label={"Industrial"} isHovered={true} checked={false}/>
         <div className="flex flex-1 min-h-0 w-full shrink-0 flex-col gap-2 overflow-y-auto scrollbar-none">
           {students.map((student) => (
             <Link

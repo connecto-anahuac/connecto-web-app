@@ -12,6 +12,7 @@ type UseSelectBoxParams<TValue extends string = string> = {
 	isMulti?: boolean;
 	options: SelectOption<TValue>[];
 	defaultValue?: TValue | TValue[] | null;
+	onValueChange?: (values: string[]) => void;
 };
 
 type UseSelectBoxResult = {
@@ -46,6 +47,7 @@ export function useSelectBox<TValue extends string = string>({
 	isMulti = false,
 	options,
 	defaultValue,
+	onValueChange,
 }: UseSelectBoxParams<TValue>): UseSelectBoxResult {
 	const normalizedDefaultValues = useMemo(() => normalizeDefaultValues(defaultValue), [defaultValue]);
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -118,15 +120,18 @@ export function useSelectBox<TValue extends string = string>({
 
 	const selectValue = (value: string) => {
 		setSelectedValues((currentValues) => {
+			let nextValues: string[];
+
 			if (!isMulti) {
-				return [value];
+				nextValues = [value];
+			} else if (currentValues.includes(value)) {
+				nextValues = currentValues.filter((currentValue) => currentValue !== value);
+			} else {
+				nextValues = [...currentValues, value];
 			}
 
-			if (currentValues.includes(value)) {
-				return currentValues.filter((currentValue) => currentValue !== value);
-			}
-
-			return [...currentValues, value];
+			onValueChange?.(nextValues);
+			return nextValues;
 		});
 
 		if (!isMulti) {

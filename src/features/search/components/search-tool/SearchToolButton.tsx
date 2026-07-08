@@ -57,7 +57,7 @@ export default function SearchToolToggleButton({
                 className,
             )}
         >
-            {isSelected ? <ToolFillIcon className="size-full" /> : <ToolOutlineIcon className="size-full" />}
+            {isSelected ? <ToolFillIcon className="size-full text-InverseOnSurface" /> : <ToolOutlineIcon className="size-full" />}
         </button>
     );
 }

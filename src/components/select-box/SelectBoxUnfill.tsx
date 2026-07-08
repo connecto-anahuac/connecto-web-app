@@ -14,6 +14,7 @@ type SelectBoxUnfillProps = HTMLAttributes<HTMLSpanElement> & {
     value: string
   }[]
   defaultValue?: string | string[] | null
+  onValueChange?: (values: string[]) => void
 }
 
 function SelectBoxUnfillChevron() {
@@ -39,6 +40,7 @@ export default function SelectBoxUnfill({
   isMulti = false,
   options = [],
   defaultValue,
+  onValueChange,
   ...props
 }: SelectBoxUnfillProps) {
   const {
@@ -54,6 +56,7 @@ export default function SelectBoxUnfill({
     isMulti,
     options,
     defaultValue,
+    onValueChange,
   })
 
   // const displayLabel = selectedLabel || label

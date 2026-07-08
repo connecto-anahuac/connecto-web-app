@@ -37,7 +37,7 @@ export default function SelectMenu({
     return(
         <div
             className={cn(
-                "inline-flex min-w-48 flex-col rounded-search-filter-card border border-Outline bg-InverseSurface text-InverseOnSurface px-1 py-1",
+                "inline-flex min-w-36 flex-col rounded-md border border-Outline bg-InverseSurface text-InverseOnSurface px-1 py-1",
                 className,
             )}
             role="menu"
@@ -46,7 +46,7 @@ export default function SelectMenu({
             {options.map((option, index) => {
                 const checked = selectedValues.includes(option.value);
                 const itemProps = {
-                    key: option.value,
+                    key: `${option.value + index}`,
                     label: option.label,
                     checked,
                     isHovered: hoveredIndex === index,

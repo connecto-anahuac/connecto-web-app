@@ -1,15 +1,47 @@
-import { FilterDefinition } from "../../shared/filter-definition";
+"use client";
 
-export function TextFilter<TItem>({
-  filter,
-}: {
+import type { ReactNode } from "react";
+import CloseButton from "@/components/button/CloseButton";
+import { FilterCard } from "./FilterCard";
+import { FilterSearchInput } from "./FilterSearchInput";
+import { FilterFieldHeader } from "./FilterFieldHeader";
+import { FilterDefinition } from "../../shared/filter-definition";
+import { useFilterCondition } from "../../shared/use-filter-condition";
+
+type Props<TItem> = {
   filter: FilterDefinition<TItem>;
-}) {
+  icon?: ReactNode;
+};
+
+/**
+ * 自由入力テキストフィルター（operator: eq / contains / in）。
+ */
+export function TextFilter<TItem>({ filter, icon }: Props<TItem>) {
+  const { condition, operator, setValue, setOperator, clear } =
+    useFilterCondition(filter);
+
+  const value = typeof condition?.value === "string" ? condition.value : "";
+
   return (
-    <input
-      aria-label={filter.label}
-      placeholder={filter.label}
-      type="text"
-    />
+    <FilterCard
+      aria-label={`${filter.label} filter`}
+      header={
+        <FilterFieldHeader
+          filter={filter}
+          icon={icon}
+          operator={operator}
+          onOperatorChange={setOperator}
+        />
+      }
+      trailingAction={<CloseButton onClick={clear} />}
+    >
+      <FilterSearchInput
+        aria-label={filter.label}
+        placeholder={filter.label}
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        onClear={clear}
+      />
+    </FilterCard>
   );
 }

@@ -22,7 +22,7 @@ export const operatorNumberLabels: Record<Operator, string> = {
   between: "Entre",
 }
 
-// UIの入力法式
+// UIの入力法式 //TODO select -> singleSelect
 export const editor = ["text", "number", "select", "multiSelect", "date"] as const;
 export type Editor = (typeof editor)[number];
 
