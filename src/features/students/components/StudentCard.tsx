@@ -1,3 +1,4 @@
+import Alert from "@/components/Alert";
 import Avator from "@/components/Avator";
 import EmailIcon from "@/components/icon/contact/EmailIcon";
 import SchoolEmailIcon from "@/components/icon/contact/SchoolEmailIcon";
@@ -26,10 +27,15 @@ export default function StudentCard({
   return (
     <article
       className={cn(
-        "flex w-full min-w-66 flex-col gap-1.5 rounded-2xl border border-[#dad0c4] bg-[#f7f2ec] px-3 py-2.5 text-[#2d2620] transition-colors",
+        "relative flex w-full min-w-66 flex-col gap-1.5 rounded-2xl border border-[#dad0c4] bg-[#f7f2ec] px-3 py-2.5 text-[#2d2620] transition-colors",
         className,
       )}
     >
+      {student.reprobado > 2 ? (
+        <Alert level={"high"} className="absolute top-2 right-2"/>
+      ) : student.reprobado > 0 ? (
+        <Alert level={"medium"}  className="absolute top-2 right-2"/>
+      ) : null}
       <div className="flex items-start gap-2">
         <div className="relative shrink-0">
           <Avator

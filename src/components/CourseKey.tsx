@@ -22,7 +22,7 @@ export default function CourseKey({
       style={{ borderColor: `var(--${code}-strong)` }}
     >
       <div
-        className="shrink-0 px-0.75 pr-0.5 py-px bg-[#595959] text-[#e3e3e3]"
+        className="shrink-0 px-0.75 pr-0.5 py-px bg-[#595959] " // text-white
         style={{ backgroundColor: `var(--${code}-strong)` }}
       >
         {code}

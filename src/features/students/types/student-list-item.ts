@@ -5,5 +5,6 @@ export type StudentListItem = {
   career: string;
   plan: string;
   semester: string;
+  reprobado: number;
   avatarColorCssVar: string;
 };

@@ -8,7 +8,7 @@ type Props = {
 };
 
 export function StudentPlanContainer({ studentId }: Props) {
-  const { loading, plan, student } = useStudentPlan(studentId);
+  const { loading, plan, student, summary } = useStudentPlan(studentId);
 
-  return <StudentPlanPresenter loading={loading} plan={plan} student={student} />;
+  return <StudentPlanPresenter loading={loading} plan={plan} student={student} summary={summary} />;
 }

@@ -28,7 +28,7 @@ describe("filter-factory", () => {
 
     expect(definition.editor).toBe("text");
     expect(definition.inputType).toBe("free");
-    expect(definition.operators).toEqual(["eq", "contains", "in"]);
+    expect(definition.operators).toEqual(["contains", "eq", "in"]);
   });
 
   it("derives number editor and range operators", () => {

@@ -21,14 +21,14 @@ export default function SearchToolModal<TItem>({
   return (
     <div
       className={cn(
-        "w-72 p-2 h-[70vh] overflow-x-visible  flex flex-col justify-start gap-3 rounded-lg border border-Outline/70 bg-SurfaceContainerLowest",
+        "w-72 p-2 h-[70vh] overflow-x-visible flex flex-col justify-start gap-3 rounded-lg border border-Outline/70 bg-SurfaceContainerLowest",
         className,
       )}
       {...props}
     >
       {/* <div className="flex flex-col  gap-3 sticky top-0 z-20"> */}
         <div className="flex items-center gap-2.5 ">
-          <TabBadge label={"filter"} icon={<FilterIcon />} />
+              <TabBadge label={"filter"} icon={<FilterIcon />} selected={true} />
           <TabBadge label={"sort"} icon={<SortIcon />} />
         </div>
         <div className="w-full  min-h-px bg-Outline/40" />

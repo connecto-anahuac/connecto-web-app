@@ -11,6 +11,7 @@ export const STUDENT_FILTER_KEYS = {
   semester: "semester",
   career: "career",
   plan: "plan",
+  reprobado: "reprobado",
 } as const;
 
 export type StudentFilterKey =
@@ -21,7 +22,10 @@ export type StudentFilterKey =
  * career は現状固定値のため static に持たせる（hybrid の「確定」側）。
  */
 //TODO 学部追加
-export const STUDENT_CAREER_OPTIONS = [{ label: "TIND", value: "TIND" }] as const;
+export const STUDENT_CAREER_OPTIONS = [{ label: "TIND", value: "TIND" },
+    { label: "Civil", value: "Civil" },
+    { label: "Ambiental", value: "Ambiental" },{ label: "Industrial", value: "Industrial" }
+] as const;
 
 /**
  * Student（UI 表示用の joined view model）向けのフィルター定義。
@@ -42,7 +46,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.status,
     label: "Estatus",
-    valueType: "singleSelect",
+    valueType: "multiSelect",
     inputType: "option",
     dynamicOptions: true,
     getValue: (student) => student.status,
@@ -50,7 +54,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.semester,
     label: "Semestre",
-    valueType: "singleSelect", //TODO number
+    valueType: "multiSelect", //TODO number
     inputType: "option",
     dynamicOptions: true,
     getValue: (student) => student.semester,
@@ -58,7 +62,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.career,
     label: "Carrera",
-    valueType: "singleSelect",
+    valueType: "multiSelect",
     inputType: "option",
     options: [...STUDENT_CAREER_OPTIONS],
     getValue: (student) => student.career,
@@ -66,9 +70,16 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.plan,
     label: "Plan",
-    valueType: "singleSelect",
+    valueType: "multiSelect",
     inputType: "option",
     dynamicOptions: true,
     getValue: (student) => student.plan,
+  }),
+  defineFilterField<StudentListItem>({
+    key: STUDENT_FILTER_KEYS.reprobado,
+    label: "Reprobado",
+    valueType: "number",
+    inputType: "free",
+    getValue: (student) => student.reprobado,
   }),
 ];

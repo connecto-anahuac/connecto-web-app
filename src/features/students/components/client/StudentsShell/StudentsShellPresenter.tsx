@@ -3,11 +3,9 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { StudentListItem } from "@/features/students/types/student-list-item";
 import SearchBar from "@/features/search/components/SearchTool";
-import SearchToolModal from "@/features/search/components/search-tool/SearchToolModal";
 import type { FilterDefinition } from "@/features/search/shared/filter-definition";
 import FilterPresetBadge from "@/components/FilterPresetBadge";
 import { FilterIcon } from "@/features/home/components/server/icons";
-import MultiSelect from "@/components/MultiSelect";
 import SearchTool from "@/features/search/components/search-tool/SearchTool";
 
 type Props = {
@@ -20,6 +18,13 @@ type Props = {
   onSearchTextChange: (value: string) => void;
   isFilterOpen: boolean;
   onFilterToggle: () => void;
+  presetState: {
+    career: boolean;
+    status: boolean;
+    alerta: boolean;
+    advertencia: boolean;
+  };
+  onPresetToggle: (presetKey: "career" | "status" | "alerta" | "advertencia") => void;
 };
 
 export function StudentsShellPresenter({
@@ -32,6 +37,8 @@ export function StudentsShellPresenter({
   onSearchTextChange,
   isFilterOpen,
   onFilterToggle,
+  presetState,
+  onPresetToggle,
 }: Props) {
   if (loading) {
     return (
@@ -57,10 +64,10 @@ export function StudentsShellPresenter({
         
         <div className="flex items-center justify-between gap-1.5">
           <FilterIcon /* className="h-6 w-6 shrink-0 text-Outline" */ />
-          <FilterPresetBadge value="TIND" isSelected={true} />
-          <FilterPresetBadge value="activo" isSelected={true} />
-          <FilterPresetBadge value="alerta" isSelected={false} />
-          <FilterPresetBadge value="advertencia" isSelected={false} />
+          <FilterPresetBadge value="TIND" isSelected={presetState.career} onClick={() => onPresetToggle("career")} />
+          <FilterPresetBadge value="activo" isSelected={presetState.status} onClick={() => onPresetToggle("status")} />
+          <FilterPresetBadge value="alerta" isSelected={presetState.alerta} onClick={() => onPresetToggle("alerta")} />
+          <FilterPresetBadge value="advertencia" isSelected={presetState.advertencia} onClick={() => onPresetToggle("advertencia")} />
         </div>
         <div className="flex flex-1 min-h-0 w-full shrink-0 flex-col gap-2 overflow-y-auto scrollbar-none">
           {students.map((student) => (

@@ -11,10 +11,6 @@ function isRangeValue(value: FilterCondition["value"]): value is FilterRangeValu
   return Array.isArray(value) && value.length === 2 && value.every((entry) => typeof entry !== "object");
 }
 
-function isListValue(value: FilterCondition["value"]): value is FilterPrimitive[] {
-  return Array.isArray(value) && !isRangeValue(value);
-}
-
 function normalizeComparableValue(valueType: ValueType, value: unknown): FilterPrimitive | null {
   if (value === null || value === undefined) {
     return null;
@@ -105,7 +101,7 @@ export function matchesCondition<TItem>(
       return includesText(actualValue, Array.isArray(expectedValue) ? null : expectedValue);
 
     case "in": {
-      if (!isListValue(expectedValue)) {
+      if (!Array.isArray(expectedValue)) {
         return false;
       }
 
@@ -169,6 +165,10 @@ export function applyFilters<TItem>(
   conditions: FilterCondition[],
 ): TItem[] {
   const definitionMap = new Map(definitions.map((definition) => [definition.key, definition]));
+
+  if (conditions.length === 0) {
+    return items;
+  }
 
   return items.filter((item) =>
     conditions.every((condition) => {

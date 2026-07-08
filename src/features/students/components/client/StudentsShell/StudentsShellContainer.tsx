@@ -13,7 +13,14 @@ type Props = {
 export function StudentsShellContainer({ children }: Props) {
   const pathname = usePathname();
   const { students, loading } = useStudentsList();
-  const { filteredStudents, definitions, searchText, setSearchText } =
+  const {
+    filteredStudents,
+    definitions,
+    searchText,
+    setSearchText,
+    presetState,
+    togglePreset,
+  } =
     useStudentFilters(students);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const activeStudentId = pathname.startsWith("/students/")
@@ -30,6 +37,8 @@ export function StudentsShellContainer({ children }: Props) {
       onSearchTextChange={setSearchText}
       isFilterOpen={isFilterOpen}
       onFilterToggle={() => setIsFilterOpen((open) => !open)}
+      presetState={presetState}
+      onPresetToggle={togglePreset}
     >
       {children}
     </StudentsShellPresenter>

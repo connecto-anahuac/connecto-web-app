@@ -1,16 +1,16 @@
 import { Student } from "@/external/domain/student";
 import type { StudentClassItem } from "@/external/domain/student-plan";
-import type { StudentEntity } from "@/external/domain/university";
 
 export type StudentDto = {
   id: string;
   name: string;
   status: string;
-    enrolledPeriod: string;
+  enrolledPeriod: string;
   currentSemester: number;
   regularSemestersCount: number;
   summerSemestersCount: number;
   avatarColorRef: number;
+  reprobado: number;
 };
 
 export type StudentPlanItemDto = {
@@ -38,6 +38,7 @@ export function toStudentDto(student: Student): StudentDto {
     regularSemestersCount: student.regularSemestersCount,
     summerSemestersCount: student.summerSemestersCount,
     avatarColorRef: student.avatarColorRef,
+    reprobado: 0,
   };
 }
 

@@ -39,6 +39,7 @@ function mapStudent(
     semester: String(
       student.currentSemester ?? student.regularSemestersCount ?? "-",
     ),
+    reprobado: student.reprobado,
     avatarColorCssVar: AVATOR_COLOR_PALETTE[student.avatarColorRef % AVATOR_COLOR_PALETTE.length] ?? AVATOR_COLOR_PALETTE[0],
   };
 }
@@ -57,7 +58,7 @@ export function useStudentsList(): UseStudentsListResult {
           return;
         }
         const studentsList = result.map(mapStudent);
-        
+
         setStudents(studentsList);
       } finally {
         if (mounted) {

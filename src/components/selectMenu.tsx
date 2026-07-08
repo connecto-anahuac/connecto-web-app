@@ -46,7 +46,6 @@ export default function SelectMenu({
             {options.map((option, index) => {
                 const checked = selectedValues.includes(option.value);
                 const itemProps = {
-                    key: `${option.value + index}`,
                     label: option.label,
                     checked,
                     isHovered: hoveredIndex === index,
@@ -57,9 +56,9 @@ export default function SelectMenu({
                 };
 
                 return isMulti ? (
-                    <MultiSelect {...itemProps} />
+                    <MultiSelect key={`${option.value + index}`} {...itemProps} />
                 ) : (
-                    <SingleSelectItem {...itemProps} />
+                    <SingleSelectItem key={`${option.value + index}`} {...itemProps} />
                 );
             })}
         </div>

@@ -32,6 +32,12 @@ describe("operator-policy", () => {
     expect(numberOperators).not.toContain("contains");
   });
 
+  it("allows inclusion matching for multi-select option fields", () => {
+    const multiSelectOperators = getOperatorsForValueType("multiSelect");
+
+    expect(multiSelectOperators).toEqual(["in"]);
+  });
+
   it("uses symbol labels for number and text labels otherwise", () => {
     expect(getOperatorLabel("number", "gt")).toBe(">");
     expect(getOperatorLabel("date", "gte")).toBe("≧");

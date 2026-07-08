@@ -11,12 +11,20 @@ import {
  *
  * 例: text は大小比較しない（gt/lt を持たない）。
  */
+// export const OPERATORS_BY_VALUE_TYPE: Record<ValueType, Operator[]> = {
+//   text: ["contains", "eq", "in"],
+//   number: ["eq", "gt", "gte", "lt", "lte", "between", "in"],
+//   date: ["eq", "gt", "gte", "lt", "lte", "between"],
+//   singleSelect: ["eq", "in"], //TODO remove??
+//   multiSelect: ["in"], //TODO remove??
+//   boolean: ["eq"],
+// };
 export const OPERATORS_BY_VALUE_TYPE: Record<ValueType, Operator[]> = {
-  text: ["eq", "contains", "in"],
-  number: ["eq", "gt", "gte", "lt", "lte", "between", "in"],
+  text: ["contains", "eq"],
+  number: ["eq", "gt", "gte", "lt", "lte", "between"],
   date: ["eq", "gt", "gte", "lt", "lte", "between"],
-  singleSelect: ["eq", "in"], //TODO remove??
-  multiSelect: ["in"], //TODO remove??
+  singleSelect: ["eq"], //TODO remove??
+  multiSelect: ["in"],
   boolean: ["eq"],
 };
 
@@ -33,7 +41,10 @@ const NUMERIC_LABEL_VALUE_TYPES: ReadonlySet<ValueType> = new Set<ValueType>([
  * operator の表示ラベルを valueType に応じて選ぶ。
  * number / date は記号ラベル（>, ≧ など）、それ以外はテキストラベル（Es, Contiene など）。
  */
-export function getOperatorLabel(valueType: ValueType, operator: Operator): string {
+export function getOperatorLabel(
+  valueType: ValueType,
+  operator: Operator,
+): string {
   const labels = NUMERIC_LABEL_VALUE_TYPES.has(valueType)
     ? operatorNumberLabels
     : operatorTextLabels;

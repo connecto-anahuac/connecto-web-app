@@ -1,4 +1,18 @@
 
+:root {
+  --fail-strong: #C2185B;
+  --great-strong: #00ACC1;
+  --good-strong: #43A047;
+}
+
+:root {
+  --fail-light:  #FCE7EF; /* Rose */
+  --great-light:  #E7F8FB; /* Cyan */
+  --good-light:  #EDF8EE; /* Green */
+}
+
+
+
 
 :root {
   --ADM-strong: #1976D2;

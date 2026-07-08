@@ -133,7 +133,7 @@ describe("filter-engine", () => {
     expect(filtered.map((student) => student.name)).toEqual(["Bob Smith", "Carla Stone"]);
   });
 
-  it("matches select and multi-select conditions with AND semantics", () => {
+  it("matches different filters with AND semantics", () => {
     const filtered = applyFilters(students, definitions, [
       {
         id: "status-eq",
@@ -152,10 +152,75 @@ describe("filter-engine", () => {
     expect(filtered.map((student) => student.name)).toEqual(["Carla Stone"]);
   });
 
+  it("matches in conditions with OR semantics inside the same filter", () => {
+    const filtered = applyFilters(students, definitions, [
+      {
+        id: "tags-in-two-values",
+        fieldKey: "tags",
+        operator: "in",
+        value: ["lab", "design"],
+      },
+    ]);
+
+    expect(filtered.map((student) => student.name)).toEqual(["Alice Johnson", "Carla Stone"]);
+  });
+
+  it("matches in conditions for scalar option values declared as multiSelect", () => {
+    const scalarOptionDefinitions: FilterDefinition<StudentSearchItem>[] = [
+      {
+        key: "status",
+        label: "Status",
+        editor: "multiSelect",
+        inputType: "option",
+        valueType: "multiSelect",
+        operators: ["in"],
+        getValue: (item) => item.status,
+        options: [
+          { label: "Active", value: "active" },
+          { label: "Leave", value: "leave" },
+        ],
+      },
+    ];
+
+    const filtered = applyFilters(students, scalarOptionDefinitions, [
+      {
+        id: "status-in-active",
+        fieldKey: "status",
+        operator: "in",
+        value: ["active"],
+      },
+    ]);
+
+    expect(filtered.map((student) => student.name)).toEqual(["Alice Johnson", "Carla Stone"]);
+  });
+
+  it("returns all items in original order when no conditions are provided", () => {
+    const filtered = applyFilters(students, definitions, []);
+
+    expect(filtered.map((student) => student.name)).toEqual([
+      "Alice Johnson",
+      "Bob Smith",
+      "Carla Stone",
+    ]);
+  });
+
   it("matches date range conditions using normalized comparable values", () => {
     const filtered = applyFilters(students, definitions, [
       {
         id: "enrolled-between",
+        fieldKey: "enrolledOn",
+        operator: "between",
+        value: ["2023-01-01", "2024-12-31"],
+      },
+    ]);
+
+    expect(filtered.map((student) => student.name)).toEqual(["Alice Johnson", "Carla Stone"]);
+  });
+
+  it("keeps between conditions working with two-value ranges", () => {
+    const filtered = applyFilters(students, definitions, [
+      {
+        id: "enrolled-between-regression",
         fieldKey: "enrolledOn",
         operator: "between",
         value: ["2023-01-01", "2024-12-31"],

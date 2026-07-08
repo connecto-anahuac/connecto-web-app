@@ -27,19 +27,33 @@ export default function StudentClassCardView({
   className,
   ...props
 }: Props) {
-  // const year = period.slice(0, 4);
-  // const semeNum = period.slice(4);
-const {year, semesterNumber: semeNum} = splitPeriod(period);
-  // console.log("period", year, "semeNum", semeNum);
-  const semester = semeNum === 10 ? "ene-mayo" : semeNum === 40 ? "verano" : semeNum === 60 ? "ago-dec" : "semester" as Semester;
-  const gradeColor =
+  const { year, semesterNumber: semeNum } = splitPeriod(period);
+  const semester =
+    semeNum === 10
+      ? "ene-mayo"
+      : semeNum === 40
+        ? "verano"
+        : semeNum === 60
+          ? "ago-dec"
+          : ("semester" as Semester);
+  const isCurrentCourse = Boolean(period) && grade === null;
+  // const gradeColor =
+  //   grade === null
+  //     ? "#202020"
+  //     : grade < 6
+  //       ? "#741313"
+  //       : grade < 8
+  //         ? "#0D7985"
+  //         : "#4F7413";
+  
+  const gradeColorBg =
     grade === null
-      ? "#202020"
+      ? ""
       : grade < 6
-      ? "#741313"
-      : grade < 8
-      ? "#0D7985"
-      : "#4F7413";
+        ? "fail"
+        : grade < 8.5
+          ? "good"
+          : "great";
   return (
     <div
       className={cn(
@@ -47,11 +61,10 @@ const {year, semesterNumber: semeNum} = splitPeriod(period);
         className,
       )}
       {...props}
-      
-      style={{ backgroundColor: `var(--${courseCode}-light)` }}
+      style={{ backgroundColor: `var(--${gradeColorBg}-light)` }}
     >
       <div className="flex items-center gap-2">
-        <CourseKey code={courseCode} number={courseNumber} />
+        <CourseKey code={courseCode} number={courseNumber} className="text-white" />
         <CourseValues
           className="ml-auto"
           leftValue={credits}
@@ -63,25 +76,31 @@ const {year, semesterNumber: semeNum} = splitPeriod(period);
         <span className="w-full line-clamp-2 ">{title}</span>
       </div>
 
-      <div className="flex items-center justify-between w-full" >
-        <div className="text-[0.8rem] flex items-center gap-1" style={{ color: gradeColor }}>
+      <div className="flex items-center justify-between w-full">
+        <div
+          className="text-[0.8rem] flex items-center gap-1"
+          // style={{ color: gradeColor }}
+          style={{ color: `var(--${gradeColorBg}-strong)` }}
+           
+        >
           <SchoolHatIcon className="w-4.5 h-4.5 " />
-          {grade ?? "--"}
+          {(!isCurrentCourse && grade) ?? "--"}
+          {isCurrentCourse ? (
+            <span className="text-[0.7rem] uppercase">cruzado</span>
+          ) : null}
         </div>
 
-
-        <div
-          className={`flex items-center gap-1 whitespace-nowrap w-fit`}
-        >
+        <div className={`flex items-center gap-1 whitespace-nowrap w-fit`}>
           <SemesterBadge semester={semester} />
-        
 
-           <div className="self-stretch flex py-0.5">
+          <div className="self-stretch flex py-0.5">
             <div className="w-px bg-[#313131]" />
           </div>
 
           <div className="flex items-baseline gap-0.5 text-xs leading-none">
-            <span className="font-normal text-black">{year !== null ? year : "año"}</span>
+            <span className="font-normal text-black">
+              {year !== null && year !== undefined && year !== 0 ? year : "año"}
+            </span>
           </div>
         </div>
         {/* <div className="ml-auto">

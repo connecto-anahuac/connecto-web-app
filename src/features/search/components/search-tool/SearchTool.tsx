@@ -11,7 +11,7 @@ export default function SearchTool<TItem>({ definitions,onClick,isSelected, ...p
     return (
         <div className="relative size-fit"{...props}>
             <SearchToolToggleButton  onClick={onClick} />
-         {isSelected && <SearchToolModal definitions={definitions} className="absolute top-0 -right-1 translate-x-full rounded-tl-sm"/>
+         {isSelected && <SearchToolModal definitions={definitions} className="absolute top-0 -right-1 translate-x-full rounded-tl-sm  "/>
         } </div>
     )
     

@@ -10,7 +10,7 @@ export type StudentClassItem = {
   block: string;
   preRequisites: StudentClassItem[];
   period: string;
-  grade: number;
+  grade: number | null;
   semester: number;
   position: number;
 };

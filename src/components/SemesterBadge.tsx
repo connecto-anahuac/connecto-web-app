@@ -23,7 +23,7 @@ export default function SemesterBadge({ semester = 'semester', className = '' }:
   return (
     <div className={['flex items-center', className].join(' ')}>
       {showDot && (
-        <span className={cn("relative w-1.25 h-1.25 shrink-0 mr-0.5 inline-block rounded-md",
+        <span className={cn("relative size-2 shrink-0 mr-0.5 inline-block rounded-md",
           semester === 'ene-mayo' && 'bg-ene-mayo',
           semester === 'verano' && 'bg-summer',
           semester === 'ago-dec' && 'bg-ago-dec',
