@@ -63,7 +63,7 @@ export default function Menu() {
               className={cn(
                 "rounded-full px-3 py-1 text-xs transition-colors hover:bg-header-container flex items-center gap-1.5",
                 isActive
-                  ? "font-bold text-OnSurface "
+                  ? "font-black text-gray-800 "
                   : "font-semibold text-header-foreground/70 hover:text-header-foreground",
               )}
               aria-current={isActive ? "page" : undefined}
