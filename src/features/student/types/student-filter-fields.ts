@@ -1,5 +1,5 @@
 import type { StudentListItem } from "@/features/students/types/student-list-item";
-import { defineFilterField, type FilterField } from "./filter-field";
+import { defineFilterField, type FilterField } from "../../search/shared/filter-field";
 
 /**
  * Student フィルターの field key。
@@ -8,10 +8,10 @@ import { defineFilterField, type FilterField } from "./filter-field";
 export const STUDENT_FILTER_KEYS = {
   name: "name",
   status: "status",
-  semester: "semester",
+  currentSemester: "semester",
   career: "career",
   plan: "plan",
-  reprobado: "reprobado",
+  failCount: "materias reprobadas",
 } as const;
 
 export type StudentFilterKey =
@@ -52,12 +52,12 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
     getValue: (student) => student.status,
   }),
   defineFilterField<StudentListItem>({
-    key: STUDENT_FILTER_KEYS.semester,
+    key: STUDENT_FILTER_KEYS.currentSemester,
     label: "Semestre",
     valueType: "multiSelect", //TODO number
     inputType: "option",
     dynamicOptions: true,
-    getValue: (student) => student.semester,
+    getValue: (student) => student.currentSemester,
   }),
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.career,
@@ -76,10 +76,10 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
     getValue: (student) => student.plan,
   }),
   defineFilterField<StudentListItem>({
-    key: STUDENT_FILTER_KEYS.reprobado,
+    key: STUDENT_FILTER_KEYS.failCount,
     label: "Reprobado",
     valueType: "number",
     inputType: "free",
-    getValue: (student) => student.reprobado,
+    getValue: (student) => student.failCount,
   }),
 ];

@@ -1,4 +1,4 @@
-export type CourseEntity = {
+export type CourseRecord = {
   key: string;
   keyCode: string;
   keyNumber: string;
@@ -8,7 +8,7 @@ export type CourseEntity = {
   name: string;
 };
 
-export type PlanEntity = {
+export type PlanRecord = {
   id: string;
   name: string;
   career: string;
@@ -17,13 +17,13 @@ export type PlanEntity = {
   position: number;
 };
 
-export type PreRequisitoEntity = {
+export type PreRequisitoRecord = {
   id: string;
   currentCourseKey: string;
   preCourseKey: string;
 };
 
-export type StudentEntity = {
+export type StudentRecord = {
   id: string;
   name: string;
   status: string;
@@ -33,9 +33,10 @@ export type StudentEntity = {
   regularSemestersCount: number;
   summerSemestersCount: number;
   avatarColorRef: number;
+  failCount: number;
 };
 
-export type GradeEntity = {
+export type GradeRecord = {
   id?: number;
   studentId: string;
   courseKey: string;
@@ -45,7 +46,7 @@ export type GradeEntity = {
   as: "default" | "TINT" | "REGIONALES";
 };
 
-export type OfferingCourseEntity = {
+export type OfferingCourseRecord = {
   id: string;
   period: string;
   career: string;

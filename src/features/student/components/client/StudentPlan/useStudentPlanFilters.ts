@@ -8,7 +8,7 @@ import { useFilterStore } from "@/features/search/shared/filter-store";
 import {
   STUDENT_PLAN_FILTER_FIELDS,
   STUDENT_PLAN_FILTER_KEYS,
-} from "@/features/search/shared/student-plan-filter-fields";
+} from "@/features/student/types/student-plan-filter-fields";
 import type { StudentClassItem } from "@/features/student/types";
 
 const STUDENT_PLAN_FILTER_KEY_LOOKUP: Record<string, true> = {

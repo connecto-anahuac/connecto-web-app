@@ -8,17 +8,18 @@ import {
 import { isGrade, isPeriod } from "@/external/service/data/shared";
 
 import { extractRegionals } from "./regionals_extractor";
-import { GradeEntity, StudentEntity } from "@/external/domain/university";
+import { GradeRecord, StudentRecord } from "@/external/domain/university";
 import { NULL_DATA_STRING } from "@/shared/types/consts";
 import { randomNumber } from "@/shared/lib/util";
 import { splitPeriod } from "@/shared/lib/tool";
+import { passGrade } from "@/external/domain/offering-course";
 
 export async function processStudentCsv(
   rows: Record<string, string>[],
   career: string,
-): Promise<{ students: StudentEntity[]; grades: GradeEntity[] }> {
-  const students: StudentEntity[] = [];
-  const grades: GradeEntity[] = [];
+): Promise<{ students: StudentRecord[]; grades: GradeRecord[] }> {
+  const students: StudentRecord[] = [];
+  const grades: GradeRecord[] = [];
 
   const columns = Object.keys(rows[0]);
 
@@ -60,7 +61,7 @@ export async function processStudentCsv(
       continue;
     }
 
-    const studentGrades: GradeEntity[] = [];
+    const studentGrades: GradeRecord[] = [];
     const uniquePeriods = new Set<string>();
 
     //  --------------------------------------------------
@@ -148,6 +149,8 @@ export async function processStudentCsv(
       (period) => period.slice(-2) !== "40",
     ).length;
 
+    const failCount = studentGrades.filter((grade) => grade.grade !== null && grade.grade < passGrade).length;
+
     students.push({
       id: studentId,
       name: normalize(firstRow.Nombre) ?? NULL_DATA_STRING,
@@ -158,7 +161,9 @@ export async function processStudentCsv(
       regularSemestersCount: currentSemester,
       summerSemestersCount: currentSemesterWithoutSummer,
       avatarColorRef: randomNumber(),
+      failCount: failCount,
     });
+
 
     grades.push(...studentGrades);
   }

@@ -1,8 +1,8 @@
 import { universityDb } from "@/external/client/university-db";
-import { CourseEntity } from "@/external/domain/university";
+import { CourseRecord } from "@/external/domain/university";
 
 export class CourseRepository {
-  async upsertBulk(courses: CourseEntity[]): Promise<void> {
+  async upsertBulk(courses: CourseRecord[]): Promise<void> {
     try {
       await universityDb.transaction("rw", universityDb.courses, async () => {
         if (courses.length) {
@@ -14,27 +14,27 @@ export class CourseRepository {
     }
   }
 
-  async findAll(): Promise<CourseEntity[]> {
+  async findAll(): Promise<CourseRecord[]> {
     return universityDb.courses.orderBy("keyCode").toArray();
   }
 
-  async findById(id: string): Promise<CourseEntity | undefined> {
+  async findById(id: string): Promise<CourseRecord | undefined> {
     return universityDb.courses.get(id);
   }
 
-  async findByBlock(block: string): Promise<CourseEntity[]> {
+  async findByBlock(block: string): Promise<CourseRecord[]> {
     return universityDb.courses.where("block").equals(block).toArray();
   }
 
-  async findByKeyCode(keyCode: string): Promise<CourseEntity[]> {
+  async findByKeyCode(keyCode: string): Promise<CourseRecord[]> {
     return universityDb.courses.where("keyCode").equals(keyCode).toArray();
   }
 
-  async save(course: CourseEntity): Promise<void> {
+  async save(course: CourseRecord): Promise<void> {
     await universityDb.courses.put(course);
   }
 
-  async saveMany(courses: CourseEntity[]): Promise<void> {
+  async saveMany(courses: CourseRecord[]): Promise<void> {
     await universityDb.courses.bulkPut(courses);
   }
 

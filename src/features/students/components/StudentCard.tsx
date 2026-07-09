@@ -20,7 +20,7 @@ export default function StudentCard({
   progress,
   progressDelta = 0,
 }: Props) {
-  const semesterValue = formatSemester(student.semester);
+  const semesterValue = formatSemester(student.currentSemester);
   const progressValue = typeof progress === "number" ? `${progress}%` : "63%";
   const statusTone = getStatusTone(student.status);
 
@@ -31,9 +31,9 @@ export default function StudentCard({
         className,
       )}
     >
-      {student.reprobado > 2 ? (
+      {student.failCount > 2 ? (
         <Alert level={"high"} className="absolute top-2 right-2"/>
-      ) : student.reprobado > 0 ? (
+      ) : student.failCount > 0 ? (
         <Alert level={"medium"}  className="absolute top-2 right-2"/>
       ) : null}
       <div className="flex items-start gap-2">

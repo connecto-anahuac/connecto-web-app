@@ -3,9 +3,9 @@
 import { useEffect, useState } from "react";
 import { universityDb } from "@/external/client/university-db";
 import {
-  CourseEntity,
-  PlanEntity,
-  PreRequisitoEntity,
+  CourseRecord,
+  PlanRecord,
+  PreRequisitoRecord,
 } from "@/external/domain/university";
 
 const MATERIAS_URL = "/dev_untrack/data/materias/Materias_ingenierias.json";
@@ -52,7 +52,7 @@ export default function DbInicializer() {
         const coursesRes = await fetch(MATERIAS_URL);
         const coursesJson = (await coursesRes.json()) as MateriaSource[];
 
-        const courses: CourseEntity[] = (coursesJson || [])
+        const courses: CourseRecord[] = (coursesJson || [])
           .filter((materia) => materia?.clave?.raw)
           .map((materia) => ({
             key: String(materia.clave?.raw),
@@ -69,7 +69,7 @@ export default function DbInicializer() {
         const plansRes = await fetch(PLANS_URL);
         const plansJson = (await plansRes.json()) as PlanSource[];
 
-        const plans: PlanEntity[] = (plansJson || [])
+        const plans: PlanRecord[] = (plansJson || [])
           .filter((plan) => plan?.clave?.raw)
           .map((plan, idx: number) => ({
             id: `${String(plan.clave?.raw)}_${idx}`,
@@ -81,7 +81,7 @@ export default function DbInicializer() {
           }));
 
         // preRequisitos: from coursesJson.pre_requisito
-        const prereqs: PreRequisitoEntity[] = [];
+        const prereqs: PreRequisitoRecord[] = [];
         (coursesJson || []).forEach((materia) => {
           const current = materia.clave?.raw;
           if (!current) return;

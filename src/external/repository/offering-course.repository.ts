@@ -1,8 +1,8 @@
 import { universityDb } from "@/external/client/university-db";
-import { OfferingCourseEntity } from "@/external/domain/university";
+import { OfferingCourseRecord } from "@/external/domain/university";
 
 export class OfferingCourseRepository {
-  async upsertBulk(offeringCourses: OfferingCourseEntity[]): Promise<void> {
+  async upsertBulk(offeringCourses: OfferingCourseRecord[]): Promise<void> {
     try {
       await universityDb.transaction("rw", universityDb.offeringCourses, async () => {
         if (offeringCourses.length) {
@@ -14,31 +14,31 @@ export class OfferingCourseRepository {
     }
   }
 
-  async findAll(): Promise<OfferingCourseEntity[]> {
+  async findAll(): Promise<OfferingCourseRecord[]> {
     return universityDb.offeringCourses.toArray();
   }
 
-  async findById(id: string): Promise<OfferingCourseEntity | undefined> {
+  async findById(id: string): Promise<OfferingCourseRecord | undefined> {
     return universityDb.offeringCourses.get(id);
   }
 
-  async findByCareer(career: string): Promise<OfferingCourseEntity[]> {
+  async findByCareer(career: string): Promise<OfferingCourseRecord[]> {
     return universityDb.offeringCourses.where("career").equals(career).toArray();
   }
 
-  async findByPeriod(period: string): Promise<OfferingCourseEntity[]> {
+  async findByPeriod(period: string): Promise<OfferingCourseRecord[]> {
     return universityDb.offeringCourses.where("period").equals(period).toArray();
   }
 
-  async findByCareerAndPeriod(career: string, period: string): Promise<OfferingCourseEntity[]> {
+  async findByCareerAndPeriod(career: string, period: string): Promise<OfferingCourseRecord[]> {
     return universityDb.offeringCourses.where("[career+period]").equals([career, period]).toArray();
   }
 
-  async save(offeringCourse: OfferingCourseEntity): Promise<void> {
+  async save(offeringCourse: OfferingCourseRecord): Promise<void> {
     await universityDb.offeringCourses.put(offeringCourse);
   }
 
-  async saveMany(offeringCourses: OfferingCourseEntity[]): Promise<void> {
+  async saveMany(offeringCourses: OfferingCourseRecord[]): Promise<void> {
     await universityDb.offeringCourses.bulkPut(offeringCourses);
   }
 

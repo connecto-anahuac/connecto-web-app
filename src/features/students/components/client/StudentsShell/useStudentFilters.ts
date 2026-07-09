@@ -5,7 +5,7 @@ import type { StudentListItem } from "../../../types/student-list-item";
 import {
   STUDENT_FILTER_FIELDS,
   STUDENT_FILTER_KEYS,
-} from "@/features/search/shared/student-filter-fields";
+} from "@/features/student/types/student-filter-fields";
 import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
 import { applyFilters } from "@/features/search/shared/filter-engine";
 import { useFilterStore } from "@/features/search/shared/filter-store";
@@ -20,9 +20,9 @@ const STUDENT_FILTER_KEY_LOOKUP: Record<string, true> = {
   [STUDENT_FILTER_KEYS.career]: true,
   [STUDENT_FILTER_KEYS.name]: true,
   [STUDENT_FILTER_KEYS.status]: true,
-  [STUDENT_FILTER_KEYS.semester]: true,
+  [STUDENT_FILTER_KEYS.currentSemester]: true,
   [STUDENT_FILTER_KEYS.plan]: true,
-  [STUDENT_FILTER_KEYS.reprobado]: true,
+  [STUDENT_FILTER_KEYS.failCount]: true,
 };
 
 function getRelevantConditions(conditions: FilterCondition[]) {
@@ -102,7 +102,7 @@ export function useStudentFilters(students: StudentListItem[]) {
             return condition.fieldKey === STUDENT_FILTER_KEYS.status;
           case "alerta":
           case "advertencia":
-            return condition.fieldKey === STUDENT_FILTER_KEYS.reprobado;
+            return condition.fieldKey === STUDENT_FILTER_KEYS.failCount;
         }
       });
 
@@ -124,7 +124,7 @@ export function useStudentFilters(students: StudentListItem[]) {
         case "alerta":
         case "advertencia":
           if (!nextCondition) {
-            removeCondition(STUDENT_FILTER_KEYS.reprobado);
+            removeCondition(STUDENT_FILTER_KEYS.failCount);
             return;
           }
           upsertCondition(nextCondition);

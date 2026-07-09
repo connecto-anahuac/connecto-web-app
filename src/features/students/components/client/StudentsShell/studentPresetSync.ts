@@ -1,5 +1,5 @@
 import type { FilterCondition } from "../../../../search/shared/filter-definition";
-import { STUDENT_FILTER_KEYS } from "../../../../search/shared/student-filter-fields";
+import { STUDENT_FILTER_KEYS } from "../../../../student/types/student-filter-fields";
 
 const ALERTA_RANGE: [number, number] = [1, 2];
 const ADVERTENCIA_THRESHOLD = 2;
@@ -20,7 +20,7 @@ function toArrayValue(value: unknown): string[] {
 
 function isAdvertenciaCondition(condition: FilterCondition | undefined): boolean {
   return (
-    condition?.fieldKey === STUDENT_FILTER_KEYS.reprobado &&
+    condition?.fieldKey === STUDENT_FILTER_KEYS.failCount &&
     condition.operator === "gt" &&
     condition.value === ADVERTENCIA_THRESHOLD
   );
@@ -28,7 +28,7 @@ function isAdvertenciaCondition(condition: FilterCondition | undefined): boolean
 
 function isAlertaCondition(condition: FilterCondition | undefined): boolean {
   return (
-    condition?.fieldKey === STUDENT_FILTER_KEYS.reprobado &&
+    condition?.fieldKey === STUDENT_FILTER_KEYS.failCount &&
     condition.operator === "between" &&
     Array.isArray(condition.value) &&
     condition.value.length === 2 &&
@@ -59,7 +59,7 @@ export function isStudentPresetSelected(
     (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.status,
   );
   const reprobadoCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.reprobado,
+    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.failCount,
   );
 
   switch (presetKey) {
@@ -85,7 +85,7 @@ export function getStudentPresetNextConditions(
     (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.status,
   );
   const reprobadoCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.reprobado,
+    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.failCount,
   );
 
   if (presetKey === "career") {
@@ -127,7 +127,7 @@ export function getStudentPresetNextConditions(
   }
 
   const rest = conditions.filter(
-    (condition) => condition.fieldKey !== STUDENT_FILTER_KEYS.reprobado,
+    (condition) => condition.fieldKey !== STUDENT_FILTER_KEYS.failCount,
   );
 
   if (presetKey === "alerta") {
@@ -136,8 +136,8 @@ export function getStudentPresetNextConditions(
       : [
           ...rest,
           {
-            id: STUDENT_FILTER_KEYS.reprobado,
-            fieldKey: STUDENT_FILTER_KEYS.reprobado,
+            id: STUDENT_FILTER_KEYS.failCount,
+            fieldKey: STUDENT_FILTER_KEYS.failCount,
             operator: "between",
             value: ALERTA_RANGE,
           },
@@ -149,8 +149,8 @@ export function getStudentPresetNextConditions(
     : [
         ...rest,
         {
-          id: STUDENT_FILTER_KEYS.reprobado,
-          fieldKey: STUDENT_FILTER_KEYS.reprobado,
+          id: STUDENT_FILTER_KEYS.failCount,
+          fieldKey: STUDENT_FILTER_KEYS.failCount,
           operator: "gt",
           value: ADVERTENCIA_THRESHOLD,
         },

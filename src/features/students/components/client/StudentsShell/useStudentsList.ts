@@ -31,17 +31,16 @@ function mapStudent(
   student: StudentDto,
 ): StudentListItem {
   return {
-    id: student.id,
-    name: student.name,
-    status: student.status,
-    career: student.career,
-    plan: "plan 2020",
-    semester: String(
-      student.currentSemester ?? student.regularSemestersCount ?? "-",
-    ),
-    reprobado: student.reprobado,
-    avatarColorCssVar: AVATOR_COLOR_PALETTE[student.avatarColorRef % AVATOR_COLOR_PALETTE.length] ?? AVATOR_COLOR_PALETTE[0],
-  };
+  id: student.id,
+  name: student.name,
+  status: student.status,
+  career: student.career,
+  plan: "plan 2020",
+  currentSemester: student.currentSemester.toString(),
+  failCount: student.failCount,
+  avatarColorCssVar: AVATOR_COLOR_PALETTE[student.avatarColorRef % AVATOR_COLOR_PALETTE.length] ?? AVATOR_COLOR_PALETTE[0],
+  enrolledPeriod: student.enrolledPeriod
+};
 }
 
 export function useStudentsList(): UseStudentsListResult {

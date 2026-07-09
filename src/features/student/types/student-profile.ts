@@ -15,9 +15,9 @@ export function toStudentProfileUI(student: StudentDto): StudentProfile {
     id: student.id,
     name: student.name,
     status: student.status,
-    enrolledPeriod: student.enrolledPeriod,
+    enrolledPeriod: student.enrolledPeriod.year + student.enrolledPeriod.semester.getCode().toString(),
     currentSemester: student.currentSemester,
-    regularSemestersCount: student.regularSemestersCount,
+    regularSemestersCount: student.semesterCount.regular,
     avatarColorRef: student.avatarColorRef,
   };
 }

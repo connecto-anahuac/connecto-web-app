@@ -1,12 +1,12 @@
-import { GradeEntity } from "@/external/domain/university";
+import { GradeRecord } from "@/external/domain/university";
 import { isGrade, isPeriod } from "@/external/service/data/shared";
 
 
 export function extractRegionals(
   studentId: string ,
   values: (string | null)[],
-): GradeEntity[] {
-  const grades: GradeEntity[] = [];
+): GradeRecord[] {
+  const grades: GradeRecord[] = [];
 
   const regionalValues = values.filter(
     Boolean,

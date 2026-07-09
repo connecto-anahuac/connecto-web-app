@@ -7,7 +7,7 @@ import { buildFilterDefinitions } from "@/features/search/shared/filter-factory"
 import {
   OFFERING_COURSE_FILTER_FIELDS,
   OFFERING_COURSE_FILTER_KEYS,
-} from "@/features/search/shared/offering-course-filter-fields";
+} from "@/features/offeringCourse/types/offering-course-filter-fields";
 import { useFilterStore } from "@/features/search/shared/filter-store";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 

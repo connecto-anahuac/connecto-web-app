@@ -1,8 +1,11 @@
 import { Student } from "../domain/student";
-import { StudentEntity } from "../domain/university";
+import { StudentRecord } from "../domain/university";
 
-export function toStudent(student: StudentEntity): Student {
+export function RecordtoStudent(student: StudentRecord): Student {
   return new Student({
+    avatarColorRef: student.avatarColorRef,
+    failCount: student.failCount,
+
     id: student.id,
     name: student.name,
     status: student.status,
@@ -10,6 +13,5 @@ export function toStudent(student: StudentEntity): Student {
     enrolledPeriod: student.enrolledPeriod,
     regularSemestersCount: student.regularSemestersCount,
     summerSemestersCount: student.summerSemestersCount,
-    avatarColorRef: student.avatarColorRef,
   });
 }

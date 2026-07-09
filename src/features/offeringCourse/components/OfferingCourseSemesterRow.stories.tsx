@@ -12,8 +12,8 @@ const meta = {
   },
   argTypes: {
     semesterLabel: { control: 'text' },
-    periodLabel: { control: 'text' },
-    yearLabel: { control: 'text' },
+    // periodLabel: { control: 'text' },
+    // yearLabel: { control: 'text' },
     studentCount: { control: 'number' },
     showLeadingArrow: { control: 'boolean' },
     onAdd: { action: 'clicked' },
@@ -22,8 +22,8 @@ const meta = {
   },
   args: {
     semesterLabel: '2026-1',
-    periodLabel: 'Regular',
-    yearLabel: '2026',
+    // periodLabel: 'Regular',
+    // yearLabel: '2026',
     studentCount: 24,
     showLeadingArrow: true,
     onAdd: fn(),
@@ -45,8 +45,8 @@ export const WithoutLeadingArrow: Story = {
 export const LongLabels: Story = {
   args: {
     semesterLabel: 'Intersemestral de Investigacion Aplicada',
-    periodLabel: 'Matricula extraordinaria extendida',
-    yearLabel: 'Ano academico 2026-2027',
+    // periodLabel: 'Matricula extraordinaria extendida',
+    // yearLabel: 'Ano academico 2026-2027',
     studentCount: 128,
   },
 }

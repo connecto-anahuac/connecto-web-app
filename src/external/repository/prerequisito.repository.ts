@@ -1,8 +1,8 @@
 import { universityDb } from "@/external/client/university-db";
-import { PreRequisitoEntity } from "@/external/domain/university";
+import { PreRequisitoRecord } from "@/external/domain/university";
 
 export class PreRequisitoRepository {
-  async upsertBulk(prerequisitos: PreRequisitoEntity[]): Promise<void> {
+  async upsertBulk(prerequisitos: PreRequisitoRecord[]): Promise<void> {
     try {
       await universityDb.transaction("rw", universityDb.preRequisitos, async () => {
         if (prerequisitos.length) {
@@ -14,19 +14,19 @@ export class PreRequisitoRepository {
     }
   }
 
-  async save(prerequisito: PreRequisitoEntity): Promise<void> {
+  async save(prerequisito: PreRequisitoRecord): Promise<void> {
     await universityDb.preRequisitos.put(prerequisito);
   }
 
-  async saveMany(prerequisitos: PreRequisitoEntity[]): Promise<void> {
+  async saveMany(prerequisitos: PreRequisitoRecord[]): Promise<void> {
     await universityDb.preRequisitos.bulkPut(prerequisitos);
   }
 
-  async findAll(): Promise<PreRequisitoEntity[]> {
+  async findAll(): Promise<PreRequisitoRecord[]> {
     return universityDb.preRequisitos.toArray();
   }
 
-  async findByCourse(courseKey: string): Promise<PreRequisitoEntity[]> {
+  async findByCourse(courseKey: string): Promise<PreRequisitoRecord[]> {
     return universityDb.preRequisitos.where("currentCourseKey").equals(courseKey).toArray();
   }
 

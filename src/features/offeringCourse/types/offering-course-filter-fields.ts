@@ -1,5 +1,5 @@
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import { defineFilterField, type FilterField } from "./filter-field";
+import { defineFilterField, type FilterField } from "../../search/shared/filter-field";
 
 export const OFFERING_COURSE_FILTER_KEYS = {
   className: "offeringCourse.className",

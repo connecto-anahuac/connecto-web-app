@@ -1,5 +1,5 @@
 import type { OfferingCourse } from "@/external/domain/offering-course";
-import type { OfferingCourseEntity } from "@/external/domain/university";
+import type { OfferingCourseRecord } from "@/external/domain/university";
 
 export type OfferingCourseDto = {
   key: string;
@@ -53,7 +53,7 @@ export function toOfferingCourseDto(offeringCourse: OfferingCourse): OfferingCou
 }
 
 export function toSelectedOfferingCourseDto(
-  offeringCourse: OfferingCourseEntity,
+  offeringCourse: OfferingCourseRecord,
 ): SelectedOfferingCourseDto {
   return {
     id: offeringCourse.id,

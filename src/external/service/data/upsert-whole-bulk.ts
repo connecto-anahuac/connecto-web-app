@@ -2,21 +2,21 @@
 
 import { universityDb } from "@/external/client/university-db";
 import {
-  CourseEntity,
-  GradeEntity,
-  OfferingCourseEntity,
-  PlanEntity,
-  PreRequisitoEntity,
-  StudentEntity,
+  CourseRecord,
+  GradeRecord,
+  OfferingCourseRecord,
+  PlanRecord,
+  PreRequisitoRecord,
+  StudentRecord,
 } from "@/external/domain/university";
 
 type UpsertWholeBulkParams = {
-  students?: StudentEntity[];
-  grades?: GradeEntity[];
-  plans?: PlanEntity[];
-  courses?: CourseEntity[];
-  preRequisitos?: PreRequisitoEntity[];
-  offeringCourses?: OfferingCourseEntity[];
+  students?: StudentRecord[];
+  grades?: GradeRecord[];
+  plans?: PlanRecord[];
+  courses?: CourseRecord[];
+  preRequisitos?: PreRequisitoRecord[];
+  offeringCourses?: OfferingCourseRecord[];
 };
 
 export async function upsertWholeBulk({

@@ -1,10 +1,10 @@
-import { SemesterType, SEMESTER_INDX } from "./consts";
+import { SemesterType, SEMESTER_INDX } from "../../external/domain/consts";
 import { Semester } from "./Semester";
 
 export class Period {
   private rawPeriod: number;
-  year: number;
-  semester: Semester;
+  readonly year: number;
+  readonly semester: Semester;
   constructor(rawPeriod: number | string) {
     const isValid = this.validate(rawPeriod);
     if (!isValid) {
@@ -12,6 +12,7 @@ export class Period {
     }
     const {year: y, semesterNumber: s} = this.splitPeriod(rawPeriod.toString());
     this.year = y;
+    console.log("semesterNumber", s, SEMESTER_INDX[s]);
     this.semester = Semester.create(s);
     this.rawPeriod = Number(rawPeriod);
 
@@ -20,7 +21,7 @@ export class Period {
      const yearDiff = this.year - other.year;
      const semesterCodeDiff = this.semester.getCode() - other.semester.getCode();
      const semesterDiff=semesterCodeDiff<0? -1: semesterCodeDiff===0? 0:1;
-    return yearDiff * 2 + semesterCodeDiff +1;
+    return yearDiff * 2 + semesterCodeDiff +1*Math.sign(semesterDiff);
   }
 
   equals(other: Period): boolean {

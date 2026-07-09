@@ -1,5 +1,5 @@
 import type { StudentClassItem } from "@/features/student/types";
-import { defineFilterField, type FilterField } from "./filter-field";
+import { defineFilterField, type FilterField } from "../../search/shared/filter-field";
 
 export const STUDENT_PLAN_FILTER_KEYS = {
   className: "studentPlan.className",

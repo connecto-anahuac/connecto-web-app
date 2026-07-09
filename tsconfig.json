@@ -1,3 +1,43 @@
+// {
+//   "compilerOptions": {
+//     "target": "ES2017",
+//     "lib": ["dom", "dom.iterable", "esnext"],
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "strict": true,
+//     "noEmit": true,
+//     "esModuleInterop": true,
+//     "module": "esnext",
+//     "moduleResolution": "bundler",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "jsx": "react-jsx",
+//     "incremental": true,
+//     "plugins": [
+//       {
+//         "name": "next"
+//       }
+//     ],
+//     "paths": {
+//       "@/*": ["./src/*"]
+//     }
+//   },
+//   "include": [
+//     "next-env.d.ts",
+//     "src/**/*",         // 👈 【重要】解析対象をsrcフォルダ配下に限定する
+//     "**/*.ts",          // もしルート直下に重要なTSファイルがなければ、これらは削除するか
+//     "**/*.tsx",         // "src/**/*.ts" のようにsrcを指定するのが安全です
+//     ".next/types/**/*.ts",
+//     // 開発中の型ファイルをVS Codeが追いかけすぎて重くなるのを防ぐため、一旦コメントアウト推奨
+//     // ".next/dev/types/**/*.ts", 
+//     "**/*.mts"
+//   ],
+//   "exclude": [
+//     "node_modules",
+//     ".next",            // 👈 【追加】Next.jsのビルド生成物を明示的に除外する
+//     "out"               // 👈 【追加】エクスポートフォルダがあれば除外する
+//   ]
+// }
 {
   "compilerOptions": {
     "target": "ES2017",

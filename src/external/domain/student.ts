@@ -1,7 +1,5 @@
-import { Period } from "./Period";
-import { SemesterCount } from "./SemesterCount";
-
-
+import { Period } from "../../shared/types/Period";
+import { SemesterCount } from "../../shared/types/SemesterCount";
 
 type StudentInput = {
   id: string;
@@ -12,6 +10,7 @@ type StudentInput = {
   summerSemestersCount: number;
   avatarColorRef: number;
   career: string;
+  failCount: number;
 };
 
 export class Student {
@@ -22,6 +21,7 @@ export class Student {
   semesterCount: SemesterCount;
   avatarColorRef: number;
   career: string;
+  failCount: number;//TODO umber error check
 
   constructor({
     id,
@@ -32,6 +32,7 @@ export class Student {
     summerSemestersCount,
     avatarColorRef,
     career,
+    failCount,
   }: StudentInput) {
     this.id = id;
     this.name = name;
@@ -43,6 +44,7 @@ export class Student {
     };
     this.avatarColorRef = avatarColorRef;
     this.career = career;
+    this.failCount = failCount;
   }
 
   get currentSemester(): number {

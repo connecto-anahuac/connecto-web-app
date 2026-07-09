@@ -1,17 +1,18 @@
 import { Student } from "@/external/domain/student";
 import type { StudentClassItem } from "@/external/domain/student-plan";
+import { Period } from "@/shared/types/Period";
+import { SemesterCount } from "@/shared/types/SemesterCount";
 
 export type StudentDto = {
   id: string;
   name: string;
   status: string;
   career: string;
-  enrolledPeriod: string;
+  enrolledPeriod: Period;
+  semesterCount: SemesterCount;
   currentSemester: number;
-  regularSemestersCount: number;
-  summerSemestersCount: number;
   avatarColorRef: number;
-  reprobado: number;
+  failCount: number;
 };
 
 export type StudentPlanItemDto = {
@@ -31,17 +32,17 @@ export type StudentPlanItemDto = {
 
 export function toStudentDto(student: Student): StudentDto {
   return {
-    id: student.id,
-    name: student.name,
-    status: student.status,
-    career: student.career,
-    enrolledPeriod: student.enrolledPeriod,
-    currentSemester: student.currentSemester,
-    regularSemestersCount: student.regularSemestersCount,
-    summerSemestersCount: student.summerSemestersCount,
-    avatarColorRef: student.avatarColorRef,
-    reprobado: 0,
-  };
+  id: student.id,
+  name: student.name,
+  status: student.status,
+  career: student.career,
+  enrolledPeriod: student.enrolledPeriod,
+  currentSemester: student.currentSemester,
+
+  avatarColorRef: student.avatarColorRef,
+  failCount: student.failCount,
+  semesterCount: student.semesterCount,
+};
 }
 
 export function toStudentPlanItemDto(

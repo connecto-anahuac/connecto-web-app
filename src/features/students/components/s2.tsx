@@ -19,7 +19,7 @@ export default function StudentCard({
 	progress,
 	progressDelta = 0,
 }: Props) {
-	const semesterValue = formatSemester(student.semester);
+	const semesterValue = formatSemester(student.currentSemester);
 	const progressValue = typeof progress === "number" ? `${progress}%` : student.plan;
 	const statusTone = getStatusTone(student.status);
 
