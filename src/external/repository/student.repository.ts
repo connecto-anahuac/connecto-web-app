@@ -31,6 +31,11 @@ export class StudentRepository {
     return universityDb.students.toArray();
   }
 
+  async findByCareer(career: string): Promise<StudentEntity[]> {
+    return universityDb.students.where("career").equals(career).toArray();
+  }
+
+
   async findByStatus(status: string): Promise<StudentEntity[]> {
     return universityDb.students.where("status").equals(status).toArray();
   }

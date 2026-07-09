@@ -5,7 +5,7 @@ import SchoolEmailIcon from "@/components/icon/contact/SchoolEmailIcon";
 import EmailIcon from "@/components/icon/contact/EmailIcon";
 import WhatsAppIcon from "@/components/icon/contact/WhatsAppIcon";
 import Image from "next/image";
-import type { Contact } from "../types";
+import type { Contact } from "../../types";
 
 type Props = {
   className?: string;

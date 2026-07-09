@@ -31,7 +31,7 @@ export class UniversityDB extends Dexie {
     this.version(2).stores({
       courses: "key,keyCode,keyNumber,name",
       plans: "id,name,courseKey,career,semester,position",
-      students: "id,name,status,currentSemester,regularSemestersCount,summerSemestersCount",
+      students: "id,name,status,currentSemester,regularSemestersCount,summerSemestersCount,career",
       grades: "++id,studentId,courseKey,period,grade",
       preRequisitos: "++id,currentCourseKey,preCourseKey",
       offeringCourses: "id,period,career,courseKey,sessionNumber,estimatedNumber,[career+period]",

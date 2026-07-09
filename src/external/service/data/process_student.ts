@@ -15,6 +15,7 @@ import { splitPeriod } from "@/shared/lib/tool";
 
 export async function processStudentCsv(
   rows: Record<string, string>[],
+  career: string,
 ): Promise<{ students: StudentEntity[]; grades: GradeEntity[] }> {
   const students: StudentEntity[] = [];
   const grades: GradeEntity[] = [];
@@ -151,6 +152,7 @@ export async function processStudentCsv(
       id: studentId,
       name: normalize(firstRow.Nombre) ?? NULL_DATA_STRING,
       status: normalize(firstRow.Estatus) ?? NULL_DATA_STRING,
+      career,
       enrolledPeriod: normalize(firstRow.Periodo) ?? NULL_DATA_STRING,
       currentSemester: getCurrentSemester(normalize(firstRow.Periodo) ?? NULL_DATA_STRING),
       regularSemestersCount: currentSemester,
@@ -184,7 +186,6 @@ function normalize(value: unknown): string | null {
 }
 
 function getCurrentSemester(periods: string): number {
-  const PERIOD_1_MONTH = 1;
   const PERIOD_2_MONTH = 8;
 
   // when the students entered in summer, they are considered to be in the August-December semester of the same year

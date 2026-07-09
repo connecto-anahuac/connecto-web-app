@@ -15,8 +15,8 @@ import {
   STUDENT_AVATAR_COLOR_PALETTE,
   STUDENT_DETAIL_CAREER,
   STUDENT_DETAIL_PLAN,
-} from "./student-summary.constants";
-import { buildStudentSummary, type StudentSummary } from "./student-summary.types";
+} from "../../ui/student-summary-panel/student-summary.constants";
+import { buildStudentSummary, type StudentSummary } from "../../ui/student-summary-panel/student-summary.types";
 
 type UseStudentPlanResult = {
   loading: boolean;

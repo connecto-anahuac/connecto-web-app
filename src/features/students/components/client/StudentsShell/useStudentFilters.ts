@@ -16,10 +16,19 @@ import {
   type StudentPresetKey,
 } from "./studentPresetSync";
 
-const STUDENT_FILTER_KEY_SET = new Set(Object.values(STUDENT_FILTER_KEYS));
+const STUDENT_FILTER_KEY_LOOKUP: Record<string, true> = {
+  [STUDENT_FILTER_KEYS.career]: true,
+  [STUDENT_FILTER_KEYS.name]: true,
+  [STUDENT_FILTER_KEYS.status]: true,
+  [STUDENT_FILTER_KEYS.semester]: true,
+  [STUDENT_FILTER_KEYS.plan]: true,
+  [STUDENT_FILTER_KEYS.reprobado]: true,
+};
 
 function getRelevantConditions(conditions: FilterCondition[]) {
-  return conditions.filter((condition) => STUDENT_FILTER_KEY_SET.has(condition.fieldKey));
+  return conditions.filter(
+    (condition) => STUDENT_FILTER_KEY_LOOKUP[condition.fieldKey] === true,
+  );
 }
 
 /**

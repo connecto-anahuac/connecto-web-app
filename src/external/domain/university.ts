@@ -27,6 +27,7 @@ export type StudentEntity = {
   id: string;
   name: string;
   status: string;
+  career: string;
   enrolledPeriod: string;
   currentSemester: number;
   regularSemestersCount: number;

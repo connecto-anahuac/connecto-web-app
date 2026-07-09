@@ -1,5 +1,6 @@
 import { cn } from "@/shared/lib/util";
 import { FileCardContainer } from "../FileCard/FileCardContainer";
+import type { FileType, UploadSource } from "@/features/data/types/file";
 
 type Props = {
   className?: string;
@@ -11,10 +12,12 @@ type Props = {
     grades: number;
     students: number;
   } | null;
-  sources: File[];
+  sources: UploadSource[];
   onDragLeave: () => void;
   onDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
   onDrop: (event: React.DragEvent<HTMLDivElement>) => void;
+  onCareerChange: (index: number, value: string) => void;
+  onFileTypeChange: (index: number, value: FileType) => void;
   onInputChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onOpenPicker: () => void;
   onRemoveSource: (indexToRemove: number) => void;
@@ -32,6 +35,8 @@ export function FileSelectorPanelPresenter({
   onDragLeave,
   onDragOver,
   onDrop,
+  onCareerChange,
+  onFileTypeChange,
   onInputChange,
   onOpenPicker,
   onRemoveSource,
@@ -59,10 +64,14 @@ export function FileSelectorPanelPresenter({
       >
         {sources.length > 0 ? (
           <div className="flex h-full w-full flex-col justify-start gap-2 overflow-y-auto p-2">
-            {sources.map((file, index) => (
+            {sources.map((source, index) => (
               <FileCardContainer
-                key={`${file.name}-${file.size}-${file.lastModified}-${index}`}
-                file={file}
+                key={`${source.file.name}-${source.file.size}-${source.file.lastModified}-${index}`}
+                career={source.career}
+                file={source.file}
+                fileType={source.fileType}
+                onCareerChange={(value) => onCareerChange(index, value)}
+                onFileTypeChange={(value) => onFileTypeChange(index, value)}
                 onRemove={() => onRemoveSource(index)}
               />
             ))}

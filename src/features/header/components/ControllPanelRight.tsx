@@ -1,4 +1,4 @@
-import StudentCardView from "@/features/student/components/StudentCardView";
+import StudentCardView from "@/features/student/components/ui/StudentCardView";
 import { cn } from "@/shared/lib/util";
 
 type Props = {

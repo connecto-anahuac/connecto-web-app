@@ -68,7 +68,8 @@ export default function OfferingClassCardView({
 			style={{ ...style, backgroundColor: `var(--${offeringClass.keyCode}-light)` }}
 		>
 			<div className="flex items-center gap-2">
-				<CourseKey code={offeringClass.keyCode} number={offeringClass.keyNumber} />
+				<CourseKey code={offeringClass.keyCode} number={offeringClass.keyNumber} className="
+				text-white"/>
 				<div className="ml-auto flex items-center gap-1 text-sm">
 					<PersonIcon className="h-4.5 w-4.5" />
 					{totalEligibleStudents}

@@ -3,7 +3,7 @@ import EmailIcon from "@/components/icon/contact/EmailIcon";
 import SchoolEmailIcon from "@/components/icon/contact/SchoolEmailIcon";
 import WhatsAppIcon from "@/components/icon/contact/WhatsAppIcon";
 import StudyPlan from "@/components/StudyPlan";
-import Memo from "@/features/student/components/Memo";
+import Memo from "@/features/student/components/ui/Memo";
 import { cn } from "@/shared/lib/util";
 import type { StudentSummary } from "./student-summary.types";
 import Alert from "@/components/Alert";

@@ -15,6 +15,8 @@ export function FileSelectorPanelContainer({ className }: Props) {
     isLoading,
     result,
     sources,
+    changeSourceCareer,
+    changeSourceFileType,
     handleDragLeave,
     handleDragOver,
     handleDrop,
@@ -33,6 +35,8 @@ export function FileSelectorPanelContainer({ className }: Props) {
       isLoading={isLoading}
       result={result}
       sources={sources}
+      onCareerChange={changeSourceCareer}
+      onFileTypeChange={changeSourceFileType}
       onDragLeave={handleDragLeave}
       onDragOver={handleDragOver}
       onDrop={handleDrop}

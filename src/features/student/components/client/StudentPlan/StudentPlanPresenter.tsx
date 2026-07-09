@@ -1,13 +1,13 @@
 import ColumnTitle from "@/components/ColumnTitle";
 import RowTitle from "@/components/RowTitle";
-import StudentClassCardView from "@/features/student/components/ClassCardView";
+import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
 import type {
   StudentClassItem,
   StudentProfile,
 } from "@/features/student/types";
 import type { FilterDefinition } from "@/features/search/shared/filter-definition";
-import { StudentSummaryPanel } from "./StudentSummaryPanel";
-import type { StudentSummary } from "./student-summary.types";
+import { StudentSummaryPanel } from "../../ui/student-summary-panel/StudentSummaryPanel";
+import type { StudentSummary } from "../../ui/student-summary-panel/student-summary.types";
 import ZoomInIcon from "@/components/icon/ZoomInIcon";
 import SearchBar from "@/features/search/components/SearchTool";
 import SearchTool from "@/features/search/components/search-tool/SearchTool";
@@ -20,6 +20,8 @@ type Props = {
   definitions: FilterDefinition<StudentClassItem>[];
   searchText: string;
   onSearchTextChange: (value: string) => void;
+  matchingPlanIds: Set<string>;
+  hasActiveFilters: boolean;
   isFilterOpen: boolean;
   onFilterToggle: () => void;
 };
@@ -32,6 +34,8 @@ export function StudentPlanPresenter({
   definitions,
   searchText,
   onSearchTextChange,
+  matchingPlanIds,
+  hasActiveFilters,
   isFilterOpen,
   onFilterToggle,
 }: Props) {
@@ -53,8 +57,8 @@ export function StudentPlanPresenter({
 
   return (
     <div className="flex min-h-full h-full w-full gap-4 p-0">
-      <div className="min-w-0 flex-1 h-full flex flex-col gap-2 ">
-        <div className="flex items-center gap-3 z-50">
+      <div id="diagram"  className="min-w-0 flex-1 h-full flex flex-col gap-2 ">
+        <div className="flex items-center gap-3 z-30">
           <div className=" size-7 p-1 bg-gray-300/40 text-OnSurface shadow-2xl">
             <ZoomInIcon className="size-full" />
           </div>
@@ -134,6 +138,11 @@ export function StudentPlanPresenter({
             {plan.map((item) => (
               <div
                 key={item.id}
+                className={
+                  hasActiveFilters && !matchingPlanIds.has(item.id)
+                    ? "grayscale opacity-45 transition"
+                    : "transition"
+                }
                 style={{
                   gridColumnStart: item.semester + 1 || 2,
                   gridRowStart: item.position + 2 || 2,

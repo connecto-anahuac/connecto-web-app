@@ -1,7 +1,10 @@
 "use client";
 
 import { importCsvClient } from "@/external/handler/data/command.client";
+import { getCareerName } from "../FileCard/useFileCard";
 import { useRef, useState } from "react";
+import { CARRERAS } from "@/shared/types/consts";
+import type { FileType, UploadSource } from "@/features/data/types/file";
 
 type UploadResult = {
   grades: number;
@@ -9,12 +12,14 @@ type UploadResult = {
 };
 
 type UseFileSelectorPanelResult = {
+  changeSourceCareer: (index: number, value: string) => void;
+  changeSourceFileType: (index: number, value: FileType) => void;
   errorMessage: string | null;
   inputRef: React.RefObject<HTMLInputElement | null>;
   isDragging: boolean;
   isLoading: boolean;
   result: UploadResult | null;
-  sources: File[];
+  sources: UploadSource[];
   handleDragLeave: () => void;
   handleDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
   handleDrop: (event: React.DragEvent<HTMLDivElement>) => void;
@@ -34,7 +39,7 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<UploadResult | null>(null);
-  const [sources, setSources] = useState<File[]>([]);
+  const [sources, setSources] = useState<UploadSource[]>([]);
 
   function openPicker() {
     inputRef.current?.click();
@@ -42,7 +47,30 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
 
   function addSource(file: File) {
     setErrorMessage(null);
-    setSources((currentSources) => [...currentSources, file]);
+    setSources((currentSources) => [
+      ...currentSources,
+      {
+        career: getCareerName(file.name) ?? CARRERAS[0],
+        file,
+        fileType: file.name.toLowerCase().includes("capp") ? "CAPP" : "Plan de Estudios",
+      },
+    ]);
+  }
+
+  function changeSourceCareer(index: number, value: string) {
+    setSources((currentSources) =>
+      currentSources.map((source, currentIndex) =>
+        currentIndex === index ? { ...source, career: value } : source,
+      ),
+    );
+  }
+
+  function changeSourceFileType(index: number, value: FileType) {
+    setSources((currentSources) =>
+      currentSources.map((source, currentIndex) =>
+        currentIndex === index ? { ...source, fileType: value } : source,
+      ),
+    );
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -88,9 +116,9 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
       return;
     }
 
-    const invalidFile = sources.find((file) => !isCsvFile(file));
+    const invalidFile = sources.find((source) => !isCsvFile(source.file));
     if (invalidFile) {
-      setErrorMessage(`El archivo ${invalidFile.name} no es un CSV valido.`);
+      setErrorMessage(`El archivo ${invalidFile.file.name} no es un CSV valido.`);
       return;
     }
 
@@ -101,9 +129,10 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
       let students = 0;
       let grades = 0;
 
-      for (const file of sources) {
+      for (const source of sources) {
         const formData = new FormData();
-        formData.append("file", file);
+        formData.append("file", source.file);
+        formData.append("career", source.career);
 
         const response = await importCsvClient(formData);
         students += response.studentsCount;
@@ -120,6 +149,8 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
   }
 
   return {
+    changeSourceCareer,
+    changeSourceFileType,
     errorMessage,
     inputRef,
     isDragging,

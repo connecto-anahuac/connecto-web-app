@@ -18,8 +18,11 @@ export class GetOfferingCoursesByCareerService {
   async execute(career: string): Promise<OfferingCourse[]> {
     const [plans, students] = await Promise.all([
       this.planRepository.findByCareer(career),
-      this.studentRepository.findAll(),
+      // this.studentRepository.findAll(),
+      this.studentRepository.findByCareer(career),
+      //TODO Student変えれる必要がある
     ]);
+    console.log(students);
 
     const sortedPlans = [...plans].sort((left, right) => {
       if (left.semester !== right.semester) {

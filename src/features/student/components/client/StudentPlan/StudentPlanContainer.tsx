@@ -12,22 +12,25 @@ type Props = {
 export function StudentPlanContainer({ studentId }: Props) {
   const { loading, plan, student, summary } = useStudentPlan(studentId);
   const {
-    filteredPlan,
     definitions,
     searchText,
     setSearchText,
+    matchingPlanIds,
+    hasActiveFilters,
   } = useStudentPlanFilters(plan);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   return (
     <StudentPlanPresenter
       loading={loading}
-      plan={filteredPlan}
+      plan={plan}
       student={student}
       summary={summary}
       definitions={definitions}
       searchText={searchText}
       onSearchTextChange={setSearchText}
+      matchingPlanIds={matchingPlanIds}
+      hasActiveFilters={hasActiveFilters}
       isFilterOpen={isFilterOpen}
       onFilterToggle={() => setIsFilterOpen((open) => !open)}
     />

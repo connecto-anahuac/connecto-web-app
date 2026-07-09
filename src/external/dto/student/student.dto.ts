@@ -5,6 +5,7 @@ export type StudentDto = {
   id: string;
   name: string;
   status: string;
+  career: string;
   enrolledPeriod: string;
   currentSemester: number;
   regularSemestersCount: number;
@@ -33,6 +34,7 @@ export function toStudentDto(student: Student): StudentDto {
     id: student.id,
     name: student.name,
     status: student.status,
+    career: student.career,
     enrolledPeriod: student.enrolledPeriod,
     currentSemester: student.currentSemester,
     regularSemestersCount: student.regularSemestersCount,

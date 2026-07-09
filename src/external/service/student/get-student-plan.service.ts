@@ -42,7 +42,7 @@ export class GetStudentPlanService {
           block: preCourse?.block ?? "",
           preRequisites: [],
           period: "",
-          grade: null,
+          grade: -1,
           semester: 0,
           position: 0,
         });
@@ -58,7 +58,7 @@ export class GetStudentPlanService {
         block: course?.block ?? "",
         preRequisites: preItems,
         period: grade?.period ?? "",
-        grade: typeof grade?.grade === "number" ? grade.grade : null,
+        grade: typeof grade?.grade === "number" ? grade.grade : -1,
         semester: plan.semester ?? 0,
         position: plan.position ?? 0,
       });

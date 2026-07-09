@@ -11,10 +11,17 @@ import {
 } from "@/features/search/shared/student-plan-filter-fields";
 import type { StudentClassItem } from "@/features/student/types";
 
-const STUDENT_PLAN_FILTER_KEY_SET = new Set(Object.values(STUDENT_PLAN_FILTER_KEYS));
+const STUDENT_PLAN_FILTER_KEY_LOOKUP: Record<string, true> = {
+  [STUDENT_PLAN_FILTER_KEYS.className]: true,
+  [STUDENT_PLAN_FILTER_KEYS.classCodeAndNumber]: true,
+  [STUDENT_PLAN_FILTER_KEYS.period]: true,
+  [STUDENT_PLAN_FILTER_KEYS.grade]: true,
+};
 
 function getRelevantConditions(conditions: FilterCondition[]) {
-  return conditions.filter((condition) => STUDENT_PLAN_FILTER_KEY_SET.has(condition.fieldKey));
+  return conditions.filter(
+    (condition) => STUDENT_PLAN_FILTER_KEY_LOOKUP[condition.fieldKey] === true,
+  );
 }
 
 export function useStudentPlanFilters(plan: StudentClassItem[]) {
@@ -57,10 +64,16 @@ export function useStudentPlanFilters(plan: StudentClassItem[]) {
     [plan, definitions, relevantConditions],
   );
 
+  const matchingPlanIds = useMemo(
+    () => new Set(filteredPlan.map((item) => item.id)),
+    [filteredPlan],
+  );
+
   return {
-    filteredPlan,
     definitions,
     searchText,
     setSearchText,
+    matchingPlanIds,
+    hasActiveFilters: relevantConditions.length > 0,
   };
 }

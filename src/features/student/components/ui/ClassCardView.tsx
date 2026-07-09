@@ -36,7 +36,7 @@ export default function StudentClassCardView({
         : semeNum === 60
           ? "ago-dec"
           : ("semester" as Semester);
-  const isCurrentCourse = Boolean(period) && grade === null;
+  const isCurrentCourse = Boolean(period) &&( grade === -1|| grade === null || grade === undefined);
   // const gradeColor =
   //   grade === null
   //     ? "#202020"
@@ -47,7 +47,7 @@ export default function StudentClassCardView({
   //         : "#4F7413";
   
   const gradeColorBg =
-    grade === null
+    ( grade === -1|| grade === null || grade === undefined)
       ? ""
       : grade < 6
         ? "fail"
@@ -84,11 +84,11 @@ export default function StudentClassCardView({
            
         >
           <SchoolHatIcon className="w-4.5 h-4.5 " />
-          {(!isCurrentCourse && grade) ?? "--"}
+          {((!isCurrentCourse && !grade)||grade===-1) ?? "--"}
           {isCurrentCourse ? (
             <span className="text-[0.7rem] uppercase">cruzado</span>
           ) : null}
-        </div>
+        </div> 
 
         <div className={`flex items-center gap-1 whitespace-nowrap w-fit`}>
           <SemesterBadge semester={semester} />

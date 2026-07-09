@@ -9,13 +9,18 @@ export async function importCsvClient(
   formData: FormData,
 ): Promise<ImportCsvResultDto> {
   const file = formData.get("file");
+  const career = formData.get("career");
 
   if (!(file instanceof File)) {
     throw new Error("File not found");
   }
 
+  if (typeof career !== "string" || career.trim().length === 0) {
+    throw new Error("Career not found");
+  }
+
   const rows = await parseCsv(file);
-  const result = await processStudentCsv(rows);
+  const result = await processStudentCsv(rows, career);
 
   await upsertWholeBulk({
     students: result.students,

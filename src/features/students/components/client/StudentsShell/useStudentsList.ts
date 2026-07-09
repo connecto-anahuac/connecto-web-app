@@ -34,7 +34,7 @@ function mapStudent(
     id: student.id,
     name: student.name,
     status: student.status,
-    career: "TIND",
+    career: student.career,
     plan: "plan 2020",
     semester: String(
       student.currentSemester ?? student.regularSemestersCount ?? "-",
