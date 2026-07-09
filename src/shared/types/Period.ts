@@ -17,11 +17,17 @@ export class Period {
     this.rawPeriod = Number(rawPeriod);
 
   }
-   minus(other: Period): number {
-     const yearDiff = this.year - other.year;
-     const semesterCodeDiff = this.semester.getCode() - other.semester.getCode();
-     const semesterDiff=semesterCodeDiff<0? -1: semesterCodeDiff===0? 0:1;
-    return yearDiff * 2 + semesterCodeDiff +1*Math.sign(semesterDiff);
+  minus(other: Period): number {
+    const yearDiff = this.year - other.year;
+    const thisSlot = toRegularSemesterSlot(this.semester.getCode());
+    const otherSlot = toRegularSemesterSlot(other.semester.getCode());
+    const semesterDiff = thisSlot - otherSlot;
+
+    return Math.max(0, yearDiff * 2 + semesterDiff + 1*Math.sign(yearDiff));
+  }
+  diff(other: Period): number {
+
+    return Math.abs(this.minus(other));
   }
 
   equals(other: Period): boolean {
@@ -58,6 +64,15 @@ export class Period {
     return value.toString().trim().length === 6;
   }
 
+}
+
+function toRegularSemesterSlot(semesterCode: number): 1 | 2 {
+  if (semesterCode < 60) {
+    return 1;
+  }
+
+  // Summer/Fall are grouped into the second regular semester slot.
+  return 2;
 }
 
 

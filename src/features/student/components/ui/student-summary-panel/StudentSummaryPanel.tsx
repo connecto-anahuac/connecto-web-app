@@ -7,6 +7,7 @@ import Memo from "@/features/student/components/ui/Memo";
 import { cn } from "@/shared/lib/util";
 import type { StudentSummary } from "./student-summary.types";
 import Alert from "@/components/Alert";
+import SemesterBadge from "@/components/SemesterBadge";
 
 type Props = {
   className?: string;
@@ -42,36 +43,71 @@ export function StudentSummaryPanel({ className, summary }: Props) {
         </div>
 
         <div className="flex flex-col gap-1">
-          <span className="text-xs font-medium uppercase text-[#6e6258]">Carrera</span>
+          <span className="text-xs font-medium uppercase text-[#6e6258]">
+            Carrera
+          </span>
           <span className="text-sm font-medium">{summary.career}</span>
-          <StudyPlan plan={summary.plan} className="w-fit text-[11px]" />
+          {/* <StudyPlan plan={summary.plan} className="w-fit text-[11px]" /> */}
         </div>
       </div>
 
       <div className="grid grid-cols-1 gap-3">
-        <InfoItem label="ingreso semestre" value={summary.profile.enrolledPeriod} />
-        <InfoItem label="semestre actual" value={String(summary.profile.currentSemester)} />
+
+         <div className="flex flex-col gap-0.5">
+      <span className="text-xs font-medium uppercase text-[#6e6258]">
+        Semestre ingresado
+      </span>
+         <div className={`flex items-center gap-1 whitespace-nowrap w-fit`}>
+          <SemesterBadge semester={summary.profile.enrolledSemester} />
+
+          <div className="self-stretch flex py-0.5">
+            <div className="w-px bg-[#313131]" />
+          </div>
+
+          <div className="flex items-baseline gap-0.5 text-xs leading-none">
+            <span className="font-normal text-black">
+              {summary.profile.enrolledYear !== 0
+                ? summary.profile.enrolledYear
+                : "año"}
+            </span>
+          </div>
+        </div>
+    </div>
+     
+        <InfoItem
+          label="semestre actual"
+          value={String(summary.profile.currentSemester)}
+        />
         <InfoItem
           label="semestres regulares"
           value={String(summary.profile.regularSemestersCount)}
         />
         <InfoItem label="avance" value={summary.advanceLabel} />
-        <InfoItem label="reprobados" value={String(summary.failedCoursesCount)} />
-          <div className="flex flex-col gap-0.5">
-      <span className="text-xs font-medium uppercase text-[#6e6258]">reprobados</span>
-          <span className="text-sm text-[#2d2620] flex gap-2 items-center">{summary.failedCoursesCount}{summary.failedCoursesCount > 2 ? (
-                  <Alert level={"high"} className=""/>
-                ) : summary.failedCoursesCount> 0 ? (
-                  <Alert level={"medium"}  className=""/>
-                ) : null}</span>
-          
-    </div>
+        {/* <InfoItem
+          label="reprobados"
+          value={String(summary.failedCoursesCount)}
+        /> */}
+        <div className="flex flex-col gap-0.5">
+          <span className="text-xs font-medium uppercase text-[#6e6258]">
+            reprobados
+          </span>
+          <span className="text-sm text-[#2d2620] flex gap-2 items-center">
+            {summary.failedCoursesCount}
+            {summary.failedCoursesCount > 2 ? (
+              <Alert level={"high"} className="" />
+            ) : summary.failedCoursesCount > 0 ? (
+              <Alert level={"medium"} className="" />
+            ) : null}
+          </span>
+        </div>
         <InfoItem label="actualmente" value={summary.currentCoursesLabel} />
         <InfoItem label="requisito" value={summary.requirementLabel} />
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-xs font-medium uppercase text-[#6e6258]">Contacto</span>
+        <span className="text-xs font-medium uppercase text-[#6e6258]">
+          Contacto
+        </span>
         <div className="flex items-center gap-2 text-[#5b5149]">
           <ContactIconButton label="School email">
             <SchoolEmailIcon className="h-4.5 w-5.25" />
@@ -86,8 +122,13 @@ export function StudentSummaryPanel({ className, summary }: Props) {
       </div>
 
       <div className="flex flex-col gap-1">
-        <span className="text-xs font-medium uppercase text-[#6e6258]">#sym:Memo</span>
-        <Memo memo={summary.memo} className="h-28 w-full max-w-full bg-[#efe5d8]" />
+        <span className="text-xs font-medium uppercase text-[#6e6258]">
+          #sym:Memo
+        </span>
+        <Memo
+          memo={summary.memo}
+          className="h-28 w-full max-w-full bg-[#efe5d8]"
+        />
       </div>
     </aside>
   );
@@ -96,7 +137,9 @@ export function StudentSummaryPanel({ className, summary }: Props) {
 function InfoItem({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-xs font-medium uppercase text-[#6e6258]">{label}</span>
+      <span className="text-xs font-medium uppercase text-[#6e6258]">
+        {label}
+      </span>
       <span className="text-sm text-[#2d2620]">{value}</span>
     </div>
   );

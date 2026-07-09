@@ -23,7 +23,10 @@ export function buildStudentSummary(
     planLabel: string;
   },
 ): StudentSummary {
-  const gradedCourses = plan.filter((item) => typeof item.grade === "number");
+  const gradedCourses = plan.filter(
+    (item): item is StudentClassItem & { grade: number } =>
+      typeof item.grade === "number" && item.grade !== GRADE_NOT_FOUND_VALUE,
+  );
   const passedCourses = gradedCourses.filter((item) => item.grade !== null && item.grade >= 6);
   const failedCourses = gradedCourses.filter((item) => item.grade !== null && item.grade < 6);
   const currentCourses = plan.filter((item) => item.period && (item.grade === null||item.grade===GRADE_NOT_FOUND_VALUE));

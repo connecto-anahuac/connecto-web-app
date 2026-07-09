@@ -48,7 +48,7 @@ export class Student {
   }
 
   get currentSemester(): number {
-    return Period.create(new Date()).minus(this.enrolledPeriod);
+    return Period.create(new Date()).diff(this.enrolledPeriod);
   }
 }
 
