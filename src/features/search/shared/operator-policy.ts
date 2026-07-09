@@ -23,8 +23,7 @@ export const OPERATORS_BY_VALUE_TYPE: Record<ValueType, Operator[]> = {
   text: ["contains", "eq"],
   number: ["eq", "gt", "gte", "lt", "lte", "between"],
   date: ["eq", "gt", "gte", "lt", "lte", "between"],
-  singleSelect: ["eq"], //TODO remove??
-  multiSelect: ["in"],
+  enum: ["in"],
   boolean: ["eq"],
 };
 

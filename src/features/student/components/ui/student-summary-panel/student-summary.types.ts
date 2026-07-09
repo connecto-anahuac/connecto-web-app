@@ -1,4 +1,5 @@
 import type { Contact, StudentClassItem, StudentProfile } from "@/features/student/types";
+import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
 
 export type StudentSummary = {
   profile: StudentProfile;
@@ -25,7 +26,7 @@ export function buildStudentSummary(
   const gradedCourses = plan.filter((item) => typeof item.grade === "number");
   const passedCourses = gradedCourses.filter((item) => item.grade !== null && item.grade >= 6);
   const failedCourses = gradedCourses.filter((item) => item.grade !== null && item.grade < 6);
-  const currentCourses = plan.filter((item) => item.period && (item.grade === null||item.grade===-1));
+  const currentCourses = plan.filter((item) => item.period && (item.grade === null||item.grade===GRADE_NOT_FOUND_VALUE));
   const totalCourses = plan.length || 1;
   const advance = Math.round((passedCourses.length / totalCourses) * 100);
 

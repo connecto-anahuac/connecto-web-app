@@ -7,11 +7,20 @@ import {
   ValueType,
 } from "./filter-definition";
 
-function isRangeValue(value: FilterCondition["value"]): value is FilterRangeValue {
-  return Array.isArray(value) && value.length === 2 && value.every((entry) => typeof entry !== "object");
+function isRangeValue(
+  value: FilterCondition["value"],
+): value is FilterRangeValue {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    value.every((entry) => typeof entry !== "object")
+  );
 }
 
-function normalizeComparableValue(valueType: ValueType, value: unknown): FilterPrimitive | null {
+function normalizeComparableValue(
+  valueType: ValueType,
+  value: unknown,
+): FilterPrimitive | null {
   if (value === null || value === undefined) {
     return null;
   }
@@ -24,18 +33,21 @@ function normalizeComparableValue(valueType: ValueType, value: unknown): FilterP
       return typeof value === "boolean" ? value : String(value) === "true";
 
     case "date": {
-      const timestamp = value instanceof Date ? value.getTime() : Date.parse(String(value));
+      const timestamp =
+        value instanceof Date ? value.getTime() : Date.parse(String(value));
       return Number.isNaN(timestamp) ? null : timestamp;
     }
 
     case "text":
-    case "singleSelect":
-    case "multiSelect":
+    case "enum":
       return String(value);
   }
 }
 
-function compareScalar(left: FilterPrimitive | null, right: FilterPrimitive | null): number | null {
+function compareScalar(
+  left: FilterPrimitive | null,
+  right: FilterPrimitive | null,
+): number | null {
   if (left === null || right === null) {
     return null;
   }
@@ -52,15 +64,23 @@ function compareScalar(left: FilterPrimitive | null, right: FilterPrimitive | nu
 }
 
 // contains
-function includesText(actual: unknown, expected: FilterPrimitive | null): boolean {
+function includesText(
+  actual: unknown,
+  expected: FilterPrimitive | null,
+): boolean {
   if (actual === null || actual === undefined || expected === null) {
     return false;
   }
 
-  return String(actual).toLocaleLowerCase().includes(String(expected).toLocaleLowerCase());
+  return String(actual)
+    .toLocaleLowerCase()
+    .includes(String(expected).toLocaleLowerCase());
 }
 
-export function isOperatorAllowed<TItem>(definition: FilterDefinition<TItem>, operator: Operator): boolean {
+export function isOperatorAllowed<TItem>(
+  definition: FilterDefinition<TItem>,
+  operator: Operator,
+): boolean {
   return definition.operators.includes(operator);
 }
 
@@ -91,15 +111,12 @@ export function matchesCondition<TItem>(
   switch (normalizedCondition.operator) {
     case "eq": {
       if (Array.isArray(actualValue)) {
+        // OR 検索
         return actualValue.some((entry) => entry === expectedValue);
       }
 
       return actualValue === expectedValue;
     }
-
-    case "contains":
-      return includesText(actualValue, Array.isArray(expectedValue) ? null : expectedValue);
-
     case "in": {
       if (!Array.isArray(expectedValue)) {
         return false;
@@ -108,23 +125,45 @@ export function matchesCondition<TItem>(
       if (Array.isArray(actualValue)) {
         return actualValue.some((entry) => expectedValue.includes(entry));
       }
-
-      return expectedValue.includes(actualValue as FilterPrimitive);
+      if (actualValue === null || actualValue === undefined) {
+        return false;
+      }
+      return expectedValue.includes(actualValue);
     }
+
+    case "contains":
+      return includesText(
+        actualValue,
+        Array.isArray(expectedValue) ? null : expectedValue,
+      );
 
     case "between": {
       if (!isRangeValue(expectedValue) || Array.isArray(actualValue)) {
         return false;
       }
 
-      const actualComparable = normalizeComparableValue(definition.valueType, actualValue);
-      const minComparable = normalizeComparableValue(definition.valueType, expectedValue[0]);
-      const maxComparable = normalizeComparableValue(definition.valueType, expectedValue[1]);
+      const actualComparable = normalizeComparableValue(
+        definition.valueType,
+        actualValue,
+      );
+      const minComparable = normalizeComparableValue(
+        definition.valueType,
+        expectedValue[0],
+      );
+      const maxComparable = normalizeComparableValue(
+        definition.valueType,
+        expectedValue[1],
+      );
 
       const minResult = compareScalar(actualComparable, minComparable);
       const maxResult = compareScalar(actualComparable, maxComparable);
 
-      return minResult !== null && maxResult !== null && minResult >= 0 && maxResult <= 0;
+      return (
+        minResult !== null &&
+        maxResult !== null &&
+        minResult >= 0 &&
+        maxResult <= 0
+      );
     }
 
     case "gt":
@@ -135,8 +174,14 @@ export function matchesCondition<TItem>(
         return false;
       }
 
-      const actualComparable = normalizeComparableValue(definition.valueType, actualValue);
-      const expectedComparable = normalizeComparableValue(definition.valueType, expectedValue);
+      const actualComparable = normalizeComparableValue(
+        definition.valueType,
+        actualValue,
+      );
+      const expectedComparable = normalizeComparableValue(
+        definition.valueType,
+        expectedValue,
+      );
       const result = compareScalar(actualComparable, expectedComparable);
 
       if (result === null) {
@@ -164,13 +209,16 @@ export function applyFilters<TItem>(
   definitions: FilterDefinition<TItem>[],
   conditions: FilterCondition[],
 ): TItem[] {
-  const definitionMap = new Map(definitions.map((definition) => [definition.key, definition]));
+  const definitionMap = new Map(
+    definitions.map((definition) => [definition.key, definition]),
+  );
 
   if (conditions.length === 0) {
     return items;
   }
 
   return items.filter((item) =>
+    // AND 検索
     conditions.every((condition) => {
       const definition = definitionMap.get(condition.fieldKey);
       if (!definition) {

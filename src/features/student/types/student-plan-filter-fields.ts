@@ -14,14 +14,14 @@ export type StudentPlanFilterKey =
 export const STUDENT_PLAN_FILTER_FIELDS: FilterField<StudentClassItem>[] = [
   defineFilterField<StudentClassItem>({
     key: STUDENT_PLAN_FILTER_KEYS.className,
-    label: "Nombre de clase",
+    label: "Nombre de materia",
     valueType: "text",
     inputType: "free",
     getValue: (item) => item.name,
   }),
   defineFilterField<StudentClassItem>({
     key: STUDENT_PLAN_FILTER_KEYS.classCodeAndNumber,
-    label: "Codigo y numero",
+    label: "Clave de materia",
     valueType: "text",
     inputType: "free",
     getValue: (item) => `${item.keyCode} ${item.keyNumber}`.trim(),
@@ -29,14 +29,14 @@ export const STUDENT_PLAN_FILTER_FIELDS: FilterField<StudentClassItem>[] = [
   defineFilterField<StudentClassItem>({
     key: STUDENT_PLAN_FILTER_KEYS.period,
     label: "Periodo",
-    valueType: "multiSelect",
+    valueType: "enum",
     inputType: "option",
     dynamicOptions: true,
     getValue: (item) => item.period,
   }),
   defineFilterField<StudentClassItem>({
     key: STUDENT_PLAN_FILTER_KEYS.grade,
-    label: "Calificacion",
+    label: "Calificación",
     valueType: "number",
     inputType: "free",
     getValue: (item) => item.grade,

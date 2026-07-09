@@ -33,6 +33,10 @@ function isCsvFile(file: File) {
   return file.name.toLowerCase().endsWith(".csv");
 }
 
+function filterCsvFiles(files: File[]) {
+  return files.filter(isCsvFile);
+}
+
 export function useFileSelectorPanel(): UseFileSelectorPanelResult {
   const inputRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -45,15 +49,27 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
     inputRef.current?.click();
   }
 
-  function addSource(file: File) {
-    setErrorMessage(null);
+  function addSources(files: File[]) {
+    const validFiles = filterCsvFiles(files);
+    const hasInvalidFiles = validFiles.length !== files.length;
+
+    if (hasInvalidFiles) {
+      setErrorMessage("Solo se pueden agregar archivos CSV.");
+    } else {
+      setErrorMessage(null);
+    }
+
+    if (validFiles.length === 0) {
+      return;
+    }
+
     setSources((currentSources) => [
       ...currentSources,
-      {
+      ...validFiles.map((file) => ({
         career: getCareerName(file.name) ?? CARRERAS[0],
         file,
-        fileType: file.name.toLowerCase().includes("capp") ? "CAPP" : "Plan de Estudios",
-      },
+        fileType: file.name.toLowerCase().includes("capp") ? ("CAPP" as const) : ("Plan de Estudios" as const),
+      })),
     ]);
   }
 
@@ -74,12 +90,12 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    if (!file) {
+    const files = Array.from(event.target.files ?? []);
+    if (files.length === 0) {
       return;
     }
 
-    addSource(file);
+    addSources(files);
     event.target.value = "";
   }
 
@@ -96,12 +112,12 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
     event.preventDefault();
     setIsDragging(false);
 
-    const file = event.dataTransfer.files?.[0];
-    if (!file) {
+    const files = Array.from(event.dataTransfer.files ?? []);
+    if (files.length === 0) {
       return;
     }
 
-    addSource(file);
+    addSources(files);
   }
 
   function removeSource(indexToRemove: number) {

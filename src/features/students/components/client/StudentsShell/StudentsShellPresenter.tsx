@@ -65,7 +65,7 @@ export function StudentsShellPresenter({
         <div className="flex items-center justify-between gap-1.5">
           <FilterIcon /* className="h-6 w-6 shrink-0 text-Outline" */ />
           <FilterPresetBadge value="TIND" isSelected={presetState.career} onClick={() => onPresetToggle("career")} />
-          <FilterPresetBadge value="activo" isSelected={presetState.status} onClick={() => onPresetToggle("status")} />
+          <FilterPresetBadge value="Activo" isSelected={presetState.status} onClick={() => onPresetToggle("status")} />
           <FilterPresetBadge value="alerta" isSelected={presetState.alerta} onClick={() => onPresetToggle("alerta")} />
           <FilterPresetBadge value="advertencia" isSelected={presetState.advertencia} onClick={() => onPresetToggle("advertencia")} />
         </div>

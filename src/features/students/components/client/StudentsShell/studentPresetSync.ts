@@ -66,7 +66,7 @@ export function isStudentPresetSelected(
     case "career":
       return toArrayValue(careerCondition?.value).includes("TIND");
     case "status":
-      return toArrayValue(statusCondition?.value).includes("activo");
+      return toArrayValue(statusCondition?.value).includes("Activo");
     case "alerta":
       return isAlertaCondition(reprobadoCondition);
     case "advertencia":
@@ -108,7 +108,7 @@ export function getStudentPresetNextConditions(
   }
 
   if (presetKey === "status") {
-    const nextValues = togglePresetOption(statusCondition, "activo");
+    const nextValues = togglePresetOption(statusCondition, "Activo");
     const rest = conditions.filter(
       (condition) => condition.fieldKey !== STUDENT_FILTER_KEYS.status,
     );

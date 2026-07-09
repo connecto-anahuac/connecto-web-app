@@ -49,7 +49,7 @@ export default function SortCard({ fieldLabel, className }: SortCardProps) {
   return (
     <div
       className={cn(
-        'inline-flex h-12 w-[260px] items-center gap-2.5 rounded-md bg-background px-2 py-3 text-sm font-medium text-connecto-ink',
+        'inline-flex h-12 w-65 items-center gap-2.5 rounded-md bg-background px-2 py-3 text-sm font-medium text-connecto-ink',
         className,
       )}
     >

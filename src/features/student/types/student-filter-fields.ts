@@ -7,7 +7,7 @@ import { defineFilterField, type FilterField } from "../../search/shared/filter-
  */
 export const STUDENT_FILTER_KEYS = {
   name: "name",
-  status: "status",
+  status: "estatus",
   currentSemester: "semester",
   career: "career",
   plan: "plan",
@@ -25,6 +25,11 @@ export type StudentFilterKey =
 export const STUDENT_CAREER_OPTIONS = [{ label: "TIND", value: "TIND" },
     { label: "Civil", value: "Civil" },
     { label: "Ambiental", value: "Ambiental" },{ label: "Industrial", value: "Industrial" }
+] as const;
+
+export const STUDENT_STATUS_OPTIONS = [{ label: "Activo", value: "Activo" },
+    { label: "Inactivo", value: "Inactivo" },{ label: "Baja Académica", value: "Baja Académica" },
+    { label: "Baja voluntaria", value: "Baja voluntaria" },
 ] as const;
 
 /**
@@ -46,15 +51,16 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.status,
     label: "Estatus",
-    valueType: "multiSelect",
+    valueType: "enum",
     inputType: "option",
-    dynamicOptions: true,
+    // dynamicOptions: true,
+    options: [...STUDENT_STATUS_OPTIONS],
     getValue: (student) => student.status,
   }),
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.currentSemester,
     label: "Semestre",
-    valueType: "multiSelect", //TODO number
+    valueType: "enum", 
     inputType: "option",
     dynamicOptions: true,
     getValue: (student) => student.currentSemester,
@@ -62,7 +68,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.career,
     label: "Carrera",
-    valueType: "multiSelect",
+    valueType: "enum",
     inputType: "option",
     options: [...STUDENT_CAREER_OPTIONS],
     getValue: (student) => student.career,
@@ -70,14 +76,14 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.plan,
     label: "Plan",
-    valueType: "multiSelect",
+    valueType: "enum",
     inputType: "option",
     dynamicOptions: true,
     getValue: (student) => student.plan,
   }),
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.failCount,
-    label: "Reprobado",
+    label: "Numero de materias reprobadas",
     valueType: "number",
     inputType: "free",
     getValue: (student) => student.failCount,

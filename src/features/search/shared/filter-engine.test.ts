@@ -58,8 +58,8 @@ const definitions: FilterDefinition<StudentSearchItem>[] = [
     label: "Status",
     editor: "select",
     inputType: "option",
-    valueType: "singleSelect",
-    operators: ["eq", "in"],
+    valueType: "enum",
+    operators: ["eq", ],
     getValue: (item) => item.status,
     options: [
       { label: "Active", value: "active" },
@@ -69,9 +69,9 @@ const definitions: FilterDefinition<StudentSearchItem>[] = [
   {
     key: "tags",
     label: "Tags",
-    editor: "multiSelect",
+    editor: "enum",
     inputType: "option",
-    valueType: "multiSelect",
+    valueType: "enum",
     operators: ["in"],
     getValue: (item) => item.tags,
     options: [
@@ -165,14 +165,14 @@ describe("filter-engine", () => {
     expect(filtered.map((student) => student.name)).toEqual(["Alice Johnson", "Carla Stone"]);
   });
 
-  it("matches in conditions for scalar option values declared as multiSelect", () => {
+  it("matches in conditions for scalar option values declared as enum", () => {
     const scalarOptionDefinitions: FilterDefinition<StudentSearchItem>[] = [
       {
         key: "status",
         label: "Status",
-        editor: "multiSelect",
+        editor: "enum",
         inputType: "option",
-        valueType: "multiSelect",
+        valueType: "enum",
         operators: ["in"],
         getValue: (item) => item.status,
         options: [

@@ -51,7 +51,7 @@ describe("filter-factory", () => {
       defineFilterField<Row>({
         key: "status",
         label: "Status",
-        valueType: "singleSelect",
+        valueType: "enum",
         inputType: "option",
         multiple: false,
         getValue: (row) => row.status,
@@ -74,7 +74,7 @@ describe("filter-factory", () => {
       defineFilterField<Row>({
         key: "status",
         label: "Status",
-        valueType: "singleSelect",
+        valueType: "enum",
         inputType: "option",
         getValue: (row) => row.status,
         options: [{ label: "Active", value: "active" }],
@@ -89,7 +89,7 @@ describe("filter-factory", () => {
       defineFilterField<Row>({
         key: "status",
         label: "Status",
-        valueType: "singleSelect",
+        valueType: "enum",
         inputType: "option",
         getValue: (row) => row.status,
         dynamicOptions: true,

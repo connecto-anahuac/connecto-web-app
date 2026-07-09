@@ -78,8 +78,8 @@ export function FileSelectorPanelPresenter({
           </div>
         ) : (
           <div className="text-center">
-            <p className="text-lg font-medium">Drag & Drop un archivo CSV</p>
-            <p className="mt-2 text-sm text-gray-500">O haz clic para seleccionar</p>
+            <p className="text-lg font-medium">Drag & Drop archivos CSV</p>
+            <p className="mt-2 text-sm text-gray-500">O haz clic para seleccionar varios</p>
           </div>
         )}
 
@@ -87,6 +87,7 @@ export function FileSelectorPanelPresenter({
           ref={inputRef}
           type="file"
           accept=".csv"
+          multiple
           hidden
           onChange={onInputChange}
         />

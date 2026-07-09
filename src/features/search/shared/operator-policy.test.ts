@@ -33,7 +33,7 @@ describe("operator-policy", () => {
   });
 
   it("allows inclusion matching for multi-select option fields", () => {
-    const multiSelectOperators = getOperatorsForValueType("multiSelect");
+    const multiSelectOperators = getOperatorsForValueType("enum");
 
     expect(multiSelectOperators).toEqual(["in"]);
   });
@@ -42,6 +42,6 @@ describe("operator-policy", () => {
     expect(getOperatorLabel("number", "gt")).toBe(">");
     expect(getOperatorLabel("date", "gte")).toBe("≧");
     expect(getOperatorLabel("text", "eq")).toBe("Es");
-    expect(getOperatorLabel("singleSelect", "in")).toBe("En");
+    expect(getOperatorLabel("enum", "in")).toBe("En");
   });
 });

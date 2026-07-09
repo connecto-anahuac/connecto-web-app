@@ -1,15 +1,15 @@
 
-export const operators = ["eq", "contains", "gt", "gte", "lt", "lte", "in", "between"] as const;
+export const operators = ["eq", "contains", "gt", "gte", "lt", "lte",  "between","in"] as const;
 export type Operator = (typeof operators)[number];
 export const operatorTextLabels: Record<Operator, string> = {
-  eq: "Es",
+  eq: "Es", //ToDo eq ->in 統合？？？
   contains: "Contiene",
   gt: "Mayor que",
   gte: "Mayor o igual que",
   lt: "Menor que",
   lte: "Menor o igual que",
-  in: "En",
   between: "Entre",
+  in: "Es",
 }
 export const operatorNumberLabels: Record<Operator, string> = {
   eq: "=",
@@ -18,16 +18,16 @@ export const operatorNumberLabels: Record<Operator, string> = {
   gte: "≧",
   lt: "<",
   lte: "≦",
-  in: "En",
   between: "Entre",
+  in: "Es",
 }
 
 // UIの入力法式 //TODO select -> singleSelect
-export const editor = ["text", "number", "select", "multiSelect", "date"] as const;
+export const editor = ["text", "number", "select", "multiSelect","enum", "date"] as const;
 export type Editor = (typeof editor)[number];
 
 //valueの型
-export const valueTypes = ["text", "number", "date", "singleSelect", "multiSelect", "boolean"] as const;
+export const valueTypes = ["text", "number", "date",  "enum", "boolean"] as const;
 export type ValueType = (typeof valueTypes)[number];
 
 // filterで使える最小単位

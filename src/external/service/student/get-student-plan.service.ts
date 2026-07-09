@@ -5,6 +5,7 @@ import { GradeRepository } from "@/external/repository/grade.repository";
 import { PlanRepository } from "@/external/repository/plan.repository";
 import { PreRequisitoRepository } from "@/external/repository/prerequisito.repository";
 import { StudentRepository } from "@/external/repository/student.repository";
+import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
 
 export class GetStudentPlanService {
   constructor(
@@ -42,7 +43,7 @@ export class GetStudentPlanService {
           block: preCourse?.block ?? "",
           preRequisites: [],
           period: "",
-          grade: -1,
+          grade: grade?.grade ?? GRADE_NOT_FOUND_VALUE,
           semester: 0,
           position: 0,
         });
@@ -58,7 +59,7 @@ export class GetStudentPlanService {
         block: course?.block ?? "",
         preRequisites: preItems,
         period: grade?.period ?? "",
-        grade: typeof grade?.grade === "number" ? grade.grade : -1,
+        grade:  grade?.grade ?? GRADE_NOT_FOUND_VALUE,
         semester: plan.semester ?? 0,
         position: plan.position ?? 0,
       });

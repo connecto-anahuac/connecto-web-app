@@ -23,7 +23,7 @@ export function FilterRenderer<TItem>({
     case "select":
       return <SelectFilter filter={filter} icon={icon} />;
 
-    case "multiSelect":
+    case "enum":
       return <MultiSelectFilter filter={filter} icon={icon} />;
 
     case "date":

@@ -9,7 +9,7 @@ const baseFilter = buildFilterDefinition(
   defineFilterField<unknown>({
     key: 'name',
     label: 'Nombre',
-    valueType: 'singleSelect',
+    valueType: 'enum',
     inputType: 'option',
     getValue: () => null,
     options: [
@@ -48,7 +48,7 @@ export const LongOptions: Story = {
       defineFilterField<unknown>({
         key: 'name',
         label: 'Nombre',
-        valueType: 'singleSelect',
+        valueType: 'enum',
         inputType: 'option',
         getValue: () => null,
         options: [
@@ -72,7 +72,7 @@ export const EmptyOptions: Story = {
       defineFilterField<unknown>({
         key: 'name',
         label: 'Nombre',
-        valueType: 'singleSelect',
+        valueType: 'enum',
         inputType: 'option',
         getValue: () => null,
         options: [],

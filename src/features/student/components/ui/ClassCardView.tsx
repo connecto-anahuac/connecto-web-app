@@ -5,6 +5,7 @@ import CourseValues from "@/components/CourseValues";
 import SchoolHatIcon from "@/components/icon/SchoolHatIcon";
 import SemesterBadge, { Semester } from "@/components/SemesterBadge";
 import { splitPeriod } from "@/shared/lib/tool";
+import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
 
 type Props = ComponentProps<"div"> & {
   courseCode: string;
@@ -36,7 +37,9 @@ export default function StudentClassCardView({
         : semeNum === 60
           ? "ago-dec"
           : ("semester" as Semester);
-  const isCurrentCourse = Boolean(period) &&( grade === -1|| grade === null || grade === undefined);
+  const isCurrentCourse =
+    period &&
+    (grade === GRADE_NOT_FOUND_VALUE || grade === null || grade === undefined);
   // const gradeColor =
   //   grade === null
   //     ? "#202020"
@@ -45,9 +48,9 @@ export default function StudentClassCardView({
   //       : grade < 8
   //         ? "#0D7985"
   //         : "#4F7413";
-  
+
   const gradeColorBg =
-    ( grade === -1|| grade === null || grade === undefined)
+    grade === GRADE_NOT_FOUND_VALUE || grade === null || grade === undefined
       ? ""
       : grade < 6
         ? "fail"
@@ -64,7 +67,11 @@ export default function StudentClassCardView({
       style={{ backgroundColor: `var(--${gradeColorBg}-light)` }}
     >
       <div className="flex items-center gap-2">
-        <CourseKey code={courseCode} number={courseNumber} className="text-white" />
+        <CourseKey
+          code={courseCode}
+          number={courseNumber}
+          className="text-white"
+        />
         <CourseValues
           className="ml-auto"
           leftValue={credits}
@@ -81,14 +88,18 @@ export default function StudentClassCardView({
           className="text-[0.8rem] flex items-center gap-1"
           // style={{ color: gradeColor }}
           style={{ color: `var(--${gradeColorBg}-strong)` }}
-           
         >
           <SchoolHatIcon className="w-4.5 h-4.5 " />
-          {((!isCurrentCourse && !grade)||grade===-1) ?? "--"}
-          {isCurrentCourse ? (
+          {grade !== null &&
+          grade !== undefined &&
+          grade !== GRADE_NOT_FOUND_VALUE ? (
+            grade
+          ) : isCurrentCourse ? (
             <span className="text-[0.7rem] uppercase">cruzado</span>
-          ) : null}
-        </div> 
+          ) : (
+            "--"
+          )}
+        </div>
 
         <div className={`flex items-center gap-1 whitespace-nowrap w-fit`}>
           <SemesterBadge semester={semester} />

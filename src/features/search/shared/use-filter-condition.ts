@@ -29,7 +29,14 @@ export function useFilterCondition<TItem>(filter: FilterDefinition<TItem>) {
   const upsertCondition = useFilterStore((state) => state.upsertCondition);
   const removeCondition = useFilterStore((state) => state.removeCondition);
 
+  // if (!condition?.operator) {
+  //   console.warn(`====================Condition for field ${filter.key} is missing operator. This may indicate a misconfiguration in the filter store or an issue with the filter definition. Defaulting to the first operator in the filter definition.`
+  //   );
+  // }
   const operator: Operator = condition?.operator ?? filter.operators[0];
+  // console.log(`====================Condition for field ${operator}`
+  //   );
+  //   console.log(filter.operators);
 
   const clear = useCallback(() => {
     removeCondition(filter.key);

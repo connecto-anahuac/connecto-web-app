@@ -12,7 +12,8 @@ import { getOperatorsForValueType } from "./operator-policy";
 function deriveEditor<TItem>(field: FilterField<TItem>): Editor {
   if (field.inputType === "option") {
     // 複数選択（デフォルト）はチェックリスト、明示的に単一選択なら select。
-    return field.multiple === false ? "select" : "multiSelect";
+    // return field.multiple === false ? "select" : "multiSelect";
+    return "enum";
   }
 
   switch (field.valueType) {
