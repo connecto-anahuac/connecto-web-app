@@ -32,7 +32,7 @@ export default function Header({ className }: Props) {
           >
         
               <Menu />
-              {/* <TopBar className={cn("flex-1 h-full")} /> */}
+              <TopBar className={cn("flex-1 h-full")} />
           </header>
           
           {/* <ControllPanelRight className="  absolute -bottom-2 right-body-frame  translate-y-full"/> */}

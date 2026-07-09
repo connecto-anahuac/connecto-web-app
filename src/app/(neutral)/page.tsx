@@ -1,5 +1,5 @@
-import { HomePageTemplate } from "@/features/home/components/server";
+import { RootPageRedirect } from "@/features/home/components/client/RootPageRedirect";
 
 export default function HomePage() {
-  return <HomePageTemplate />;
+  return <RootPageRedirect />;
 }
