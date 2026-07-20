@@ -24,7 +24,7 @@ type SearchBarProps = ComponentProps<"div"> & {
 
 function getContainerStateClassName(state: SearchBarState) {
   if (state === "writing") {
-    return "gap-3.5 border border-Primary/40 bg-PrimaryContainer-low";
+    return "gap-3.5 border border-Primary/40 bg-PrimaryContainerLow";
   }
 
   if (state === "hasDefinedQuery") {

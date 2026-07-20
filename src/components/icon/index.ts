@@ -19,6 +19,7 @@ import PanelToLeftIcon from "./PanelToLeftIcon";
 import PersonIcon from "./PersonIcon";
 import PinIcon from "./PinIcon";
 import PlanIcon from "./PlanIcon";
+import TwoPersonsIcon from "./TwoPersonsIcon";
 import ScheduleIcon from "./ScheduleIcon";
 import SchoolEmailIcon from "./contact/SchoolEmailIcon";
 import SchoolHatIcon from "./SchoolHatIcon";
@@ -70,6 +71,7 @@ export const Icons = {
   numberDescending: NumberDescendingIcon,
   panelToLeft: PanelToLeftIcon,
   person: PersonIcon,
+  twoPersons: TwoPersonsIcon,
   pin: PinIcon,
   plan: PlanIcon,
   plus: PlusIcon,

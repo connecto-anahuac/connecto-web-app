@@ -144,8 +144,8 @@
   --color-DividerMiddle: var(--DividerMiddle);
   --color-OnSurface-60: var(--OnSurface-60);
   --color-OnSurface-40: var(--OnSurface-40);
-  --color-onPrimaryContainer-low: var(--onPrimaryContainer-low);
-  --color-PrimaryContainer-low: var(--PrimaryContainer-low);
+  --color-onPrimaryContainerLow: var(--onPrimaryContainer-low);
+  --color-PrimaryContainerLow: var(--PrimaryContainer-low);
   --color-DividerLowest: var(--DividerLowest);
   --color-Gray-low: var(--Gray-low);
   --color-PrimaryContainerLowest: var(--PrimaryContainerLowest);

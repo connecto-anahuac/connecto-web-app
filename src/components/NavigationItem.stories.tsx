@@ -1,17 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 
 import NavigationItem from "./NavigationItem";
-
-function NavIcon() {
-  return (
-    <svg aria-hidden="true" className="size-4.5" viewBox="0 0 18 18" fill="none">
-      <path
-        d="M9 3.25A2.55 2.55 0 1 1 9 8.35A2.55 2.55 0 0 1 9 3.25ZM4.5 13.5C4.5 11.98 5.73 10.75 7.25 10.75H10.75C12.27 10.75 13.5 11.98 13.5 13.5V14.25H4.5V13.5Z"
-        fill="currentColor"
-      />
-    </svg>
-  );
-}
+import { IconName, Icons } from "./icon";
 
 const meta = {
   title: "Components/NavigationItem",
@@ -21,7 +11,12 @@ const meta = {
     a11y: { test: "todo" },
   },
   argTypes: {
-    icon: { table: { disable: true } },
+    icon: {
+      control: {
+        type: "select",
+        options: Object.keys(Icons) as IconName[],
+      },
+    },
     className: { table: { disable: true } },
     label: { control: "text" },
     selected: { control: "boolean" },
@@ -29,10 +24,10 @@ const meta = {
     hasLabel: { control: "boolean" },
   },
   args: {
-    icon: <NavIcon />,
-    label: "materias ofertadas",
+    icon: "twoPersons",
+    label: "Alumnos",
     selected: false,
-    tone: "content",
+    tone: "root",
     hasLabel: true,
   },
   tags: ["autodocs"],

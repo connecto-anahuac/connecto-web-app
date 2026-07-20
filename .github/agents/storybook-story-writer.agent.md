@@ -57,6 +57,7 @@ argument-hint: "対象コンポーネントのファイルパスを渡してく�
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { expect, userEvent, within } from "@storybook/test";
 import { ComponentName } from "./ComponentName";
+import { IconName, Icons } from "./icon";
 
 const meta = {
   title: "Components/ComponentName",
@@ -68,6 +69,12 @@ const meta = {
   argTypes: {
     // 主要 props を記述
     // 例: variant: { control: "select", options: ["primary", "secondary"] }
+    icon: {
+      control: {
+        type: "select",
+        options: Object.keys(Icons) as IconName[],
+      },
+    },
   },
   args: {
     // デフォルト args（全ストーリー共通）
