@@ -1,125 +1,113 @@
 ---
 name: figma-tailwind-best-practices
-description: 'Implement Figma designs with Tailwind CSS best practices in this project. Use when: implementing Figma in Tailwind, converting design tokens to Tailwind classes, avoiding arbitrary values, adding custom Tailwind utilities, or translating Figma layout into correct Tailwind CSS 4 code.'
-argument-hint: 'Describe the Figma implementation target and any Tailwind constraints'
+description: 'FigmaデータをTailwindで実装する際の実装ルール。Use when: Figma to Tailwind, width/spacingの変換方針, arbitrary valueの許容判断, color tokenの選定, color_scheme.cssとcourse_colors.cssの運用。'
+argument-hint: '実装対象(Figma URL/コンポーネント名)と、再利用したい値(サイズ/色)を指定してください'
 ---
 
 # Figma Tailwind Best Practices
 
-Implement Figma-derived UI with Tailwind CSS in a way that stays faithful to the design without abandoning Tailwind's native workflow.
+Figmaデータから Tailwind CSS 実装を生成するときに、
+「Tailwindらしさを維持しつつ、必要な精度だけ担保する」ためのワークフロー。
 
-This skill is for design-to-code work where the output should remain idiomatic Tailwind instead of drifting into ad hoc CSS.
+## When To Use
 
-## When to Use
+- Figma のコンポーネントや画面を Tailwind で実装するとき
+- `w-[11px]` のような arbitrary value を使うべきか迷うとき
+- 色を既存トークンから選ぶか、新規追加するか判断したいとき
+- リポジトリ内の色定義を一貫した運用で増やしたいとき
 
-- Implementing a Figma screen or component with Tailwind CSS
-- Converting Figma spacing, sizing, radius, typography, and colors into Tailwind classes
-- Deciding whether a value should use a built-in Tailwind utility or a custom utility
-- Cleaning up Tailwind code that overuses arbitrary values such as `w-[45px]`
-- Enforcing Tailwind-first authoring instead of bundling utilities into CSS component classes
+## Required Color Sources
 
-## Core Rules
+色は必ず次の 2 ファイルを先に参照する。
 
-- Use an existing Tailwind utility whenever Tailwind already provides the needed value.
-- If the exact value does not exist in Tailwind, do not use arbitrary values like `w-[45px]` as the default solution.
-- Define missing values as reusable CSS-backed Tailwind-friendly utilities such as `w-45px` in a shared stylesheet.
-- Do not group Tailwind utilities into CSS component classes just to mimic traditional CSS structure.
-- Keep Tailwind classes inline on the element unless a true shared utility or token is needed.
-- Prefer project tokens and CSS variables over literal one-off color, spacing, radius, and typography values.
+- `src/app/styles/color_scheme.css`
+- `src/app/styles/course_colors.css`
+
+## Procedure
+
+1. Figma の値を「レイアウト」「サイズ」「色」に分解する。
+2. サイズ系は Tailwind の既定スケール（例: `w-2`）で表現できるかを最初に判定する。
+3. 色は上記 2 ファイルから semantic token を選ぶ。
+4. 既存値で表現できない場合のみ、以下の分岐ルールで追加実装する。
+5. 最後にチェックリストで品質確認する。
+
+## Sizing Rules (Width/Height/Spacing)
+
+### Rule 1: Tailwind default value を最優先
+
+- まず `w-2`, `px-4`, `rounded-lg` など既存ユーティリティへ変換する。
+- Figma 値に近くても、既存スケールで視覚差が許容できるなら既存値を採用する。
+
+### Rule 2: 既存値がない場合の分岐
+
+- その値が「そのコンポーネント内だけ」で完結するなら、`w-[11px]` のような直書きは許可。
+- 複数箇所で再利用する値は、arbitrary value を増やさず CSS に宣言して使う。
+
+例:
+
+```tsx
+<div className="w-[11px]" />
+```
+
+```css
+/* shared utility example */
+@utility componentA-width {
+	width: 11px;
+}
+```
+
+```tsx
+<div className="componentA-width" />
+```
+
+### Rule 3: 再利用の判断基準
+
+次のいずれかを満たす場合は CSS 宣言へ昇格する。
+
+- 同一コンポーネント内で 3 回以上使う
+- 別コンポーネントでも使う見込みがある
+- デザイン上の意味を持つ値（カード固定幅、共通角丸など）
+
+## Color Rules
+
+### Rule 1: 既存 token を優先
+
+- `color_scheme.css` と `course_colors.css` から最も意味が近い semantic color を選ぶ。
+- 可能な限り生の hex (`#xxxxxx`) を JSX に直書きしない。
+
+### Rule 2: 該当しない色は semantic 名で追加
+
+- 既存にない場合のみ、新しい semantic 名で追加する。
+- 追加先の原則:
+	- アプリ共通/UI 基盤色: `color_scheme.css`
+	- コース/ドメイン分類色: `course_colors.css`
+
+命名例:
+
+- 良い例: `--CourseBadgeInfo`, `--ScheduleConflict`, `--DataPanelMutedText`
+- 悪い例: `--blue-2`, `--newColor`, `--tmp-orange`
+
+### Rule 3: 追加時の整合
+
+- 追加した色は用途が分かる名前にする。
+- 既存トークンと意味重複する色は追加しない。
+- 追加後は実装側で token 経由で使用する。
 
 ## Decision Flow
 
-For every Figma value, decide in this order.
+1. この値は Tailwind の既定値で表せるか?
+2. 表せるなら既定値を使う。
+3. 表せない場合、その値は単発利用か?
+4. 単発なら arbitrary value を許可。
+5. 再利用するなら CSS utility または token を追加する。
+6. 色は 2 つの CSS ファイルを確認済みか?
+7. 未定義なら semantic 名で追加する。
 
-### 1. Check for an existing Tailwind utility
+## Completion Checklist
 
-Use Tailwind's native class if it already expresses the value accurately enough.
-
-Do not replace valid native utilities with custom CSS just to mirror Figma literally.
-
-### 2. If Tailwind does not provide the value, create a reusable utility
-
-When the design requires an exact value that Tailwind does not expose, define a reusable utility in a shared CSS surface such as `src/app/globals.css`.
-
-Prefer utilities like these:
-
-```css
-@utility w-45px {
-  width: 45px;
-}
-
-@utility rounded-20px {
-  border-radius: 20px;
-}
-```
-
-Then use them directly in markup:
-
-```tsx
-<div className="w-45px rounded-20px" />
-```
-
-Do not default to this:
-
-```tsx
-<div className="w-[45px] rounded-[20px]" />
-```
-
-### 3. If the value repeats or belongs to the design system, promote it to a token
-
-When a custom value is likely to recur, define it through shared variables or theme tokens instead of scattering multiple custom utilities.
-
-Examples:
-
-- Repeated brand colors
-- Reused card radius
-- Common content widths
-- Recurrent shadow or blur values
-
-For this project, prefer extending the shared styling surface in `src/app/globals.css` deliberately.
-
-### 4. Keep the final markup Tailwind-native
-
-Even when custom utilities are required, author the component in normal Tailwind style.
-
-Preferred:
-
-```tsx
-<section className="flex w-full items-center gap-4 rounded-20px bg-background px-6 py-4">
-```
-
-Avoid introducing CSS component wrappers like this:
-
-```css
-.card {
-  @apply flex w-full items-center gap-4 px-6 py-4;
-}
-```
-
-```tsx
-<section className="card" />
-```
-
-## Figma-to-Tailwind Procedure
-
-1. Use the Figma retrieval workflow first. Do not implement from incomplete or oversized raw Figma output.
-2. Extract the implementation-critical values from the design: layout, spacing, size, typography, radius, color, and state differences.
-3. Map each value to an existing Tailwind utility where possible.
-4. For each missing exact value, decide whether it is one-off or reusable.
-5. Add one-off-exact values as narrowly scoped shared utilities only when necessary.
-6. Add recurring values as shared tokens or reusable utilities in `src/app/globals.css`.
-7. Implement the component with inline Tailwind classes, not CSS abstraction classes.
-8. Compare the result against the Figma screenshot and adjust only the mismatched values.
-
-## Common Anti-Patterns
-
-- Copying raw Figma values straight into arbitrary-value utilities everywhere
-- Creating `.button`, `.card`, or `.hero` classes that mostly wrap `@apply`
-- Introducing literal hex colors directly in markup repeatedly
-- Using margins to simulate `gap`
-- Defining custom utilities for values Tailwind already supports
-- Adding custom utilities in component-local CSS when the shared stylesheet is the correct location
-
-## Completion Standard
-
-The implementation is complete only when the UI is faithful to Figma and the code still reads like real Tailwind code.
+- サイズ値は可能な限り Tailwind 既定値に変換されている
+- arbitrary value は単発用途に限定されている
+- 再利用値は CSS 側へ昇格されている
+- 色は `color_scheme.css` / `course_colors.css` から選択されている
+- 新規色は semantic 名で追加され、命名理由が説明できる
+- JSX に生の hex を繰り返し直書きしていない

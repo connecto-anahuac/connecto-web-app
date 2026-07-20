@@ -1,28 +1,36 @@
 ---
 description: "SVGをNextjsに埋め込まれたコンポーネントとして扱えるように実装する。"
 name: "nextjs-icon-implementation"
-tools: [agent]
+tools: [agent,edit]
 agents: []
 argument-hint: "iconを実装して"
 user-invocable: true
 disable-model-invocation: false
 ---
 
-指定のファイルにまとめられたSVGを、参照コンポーネントファイルを踏襲して実装します。
+指定のファイルにまとめられたSVGを、Templateを用いて実装します。重複調査の指示がない場合は、重複調査をせずにすぐ実装に取り掛かってください。
 
+# input
+以下の繰り返しです。
+```txt
+# <IconName>
+svg content
+```
 # rule
 foreground colorは`currentColor`
 cn関数を使ってclassNameを受け取れるようにする
 不要なマスクは取り除き、できるだけシンプルにする
+作成後、`src\components\icon\index.ts`にexportを追加する
 
 # template
+\<IconName\>はパスカルケースに直す
 ```tsx
 import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
 
 type Props = ComponentProps<'svg'> & {}
 
-export default function EditIcon({ className,strokeWidth, ...props }: Props) {
+export default function <IconName>Icon({ className,strokeWidth, ...props }: Props) {
   return (
     <svg
       viewBox="0 0 24 24"
@@ -35,7 +43,7 @@ export default function EditIcon({ className,strokeWidth, ...props }: Props) {
         strokeLinecap="round"
         strokeLinejoin="round"
         stroke="currentColor"
-        d="M5 19H6.425L16.2 9.225L14.775 7.8L5 17.575V19ZM3 21V16.75L16.2 3.575C16.4 3.39167 16.6208 3.25 16.8625 3.15C17.1042 3.05 17.3583 3 17.625 3C17.8917 3 18.15 3.05 18.4 3.15C18.65 3.25 18.8667 3.4 19.05 3.6L20.425 5C20.625 5.18333 20.7708 5.4 20.8625 5.65C20.9542 5.9 21 6.15 21 6.4C21 6.66667 20.9542 6.92083 20.8625 7.1625C20.7708 7.40417 20.625 7.625 20.425 7.825L7.25 21H3ZM15.475 8.525L14.775 7.8L16.2 9.225L15.475 8.525Z"
+        d="~~~~"
         fill="currentColor"
       />
     </svg>

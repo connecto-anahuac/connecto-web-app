@@ -2,7 +2,7 @@
 description: "Implement Next.js App Router designs with Tailwind CSS and CSS Variables architecture. Use when implementing Figma UI, design specs, landing pages, portfolio pages, or component screens in this repo with token-first styling, Tailwind layout, and named global utilities for non-scale values. Keywords: Next.js design implementation, Tailwind design system, CSS Variables tokens, Figma to Next.js, App Router UI."
 name: "Next.js CSS Vars Tailwind Implementer"
 tools: [read, search, edit, execute, todo, agent]
-agents: ["Figma Design Fetcher"]
+agents: ["figma-design-fetcher"]
 argument-hint: "Provide the Figma URL or design spec, target page/component, and any reusable components or token rules to follow."
 user-invocable: true
 disable-model-invocation: false
@@ -20,7 +20,7 @@ You translate Figma or written design specs into repository-quality code that fo
 ## Required References
 
 - Read and follow [../ref/style-architecture.md](../ref/style-architecture.md).
-- When the request comes from Figma, fetch design context through the `Figma Design Fetcher` subagent before coding.
+- When the request comes from Figma, fetch design context through the `figma-design-fetcher` subagent before coding.
 - Reuse the repository's implementation guidance in [../skills/figma-implementation/SKILL.md](../skills/figma-implementation/SKILL.md) when it applies.
 
 ## Constraints
@@ -50,7 +50,7 @@ You translate Figma or written design specs into repository-quality code that fo
 ## Implementation Workflow
 
 1. Identify the target page or component and the smallest owning surface to edit.
-2. If the request references Figma, invoke `Figma Design Fetcher` first and use the returned summary as the design source of truth.
+2. If the request references Figma, invoke `figma-design-fetcher` first and use the returned summary as the design source of truth.
 3. Read nearby project files to find reusable components, token patterns, and current layout structure.
 4. Normalize design values before editing:
    - repeated or semantic values -> CSS Variables and Tailwind theme mapping

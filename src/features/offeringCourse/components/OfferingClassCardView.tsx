@@ -118,13 +118,13 @@ function SessionCounter({ initialValue = 1, disabled = false }: SessionCounterPr
 				type="button"
 				aria-label="Decrease sessions"
 				disabled={disabled}
-				className="h-23px w-8 rounded-sm bg-InverseSurface text-base leading-none font-medium text-InverseOnSurface"
+				className="h-[23px] w-8 rounded-sm bg-InverseSurface text-base leading-none font-medium text-InverseOnSurface"
 				onClick={handleDecrease}
 			>
 				-
 			</button>
 
-			<div className="h-23px flex flex-1 items-center justify-center rounded-sm border border-InverseSurface px-2 text-center text-xs font-medium text-OnSurface">
+			<div className="h-[23px] flex flex-1 items-center justify-center rounded-sm border border-InverseSurface px-2 text-center text-xs font-medium text-OnSurface">
 				{value}
 			</div>
 
@@ -132,7 +132,7 @@ function SessionCounter({ initialValue = 1, disabled = false }: SessionCounterPr
 				type="button"
 				aria-label="Increase sessions"
 				disabled={disabled}
-				className="h-23px w-8 rounded-sm bg-InverseSurface text-base leading-none font-medium text-InverseOnSurface"
+				className="h-[23px] w-8 rounded-sm bg-InverseSurface text-base leading-none font-medium text-InverseOnSurface"
 				onClick={handleIncrease}
 			>
 				+

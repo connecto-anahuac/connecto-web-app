@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "typegen": "next typegen",
-    "story": "storybook dev -p 6006",
+    "story": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
   },
   "dependencies": {

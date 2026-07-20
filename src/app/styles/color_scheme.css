@@ -50,9 +50,30 @@
   --SurfaceContainer: #fceae4;
   --SurfaceContainerHigh: #f7e4df;
   --SurfaceContainerHighest: #f1dfd9;
-  /*  */
+  
+  /* custom color */
   --Warning: #fff151;
+  --DividerLow: #ededed;
+  --DividerMiddle: #e0e0e0;
+  --OnSurface-60: rgba(35, 26, 22, 0.6);
+  --OnSurface-40: rgba(35, 26, 22, 0.4);
+  --onPrimaryContainer-low: #bc5f2f;
+  --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
+  --DividerLowest: #f4f4f4;
+  --Gray-low: #b5b5b5;
+  --PrimaryContainerLowest: #fcf9f7;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 .lightTheme {
   --Primary: #fe5900;
@@ -106,10 +127,28 @@
   --SurfaceContainerHighest: #f1dfd9;
   /*  */
   --Warning: #fff151;
+  --DividerLow: #ededed;
+  --DividerMiddle: #e0e0e0;
+  --OnSurface-60: rgba(35, 26, 22, 0.6);
+  --OnSurface-40: rgba(35, 26, 22, 0.4);
+  --onPrimaryContainer-low: #bc5f2f;
+  --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
+  --DividerLowest: #f4f4f4;
+  --Gray-low: #b5b5b5;
+  --PrimaryContainerLowest: #fcf9f7;
 }
 
 @theme inline {
   --color-Warning: var(--Warning);
+  --color-DividerLow: var(--DividerLow);
+  --color-DividerMiddle: var(--DividerMiddle);
+  --color-OnSurface-60: var(--OnSurface-60);
+  --color-OnSurface-40: var(--OnSurface-40);
+  --color-onPrimaryContainer-low: var(--onPrimaryContainer-low);
+  --color-PrimaryContainer-low: var(--PrimaryContainer-low);
+  --color-DividerLowest: var(--DividerLowest);
+  --color-Gray-low: var(--Gray-low);
+  --color-PrimaryContainerLowest: var(--PrimaryContainerLowest);
   /*  */
   --color-Primary: var(--Primary);
   --color-SurfaceTint: var(--SurfaceTint);

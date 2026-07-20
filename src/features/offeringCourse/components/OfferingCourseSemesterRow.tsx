@@ -59,7 +59,7 @@ export default function OfferingCourseSemesterRow({
             </span>
           </div>
         </div>
-        {/* <div className="flex items-center gap-3px text-xs leading-4 text-connecto-ink">
+        {/* <div className="flex items-center gap-[3px] text-xs leading-4 text-connecto-ink">
 					<span>{periodLabel}</span>
 					<span
 						className="h-3.25 w-px rounded-full bg-connecto-ink/80"
@@ -69,7 +69,7 @@ export default function OfferingCourseSemesterRow({
 				</div> */}
       </div>
 
-      <div className="rounded-select-fill-left flex items-center gap-3px bg-connecto-select-fill py-5px pl-4px pr-7px text-connecto-muted-strong">
+      <div className="rounded-select-fill-left flex items-center gap-[3px] bg-connecto-select-fill py-5px pl-4px pr-7px text-connecto-muted-strong">
         <PersonIcon className="h-5 w-5" />
         <span className="text-sm leading-5 font-medium">{studentCount}</span>
       </div>

@@ -1,6 +1,6 @@
 @import "tailwindcss";
-@import "./course_colors.css";
-@import "./color_scheme.css";
+@import "./styles//course_colors.css";
+@import "./styles/color_scheme.css";
 
 :root {
   /* --background: #ffffff;
@@ -101,21 +101,6 @@
   color: var(--color-connecto-ink);
 }
 
-@utility h-23px {
-  height: 23px;
-}
-
-@utility h-22px {
-  height: 22px;
-}
-
-@utility h-24px {
-  height: 24px;
-}
-
-@utility w-22px {
-  width: 22px;
-}
 
 @utility gap-1px {
   gap: 1px;

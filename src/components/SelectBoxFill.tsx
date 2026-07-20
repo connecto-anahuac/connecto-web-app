@@ -24,13 +24,13 @@ const sizeStyles: Record<
   }
 > = {
   small: {
-    container: 'h-22px',
+    container: 'h-[22px]',
     label: 'text-[12px] font-normal',
     icon: 'size-3',
     chevron: 'size-4',
   },
   middle: {
-    container: 'h-24px',
+    container: 'h-[24px]',
     label: 'text-sm font-medium',
     icon: 'size-3',
     chevron: 'size-4',
@@ -50,7 +50,7 @@ export default function SelectBoxFill({
   return (
     <div
       className={cn(
-        'inline-flex items-center gap-1px text-connecto-select-ink',
+        'inline-flex items-center gap-[1px] text-connecto-select-ink',
         styles.container,
         className,
       )}
@@ -58,7 +58,7 @@ export default function SelectBoxFill({
       <div
         className={cn(
           'inline-flex h-full items-center rounded-select-fill-left bg-connecto-select-fill',
-          leadingIcon ? 'gap-3px pl-4px pr-7px py-5px' : 'px-7px',
+          leadingIcon ? 'gap-[3px] pl-4px pr-7px py-5px' : 'px-7px',
         )}
       >
         {leadingIcon ? (
@@ -73,7 +73,7 @@ export default function SelectBoxFill({
         type="button"
         aria-label={`${value} options`}
         className={cn(
-          'inline-flex h-full w-22px items-center justify-center rounded-select-fill-right bg-connecto-select-fill px-3px text-connecto-select-ink',
+          'inline-flex h-full w-[22px] items-center justify-center rounded-select-fill-right bg-connecto-select-fill px-3px text-connecto-select-ink',
           triggerClassName,
         )}
       >
