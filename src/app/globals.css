@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "./styles//course_colors.css";
 @import "./styles/color_scheme.css";
+@import "./styles/palette.css";
 
 :root {
   /* --background: #ffffff;
@@ -49,7 +50,12 @@
 
   --spacing-body-frame:0.625rem; /* 10px */
   --spacing-header-height:3rem; /* 48px */
-
+  /*  */
+  --spacing-header-logo:1.25rem; /* 20px */
+  --spacing-navitem-icon:1.125rem; /* 18px */
+  --spacing-body-x:0.75rem; /* 12px */ /* header,sidebar */
+  --spacing-nav-left:0.25rem; /* 4px */ /* header-logo,sidebar-navigationitem */
+  --spacing-header-logo-left:calc(var(--spacing-nav-left) - (var(--spacing-header-logo) - var(--spacing-navitem-icon))/2); /* 5px */ /* center of navitem.icon == center of header.logo */
 
 }
 

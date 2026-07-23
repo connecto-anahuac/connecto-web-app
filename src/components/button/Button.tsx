@@ -5,18 +5,19 @@ import { cn } from "@/shared/lib/util";
 import { IconName, Icons } from "../icon";
 import { DisableProps, LoadableProps } from "@/shared/lib/cva";
 import { ButtonVariantProps, buttonVariants } from "./button_cva";
-import { IconButtonVariantProps, iconButtonVariants } from "./iconbutton_cva";
 
-type IconButtonProps = IconButtonVariantProps &
+type ButtonProps = ButtonVariantProps &
   ComponentProps<"button"> &
   DisableProps &
   LoadableProps & {
-    icon: IconName;
+    label: string;
+    icon?: IconName;
     hasBadge?: boolean;
   };
 
-export default function IconButton({
+export default function Button({
   className,
+  label,
   icon,
   intent,
   size,
@@ -25,29 +26,38 @@ export default function IconButton({
   disabled = false,
   loading = false,
   ...props
-}: IconButtonProps) {
-  const IconComponent = Icons[icon] ;
+}: ButtonProps) {
+  const IconComponent = icon ? Icons[icon] : null;
+  const buttonContent = IconComponent ? "iconLabel" : "labelOnly";
 
   return (
     <button
       className={cn(
-        iconButtonVariants({
+        buttonVariants({
           intent: intent,
           size: size,
           appearance: appearance,
+          content: buttonContent,
         }),
         className,
       )}
+      disabled={disabled }
       {...props}
     >
       {/* Icon */}
       {IconComponent && (
         <IconComponent
-          className={cn("size-full",
+          className={cn(
+            size=="sm" && "size-4",
+            size=="md" && "size-4",
+            size=="lg" && "size-4.5",
 
           )}
         />
       )}
+
+      {/* Label */}
+      {label && <span>{label}</span>}
 
       {/* Badge */}
       {hasBadge && (

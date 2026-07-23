@@ -3,7 +3,7 @@ import { ComponentProps } from "react";
 
 type Props = ComponentProps<"svg"> & {};
 
-export default function PlanIcon({ className, ...props }: Props) {
+export default function CurriculumIcon({ className, ...props }: Props) {
   return (
     <svg
       viewBox="0 0 24 24"

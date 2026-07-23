@@ -18,7 +18,7 @@ import NumberDescendingIcon from "./sorts/NumberDescendingIcon";
 import PanelToLeftIcon from "./PanelToLeftIcon";
 import PersonIcon from "./PersonIcon";
 import PinIcon from "./PinIcon";
-import PlanIcon from "./PlanIcon";
+import CurriculumIcon from "./CurriculumIcon";
 import TwoPersonsIcon from "./TwoPersonsIcon";
 import ScheduleIcon from "./ScheduleIcon";
 import SchoolEmailIcon from "./contact/SchoolEmailIcon";
@@ -46,6 +46,7 @@ import BookIcon from "./BookIcon";
 import HashmarkIcon from "./HashmarkIcon";
 import FrascoOutlineIcon from "./FrascoOutlineIcon";
 import FailedClassIcon from "./FailedClassIcon";
+import ProfessorIcon from "./ProfessorIcon";
 
 export const Icons = {
   admin: AdminIcon,
@@ -55,6 +56,7 @@ export const Icons = {
   cardView: CardViewIcon,
   class: ClassIcon,
   close: CloseIcon,
+  curriculum: CurriculumIcon,
   door: DoorIcon,
   edit: EditIcon,
   email: EmailIcon,
@@ -71,9 +73,9 @@ export const Icons = {
   numberDescending: NumberDescendingIcon,
   panelToLeft: PanelToLeftIcon,
   person: PersonIcon,
+  professor:ProfessorIcon,
   twoPersons: TwoPersonsIcon,
   pin: PinIcon,
-  plan: PlanIcon,
   plus: PlusIcon,
   progress: ProgressIcon,
   schedule: ScheduleIcon,

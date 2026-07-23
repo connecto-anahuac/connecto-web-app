@@ -2,45 +2,8 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { ComponentType } from "react";
 
 import Arrow from "./Arrow";
-import AdminIcon from "./AdminIcon";
-import BellIcon from "./BellIcon";
-import CardViewIcon from "./CardViewIcon";
-import ClassIcon from "./ClassIcon";
-import CloseIcon from "./CloseIcon";
-import DoorIcon from "./DoorIcon";
-import EditIcon from "./EditIcon";
-import ExpandCenterColumnIcon from "./ExpandCenterColumnIcon";
-import EmailIcon from "./contact/EmailIcon";
-import FilterIcon from "./FilterIcon";
-import HandleGripIcon from "./HandleGripIcon";
-import ListIcon from "./ListIcon";
-import MinusIcon from "./MinusIcon";
-import PanelToLeftIcon from "./PanelToLeftIcon";
-import PinIcon from "./PinIcon";
-import PlanIcon from "./PlanIcon";
-import NumberAscendingIcon from "./sorts/NumberAscendingIcon";
-import NumberDescendingIcon from "./sorts/NumberDescendingIcon";
-import PersonIcon from "./PersonIcon";
-import StickArrowDownIcon from "./StickArrowDownIcon";
-import SchoolEmailIcon from "./contact/SchoolEmailIcon";
-import SchoolHatIcon from "./SchoolHatIcon";
-import SearchIcon from "./SearchIcon";
-import ThreeColumnsIcon from "./ThreeColumnsIcon";
-import ThreePointMenuIcon from "./ThreePointMenuIcon";
-import SortIcon from "./sorts/SortIcon";
-import TextAscendingIcon from "./sorts/TextAscendingIcon";
-import TextDescendingIcon from "./sorts/TextDescendingIcon";
-import VisibleIcon from "./VisibleIcon";
-import ToolFillIcon from "./ToolFillIcon";
-import ToolOutlineIcon from "./ToolOutlineIcon";
-import UnvisibleIcon from "./UnvisibleIcon";
-import WhatsAppIcon from "./contact/WhatsAppIcon";
-import ZoomOutIcon from "./ZoomOutIcon";
-import ZoomInIcon from "./ZoomInIcon";
-import ScheduleIcon from "./ScheduleIcon";
-import StatusIcon from "./StatusIcon";
-import TildeIcon from "./TildeIcon";
 import { Icons } from ".";
+import ConnectoLogo from "./logo/Connecto";
 
 type GalleryArgs = {
   iconClassName: string;
@@ -107,6 +70,17 @@ function IconGallery({ iconClassName, arrowDirection }: GalleryArgs) {
   return (
     <div className="w-full max-w-6xl rounded-3xl border border-neutral-200 bg-white p-6 shadow-sm">
       <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] gap-4">
+       <div
+            key={"connecto logo"}
+            className="flex min-h-32 flex-col items-center justify-center gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-5 text-center"
+          >
+            <div className="flex min-h-10 items-center justify-center text-neutral-900">
+              <ConnectoLogo className={iconClassName} aria-label="Connecto logo" />
+            </div>
+            <span className="break-all text-xs font-medium leading-5 text-neutral-600">
+              Connecto logo
+            </span>
+          </div>
         {icons.map(({ name, Component }) => (
           <div
             key={name}

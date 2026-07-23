@@ -1,4 +1,3 @@
-import ContentTitleSection from "@/components/ContentTitleSection";
 import { StudentPlanContainer } from "../client/StudentPlan/StudentPlanContainer";
 
 type Props = {
@@ -6,8 +5,5 @@ type Props = {
 };
 
 export function StudentPageTemplate({ studentId }: Props) {
-  return <div className="flex flex-col gap-3 pb-5 w-full h-full">
-    <ContentTitleSection />
-    
-  </div>;
+  return <StudentPlanContainer studentId={studentId} />;
 }

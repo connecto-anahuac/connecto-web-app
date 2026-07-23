@@ -3,14 +3,21 @@ import { cn } from "@/shared/lib/util";
 
 type AvatorProps = React.ComponentPropsWithRef<"div"> & {
   fullName: string;
+  size: "small" | "medium" | "large";
 };
 
-export default function Avator({ fullName ,className, ...props}: AvatorProps) { 
+export default function Avator({ fullName,size ,className, ...props}: AvatorProps) { 
     return (
-        <div className={cn("text-xl relative aspect-square  rounded-full flex items-center justify-center text-white font-bold ", className)}
+        <div className={cn(
+          "text-xl relative aspect-square rounded-full flex items-center justify-center text-white font-semibold",
+          size === "small" && "size-4.5 text-xs",
+          size === "medium" && "size-6 text-[0.6875rem]",//11px
+          size === "large" && "size-8 text-sm",
+          className
+        )}
         {...props}
         >
-           <span className="leading-none">{getInitials(fullName)}</span>
+           <span className="leading-none">{getInitials(size,fullName)}</span>
          
         </div>
     );
@@ -19,7 +26,12 @@ export default function Avator({ fullName ,className, ...props}: AvatorProps) {
 
 
 
-function getInitials(fullName: string): string {
+function getInitials(size: "small" | "medium" | "large", fullName: string): string {
+  if (size === "small") {
+    // 小さいサイズの場合は、先頭の1文字だけを返す
+    return fullName.trim().charAt(0).toUpperCase();
+  }
+  
   return fullName
     .trim()                           // 前後の余計な空白を削除
     .split(/\s+/)                     // 連続した空白（スペースやタブ）で分割して配列にする

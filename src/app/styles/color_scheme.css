@@ -60,7 +60,7 @@
   --onPrimaryContainer-low: #bc5f2f;
   --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
   --DividerLowest: #f4f4f4;
-  --Gray-low: #b5b5b5;
+  --GrayLow: #b5b5b5;
   --PrimaryContainerLowest: #fcf9f7;
 }
 
@@ -134,7 +134,7 @@
   --onPrimaryContainer-low: #bc5f2f;
   --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
   --DividerLowest: #f4f4f4;
-  --Gray-low: #b5b5b5;
+  --GrayLow: #b5b5b5;
   --PrimaryContainerLowest: #fcf9f7;
 }
 
@@ -147,7 +147,7 @@
   --color-onPrimaryContainerLow: var(--onPrimaryContainer-low);
   --color-PrimaryContainerLow: var(--PrimaryContainer-low);
   --color-DividerLowest: var(--DividerLowest);
-  --color-Gray-low: var(--Gray-low);
+  --color-GrayLow: var(--GrayLow);
   --color-PrimaryContainerLowest: var(--PrimaryContainerLowest);
   /*  */
   --color-Primary: var(--Primary);

@@ -1,11 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import IconButton from "../button/IconButton";
+import IconButtonOLD from "../button/IconButton2";
 import ToggleButton from "../button/ToggleButton";
 import SearchPresetChip from "../chip/SearchPresetChip";
 import SearchBar from "../search/SearchBar";
 import { cn } from "@/shared/lib/util";
+import IconButton from "../button/IconButton";
+import Button from "../button/Button";
 
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
 export default function DataSection({
@@ -40,12 +42,35 @@ export default function DataSection({
       {/* 1 line */}
       <div className="flex gap-4 w-full">
         <SearchBar className="w-64" />
+
         <div className="flex gap-1.5 flex-1">
-          <ToggleButton label={"Filter"} icon="filter" />
-          <ToggleButton label={"Filter"} icon="plus" />
+          {/* <ToggleButton label={"Filter"} icon="filter" />
+          <ToggleButton label={"Filter"} icon="plus" /> */}
+
+          <Button
+            icon="filter"
+            label="Filter"
+            intent="darkInk"
+            appearance="text"
+            size="md"
+          />
+          <Button
+            icon="plus"
+            label="Add"
+            intent="darkInk"
+            appearance="text"
+            size="md"
+          />
         </div>
-        <IconButton icon="zoomOut" className="size-6.5" />
+        <IconButton
+          icon="zoomOut"
+          intent="lightInk"
+          appearance="filled"
+          size="md"
+        />
+        {/* <IconButtonOLD icon="zoomOut" className="size-6.5" /> */}
       </div>
+
       {/* 2 line */}
       {/* when changed the chip size, still keep the height */}
       <div className="flex gap-3 items-center h-5">
@@ -54,6 +79,7 @@ export default function DataSection({
         <SearchPresetChip>Industrial</SearchPresetChip>
         <SearchPresetChip>TIND</SearchPresetChip>
       </div>
+
       {/* 3 line */}
 
       <div className="flex gap-4 items-center">
@@ -62,7 +88,35 @@ export default function DataSection({
           onCardViewClick={onCardViewClick}
           onViewChange={viewChangeHandler}
         />
-        <ToggleButton label={"Sort"} icon="sort" isEnabled={isEnable("sort")} />
+
+        <Button
+          icon="sort"
+          label="Sort"
+          intent="darkInk"
+          appearance="text"
+          size="md"
+          disabled={!isEnable("sort")}
+        />
+
+        <Button
+          icon="unvisible"
+          label="Ocultar"
+          intent="darkInk"
+          appearance="text"
+          size="md"
+          disabled={!isEnable("hide")}
+        />
+
+        <Button
+          icon="pin"
+          label="Pivot"
+          intent="darkInk"
+          appearance="text"
+          size="md"
+          disabled={!isEnable("pivot")}
+        />
+
+        {/* <ToggleButton label={"Sort"} icon="sort" isEnabled={isEnable("sort")} />
         <ToggleButton
           label={"Ocultar"}
           icon="unvisible"
@@ -72,7 +126,7 @@ export default function DataSection({
           label={"Pivot"}
           icon="pin"
           isEnabled={isEnable("pivot")}
-        />
+        /> */}
       </div>
 
       {/* graph */}
@@ -110,8 +164,25 @@ function GraphSwitcher({
   };
 
   return (
-    <div className="flex gap-0 rounded-md bg-DividerMiddle p-px">
-      <IconButton
+    <div className="flex gap-0 rounded-md bg-DividerMiddle p-0.5">
+      {/* <IconButton
+          icon="list"
+          intent="lightInk"
+          appearance="filled"
+        size="md"
+        onClick={() => handleClick("list")}
+        
+      />
+      
+        <IconButton
+          icon="cardView"
+          intent="lightInk"
+          appearance="filled"
+          size="md"
+          onClick={() => handleClick("card")}
+        /> */}
+
+      <IconButtonOLD
         icon="list"
         className={cn(
           "rounded-md size-6",
@@ -119,7 +190,7 @@ function GraphSwitcher({
         )}
         onClick={() => handleClick("list")}
       />
-      <IconButton
+      <IconButtonOLD
         icon="cardView"
         className={cn(
           "rounded-md size-6",

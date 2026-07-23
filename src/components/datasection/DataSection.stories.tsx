@@ -3,7 +3,7 @@ import { Meta,StoryObj } from "@storybook/nextjs-vite";
 import DataSection from "./DataSection";
 
 const meta = {
-    title: "Conponents/DataSection",
+    title: "Components/DataSection",
     component: DataSection,
     parameters: {
         layout: "padded",

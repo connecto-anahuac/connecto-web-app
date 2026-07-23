@@ -4,7 +4,7 @@ import ThreePointMenuIcon from "../icon/ThreePointMenuIcon";
 import TextAscendingIcon from "../icon/sorts/TextAscendingIcon";
 
 import { cn } from "@/shared/lib/util";
-import IconButton from "../button/IconButton";
+import IconButtonOLD from "../button/IconButton2";
 import PinIcon from "../icon/PinIcon";
 import FilterIcon from "../icon/FilterIcon";
 import { IconName, Icons } from "../icon";
@@ -57,28 +57,28 @@ export default function HeaderCell({
         {/* if has spacing, visible */}
         {isUnpackedTools && (
           <div className="flex gap-0.5 shrink-0 ">
-            <IconButton>
+            <IconButtonOLD>
               <PinIcon className="size-4.5" />
-            </IconButton>
-            <IconButton>
+            </IconButtonOLD>
+            <IconButtonOLD>
               <VisibleIcon className="size-4.5" />
-            </IconButton>
-            <IconButton>
+            </IconButtonOLD>
+            <IconButtonOLD>
               <FilterIcon className="size-4.5" />
-            </IconButton>
+            </IconButtonOLD>
           </div>
         )}
 
         {/* always visible */}
         <div className="shrink-0  flex gap-1">
           {!isUnpackedTools && (
-            <IconButton>
+            <IconButtonOLD>
               <ThreePointMenuIcon className="size-search-filter-dismiss" />
-            </IconButton>
+            </IconButtonOLD>
           )}
-          <IconButton>
+          <IconButtonOLD>
             <TextAscendingIcon className="size-5" />
-          </IconButton>
+          </IconButtonOLD>
         </div>
       </div>
     </div>
