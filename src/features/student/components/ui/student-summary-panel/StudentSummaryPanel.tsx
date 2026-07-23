@@ -25,6 +25,7 @@ export function StudentSummaryPanel({ className, summary }: Props) {
       <div className="flex flex-col gap-3">
         <div className="flex items-start gap-3">
           <Avator
+            size="large"
             fullName={summary.profile.name}
             className="h-12 w-12 text-lg font-semibold"
             style={{ backgroundColor: `var(${summary.avatarColorCssVar})` }}

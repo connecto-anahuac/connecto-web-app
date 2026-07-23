@@ -39,11 +39,18 @@ export default function StudentCardView_OLD({ className, student }: Props) {
     >
       {/* top */}
       <div className="flex gap-2.5 h-fit w-full">
-        <Avator fullName={student.name} className="w-10 h-10 text-xl font-semibold" style={{ backgroundColor: `var(${student.avatarColorCssVar})` }} />
+        <Avator
+          size="large"
+          fullName={student.name}
+          className="w-10 h-10 text-xl font-semibold"
+          style={{ backgroundColor: `var(${student.avatarColorCssVar})` }}
+        />
         {/* info */}
         <div className="flex flex-col gap-2 h-fit w-full">
           <div className="flex gap-2.5 items-center">
-            <span className="text-base font-medium leading-none whitespace-nowrap">{student.name}</span>
+            <span className="text-base font-medium leading-none whitespace-nowrap">
+              {student.name}
+            </span>
             {/* <div className={cn("font-medium text-xs px-1.5 text-white bg-lime-500 rounded-full",
               student.status === "Inactivo" && "bg-gray-500" ,
               student.status === "Baja Académica" &&"bg-gray-500" ,
@@ -54,16 +61,21 @@ export default function StudentCardView_OLD({ className, student }: Props) {
           </div>
 
           <div className="flex  items-center w-full">
-            <div className={cn("font-medium text-xs px-1.5 text-white bg-lime-500 rounded-full",
-              student.status === "Inactivo" && "bg-gray-500" ,
-              student.status === "Baja Académica" &&"bg-gray-500" ,
-              student.status === "Baja voluntaria" &&"bg-gray-500" ,
-            )}>
+            <div
+              className={cn(
+                "font-medium text-xs px-1.5 text-white bg-lime-500 rounded-full",
+                student.status === "Inactivo" && "bg-gray-500",
+                student.status === "Baja Académica" && "bg-gray-500",
+                student.status === "Baja voluntaria" && "bg-gray-500",
+              )}
+            >
               {student.status}
             </div>
             <span className="ml-4 text-xs font-medium">{student.career}</span>
-            <StudyPlan plan={student.plan} className={"ml-2.5 text-xs whitespace-nowrap"} />
-           
+            <StudyPlan
+              plan={student.plan}
+              className={"ml-2.5 text-xs whitespace-nowrap"}
+            />
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { ComponentProps, useState } from "react";
 import IconButtonOLD from "../button/IconButton2";
 import ToggleButton from "../button/ToggleButton";
 import SearchPresetChip from "../chip/SearchPresetChip";
@@ -10,22 +10,30 @@ import IconButton from "../button/IconButton";
 import Button from "../button/Button";
 
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
+
+type Props =ComponentProps<"div"> & {
+  defaultView?: "list" | "card";
+  listTools?: SearchTool[];
+  cardviewTools?: SearchTool[];
+  listDiagram?: React.ReactNode;
+  cardDiagram?: React.ReactNode;
+  onListClick?: () => void;
+  onCardViewClick?: () => void;
+  onViewChange?: (view: "list" | "card") => void;
+};
 export default function DataSection({
+  className,
   children,
   onListClick,
   onCardViewClick,
   onViewChange,
   listTools = ["sort", "filter", "pivot", "hide"],
   cardviewTools = ["filter", "hide"],
-}: {
-  listTools?: SearchTool[];
-  cardviewTools?: SearchTool[];
-  children?: React.ReactNode;
-  onListClick?: () => void;
-  onCardViewClick?: () => void;
-  onViewChange?: (view: "list" | "card") => void;
-}) {
-  const [selectedView, setSelectedView] = useState<"list" | "card">("list");
+  listDiagram,
+  cardDiagram,
+  defaultView = "list",
+}: Props) {
+  const [selectedView, setSelectedView] = useState<"list" | "card">(defaultView);
   const viewChangeHandler = (view: "list" | "card") => {
     setSelectedView(view);
     onViewChange?.(view);
@@ -38,7 +46,7 @@ export default function DataSection({
     return cardviewTools.includes(searchTool);
   };
   return (
-    <div className="flex flex-col gap-3">
+    <div className={cn("flex flex-col gap-3", className)}>
       {/* 1 line */}
       <div className="flex gap-4 w-full">
         <SearchBar className="w-64" />
@@ -130,8 +138,8 @@ export default function DataSection({
       </div>
 
       {/* graph */}
-      <div className="w-full h-full">
-        {selectedView === "list" ? "LIST VIEW" : "CARD VIEW"}
+      <div className="w-full flex-1 min-h-0">
+        {selectedView === "list" ? listDiagram : cardDiagram}
       </div>
     </div>
   );

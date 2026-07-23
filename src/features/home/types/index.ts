@@ -1,6 +1,9 @@
+import { IconName } from "@/components/icon";
+
 export type NavItem = {
   label: string;
   active?: boolean;
+  iconName?: IconName;
 };
 
 export type SummaryItem = {

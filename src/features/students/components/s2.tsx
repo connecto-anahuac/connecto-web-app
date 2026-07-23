@@ -33,6 +33,7 @@ export default function StudentCard({
 			<div className="flex items-start gap-2">
 				<div className="relative shrink-0">
 					<Avator
+						size="large"
 						fullName={student.name}
 						className="h-9 w-9 text-sm font-semibold"
 						style={{ backgroundColor: `var(${student.avatarColorCssVar})` }}

@@ -7,6 +7,7 @@ import { cn } from "@/shared/lib/util";
 import IconButtonOLD from "@/components/button/IconButton2";
 import SearchBar from "@/components/search/SearchBar";
 import ConnectoLogo from "@/components/icon/logo/Connecto";
+import IconButton from "@/components/button/IconButton";
 
 type RootNavigationEntry = {
   label: string;
@@ -41,7 +42,10 @@ export default function Header({ className, ...props }: Props) {
       {/* navigation */}
       <div className="flex items-center gap-0 ml-8 mr-auto text-OnSurface">
         <IconButtonOLD icon="arrow" className="size-6" />
-        <IconButtonOLD icon="arrow" className="size-6 transform rotate-180 text-OnSurface/40" />
+        <IconButtonOLD
+          icon="arrow"
+          className="size-6 transform rotate-180 text-OnSurface/40"
+        />
         <span className="ml-5 font-semibold text-OnSurfaceVariant text-xs">
           alumnos
         </span>
@@ -51,7 +55,9 @@ export default function Header({ className, ...props }: Props) {
 
       {/* notification & avatar */}
       <div className="flex items-center gap-2 text-OnSurface ml-4">
-        <IconButtonOLD icon="bell" className="size-6" />
+        {/* <IconButtonOLD icon="bell" className="size-6" /> */}
+
+        <IconButton size="lg" intent="lightInk" appearance="text" icon="bell" />
         <button className="relative p-0 rounded-full size-fit overflow-hidden group">
           <Avator
             fullName="Jose Perez"

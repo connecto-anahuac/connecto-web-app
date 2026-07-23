@@ -32,7 +32,7 @@ export function HomeSidebar({ items }: HomeSidebarProps) {
             className="transition hover:opacity-90"
           >
             <NavigationItem
-              icon={<SidebarUserIcon active={item.active} />}
+              icon={item.iconName}
               label={item.label}
               selected={item.active}
               className={item.active ? "text-white" : "text-white/80"}

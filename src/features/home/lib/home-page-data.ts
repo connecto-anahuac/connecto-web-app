@@ -1,12 +1,12 @@
 import type { CourseRecord, NavItem, StudentProfile } from "@/features/home/types";
 
 export const navigationItems: NavItem[] = [
-  { label: "estudiante", active: true },
-  { label: "profesor" },
-  { label: "class" },
-  { label: "plan" },
-  { label: "horario" },
-  { label: "admin" },
+  { label: "estudiante",iconName:"twoPersons", active: true },
+  { label: "profesor",iconName:"professor", },
+  { label: "class",iconName:"class", },
+  { label: "plan",iconName:"curriculum", },
+  { label: "horario",iconName:"schedule", },
+  { label: "admin",iconName:"admin", },
 ];
 
 export const studentProfile: StudentProfile = {

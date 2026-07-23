@@ -13,26 +13,26 @@ export default function ContentTitleSection({
   ...props
 }: Props) {
   return (
-    <div {...props} className={cn("flex flex-col gap-3 pb-5", className)}>
-      <div className=" flex items-center">
+    <div {...props} className={cn("flex flex-col gap-3 pb-5 w-full", className)}>
+      <div className=" flex items-center w-full">
         <h2 className="text-sm font-semibold text-OnSurface">{title}</h2>
         <div className="flex items-center gap-3 ml-auto">
-            <Button
-              size="sm"
-              intent="primary"
-              appearance="filled"
-              label="Editar"
-              icon="edit"
-            />
-            <IconButton
-              size="sm"
-              intent="lightInk"
-              appearance="text"
-              icon="threePointMenu"
-            />
-              </div>
-              <div className="w-full h-px bg-DividerMiddle"/>
+          <Button
+            size="sm"
+            intent="primary"
+            appearance="filled"
+            label="Editar"
+            icon="edit"
+          />
+          <IconButton
+            size="lg"
+            intent="lightInk"
+            appearance="text"
+            icon="threePointMenu"
+          />
+        </div>
       </div>
+        <div className="w-full h-px bg-DividerMiddle" />
     </div>
   );
 }
