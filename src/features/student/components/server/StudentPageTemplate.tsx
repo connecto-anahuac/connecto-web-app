@@ -1,5 +1,5 @@
 import ContentTitleSection from "@/components/ContentTitleSection";
-import { StudentPlanContainer } from "../client/StudentPlan/StudentPlanContainer";
+import { StudentDetailContainer } from "../client/StudentDetail/StudentDetailContainer";
 import DataSection from "@/components/datasection/DataSection";
 
 type Props = {
@@ -11,8 +11,8 @@ export function StudentPageTemplate({ studentId }: Props) {
     <ContentTitleSection title={"Alumnos"} />
     <DataSection
       className="w-full flex-1 min-h-0"
-      listDiagram={<StudentPlanContainer studentId={studentId} />}
-      cardDiagram={<StudentPlanContainer studentId={studentId} />}
+      listDiagram={<StudentDetailContainer studentId={studentId} />}
+      cardDiagram={<StudentDetailContainer studentId={studentId} />}
     />
     
   </div>;

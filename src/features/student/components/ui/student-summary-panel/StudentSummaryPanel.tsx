@@ -5,13 +5,13 @@ import WhatsAppIcon from "@/components/icon/contact/WhatsAppIcon";
 import StudyPlan from "@/components/StudyPlan";
 import Memo from "@/features/student/components/ui/Memo";
 import { cn } from "@/shared/lib/util";
-import type { StudentSummary } from "./student-summary.types";
+import type { StudentDetail } from "./student-summary.types";
 import Alert from "@/components/Alert";
 import SemesterBadge from "@/components/SemesterBadge";
 
 type Props = {
   className?: string;
-  summary: StudentSummary;
+  summary: StudentDetail;
 };
 
 export function StudentSummaryPanel({ className, summary }: Props) {

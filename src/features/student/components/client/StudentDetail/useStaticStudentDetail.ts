@@ -16,19 +16,20 @@ import {
   STUDENT_DETAIL_CAREER,
   STUDENT_DETAIL_PLAN,
 } from "../../ui/student-summary-panel/student-summary.constants";
-import { buildStudentSummary, type StudentSummary } from "../../ui/student-summary-panel/student-summary.types";
+import {
+  buildStudentDetail,
+  type StudentDetail,
+} from "../../ui/student-summary-panel/student-summary.types";
 
 type UseStudentPlanResult = {
   loading: boolean;
-  plan: StudentClassItem[];
-  student: StudentProfile | null;
-  summary: StudentSummary | null;
+  studentDetail: StudentDetail | null;
 };
 
-export function useStudentPlan(studentId: string): UseStudentPlanResult {
-  const [student, setStudent] = useState<StudentProfile | null>(null);
-  const [plan, setPlan] = useState<StudentClassItem[]>([]);
-  const [summary, setSummary] = useState<StudentSummary | null>(null);
+export function useStaticStudentDetail(
+  studentId: string,
+): UseStudentPlanResult {
+  const [summary, setSummary] = useState<StudentDetail | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -47,17 +48,18 @@ export function useStudentPlan(studentId: string): UseStudentPlanResult {
           return;
         }
 
-        const nextStudent = studentResult ? toStudentProfileUI(studentResult) : null;
+        const nextStudent = studentResult
+          ? toStudentProfileUI(studentResult)
+          : null;
         const nextPlan = planResult.map(toStudentClassItemUI);
 
-        setStudent(nextStudent);
-        setPlan(nextPlan);
         setSummary(
           nextStudent
-            ? buildStudentSummary(nextStudent, nextPlan, {
+            ? buildStudentDetail(nextStudent, nextPlan, {
                 avatarColorCssVar:
                   STUDENT_AVATAR_COLOR_PALETTE[
-                    nextStudent.avatarColorRef % STUDENT_AVATAR_COLOR_PALETTE.length
+                    nextStudent.avatarColorRef %
+                      STUDENT_AVATAR_COLOR_PALETTE.length
                   ] ?? STUDENT_AVATAR_COLOR_PALETTE[0],
                 career: STUDENT_DETAIL_CAREER,
                 planLabel: STUDENT_DETAIL_PLAN,
@@ -82,8 +84,6 @@ export function useStudentPlan(studentId: string): UseStudentPlanResult {
 
   return {
     loading,
-    plan,
-    student,
-    summary,
+    studentDetail: summary,
   };
 }

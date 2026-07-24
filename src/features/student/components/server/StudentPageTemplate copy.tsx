@@ -1,9 +1,9 @@
-import { StudentPlanContainer } from "../client/StudentPlan/StudentPlanContainer";
+import { StudentDetailContainer } from "../client/StudentDetail/StudentDetailContainer";
 
 type Props = {
   studentId: string;
 };
 
 export function StudentPageTemplate({ studentId }: Props) {
-  return <StudentPlanContainer studentId={studentId} />;
+  return <StudentDetailContainer studentId={studentId} />;
 }

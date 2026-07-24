@@ -7,16 +7,16 @@ import type {
 } from "@/features/student/types";
 import type { FilterDefinition } from "@/features/search/shared/filter-definition";
 import { StudentSummaryPanel } from "../../ui/student-summary-panel/StudentSummaryPanel";
-import type { StudentSummary } from "../../ui/student-summary-panel/student-summary.types";
+import type { StudentDetail } from "../../ui/student-summary-panel/student-summary.types";
 import ZoomInIcon from "@/components/icon/ZoomInIcon";
 import SearchBar from "@/features/search/components/SearchTool";
 import SearchTool from "@/features/search/components/search-tool/SearchTool";
 
 type Props = {
   loading: boolean;
-  grades: StudentClassItem[];
-  student: StudentProfile | null;
-  summary: StudentSummary | null;
+  filteredGrades: StudentClassItem[];
+  allGrades: StudentClassItem[];
+  studentDetail: StudentDetail | null;
   definitions: FilterDefinition<StudentClassItem>[];
   searchText: string;
   onSearchTextChange: (value: string) => void;
@@ -26,11 +26,11 @@ type Props = {
   onFilterToggle: () => void;
 };
 
-export function StudentPlanPresenter({
+export function StudentDetailPresenter({
   loading,
-  grades: plan,
-  student,
-  summary,
+  filteredGrades,
+  allGrades,
+  studentDetail,
   definitions,
   searchText,
   onSearchTextChange,
@@ -43,16 +43,16 @@ export function StudentPlanPresenter({
     return <div>Loading...</div>;
   }
 
-  if (!student || !summary) {
+  if ( !studentDetail) {
     return <div>Student not found</div>;
   }
 
   const semesters = Array.from(
-    new Set(plan.map((item) => item.semester).filter(Boolean)),
+    new Set(allGrades.map((item) => item.semester).filter(Boolean)),
   ).sort((left, right) => left - right);
   const maxSemester = semesters.length ? Math.max(...semesters) : 1;
-  const maxPosition = plan.length
-    ? Math.max(...plan.map((item) => item.position)) + 1
+  const maxPosition = allGrades.length
+    ? Math.max(...allGrades.map((item) => item.position)) + 1
     : 1;
 
   return (
@@ -135,7 +135,7 @@ export function StudentPlanPresenter({
                 </div>
               );
             })}
-            {plan.map((item) => (
+            {allGrades.map((item) => (
               <div
                 key={item.id}
                 className={
@@ -165,7 +165,7 @@ export function StudentPlanPresenter({
       </div>
 
       <StudentSummaryPanel
-        summary={summary}
+        summary={studentDetail}
         className="sticky top-4 self-start"
       />
     </div>

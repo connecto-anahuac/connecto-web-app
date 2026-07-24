@@ -1,7 +1,7 @@
 import type { Contact, StudentClassItem, StudentProfile } from "@/features/student/types";
 import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
 
-export type StudentSummary = {
+export type StudentDetail = {
   profile: StudentProfile;
   avatarColorCssVar: string;
   career: string;
@@ -14,7 +14,7 @@ export type StudentSummary = {
   memo: string;
 };
 
-export function buildStudentSummary(
+export function buildStudentDetail(
   profile: StudentProfile,
   plan: StudentClassItem[],
   options: {
@@ -22,7 +22,7 @@ export function buildStudentSummary(
     career: string;
     planLabel: string;
   },
-): StudentSummary {
+): StudentDetail {
   const gradedCourses = plan.filter(
     (item): item is StudentClassItem & { grade: number } =>
       typeof item.grade === "number" && item.grade !== GRADE_NOT_FOUND_VALUE,
