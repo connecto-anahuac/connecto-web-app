@@ -14,7 +14,7 @@ import SearchTool from "@/features/search/components/search-tool/SearchTool";
 
 type Props = {
   loading: boolean;
-  plan: StudentClassItem[];
+  grades: StudentClassItem[];
   student: StudentProfile | null;
   summary: StudentSummary | null;
   definitions: FilterDefinition<StudentClassItem>[];
@@ -28,7 +28,7 @@ type Props = {
 
 export function StudentPlanPresenter({
   loading,
-  plan,
+  grades: plan,
   student,
   summary,
   definitions,

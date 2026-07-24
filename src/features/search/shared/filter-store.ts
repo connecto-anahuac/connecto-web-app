@@ -1,36 +1,47 @@
 import { create } from "zustand";
 import { FilterCondition } from "./filter-definition";
 
-export type FilterStore = {
+export type FilterState = {
   conditions: FilterCondition[];
+};
+
+export type FilterCommands = {
   setConditions: (conditions: FilterCondition[]) => void;
   upsertCondition: (condition: FilterCondition) => void;
   removeCondition: (conditionId: string) => void;
   clear: () => void;
 };
 
-export const useFilterStore = create<FilterStore>((set) => ({
-  conditions: [],
+export type FilterStore = FilterState & FilterCommands;
 
-  setConditions: (conditions) =>
-    set({ conditions }),
+export function createFilterStore() {
+  return create<FilterStore>((set) => ({
+    conditions: [],
 
-  upsertCondition: (condition) =>
-    set((state) => {
-      const nextConditions = state.conditions.some((current) => current.id === condition.id)
-        ? state.conditions.map((current) => (current.id === condition.id ? condition : current))
-        : [...state.conditions, condition];
+    setConditions: (conditions) => set({ conditions }),
 
-      return {
-        conditions: nextConditions,
-      };
-    }),
+    upsertCondition: (condition) =>
+      set((state) => {
+        const nextConditions = state.conditions.some(
+          (current) => current.id === condition.id,
+        )
+          ? state.conditions.map((current) =>
+              current.id === condition.id ? condition : current,
+            )
+          : [...state.conditions, condition];
 
-  removeCondition: (conditionId) =>
-    set((state) => ({
-      conditions: state.conditions.filter((condition) => condition.id !== conditionId),
-    })),
+        return {
+          conditions: nextConditions,
+        };
+      }),
 
-  clear: () =>
-    set({ conditions: [] }),
-}));
+    removeCondition: (conditionId) =>
+      set((state) => ({
+        conditions: state.conditions.filter(
+          (condition) => condition.id !== conditionId,
+        ),
+      })),
+
+    clear: () => set({ conditions: [] }),
+  }));
+}

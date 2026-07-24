@@ -8,13 +8,14 @@ import {
 } from "@/features/student/types/student-filter-fields";
 import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
 import { applyFilters } from "@/features/search/shared/filter-engine";
-import { useFilterStore } from "@/features/search/shared/filter-store";
+import { createFilterStore } from "@/features/search/shared/filter-store";
 import type { FilterCondition } from "@/features/search/shared/filter-definition";
 import {
   getStudentPresetNextConditions,
   isStudentPresetSelected,
   type StudentPresetKey,
 } from "./studentPresetSync";
+import { useFilterStore } from "@/features/search/components/useFilterStore";
 
 const STUDENT_FILTER_KEY_LOOKUP: Record<string, true> = {
   [STUDENT_FILTER_KEYS.career]: true,
@@ -39,6 +40,9 @@ function getRelevantConditions(conditions: FilterCondition[]) {
  * - 検索ボックスは独立 state を持たず、name filter の condition と同一のものを使う
  */
 export function useStudentFilters(students: StudentListItem[]) {
+  // const conditions = createFilterStore((state) => state.conditions);
+  // const upsertCondition = createFilterStore((state) => state.upsertCondition);
+  // const removeCondition = createFilterStore((state) => state.removeCondition);
   const conditions = useFilterStore((state) => state.conditions);
   const upsertCondition = useFilterStore((state) => state.upsertCondition);
   const removeCondition = useFilterStore((state) => state.removeCondition);

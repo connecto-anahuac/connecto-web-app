@@ -8,8 +8,9 @@ import {
   OFFERING_COURSE_FILTER_FIELDS,
   OFFERING_COURSE_FILTER_KEYS,
 } from "@/features/offeringCourse/types/offering-course-filter-fields";
-import { useFilterStore } from "@/features/search/shared/filter-store";
+import { createFilterStore } from "@/features/search/shared/filter-store";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
+import { useFilterStore } from "@/features/search/components/useFilterStore";
 
 const OFFERING_COURSE_FILTER_KEY_LOOKUP: Record<string, true> = {
   [OFFERING_COURSE_FILTER_KEYS.className]: true,
@@ -26,6 +27,9 @@ function getRelevantConditions(conditions: FilterCondition[]) {
 }
 
 export function useScheduleBuilderFilters(offeringCourses: OfferingCourse[]) {
+  // const conditions = createFilterStore((state) => state.conditions);
+  // const upsertCondition = createFilterStore((state) => state.upsertCondition);
+  // const removeCondition = createFilterStore((state) => state.removeCondition);
   const conditions = useFilterStore((state) => state.conditions);
   const upsertCondition = useFilterStore((state) => state.upsertCondition);
   const removeCondition = useFilterStore((state) => state.removeCondition);

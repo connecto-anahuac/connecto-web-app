@@ -23,7 +23,7 @@ export function StudentPlanContainer({ studentId }: Props) {
   return (
     <StudentPlanPresenter
       loading={loading}
-      plan={plan}
+      grades={plan}
       student={student}
       summary={summary}
       definitions={definitions}

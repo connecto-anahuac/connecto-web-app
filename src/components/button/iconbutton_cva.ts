@@ -10,7 +10,72 @@ export const iconbuttonIntents = [
 ] as const;
 export type IconButtonIntent = (typeof iconbuttonIntents)[number];
 
-export const iconButtonIntentVariants: Record<IconButtonIntent, string> = {
+// export const iconButtonIntentVariants: Record<IconButtonIntent, string> = {
+//   primary: [
+//     // default
+//     "[--btn-bg:var(--color-Primary)] [--btn-fg:var(--color-OnPrimary)] [--btn-outline:var(--color-Primary)]",
+//     // hover
+//     "[--btn-bg-hover:var(--color-Primary-50)] [--btn-fg-hover:var(--color-OnPrimary)] [--btn-outline-hover:var(--color-Primary)]",
+//     // click
+//     "[--btn-bg-active:var(--color-Primary-40)] [--btn-fg-active:var(--color-OnPrimary)] [--btn-outline-active:var(--color-Primary)]",
+//     // disable
+//     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+
+//     // "focus:ring-1", // selected by Tab key
+//     // "aria-pressed:bg-Primary", //toggle on
+//     // "aria-selected:bg-Primary", // selected tab or one of lists
+
+//     // "checked:bg-Primary",
+//     // "open:bg-Primary",
+//     // "aria-hidden:bg-Primary",
+//   ].join(" "),
+
+//   secondary: [
+//     // default
+//     "[--btn-bg:var(--color-Secondary)] [--btn-fg:var(--color-OnSecondary)] [--btn-outline:var(--color-Secondary)]",
+//     // hover
+//     "[--btn-bg-hover:var(--color-Secondary-30)] [--btn-fg-hover:var(--color-OnSecondary)] [--btn-outline-hover:var(--color-Secondary)]",
+//     // click
+//     "[--btn-bg-active:var(--color-Secondary-20)] [--btn-fg-active:var(--color-OnSecondary)] [--btn-outline-active:var(--color-Secondary)]",
+//     // disable
+//     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+//   ].join(" "),
+
+//   tertiary: [
+//     // default
+//     "[--btn-bg:var(--color-Tertiary)] [--btn-fg:var(--color-OnTertiary)] [--btn-outline:var(--color-Tertiary)]",
+//     // hover
+//     "[--btn-bg-hover:var(--color-Tertiary-50)] [--btn-fg-hover:var(--color-OnTertiary)] [--btn-outline-hover:var(--color-Tertiary)]",
+//     // click
+//     "[--btn-bg-active:var(--color-Tertiary-40)] [--btn-fg-active:var(--color-OnTertiary)] [--btn-outline-active:var(--color-Tertiary)]",
+//     // disable
+//     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+//   ].join(" "),
+//   darkInk: [//TODO color
+//     // default
+//     "[--btn-bg:var(--color-InverseSurface)] [--btn-fg:var(--color-OnSurface)] [--btn-outline:var(--color-InverseSurface)]",
+//     // hover
+//     "[--btn-bg-hover:var(--color-OnSurface-40)] [--btn-fg-hover:var(--color-OnSurface)] [--btn-outline-hover:var(--color-InverseSurface)]",
+//     // click
+//     "[--btn-bg-active:var(--color-OnSurface-60)] [--btn-fg-active:var(--color-OnSurface)] [--btn-outline-active:var(--color-InverseSurface)]",
+//     // disable
+//     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+//   ].join(" "),
+//   lightInk: [
+//     // default
+//     "[--btn-bg:var(--color-SurfaceContainer)] [--btn-fg:var(--color-OnSurfaceVariant)] [--btn-outline:var(--color-SurfaceContainer)]",
+//     // hover
+//     "[--btn-bg-hover:var(--color-SurfaceContainerHigh)] [--btn-fg-hover:var(--color-OnSurfaceVariant)] [--btn-outline-hover:var(--color-SurfaceContainerHigh)]",
+//     // click
+//     "[--btn-bg-active:var(--color-SurfaceContainerHighest)] [--btn-fg-active:var(--color-OnSurfaceVariant)] [--btn-outline-active:var(--color-SurfaceContainerHighest)]",
+//     // disable
+//     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+//   ].join(" "),
+// } as const;
+
+
+
+export const iconButtonIntentVariants: Record<UIIntent, string> = {
   primary: [
     // default
     "[--btn-bg:var(--color-Primary)] [--btn-fg:var(--color-OnPrimary)] [--btn-outline:var(--color-Primary)]",
@@ -51,15 +116,26 @@ export const iconButtonIntentVariants: Record<IconButtonIntent, string> = {
     // disable
     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
   ].join(" "),
-  darkInk: [//TODO color
+  darkInk: [
+    //TODO color
     // default
-    "[--btn-bg:var(--color-InverseSurface)] [--btn-fg:var(--color-OnSurface)] [--btn-outline:var(--color-InverseSurface)]",
+    "[--btn-bg:var(--color-InverseSurface)] [--btn-fg:var(--color-InverseOnSurface)] [--btn-outline:var(--color-InverseSurface)]",
     // hover
     "[--btn-bg-hover:var(--color-OnSurface-40)] [--btn-fg-hover:var(--color-OnSurface)] [--btn-outline-hover:var(--color-InverseSurface)]",
     // click
     "[--btn-bg-active:var(--color-OnSurface-60)] [--btn-fg-active:var(--color-OnSurface)] [--btn-outline-active:var(--color-InverseSurface)]",
     // disable
     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+
+    // text
+    //default
+    " [--txt-btn-fg:var(--color-OnSurface)] ",
+    // hover
+    "[--txt-btn-bg-hover:var(--color-SurfaceContainer)] [--txt-btn-fg-hover:var(--color-OnSurface)] ",
+    // click
+    "[--txt-btn-bg-active:var(--color-SurfaceContainerHigh)] [--txt-btn-fg-active:var(--color-OnSurface)] ",
+    // disable
+    " [--txt-btn-fg-disable:var(--color-OnSurface-40)]",
   ].join(" "),
   lightInk: [
     // default
@@ -70,6 +146,16 @@ export const iconButtonIntentVariants: Record<IconButtonIntent, string> = {
     "[--btn-bg-active:var(--color-SurfaceContainerHighest)] [--btn-fg-active:var(--color-OnSurfaceVariant)] [--btn-outline-active:var(--color-SurfaceContainerHighest)]",
     // disable
     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+
+    // text
+    //default
+    " [--txt-btn-fg:var(--color-OnSurfaceVariant)] ",
+    // hover
+    "[--txt-btn-bg-hover:var(--color-SurfaceContainer)] [--txt-btn-fg-hover:var(--color-OnSurfaceVariant)] ",
+    // click
+    "[--txt-btn-bg-active:var(--color-SurfaceContainerHigh)] [--txt-btn-fg-active:var(--color-OnSurfaceVariant)] ",
+    // disable
+    " [--txt-btn-fg-disable:var(--color-OnSurface-40)]",
   ].join(" "),
 } as const;
 
@@ -129,10 +215,16 @@ export const iconButtonAppearanceVariants: Record<UIAppearance, string> = {
     // "disabled:text-[var(--btn-bg-disable)] ",
 //TODO color
  
-    "bg-transparent text-[var(--btn-fg)] ",
-    "hover:bg-[var(--btn-bg-hover)] hover:text-[var(--btn-fg-hover)]",
-    "active:bg-[var(--btn-bg-active)] active:text-[var(--btn-fg-active)]",
-    "disabled:bg-transparent disabled:text-[var(--btn-fg-disable)]",
+    // "bg-transparent text-[var(--btn-fg)] ",
+    // "hover:bg-[var(--btn-bg-hover)] hover:text-[var(--btn-fg-hover)]",
+    // "active:bg-[var(--btn-bg-active)] active:text-[var(--btn-fg-active)]",
+    // "disabled:bg-transparent disabled:text-[var(--btn-fg-disable)]",
+    
+
+    "bg-transparent text-[var(--txt-btn-fg)] ",
+    "hover:text-[var(--txt-btn-fg-hover)] hover:bg-[var(--txt-btn-bg-hover)]",
+    "active:text-[var(--txt-btn-fg-active)] active:bg-[var(--txt-btn-bg-active)]",
+    "disabled:text-[var(--txt-btn-fg-disable)] ",
   ].join(" "),
 };
 

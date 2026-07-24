@@ -6,7 +6,8 @@ import {
   FilterDefinition,
   Operator,
 } from "./filter-definition";
-import { useFilterStore } from "./filter-store";
+import { createFilterStore } from "./filter-store";
+import { useFilterStore } from "../components/useFilterStore";
 
 function isEmptyValue(value: FilterConditionValue): boolean {
   if (value === null || value === undefined || value === "") {
@@ -23,6 +24,11 @@ function isEmptyValue(value: FilterConditionValue): boolean {
  * - 値が空になったら condition を削除する
  */
 export function useFilterCondition<TItem>(filter: FilterDefinition<TItem>) {
+  // const condition = createFilterStore((state) =>
+  //   state.conditions.find((current) => current.fieldKey === filter.key),
+  // );
+  // const upsertCondition = createFilterStore((state) => state.upsertCondition);
+  // const removeCondition = createFilterStore((state) => state.removeCondition);
   const condition = useFilterStore((state) =>
     state.conditions.find((current) => current.fieldKey === filter.key),
   );

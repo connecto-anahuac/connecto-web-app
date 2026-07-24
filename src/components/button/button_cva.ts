@@ -4,7 +4,6 @@ import { cva, VariantProps } from "class-variance-authority";
 export const buttonContents = ["iconOnly", "iconLabel", "labelOnly"] as const;
 export type ButtonContent = (typeof buttonContents)[number];
 
-
 export const buttonIntentVariants: Record<UIIntent, string> = {
   primary: [
     // default
@@ -46,7 +45,8 @@ export const buttonIntentVariants: Record<UIIntent, string> = {
     // disable
     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
   ].join(" "),
-  darkInk: [//TODO color
+  darkInk: [
+    //TODO color
     // default
     "[--btn-bg:var(--color-InverseSurface)] [--btn-fg:var(--color-InverseOnSurface)] [--btn-outline:var(--color-InverseSurface)]",
     // hover
@@ -55,6 +55,16 @@ export const buttonIntentVariants: Record<UIIntent, string> = {
     "[--btn-bg-active:var(--color-OnSurface-60)] [--btn-fg-active:var(--color-OnSurface)] [--btn-outline-active:var(--color-InverseSurface)]",
     // disable
     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+
+    // text
+    //default
+    " [--txt-btn-fg:var(--color-OnSurface)] ",
+    // hover
+    "[--txt-btn-bg-hover:var(--color-SurfaceContainer)] [--txt-btn-fg-hover:var(--color-OnSurface)] ",
+    // click
+    "[--txt-btn-bg-active:var(--color-SurfaceContainerHigh)] [--txt-btn-fg-active:var(--color-OnSurface)] ",
+    // disable
+    " [--txt-btn-fg-disable:var(--color-OnSurface-40)]",
   ].join(" "),
   lightInk: [
     // default
@@ -65,10 +75,18 @@ export const buttonIntentVariants: Record<UIIntent, string> = {
     "[--btn-bg-active:var(--color-SurfaceContainerHighest)] [--btn-fg-active:var(--color-OnSurfaceVariant)] [--btn-outline-active:var(--color-SurfaceContainerHighest)]",
     // disable
     "[--btn-bg-disable:var(--color-DividerLow)] [--btn-fg-disable:var(--color-GrayLow)] [--btn-outline-disable:var(--color-DividerMiddle)]",
+
+    // text
+    //default
+    " [--txt-btn-fg:var(--color-OnSurfaceVariant)] ",
+    // hover
+    "[--txt-btn-bg-hover:var(--color-SurfaceContainer)] [--txt-btn-fg-hover:var(--color-OnSurfaceVariant)] ",
+    // click
+    "[--txt-btn-bg-active:var(--color-SurfaceContainerHigh)] [--txt-btn-fg-active:var(--color-OnSurfaceVariant)] ",
+    // disable
+    " [--txt-btn-fg-disable:var(--color-OnSurface-40)]",
   ].join(" "),
 } as const;
-
-
 
 // export const buttonIntentVariants: Record<UIIntent, string> = {
 //   primary: [
@@ -162,20 +180,19 @@ export const buttonAppearanceVariants: Record<UIAppearance, string> = {
     "disabled:opacity-100",
 
     "bg-transparent text-[var(--btn-outline)] border border-[var(--btn-outline)]",
-    "hover:bg-[var(--btn-bg-hover)] hover:text-[var(--btn-fg-hover)]",
-    "active:bg-[var(--btn-bg-active)] active:text-[var(--btn-fg-active)]",
-    "disabled:bg-transparent disabled:text-[var(--btn-outline-disable)]",
+    "hover:bg-[var(--btn-bg-hover)] hover:text-[var(--btn-fg-hover)] hover:border-[var(--btn-outline-hover)]",
+    "active:bg-[var(--btn-bg-active)] active:text-[var(--btn-fg-active)] active:border-[var(--btn-outline-active)]",
+    "disabled:bg-transparent disabled:text-[var(--btn-outline-disable)] disabled:border-[var(--btn-outline-disable)]",
   ].join(" "),
 
   text: [
     "hover:opacity-100",
     "disabled:opacity-100",
 
-    "bg-transparent text-[var(--btn-bg)] ",
-    "hover:text-[var(--btn-bg-hover)] ",
-    "active:text-[var(--btn-bg-active)] ",
-    // "disabled:text-[var(--btn-bg-disable)] ",
-    "disabled:text-[var(--color-OnSurface-40)] ",
+    "bg-transparent text-[var(--txt-btn-fg)] ",
+    "hover:text-[var(--txt-btn-fg-hover)] hover:bg-[var(--txt-btn-bg-hover)]",
+    "active:text-[var(--txt-btn-fg-active)] active:bg-[var(--txt-btn-bg-active)]",
+    "disabled:text-[var(--txt-btn-fg-disable)] ",
   ].join(" "),
 };
 

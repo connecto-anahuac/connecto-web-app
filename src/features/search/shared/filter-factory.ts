@@ -27,7 +27,7 @@ function deriveEditor<TItem>(field: FilterField<TItem>): Editor {
 }
 
 /**
- * dataset から distinct な値を集めて選択肢を導出する（dynamicOptions 用）。
+ * 実データ から distinct な値を集めて選択肢を導出する（dynamicOptions 用）。
  */
 function deriveOptionsFromDataset<TItem>(
   field: FilterField<TItem>,

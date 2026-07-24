@@ -4,12 +4,13 @@ import { useCallback, useMemo } from "react";
 import type { FilterCondition } from "@/features/search/shared/filter-definition";
 import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
 import { applyFilters } from "@/features/search/shared/filter-engine";
-import { useFilterStore } from "@/features/search/shared/filter-store";
+import { createFilterStore } from "@/features/search/shared/filter-store";
 import {
   STUDENT_PLAN_FILTER_FIELDS,
   STUDENT_PLAN_FILTER_KEYS,
 } from "@/features/student/types/student-plan-filter-fields";
 import type { StudentClassItem } from "@/features/student/types";
+import { useFilterStore } from "@/features/search/components/useFilterStore";
 
 const STUDENT_PLAN_FILTER_KEY_LOOKUP: Record<string, true> = {
   [STUDENT_PLAN_FILTER_KEYS.className]: true,
@@ -25,6 +26,9 @@ function getRelevantConditions(conditions: FilterCondition[]) {
 }
 
 export function useStudentPlanFilters(plan: StudentClassItem[]) {
+  // const conditions = createFilterStore((state) => state.conditions);
+  // const upsertCondition = createFilterStore((state) => state.upsertCondition);
+  // const removeCondition = createFilterStore((state) => state.removeCondition);
   const conditions = useFilterStore((state) => state.conditions);
   const upsertCondition = useFilterStore((state) => state.upsertCondition);
   const removeCondition = useFilterStore((state) => state.removeCondition);
