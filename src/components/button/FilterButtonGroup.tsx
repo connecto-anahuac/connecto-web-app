@@ -2,19 +2,6 @@
 
 import { useState, type ComponentProps } from "react";
 import { cn } from "@/shared/lib/util";
-import { IconName, Icons } from "../icon";
-import { DisableProps, LoadableProps } from "@/shared/lib/cva";
-import { ButtonVariantProps, buttonVariants } from "./button_cva";
-import Button from "./Button";
-import { FilterRenderer } from "@/features/search/components/filter/FilterRenderer";
-import {
-  autoUpdate,
-  flip,
-  offset,
-  shift,
-  useFloating,
-} from "@floating-ui/react";
-import { getStudentFilterIcon } from "@/features/student/types/filter-metadata";
 import { FilterDefinition } from "@/features/search/shared/filter-definition";
 import FilterButton from "./FilterButton";
 
@@ -41,7 +28,7 @@ export default function FilterButtonGroup<TItem>({
     >
       {definitions.map((definition) => (
         <FilterButton
-          icon={}
+          // icon={} //TODO icon
           key={definition.key}
           definition={definition}
           open={openedKey === definition.key}

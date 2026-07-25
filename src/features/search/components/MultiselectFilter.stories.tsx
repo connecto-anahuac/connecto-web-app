@@ -10,6 +10,7 @@ const baseFilter = buildFilterDefinition(
     key: 'name',
     label: 'Nombre',
     valueType: 'enum',
+    icon:"person",
     inputType: 'option',
     getValue: () => null,
     options: [
@@ -32,7 +33,7 @@ const meta = {
   },
   args: {
     filter: baseFilter,
-    icon: <PersonIcon />,
+    icon: "person",
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof MultiSelectFilter<unknown>>
@@ -49,6 +50,7 @@ export const LongOptions: Story = {
         key: 'name',
         label: 'Nombre',
         valueType: 'enum',
+    icon:"person",
         inputType: 'option',
         getValue: () => null,
         options: [
@@ -74,6 +76,7 @@ export const EmptyOptions: Story = {
         label: 'Nombre',
         valueType: 'enum',
         inputType: 'option',
+    icon:"person",
         getValue: () => null,
         options: [],
       }),

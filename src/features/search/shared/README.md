@@ -3,6 +3,9 @@
 - FilterDefinition
 - FilterCondition
 
+filterField -> filterDefinition 
+filterDefinitionをアプリ内では使用。
+これを生成するための値としてfilterFieldで値を定義する。
 
 使用可能なフィルターの定義
 
@@ -113,39 +116,9 @@ Physics
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 #  FilterDefinition<TItem>
+
+`FilterDefinition<Student>` は `StudentをどうフィルタUIに表示するか` を定義しています。
 
 `TItem`には実際には`Student`が入ります。
 
@@ -202,8 +175,6 @@ const studentFilterDefinitions: FilterDefinition<Student>[] = [
   },
 ];
 ```
-
-つまり `FilterDefinition<Student>` は `StudentをどうフィルタUIに表示するか` を定義しています。
 
 
 #  FilterCondition

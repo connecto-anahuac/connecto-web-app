@@ -19,6 +19,7 @@ describe("filter-factory", () => {
     const definition = buildFilterDefinition(
       defineFilterField<Row>({
         key: "name",
+    icon:"person",
         label: "Name",
         valueType: "text",
         inputType: "free",
@@ -37,6 +38,7 @@ describe("filter-factory", () => {
         key: "semester",
         label: "Semester",
         valueType: "number",
+    icon:"person",
         inputType: "free",
         getValue: (row) => row.semester,
       }),
@@ -51,6 +53,7 @@ describe("filter-factory", () => {
       defineFilterField<Row>({
         key: "status",
         label: "Status",
+    icon:"person",
         valueType: "enum",
         inputType: "option",
         multiple: false,
@@ -73,6 +76,7 @@ describe("filter-factory", () => {
     const definition = buildFilterDefinition(
       defineFilterField<Row>({
         key: "status",
+    icon:"person",
         label: "Status",
         valueType: "enum",
         inputType: "option",
@@ -89,6 +93,7 @@ describe("filter-factory", () => {
       defineFilterField<Row>({
         key: "status",
         label: "Status",
+    icon:"person",
         valueType: "enum",
         inputType: "option",
         getValue: (row) => row.status,
@@ -112,6 +117,7 @@ describe("filter-factory", () => {
         key: "name",
         label: "Name",
         valueType: "text",
+    icon:"person",
         inputType: "free",
         getValue: (row) => row.name,
         operators: ["contains"],
@@ -128,12 +134,14 @@ describe("filter-factory", () => {
           key: "name",
           label: "Name",
           valueType: "text",
+    icon:"person",
           inputType: "free",
           getValue: (row) => row.name,
         }),
         defineFilterField<Row>({
           key: "semester",
           label: "Semester",
+    icon:"person",
           valueType: "number",
           inputType: "free",
           getValue: (row) => row.semester,

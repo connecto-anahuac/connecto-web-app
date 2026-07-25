@@ -17,7 +17,6 @@ import {
   useFloating,
   useInteractions,
 } from "@floating-ui/react";
-import { getStudentFilterIcon } from "@/features/student/types/filter-metadata";
 import { FilterDefinition } from "@/features/search/shared/filter-definition";
 
 type ButtonProps<TItem> = Partial<ButtonVariantProps> &
@@ -47,7 +46,8 @@ export default function FilterButton<TItem>({
   onOpenChange,
   ...props
 }: ButtonProps<TItem>) {
-  const IconComponent = icon ? Icons[icon] : null;
+  const buttonIcon = icon ? icon : definition.icon ?? null;
+  
   const { refs, floatingStyles, context } = useFloating({
     open,
     onOpenChange,
@@ -69,7 +69,7 @@ export default function FilterButton<TItem>({
       <Button
         ref={refs.setReference}
         label={label}
-        icon={icon}
+        icon={buttonIcon}
         intent={intent}
         size={size}
         appearance={appearance}
@@ -90,7 +90,7 @@ export default function FilterButton<TItem>({
           }}
           key={definition.key}
           filter={definition}
-          icon={IconComponent && <IconComponent />}
+          icon={definition.icon}
         />
       )}
     </>

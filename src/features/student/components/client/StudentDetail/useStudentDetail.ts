@@ -21,7 +21,7 @@ import {
   type StudentDetail,
 } from "../../ui/student-summary-panel/student-summary.types";
 import { useFilters } from "@/features/search/shared/useFilters";
-import { STUDENT_PLAN_FILTER_FIELDS } from "@/features/student/types/student-plan-filter-fields";
+import { STUDENT_GRADE_FILTER_FIELDS } from "@/features/student/types/student-grade-filter-fields";
 import { FilterDefinition } from "@/features/search/shared/filter-definition";
 import { applyFilters } from "@/features/search/shared/filter-engine";
 
@@ -73,7 +73,7 @@ export function useStudentDetail(studentId: string): UseStudentDetailResult {
   }, [studentId]);
 
   const { definitions, searchText, setSearchText, hasActiveFilters,relevantConditions } =
-    useFilters(STUDENT_PLAN_FILTER_FIELDS, items);
+    useFilters(STUDENT_GRADE_FILTER_FIELDS, items);
   
     const filteredItems = useMemo(
       () => applyFilters(items, definitions, relevantConditions),

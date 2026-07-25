@@ -5,11 +5,12 @@ import { NumberFilter } from "./NumberFilter";
 import { SelectFilter } from "../SelectFilter";
 import { TextFilter } from "./TextFilter";
 import { FilterDefinition } from "../../shared/filter-definition";
+import { IconName } from "@/components/icon";
 
 type Props<TItem> = ComponentPropsWithRef<"section"> & {
   
   filter: FilterDefinition<TItem>;
-  icon?: ReactNode;
+  icon?: IconName;
 };
 
 export function FilterRenderer<TItem>({

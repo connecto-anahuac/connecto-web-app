@@ -12,6 +12,7 @@ export const OFFERING_COURSE_FILTER_FIELDS: FilterField<OfferingCourse>[] = [
   defineFilterField<OfferingCourse>({
     key: OFFERING_COURSE_FILTER_KEYS.className,
     label: "Nombre de clase",
+    icon:"class",
     valueType: "text",
     inputType: "free",
     getValue: (item) => item.name,

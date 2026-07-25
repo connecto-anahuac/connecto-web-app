@@ -44,6 +44,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.name,
     label: "Nombre",
+    icon:"person",
     valueType: "text",
     inputType: "free",
     getValue: (student) => student.name,
@@ -51,6 +52,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.status,
     label: "Estatus",
+    icon:"status",
     valueType: "enum",
     inputType: "option",
     // dynamicOptions: true,
@@ -60,6 +62,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.currentSemester,
     label: "Semestre",
+    icon:"schedule",
     valueType: "enum", 
     inputType: "option",
     dynamicOptions: true,
@@ -68,6 +71,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.career,
     label: "Carrera",
+    icon:"schoolHat",
     valueType: "enum",
     inputType: "option",
     options: [...STUDENT_CAREER_OPTIONS],
@@ -76,6 +80,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.plan,
     label: "Plan",
+    icon:"schoolHat",
     valueType: "enum",
     inputType: "option",
     dynamicOptions: true,
@@ -84,6 +89,7 @@ export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.failCount,
     label: "Numero de materias reprobadas",
+    icon:"failedClass",
     valueType: "number",
     inputType: "free",
     getValue: (student) => student.failCount,

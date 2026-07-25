@@ -7,10 +7,11 @@ import { FilterCard } from "./FilterCard";
 import { FilterFieldHeader } from "./FilterFieldHeader";
 import { FilterDefinition } from "../../shared/filter-definition";
 import { useFilterCondition } from "../../shared/use-filter-condition";
+import { IconName } from "@/components/icon";
 
 type Props<TItem> = {
   filter: FilterDefinition<TItem>;
-  icon?: ReactNode;
+    icon?: IconName;
 } & ComponentPropsWithRef<"section">;
 
 /**

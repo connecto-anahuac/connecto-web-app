@@ -1,3 +1,4 @@
+import { IconName } from "@/components/icon";
 import {
   FilterPrimitive,
   Operator,
@@ -25,6 +26,7 @@ export type FilterFieldOption<TValue extends FilterPrimitive = FilterPrimitive> 
 type BaseFilterField<TItem, TValue extends FilterPrimitive = FilterPrimitive> = {
   key: string;
   label: string;
+  icon: IconName;
   valueType: ValueType;
   getValue: (item: TItem) => TValue | TValue[] | null | undefined;
   /** valueType 由来のデフォルト operator を上書きしたい場合のみ指定 */

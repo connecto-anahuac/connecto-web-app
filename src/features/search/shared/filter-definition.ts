@@ -1,3 +1,4 @@
+import { IconName } from "@/components/icon";
 
 export const operators = ["eq", "contains", "gt", "gte", "lt", "lte",  "between","in"] as const;
 export type Operator = (typeof operators)[number];
@@ -40,6 +41,7 @@ export type FilterConditionValue = FilterPrimitive | FilterPrimitive[] | FilterR
 type BaseFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = {
   key: string;
   label: string;
+  icon: IconName;
   editor: Editor;
   valueType: ValueType;
   operators: Operator[];

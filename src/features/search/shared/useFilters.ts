@@ -4,7 +4,7 @@ import { useCallback, useMemo } from "react";
 import type { FilterCondition, FilterDefinition } from "@/features/search/shared/filter-definition";
 import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
 
-import { STUDENT_PLAN_FILTER_KEYS } from "@/features/student/types/student-plan-filter-fields";
+import { STUDENT_GRADE_FILTER_KEYS } from "@/features/student/types/student-grade-filter-fields";
 import { useFilterStore } from "@/features/search/components/useFilterStore";
 import { FilterField } from "@/features/search/shared/filter-field";
 
@@ -24,7 +24,7 @@ export function useFilters<TItem>(
   const removeCondition = useFilterStore((state) => state.removeCondition);
 
   const FILTER_KEY_LOOKUP: Record<string, boolean> = Object.values(
-    STUDENT_PLAN_FILTER_KEYS,
+    STUDENT_GRADE_FILTER_KEYS,
   ).reduce(
     (acc, value) => {
       acc[value] = true;
@@ -56,7 +56,7 @@ export function useFilters<TItem>(
 
   //!Todo textsearcの実装
   const classNameCondition = relevantConditions.find(
-    (condition) => condition.fieldKey === STUDENT_PLAN_FILTER_KEYS.className,
+    (condition) => condition.fieldKey === STUDENT_GRADE_FILTER_KEYS.className,
   );
 
   const searchText =
@@ -67,13 +67,13 @@ export function useFilters<TItem>(
   const setSearchText = useCallback(
     (value: string) => {
       if (value === "") {
-        removeCondition(STUDENT_PLAN_FILTER_KEYS.className);
+        removeCondition(STUDENT_GRADE_FILTER_KEYS.className);
         return;
       }
 
       upsertCondition({
-        id: STUDENT_PLAN_FILTER_KEYS.className,
-        fieldKey: STUDENT_PLAN_FILTER_KEYS.className,
+        id: STUDENT_GRADE_FILTER_KEYS.className,
+        fieldKey: STUDENT_GRADE_FILTER_KEYS.className,
         operator: classNameCondition?.operator ?? "contains",
         value,
       });

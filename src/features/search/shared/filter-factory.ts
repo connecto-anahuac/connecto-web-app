@@ -72,6 +72,7 @@ export function buildFilterDefinition<TItem>(
   const base = {
     key: field.key,
     label: field.label,
+    icon: field.icon,
     editor: deriveEditor(field),
     valueType: field.valueType,
     operators,

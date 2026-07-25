@@ -38,6 +38,7 @@ const definitions: FilterDefinition<StudentSearchItem>[] = [
   {
     key: "name",
     label: "Name",
+    icon:"person",
     editor: "text",
     inputType: "free",
     valueType: "text",
@@ -47,6 +48,7 @@ const definitions: FilterDefinition<StudentSearchItem>[] = [
   {
     key: "semester",
     label: "Semester",
+    icon:"person",
     editor: "number",
     inputType: "free",
     valueType: "number",
@@ -56,6 +58,7 @@ const definitions: FilterDefinition<StudentSearchItem>[] = [
   {
     key: "status",
     label: "Status",
+    icon:"person",
     editor: "select",
     inputType: "option",
     valueType: "enum",
@@ -70,6 +73,7 @@ const definitions: FilterDefinition<StudentSearchItem>[] = [
     key: "tags",
     label: "Tags",
     editor: "enum",
+    icon:"person",
     inputType: "option",
     valueType: "enum",
     operators: ["in"],
@@ -85,6 +89,7 @@ const definitions: FilterDefinition<StudentSearchItem>[] = [
   {
     key: "enrolledOn",
     label: "Enrolled On",
+    icon:"person",
     editor: "date",
     inputType: "free",
     valueType: "date",
@@ -171,6 +176,7 @@ describe("filter-engine", () => {
         key: "status",
         label: "Status",
         editor: "enum",
+    icon:"person",
         inputType: "option",
         valueType: "enum",
         operators: ["in"],

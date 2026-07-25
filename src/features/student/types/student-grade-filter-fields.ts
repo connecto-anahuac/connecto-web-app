@@ -1,7 +1,7 @@
 import type { StudentClassItem } from "@/features/student/types";
 import { defineFilterField, type FilterField } from "../../search/shared/filter-field";
 
-export const STUDENT_PLAN_FILTER_KEYS = {
+export const STUDENT_GRADE_FILTER_KEYS = {
   className: "studentPlan.className",
   classCodeAndNumber: "studentPlan.classCodeAndNumber",
   period: "studentPlan.period",
@@ -9,34 +9,38 @@ export const STUDENT_PLAN_FILTER_KEYS = {
 } as const;
 
 export type StudentPlanFilterKey =
-  (typeof STUDENT_PLAN_FILTER_KEYS)[keyof typeof STUDENT_PLAN_FILTER_KEYS];
+  (typeof STUDENT_GRADE_FILTER_KEYS)[keyof typeof STUDENT_GRADE_FILTER_KEYS];
 
-export const STUDENT_PLAN_FILTER_FIELDS: FilterField<StudentClassItem>[] = [
+export const STUDENT_GRADE_FILTER_FIELDS: FilterField<StudentClassItem>[] = [
   defineFilterField<StudentClassItem>({
-    key: STUDENT_PLAN_FILTER_KEYS.className,
+    key: STUDENT_GRADE_FILTER_KEYS.className,
     label: "Nombre de materia",
+    icon:"class",
     valueType: "text",
     inputType: "free",
     getValue: (item) => item.name,
   }),
   defineFilterField<StudentClassItem>({
-    key: STUDENT_PLAN_FILTER_KEYS.classCodeAndNumber,
+    key: STUDENT_GRADE_FILTER_KEYS.classCodeAndNumber,
     label: "Clave de materia",
+    icon:"hashmark",
     valueType: "text",
     inputType: "free",
     getValue: (item) => `${item.keyCode} ${item.keyNumber}`.trim(),
   }),
   defineFilterField<StudentClassItem>({
-    key: STUDENT_PLAN_FILTER_KEYS.period,
+    key: STUDENT_GRADE_FILTER_KEYS.period,
     label: "Periodo",
+    icon:"schedule",
     valueType: "enum",
     inputType: "option",
     dynamicOptions: true,
     getValue: (item) => item.period,
   }),
   defineFilterField<StudentClassItem>({
-    key: STUDENT_PLAN_FILTER_KEYS.grade,
+    key: STUDENT_GRADE_FILTER_KEYS.grade,
     label: "Calificación",
+    icon:"schoolHat",
     valueType: "number",
     inputType: "free",
     getValue: (item) => item.grade,

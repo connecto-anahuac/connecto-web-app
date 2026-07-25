@@ -5,7 +5,6 @@ import {
 } from "@/features/home/components/server/icons/HomeIcons";
 import { ComponentProps } from "react";
 import { FilterRenderer } from "../filter/FilterRenderer";
-import { getStudentFilterIcon } from "../../../student/types/filter-metadata";
 import { FilterDefinition } from "../../shared/filter-definition";
 import { cn } from "@/shared/lib/util";
 
@@ -38,7 +37,7 @@ export default function SearchToolModal<TItem>({
           <FilterRenderer
             key={definition.key}
             filter={definition}
-            icon={getStudentFilterIcon(definition.key)}
+            icon={definition.icon}
           />
         ))}
       </div>
