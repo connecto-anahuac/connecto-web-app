@@ -18,7 +18,9 @@ type Props = ComponentProps<'div'> & {
     onSelectItem?: (value: string) => void;
 };
 
-
+// hoverはselectbox用に外注
+// 初期位置がselectedの値にしたい
+// TODO: selectedValues.length==1の時はその値をhoveredさせる <- 内部hover化可能
 export default function SelectMenu({
     isMulti = false,
     isOpen = false,

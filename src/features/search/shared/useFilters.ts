@@ -18,7 +18,7 @@ export function useFilters<TItem>(
     hasActiveFilters: boolean;
     relevantConditions: FilterCondition[];
 } {
-  //!Todo textsearcの実装
+  // TODO textsearcの実装
   const conditions = useFilterStore((state) => state.conditions);
   const upsertCondition = useFilterStore((state) => state.upsertCondition);
   const removeCondition = useFilterStore((state) => state.removeCondition);
@@ -32,6 +32,18 @@ export function useFilters<TItem>(
     },
     {} as Record<string, boolean>,
   );
+
+  // const FILTER_KEY_LOOKUP: Record<string, boolean> = Object.values(
+  //   STUDENT_GRADE_FILTER_KEYS,
+  // ).reduce(
+  //   (acc, value) => {
+  //     acc[value] = true;
+  //     return acc;
+  //   },
+  //   {} as Record<string, boolean>,
+  // );
+
+
   /* 
   const FILTER_KEY_LOOKUP: Record<string, true> = {
     [STUDENT_PLAN_FILTER_KEYS.className]: true,

@@ -24,9 +24,9 @@ export const STUDENT_GRADE_FILTER_FIELDS: FilterField<StudentClassItem>[] = [
     key: STUDENT_GRADE_FILTER_KEYS.classCodeAndNumber,
     label: "Clave de materia",
     icon:"hashmark",
-    valueType: "text",
-    inputType: "free",
-    getValue: (item) => `${item.keyCode} ${item.keyNumber}`.trim(),
+    valueType: "enum",
+    inputType: "option",
+    getValue: (item) => `${item.keyCode}${item.keyNumber}`.trim(),
   }),
   defineFilterField<StudentClassItem>({
     key: STUDENT_GRADE_FILTER_KEYS.period,

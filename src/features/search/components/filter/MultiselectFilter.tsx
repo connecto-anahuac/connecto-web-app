@@ -98,6 +98,7 @@ export function MultiSelectFilter<TItem>({ filter, icon, ...props }: Props<TItem
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         onClear={() => setQuery("")}
+        isFocusedInitially={true} 
       />
 
       <SelectMenu
