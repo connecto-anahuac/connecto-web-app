@@ -8,10 +8,13 @@ import SearchBar from "../search/SearchBar";
 import { cn } from "@/shared/lib/util";
 import IconButton from "../button/IconButton";
 import Button from "../button/Button";
+import { FilterDefinition } from "@/features/search/shared/filter-definition";
+import FilterButtonGroup from "../button/FilterButtonGroup";
 
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
 
-type Props =ComponentProps<"div"> & {
+type Props<TItem> = ComponentProps<"div"> & {
+  definitions: FilterDefinition<TItem>[];
   defaultView?: "list" | "card";
   listTools?: SearchTool[];
   cardviewTools?: SearchTool[];
@@ -21,7 +24,7 @@ type Props =ComponentProps<"div"> & {
   onCardViewClick?: () => void;
   onViewChange?: (view: "list" | "card") => void;
 };
-export default function DataSection({
+export default function DataSection<TItem>({
   className,
   children,
   onListClick,
@@ -32,8 +35,11 @@ export default function DataSection({
   listDiagram,
   cardDiagram,
   defaultView = "list",
-}: Props) {
-  const [selectedView, setSelectedView] = useState<"list" | "card">(defaultView);
+  definitions,
+}: Props<TItem>) {
+  const [selectedView, setSelectedView] = useState<"list" | "card">(
+    defaultView,
+  );
   const viewChangeHandler = (view: "list" | "card") => {
     setSelectedView(view);
     onViewChange?.(view);
@@ -49,12 +55,14 @@ export default function DataSection({
     <div className={cn("flex flex-col gap-3", className)}>
       {/* 1 line */}
       <div className="flex gap-4 w-full">
+        {/* //TODO Searchbar */}
         <SearchBar className="w-64" />
 
-        <div className="flex gap-1.5 flex-1">
+        <div className="flex gap-1.5 flex-1 min-w-0">
           {/* <ToggleButton label={"Filter"} icon="filter" />
           <ToggleButton label={"Filter"} icon="plus" /> */}
 
+          {/* //TODO filter button　追加tと機能 */}
           <Button
             icon="filter"
             label="Filter"
@@ -62,14 +70,25 @@ export default function DataSection({
             appearance="text"
             size="md"
           />
-          <Button
+          {/* <Button
             icon="plus"
             label="Add"
             intent="darkInk"
             appearance="text"
             size="md"
-          />
+          /> */}
+
+          <FilterButtonGroup definitions={definitions} className="flex-1" />
+          {/* {definitions.map((definition, index) => (
+            <FilterButton
+              key={index}
+              label={definition.label}
+              definition={definition}
+            />
+          ))} */}
         </div>
+
+        {/* //TODO zoom */}
         <IconButton
           icon="zoomOut"
           intent="lightInk"
@@ -81,6 +100,7 @@ export default function DataSection({
 
       {/* 2 line */}
       {/* when changed the chip size, still keep the height */}
+      {/* //TODO presetfilterchip */}
       <div className="flex gap-3 items-center h-5">
         <SearchPresetChip>Ambiental</SearchPresetChip>
         <SearchPresetChip>Civil</SearchPresetChip>
@@ -96,6 +116,7 @@ export default function DataSection({
           onCardViewClick={onCardViewClick}
           onViewChange={viewChangeHandler}
         />
+        {/* //TODO switch切り替え時のフィルター変更処理  */}
 
         <Button
           icon="sort"

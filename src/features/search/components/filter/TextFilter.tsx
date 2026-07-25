@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 import CloseButton from "@/components/button/CloseButton";
 import { FilterCard } from "./FilterCard";
 import { FilterSearchInput } from "./FilterSearchInput";
@@ -11,12 +11,12 @@ import { useFilterCondition } from "../../shared/use-filter-condition";
 type Props<TItem> = {
   filter: FilterDefinition<TItem>;
   icon?: ReactNode;
-};
+} & ComponentPropsWithRef<"section">;
 
 /**
  * 自由入力テキストフィルター（operator: eq / contains / in）。
  */
-export function TextFilter<TItem>({ filter, icon }: Props<TItem>) {
+export function TextFilter<TItem>({ filter, icon, ...props }: Props<TItem>) {
   const { condition, operator, setValue, setOperator, clear } =
     useFilterCondition(filter);
 
@@ -24,6 +24,7 @@ export function TextFilter<TItem>({ filter, icon }: Props<TItem>) {
 
   return (
     <FilterCard
+      {...props}
       aria-label={`${filter.label} filter`}
       header={
         <FilterFieldHeader

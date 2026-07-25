@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 import CloseButton from "@/components/button/CloseButton";
 import SelectMenu from "@/components/selectMenu";
 import { FilterCard } from "./filter/FilterCard";
@@ -12,13 +12,13 @@ import { useFilterCondition } from "../shared/use-filter-condition";
 type Props<TItem> = {
   filter: FilterDefinition<TItem>;
   icon?: ReactNode;
-};
+} & ComponentPropsWithRef<"section">;
 
 /**
  * 単一選択フィルター（operator: eq）。
  *　//TODO 使わない？？？？？
  */
-export function SelectFilter<TItem>({ filter, icon }: Props<TItem>) {
+export function SelectFilter<TItem>({ filter, icon, ...props }: Props<TItem>) {
   const { condition, operator, setValue, setOperator, clear } =
     useFilterCondition(filter);
   const [hoveredIndex, setHoveredIndex] = useState(0);
@@ -63,6 +63,7 @@ export function SelectFilter<TItem>({ filter, icon }: Props<TItem>) {
 
   return (
     <FilterCard
+      {...props}
       aria-label={`${filter.label} filter`}
       header={
         <FilterFieldHeader

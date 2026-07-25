@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { ReactNode } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 import CloseButton from "@/components/button/CloseButton";
 import SelectMenu from "@/components/selectMenu";
 import { FilterCard } from "./filter/FilterCard";
@@ -13,12 +13,12 @@ import { useFilterCondition } from "../shared/use-filter-condition";
 type Props<TItem> = {
   filter: FilterDefinition<TItem>;
   icon?: ReactNode;
-};
+} & ComponentPropsWithRef<"section">;
 
 /**
  * option フィールド向けのチェックリスト型フィルター（複数選択 / operator "in"）。
  */
-export function MultiSelectFilter<TItem>({ filter, icon }: Props<TItem>) {
+export function MultiSelectFilter<TItem>({ filter, icon, ...props }: Props<TItem>) {
   const { condition, operator, setValue, setOperator, clear } =
     useFilterCondition(filter);
   const [query, setQuery] = useState("");
@@ -79,6 +79,7 @@ export function MultiSelectFilter<TItem>({ filter, icon }: Props<TItem>) {
 
   return (
     <FilterCard
+      {...props}
       aria-label={`${filter.label} filter`}
       header={
         <FilterFieldHeader

@@ -191,6 +191,7 @@ export const buttonAppearanceVariants: Record<UIAppearance, string> = {
 
     "bg-transparent text-[var(--txt-btn-fg)] ",
     "hover:text-[var(--txt-btn-fg-hover)] hover:bg-[var(--txt-btn-bg-hover)]",
+    "aria-pressed:text-[var(--txt-btn-fg-hover)] aria-pressed:bg-[var(--txt-btn-bg-hover)]",
     "active:text-[var(--txt-btn-fg-active)] active:bg-[var(--txt-btn-bg-active)]",
     "disabled:text-[var(--txt-btn-fg-disable)] ",
   ].join(" "),

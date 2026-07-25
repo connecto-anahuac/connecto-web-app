@@ -39,6 +39,7 @@ export default function Button({
           appearance: appearance,
           content: buttonContent,
         }),
+        "whitespace-nowrap",
         className,
       )}
       disabled={disabled }

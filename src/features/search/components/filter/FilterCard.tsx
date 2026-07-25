@@ -1,8 +1,8 @@
-import type { HTMLAttributes, ReactNode } from "react";
+import type { ComponentPropsWithRef, HTMLAttributes, ReactNode } from "react";
 
 import { cn } from "@/shared/lib/util";
 
-type FilterCardProps = HTMLAttributes<HTMLDivElement> & {
+type FilterCardProps = ComponentPropsWithRef<"section"> & {
   header: ReactNode;
   trailingAction?: ReactNode;
   children: ReactNode;
@@ -18,7 +18,7 @@ export function FilterCard({
   return (
     <section
       className={cn(
-        "inline-flex min-w-64 w-full flex-col gap-2 rounded-lg border border-Outline bg-Surface px-3 pb-3 pt-2",
+        "inline-flex min-w-64 w-fit flex-col gap-2 rounded-lg border border-Outline bg-Surface px-3 pb-3 pt-2",
         className,
       )}
       {...props}

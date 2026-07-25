@@ -4,6 +4,9 @@ import { useState } from "react";
 import { StudentDetailPresenter } from "./StudentDetailPresenter";
 import { useStudentDetail } from "./useStudentDetail";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
+import ContentTitleSection from "@/components/ContentTitleSection";
+import DataSection from "@/components/datasection/DataSection";
+import { StudentDiagram } from "./StudentDiagram";
 
 type Props = {
   studentId: string;
@@ -24,7 +27,6 @@ export function StudentDetailContainer({ studentId }: Props) {
     allItems,
     matchingPlanIds,
   } = useStudentDetail(studentId);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   return (
     <StudentDetailPresenter
@@ -37,8 +39,10 @@ export function StudentDetailContainer({ studentId }: Props) {
       onSearchTextChange={setSearchText}
       matchingPlanIds={matchingPlanIds}
       hasActiveFilters={hasActiveFilters}
-      isFilterOpen={isFilterOpen}
-      onFilterToggle={() => setIsFilterOpen((open) => !open)}
+      // isFilterOpen={isFilterOpen}
+      // onFilterToggle={() => setIsFilterOpen((open) => !open)}
     />
+
+    
   );
 }

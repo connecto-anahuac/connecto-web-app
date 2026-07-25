@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 import CloseButton from "@/components/button/CloseButton";
 import { cn } from "@/shared/lib/util";
 import { FilterCard } from "./FilterCard";
@@ -11,12 +11,12 @@ import { useFilterCondition } from "../../shared/use-filter-condition";
 type Props<TItem> = {
   filter: FilterDefinition<TItem>;
   icon?: ReactNode;
-};
+} & ComponentPropsWithRef<"section">;
 
 /**
  * 数値フィルター（operator: eq / gt / gte / lt / lte / between / in）。
  */
-export function NumberFilter<TItem>({ filter, icon }: Props<TItem>) {
+export function NumberFilter<TItem>({ filter, icon, ...props }: Props<TItem>) {
   const { condition, operator, setValue, setOperator, clear } =
     useFilterCondition(filter);
 
@@ -24,6 +24,7 @@ export function NumberFilter<TItem>({ filter, icon }: Props<TItem>) {
 
   return (
     <FilterCard
+      {...props}
       aria-label={`${filter.label} filter`}
       header={
         <FilterFieldHeader

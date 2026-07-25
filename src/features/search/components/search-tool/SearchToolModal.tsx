@@ -5,7 +5,7 @@ import {
 } from "@/features/home/components/server/icons/HomeIcons";
 import { ComponentProps } from "react";
 import { FilterRenderer } from "../filter/FilterRenderer";
-import { getStudentFilterIcon } from "../../shared/filter-metadata";
+import { getStudentFilterIcon } from "../../../student/types/filter-metadata";
 import { FilterDefinition } from "../../shared/filter-definition";
 import { cn } from "@/shared/lib/util";
 

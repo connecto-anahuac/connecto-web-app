@@ -57,16 +57,21 @@ export function StudentDetailPresenter({
 
   return (
     <div className="flex min-h-full h-full w-full gap-4 p-0">
+
+      {/* diagram section */}
       <div id="diagram"  className="min-w-0 flex-1 h-full flex flex-col gap-2 ">
+        
+        {/* tools */}
         <div className="flex items-center gap-3 z-30">
           <div className=" size-7 p-1 bg-gray-300/40 text-OnSurface shadow-2xl">
             <ZoomInIcon className="size-full" />
           </div>
+          
           <div className="flex items-center gap-3">
             <SearchBar
               value={searchText}
               onChange={(event) => onSearchTextChange(event.target.value)}
-              onFilterClick={onFilterToggle}
+              onFocus={onFilterToggle}
               placeholder="buscar por nombre de clase"
             />
             <SearchTool
@@ -76,6 +81,8 @@ export function StudentDetailPresenter({
             />
           </div>
         </div>
+
+        {/* diagram */}
         <div className="min-w-0 flex-1  overflow-auto relative">
           <div
             className="w-fit"
@@ -86,6 +93,7 @@ export function StudentDetailPresenter({
               gap: "1rem",
             }}
           >
+            {/* top-left-edge */}
             <div
               key="table-edge"
               className="w-fit"
@@ -101,6 +109,8 @@ export function StudentDetailPresenter({
             >
               <div className="w-4" />
             </div>
+
+            {/* RowTitle A,B,C,D,... */}
             {Array.from({ length: maxPosition }, (_, index) => {
               const position = index + 1;
               return (
@@ -118,6 +128,9 @@ export function StudentDetailPresenter({
                 </div>
               );
             })}
+
+            
+            {/* ColumnTitle Semestre 1,Semestre 2,... */}
             {Array.from({ length: maxSemester }, (_, index) => {
               const semester = index + 1;
               return (
@@ -135,6 +148,8 @@ export function StudentDetailPresenter({
                 </div>
               );
             })}
+
+            {/* data */}
             {allGrades.map((item) => (
               <div
                 key={item.id}
