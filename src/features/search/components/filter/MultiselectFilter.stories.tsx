@@ -2,8 +2,8 @@ import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 
 import { MultiSelectFilter } from './MultiselectFilter'
 import PersonIcon from '@/components/icon/PersonIcon'
-import { buildFilterDefinition } from '../shared/filter-factory'
-import { defineFilterField } from '../shared/filter-field'
+import { buildFilterDefinition } from '../../shared/filter-factory'
+import { defineFilterField } from '../../shared/filter-field'
 
 const baseFilter = buildFilterDefinition(
   defineFilterField<unknown>({
