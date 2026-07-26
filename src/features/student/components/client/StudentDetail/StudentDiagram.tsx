@@ -1,9 +1,7 @@
 import ColumnTitle from "@/components/ColumnTitle";
 import RowTitle from "@/components/RowTitle";
 import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
-import type {
-  StudentClassItem,
-} from "@/features/student/types";
+import type { StudentClassItem } from "@/features/student/types";
 import type { FilterableItem } from "@/features/search/shared/filterDefinition";
 import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
@@ -23,7 +21,9 @@ export function StudentDiagram({
     return <div>Loading...</div>;
   }
 
-  const allGrades = filterableItems.map((filterableItem) => filterableItem.item);
+  const allGrades = filterableItems.map(
+    (filterableItem) => filterableItem.item,
+  );
 
   const semesters = Array.from(
     new Set(allGrades.map((item) => item.semester).filter(Boolean)),
@@ -123,6 +123,7 @@ export function StudentDiagram({
               grade={item.grade}
               credits={item.credits ? item.credits.toString() : undefined}
               hours={item.hours ? item.hours.toString() : undefined}
+              status={item.status}
             />
           </div>
         ))}

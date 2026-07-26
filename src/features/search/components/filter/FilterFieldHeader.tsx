@@ -1,8 +1,8 @@
 import IconWithText from "@/components/IconWithText";
 import SelectBoxUnfill from "@/components/select-box/SelectBoxUnfill";
 import type { ReactNode } from "react";
-import { FilterDefinition, Operator } from "../../shared/filterDefinition";
-import { getOperatorLabel } from "../../shared/operatorPolicy";
+import { FilterDefinition,  } from "../../shared/filterDefinition";
+import { getOperatorLabel, Operator } from "../../shared/operatorPolicy";
 import { IconName, Icons } from "@/components/icon";
 import { cn } from "@/shared/lib/util";
 

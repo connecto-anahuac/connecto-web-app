@@ -4,9 +4,9 @@ import {
   FilterDefinition,
   FilterPrimitive,
   FilterRangeValue,
-  Operator,
   ValueType,
 } from "./filterDefinition";
+import { Operator } from "./operatorPolicy";
 
 function isRangeValue(
   value: FilterCondition["value"],

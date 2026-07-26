@@ -1,3 +1,5 @@
+import { SemesterValue } from "@/components/SemesterBadge";
+
 export class Semester {
   private constructor(private readonly code: SemesterCode) {}
 
@@ -27,6 +29,22 @@ export class Semester {
 
   private static isValidCode(value: number): value is SemesterCode {
     return Object.values(SEMESTER_CODES).includes(value as SemesterCode);
+  }
+
+  get value(): SemesterValue {
+    switch (this.code) {
+      case 10:
+      case 15:
+        return "ene-mayo";
+      case 40:
+      case 50:
+        return "verano";
+      case 60:
+      case 65:
+        return "ago-dec";
+      default:
+        return "semester";
+    }
   }
 }
 

@@ -1,8 +1,8 @@
 import type {
   FilterCondition,
   FilterConditionValue,
-  Operator,
 } from "./filterDefinition";
+import { Operator } from "./operatorPolicy";
 
 /** A declarative filter condition exposed as a selectable UI preset. */
 export type FilterPresetConfig<TFilterKey extends string = string> = {

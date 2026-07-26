@@ -4,7 +4,7 @@ import Arrow from "@/components/icon/Arrow";
 import PersonIcon from "@/components/icon/PersonIcon";
 import { cn } from "@/shared/lib/util";
 import TriangleArrowIcon from "@/components/icon/TriangleArrowIcon";
-import SemesterBadge, { Semester } from "@/components/SemesterBadge";
+import SemesterBadge, { SemesterValue } from "@/components/SemesterBadge";
 
 type Props = ComponentProps<"div"> & {
   semesterLabel: string;
@@ -86,7 +86,7 @@ export default function OfferingCourseSemesterRow({
   );
 }
 
-const getItems = (semester: number): { year: number; semester: Semester } => {
+const getItems = (semester: number): { year: number; semester: SemesterValue } => {
   const now = new Date();
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth() + 1; // Months are zero-based
@@ -109,7 +109,7 @@ const getItems = (semester: number): { year: number; semester: Semester } => {
   return { year, semester: getSemesterLabel(semNum) };
 };
 
-const getSemesterLabel = (semester: number): Semester => {
+const getSemesterLabel = (semester: number): SemesterValue => {
   const semLabel = semester === 1 ? "ene-mayo" : "ago-dec";
   return semLabel;
 };

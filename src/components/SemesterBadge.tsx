@@ -1,8 +1,8 @@
 import { cn } from '@/shared/lib/util'
 
-export type Semester = 'ene-mayo' | 'verano' | 'ago-dec' | 'semester'
+export type SemesterValue = 'ene-mayo' | 'verano' | 'ago-dec' | 'semester'
 
-const SEMESTER_LABELS: Record<Semester, string> = {
+const SEMESTER_LABELS: Record<SemesterValue, string> = {
   'ene-mayo': 'Ene-May',
   verano: 'Verano',
   'ago-dec': 'Ago-Dec',
@@ -11,7 +11,7 @@ const SEMESTER_LABELS: Record<Semester, string> = {
 
 
 interface Props {
-  semester?: Semester
+  semester?: SemesterValue
   className?: string
 }
 

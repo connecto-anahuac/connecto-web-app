@@ -59,10 +59,26 @@ export class Period {
     return new Period(`${currentYear}${semesterCode}`);
   }
 
+  static current(): Period {
+    const now = new Date();
+    return  Period.create(now);
+  }
+
   private validate(value: number | string): boolean {
     // 文字列に変換し、前後の不要な空白をトリムしてから長さをチェック
     return value.toString().trim().length === 6;
   }
+
+  get label(): string {
+    return `${this.year} ${this.semester.label}`;
+  }
+
+  get raw(): number {
+    return this.rawPeriod;
+  }
+
+ 
+
 
 }
 

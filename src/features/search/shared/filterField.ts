@@ -1,5 +1,6 @@
 import { IconName } from "@/components/icon";
-import { FilterPrimitive, Operator, ValueType } from "./filterDefinition";
+import { FilterPrimitive, ValueType } from "./filterDefinition";
+import { Operator } from "./operatorPolicy";
 
 /**
  * option フィルターの選択肢。

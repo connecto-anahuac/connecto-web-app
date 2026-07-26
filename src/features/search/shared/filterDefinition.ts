@@ -1,27 +1,7 @@
 import { IconName } from "@/components/icon";
+import { Operator } from "./operatorPolicy";
 
-export const operators = ["eq", "contains", "gt", "gte", "lt", "lte",  "between","in"] as const;
-export type Operator = (typeof operators)[number];
-export const operatorTextLabels: Record<Operator, string> = {
-  eq: "Es", //ToDo eq ->in 統合？？？
-  contains: "Contiene",
-  gt: "Mayor que",
-  gte: "Mayor o igual que",
-  lt: "Menor que",
-  lte: "Menor o igual que",
-  between: "Entre",
-  in: "Es",
-}
-export const operatorNumberLabels: Record<Operator, string> = {
-  eq: "=",
-  contains: "Contiene",
-  gt: ">",
-  gte: "≧",
-  lt: "<",
-  lte: "≦",
-  between: "Entre",
-  in: "Es",
-}
+
 
 // UIの入力法式 //TODO select -> singleSelect
 export const editor = ["text", "number", "select", "multiSelect","enum", "date"] as const;

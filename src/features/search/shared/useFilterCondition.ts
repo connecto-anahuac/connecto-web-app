@@ -4,10 +4,10 @@ import { useCallback } from "react";
 import {
   FilterConditionValue,
   FilterDefinition,
-  Operator,
 } from "./filterDefinition";
 import { createFilterStore } from "../components/Provider/filterStore";
 import { useFilterStoreProvider } from "../components/Provider/useFilterStore";
+import { Operator } from "./operatorPolicy";
 
 function isEmptyValue(value: FilterConditionValue): boolean {
   if (value === null || value === undefined || value === "") {

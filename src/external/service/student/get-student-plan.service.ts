@@ -5,7 +5,7 @@ import { GradeRepository } from "@/external/repository/grade.repository";
 import { PlanRepository } from "@/external/repository/plan.repository";
 import { PreRequisitoRepository } from "@/external/repository/prerequisito.repository";
 import { StudentRepository } from "@/external/repository/student.repository";
-import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
+import { GRADE_NOT_FOUND_VALUE, PERIOD_NOT_FOUND_VALUE } from "@/shared/types/consts";
 
 export class GetStudentPlanService {
   constructor(
@@ -25,29 +25,48 @@ export class GetStudentPlanService {
     const plans = await this.planRepository.findAll();
     const result: StudentClassItem[] = [];
 
+    const buildPreRequisite = async (
+      courseKey: string,
+      ancestors: ReadonlySet<string>,
+    ): Promise<StudentClassItem> => {
+      const [course, grade, prereqs] = await Promise.all([
+        this.courseRepository.findById(courseKey),
+        this.gradeRepository.findGrade(studentId, courseKey),
+        this.preRequisitoRepository.findByCourse(courseKey),
+      ]);
+      const nextAncestors = new Set(ancestors).add(courseKey);
+      const preRequisites = await Promise.all(
+        prereqs
+          .filter((prereq) => !nextAncestors.has(prereq.preCourseKey))
+          .map((prereq) => buildPreRequisite(prereq.preCourseKey, nextAncestors)),
+      );
+
+      return {
+        id: courseKey,
+        keyCode: course?.keyCode ?? "",
+        keyNumber: course?.keyNumber ?? "",
+        name: course?.name ?? "",
+        hours: course?.hours ?? 0,
+        credits: course?.credits ?? 0,
+        block: course?.block ?? "",
+        preRequisites,
+        period: grade?.period ?? PERIOD_NOT_FOUND_VALUE,
+        grade: grade?.grade ?? GRADE_NOT_FOUND_VALUE,
+        semester: 0,
+        position: 0,
+      };
+    };
+
     for (const plan of plans) {
       const course = await this.courseRepository.findById(plan.courseKey as string);
       const grade = await this.gradeRepository.findGrade(studentId, plan.courseKey);
       const prereqs = await this.preRequisitoRepository.findByCourse(plan.courseKey as string);
-      const preItems: StudentClassItem[] = [];
-
-      for (const prereq of prereqs) {
-        const preCourse = await this.courseRepository.findById(prereq.preCourseKey);
-        preItems.push({
-          id: prereq.preCourseKey,
-          keyCode: preCourse?.keyCode ?? "",
-          keyNumber: preCourse?.keyNumber ?? "",
-          name: preCourse?.name ?? "",
-          hours: preCourse?.hours ?? 0,
-          credits: preCourse?.credits ?? 0,
-          block: preCourse?.block ?? "",
-          preRequisites: [],
-          period: "",
-          grade: grade?.grade ?? GRADE_NOT_FOUND_VALUE,
-          semester: 0,
-          position: 0,
-        });
-      }
+      const rootAncestors = new Set<string>([plan.courseKey as string]);
+      const preItems = await Promise.all(
+        prereqs
+          .filter((prereq) => !rootAncestors.has(prereq.preCourseKey))
+          .map((prereq) => buildPreRequisite(prereq.preCourseKey, rootAncestors)),
+      );
 
       result.push({
         id: plan.courseKey ?? plan.id,
@@ -58,7 +77,7 @@ export class GetStudentPlanService {
         credits: course?.credits ?? 0,
         block: course?.block ?? "",
         preRequisites: preItems,
-        period: grade?.period ?? "",
+        period: grade?.period ?? PERIOD_NOT_FOUND_VALUE,
         grade:  grade?.grade ?? GRADE_NOT_FOUND_VALUE,
         semester: plan.semester ?? 0,
         position: plan.position ?? 0,
