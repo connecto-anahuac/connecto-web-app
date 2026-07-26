@@ -1,44 +1,30 @@
-import ColumnTitle from "@/components/ColumnTitle";
-import RowTitle from "@/components/RowTitle";
-import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
 import type {
   StudentClassItem,
-  StudentProfile,
 } from "@/features/student/types";
-import type { FilterDefinition } from "@/features/search/shared/filter-definition";
-import { StudentSummaryPanel } from "../../ui/student-summary-panel/StudentSummaryPanel";
+import type { FilterDefinition, FilterableItem } from "@/features/search/shared/filter-definition";
 import type { StudentDetail } from "../../ui/student-summary-panel/student-summary.types";
-import ZoomInIcon from "@/components/icon/ZoomInIcon";
-import SearchBar from "@/features/search/components/SearchTool";
-import SearchTool from "@/features/search/components/search-tool/SearchTool";
 import ContentTitleSection from "@/components/ContentTitleSection";
 import DataSection from "@/components/datasection/DataSection";
 import { StudentDiagram } from "./StudentDiagram";
 
 type Props = {
   loading: boolean;
-  filteredGrades: StudentClassItem[];
-  allGrades: StudentClassItem[];
+  filterableItems: FilterableItem<StudentClassItem>[];
   studentDetail: StudentDetail | null;
   definitions: FilterDefinition<StudentClassItem>[];
   searchText: string;
   onSearchTextChange: (value: string) => void;
-  matchingPlanIds: Set<string>;
-  hasActiveFilters: boolean;
   // isFilterOpen: boolean;
   // onFilterToggle: () => void;
 };
 
 export function StudentDetailPresenter({
   loading,
-  filteredGrades,
-  allGrades,
+  filterableItems,
   studentDetail,
   definitions,
   searchText,
   onSearchTextChange,
-  matchingPlanIds,
-  hasActiveFilters,
   // isFilterOpen,
   // onFilterToggle,
 }: Props) {
@@ -60,13 +46,7 @@ export function StudentDetailPresenter({
         className="w-full flex-1 min-h-0"
         listDiagram={<div> LIST VIEW</div>}
         cardDiagram={
-          <StudentDiagram
-            loading={loading}
-            allGrades={allGrades}
-            filteredGrades={filteredGrades}
-            matchingPlanIds={matchingPlanIds}
-            hasActiveFilters={hasActiveFilters}
-          />
+          <StudentDiagram loading={loading} filterableItems={filterableItems} />
         }
       />
     </div>

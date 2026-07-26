@@ -82,3 +82,11 @@ export type FilterCondition = {
 };
 
 export type FilterDefinitionMap<TItem> = Record<string, FilterDefinition<TItem>>;
+
+// filter適用後のリスト表示用アイテム（list/card 表示共通）
+export type FilterableItem<TItem> = {
+  listId: string;
+  filteringScore: number;
+  isMatch: boolean;
+  item: TItem;
+};

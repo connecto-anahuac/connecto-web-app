@@ -1,4 +1,5 @@
 import {
+  FilterableItem,
   FilterCondition,
   FilterDefinition,
   FilterPrimitive,
@@ -204,6 +205,22 @@ export function matchesCondition<TItem>(
   }
 }
 
+function matchesAllConditions<TItem>(
+  item: TItem,
+  conditions: FilterCondition[],
+  definitionMap: Map<string, FilterDefinition<TItem>>,
+): boolean {
+  // AND 検索
+  return conditions.every((condition) => {
+    const definition = definitionMap.get(condition.fieldKey);
+    if (!definition) {
+      return false;
+    }
+
+    return matchesCondition(item, condition, definition);
+  });
+}
+
 export function applyFilters<TItem>(
   items: TItem[],
   definitions: FilterDefinition<TItem>[],
@@ -212,21 +229,64 @@ export function applyFilters<TItem>(
   if (conditions.length === 0) {
     return items;
   }
-  
+
   const definitionMap = new Map(
     definitions.map((definition) => [definition.key, definition]),
   );
 
+  return items.filter((item) => matchesAllConditions(item, conditions, definitionMap));
+}
 
-  return items.filter((item) =>
-    // AND 検索
-    conditions.every((condition) => {
-      const definition = definitionMap.get(condition.fieldKey);
-      if (!definition) {
-        return false;
-      }
 
-      return matchesCondition(item, condition, definition);
-    }),
+
+
+/**
+ * items を FilterableItem に変換する。
+ * list/card どちらの表示にも共通で使える形。
+ * - isMatch: 条件が無ければ常に true、あれば AND 検索で判定
+ * - filteringScore: 現状は未実装（sort 未対応）のため常に 0
+ */
+function resolveListId<TItem>(item: TItem, index: number): string {
+  if (
+    typeof item === "object" &&
+    item !== null &&
+    "id" in item &&
+    typeof (item as { id?: unknown }).id === "string"
+  ) {
+    return (item as { id: string }).id;
+  }
+
+  return `filterable-item-${index}`;
+}
+
+export function toFilterableItems<TItem>(items: TItem[]): FilterableItem<TItem>[] {
+  return items.map((item, index) => ({
+    listId: resolveListId(item, index),
+    filteringScore: 0,
+    isMatch: true,
+    item,
+  }));
+}
+
+
+/**
+ * 既存の FilterableItem[] に対して condition を評価し、isMatch を更新する。
+ * condition が変化した時にこれを呼び出して filterableItems を更新する想定。
+ * listId / filteringScore / item はそのまま引き継ぐ。
+ */
+export function applyFilterMatches<TItem>(
+  filterableItems: FilterableItem<TItem>[],
+  definitions: FilterDefinition<TItem>[],
+  conditions: FilterCondition[],
+): FilterableItem<TItem>[] {
+  const definitionMap = new Map(
+    definitions.map((definition) => [definition.key, definition]),
   );
+
+  return filterableItems.map((filterableItem) => ({
+    ...filterableItem,
+    isMatch:
+      conditions.length === 0 ||
+      matchesAllConditions(filterableItem.item, conditions, definitionMap),
+  }));
 }

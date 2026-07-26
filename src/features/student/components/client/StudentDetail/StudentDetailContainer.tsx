@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import { StudentDetailPresenter } from "./StudentDetailPresenter";
-import { useStudentDetail } from "./useStudentDetail";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
-import ContentTitleSection from "@/components/ContentTitleSection";
-import DataSection from "@/components/datasection/DataSection";
-import { StudentDiagram } from "./StudentDiagram";
+import { useFilter } from "@/features/search/shared/useFilter";
+import { fetchStudentPlan } from "@/external/handler/student/query.client";
+import { STUDENT_GRADE_FILTER_FIELDS } from "@/features/student/types/student-grade-filter-fields";
+import { toStudentClassItemUI } from "@/features/student/types";
 
 type Props = {
   studentId: string;
@@ -17,28 +16,18 @@ export function StudentDetailContainer({ studentId }: Props) {
   const { loading: staticLoading, studentDetail } =
     useStaticStudentDetail(studentId);
 
-  const {
-    loading: DynamicLoading,
+  const { loading: DynamicLoading,
     definitions,
-    // searchText,
-    // setSearchText,
-    hasActiveFilters,
-    filteredItems,
-    allItems,
-    matchingPlanIds,
-  } = useStudentDetail(studentId);
+    filterableItems } = useFilter(STUDENT_GRADE_FILTER_FIELDS,()=>fetchStudentPlan(studentId),toStudentClassItemUI);
 
   return (
     <StudentDetailPresenter
       loading={staticLoading && DynamicLoading}
-      allGrades={allItems}
-      filteredGrades={filteredItems}
+      filterableItems={filterableItems}
       studentDetail={studentDetail}
       definitions={definitions}
       searchText={"searchText"}
       onSearchTextChange={() => {}}
-      matchingPlanIds={matchingPlanIds}
-      hasActiveFilters={hasActiveFilters}
       // isFilterOpen={isFilterOpen}
       // onFilterToggle={() => setIsFilterOpen((open) => !open)}
     />

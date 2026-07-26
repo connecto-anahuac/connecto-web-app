@@ -15,7 +15,7 @@ type UseFiltersResult<TItem> = {
     conditions: FilterCondition[];
 }
 
-export function useFilters<TItem>(
+export function useFiltersOLD<TItem>(
   fields: FilterField<TItem>[],
   targetFilterableList: TItem[],
 ):UseFiltersResult<TItem> {

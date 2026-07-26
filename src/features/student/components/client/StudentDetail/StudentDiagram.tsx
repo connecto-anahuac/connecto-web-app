@@ -4,23 +4,18 @@ import StudentClassCardView from "@/features/student/components/ui/ClassCardView
 import type {
   StudentClassItem,
 } from "@/features/student/types";
+import type { FilterableItem } from "@/features/search/shared/filter-definition";
 import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
 
 type Props = ComponentProps<"div"> & {
   loading: boolean;
-  filteredGrades: StudentClassItem[];
-  allGrades: StudentClassItem[];
-  matchingPlanIds: Set<string>;
-  hasActiveFilters: boolean;
+  filterableItems: FilterableItem<StudentClassItem>[];
 };
 
 export function StudentDiagram({
   loading,
-  allGrades,
-  filteredGrades,
-  matchingPlanIds,
-  hasActiveFilters,
+  filterableItems,
   className,
   ...props
 }: Props) {
@@ -28,6 +23,7 @@ export function StudentDiagram({
     return <div>Loading...</div>;
   }
 
+  const allGrades = filterableItems.map((filterableItem) => filterableItem.item);
 
   const semesters = Array.from(
     new Set(allGrades.map((item) => item.semester).filter(Boolean)),
@@ -107,13 +103,11 @@ export function StudentDiagram({
         })}
 
         {/* data */}
-        {allGrades.map((item) => (
+        {filterableItems.map(({ item, isMatch }) => (
           <div
             key={item.id}
             className={
-              hasActiveFilters && !matchingPlanIds.has(item.id)
-                ? "grayscale opacity-45 transition"
-                : "transition"
+              !isMatch ? "grayscale opacity-45 transition" : "transition"
             }
             style={{
               gridColumnStart: item.semester + 1 || 2,

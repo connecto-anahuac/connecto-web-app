@@ -20,7 +20,7 @@ import {
   buildStudentDetail,
   type StudentDetail,
 } from "../../ui/student-summary-panel/student-summary.types";
-import { useFilters } from "@/features/search/shared/useFilters";
+import { useFiltersOLD } from "@/features/search/shared/useFiltersOLD";
 import { STUDENT_GRADE_FILTER_FIELDS } from "@/features/student/types/student-grade-filter-fields";
 import { FilterDefinition } from "@/features/search/shared/filter-definition";
 import { applyFilters } from "@/features/search/shared/filter-engine";
@@ -72,7 +72,7 @@ export function useStudentDetail(studentId: string): UseStudentDetailResult {
     };
   }, [studentId]);
 
-  const { definitions, hasActiveFilters, conditions } = useFilters(
+  const { definitions, hasActiveFilters, conditions } = useFiltersOLD(
     STUDENT_GRADE_FILTER_FIELDS,
     items,
   );
