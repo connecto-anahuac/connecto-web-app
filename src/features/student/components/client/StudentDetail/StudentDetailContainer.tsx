@@ -3,7 +3,11 @@
 import { StudentDetailPresenter } from "./StudentDetailPresenter";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
 import { useFilter } from "@/features/search/shared/useFilter";
-import { STUDENT_GRADE_FILTER_FIELDS } from "@/features/student/types/student-grade-filter-fields";
+import {
+  STUDENT_GRADE_FILTER_FIELDS,
+  STUDENT_GRADE_FILTER_PRESET,
+} from "@/features/student/types/student-grade-filter-fields";
+import { useFilterPreset } from "@/features/search/shared/usePresetFilter";
 
 type Props = {
   studentId: string;
@@ -18,6 +22,7 @@ export function StudentDetailContainer({ studentId }: Props) {
     STUDENT_GRADE_FILTER_FIELDS,
     studentGrades,
   );
+  const presets = useFilterPreset(STUDENT_GRADE_FILTER_PRESET);
 
   return (
     <StudentDetailPresenter
@@ -27,6 +32,7 @@ export function StudentDetailContainer({ studentId }: Props) {
       definitions={definitions}
       searchText={"searchText"}
       onSearchTextChange={() => {}}
+      presets={presets}
       // isFilterOpen={isFilterOpen}
       // onFilterToggle={() => setIsFilterOpen((open) => !open)}
     />

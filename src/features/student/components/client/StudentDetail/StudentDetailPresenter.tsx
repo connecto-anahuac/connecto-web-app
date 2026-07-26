@@ -6,6 +6,7 @@ import type { StudentDetail } from "../../ui/student-summary-panel/student-summa
 import ContentTitleSection from "@/components/ContentTitleSection";
 import DataSection from "@/components/datasection/DataSection";
 import { StudentDiagram } from "./StudentDiagram";
+import type { FilterPreset } from "@/features/search/shared/filter-preset-type";
 
 type Props = {
   loading: boolean;
@@ -14,6 +15,7 @@ type Props = {
   definitions: FilterDefinition<StudentClassItem>[];
   searchText: string;
   onSearchTextChange: (value: string) => void;
+  presets: readonly FilterPreset[];
   // isFilterOpen: boolean;
   // onFilterToggle: () => void;
 };
@@ -25,6 +27,7 @@ export function StudentDetailPresenter({
   definitions,
   searchText,
   onSearchTextChange,
+  presets,
   // isFilterOpen,
   // onFilterToggle,
 }: Props) {
@@ -44,6 +47,7 @@ export function StudentDetailPresenter({
       <DataSection
         definitions={definitions}
         className="w-full flex-1 min-h-0"
+        presets={presets}
         listDiagram={<div> LIST VIEW</div>}
         cardDiagram={
           <StudentDiagram loading={loading} filterableItems={filterableItems} />

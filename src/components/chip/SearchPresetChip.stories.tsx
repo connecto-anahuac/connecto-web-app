@@ -30,13 +30,13 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     children: 'Ambiental',
-    isSelected: false,
+    selected: false,
   },}
 
 export const NumericValue: Story = {
   args: {
     children: 'Ambiental',
-    isSelected: true,
+    selected: true,
   },
 }
 
@@ -44,7 +44,7 @@ export const NumericValue: Story = {
 export const lLsts: Story = {
   render: () => (
     <div className="flex gap-1">
-      <SearchPresetChip isSelected>
+      <SearchPresetChip selected>
         TIND
       </SearchPresetChip>
       <SearchPresetChip >

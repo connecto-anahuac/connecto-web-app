@@ -10,6 +10,7 @@ import IconButton from "../button/IconButton";
 import Button from "../button/Button";
 import { FilterDefinition } from "@/features/search/shared/filter-definition";
 import FilterButtonGroup from "../button/FilterButtonGroup";
+import type { FilterPreset } from "@/features/search/shared/filter-preset-type";
 
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
 
@@ -23,10 +24,12 @@ type Props<TItem> = ComponentProps<"div"> & {
   onListClick?: () => void;
   onCardViewClick?: () => void;
   onViewChange?: (view: "list" | "card") => void;
+  presets?: readonly FilterPreset[];
 };
 export default function DataSection<TItem>({
   className,
   children,
+  presets,
   onListClick,
   onCardViewClick,
   onViewChange,
@@ -102,10 +105,15 @@ export default function DataSection<TItem>({
       {/* when changed the chip size, still keep the height */}
       {/* //TODO presetfilterchip */}
       <div className="flex gap-3 items-center h-5">
-        <SearchPresetChip>Ambiental</SearchPresetChip>
-        <SearchPresetChip>Civil</SearchPresetChip>
-        <SearchPresetChip>Industrial</SearchPresetChip>
-        <SearchPresetChip>TIND</SearchPresetChip>
+        {presets?.map((preset) => (
+          <SearchPresetChip
+            key={preset.label}
+            selected={preset.isSelected}
+            onClick={preset.onToggle}
+          >
+            {preset.label}
+          </SearchPresetChip>
+        ))}
       </div>
 
       {/* 3 line */}
