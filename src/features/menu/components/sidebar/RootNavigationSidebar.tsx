@@ -1,8 +1,11 @@
+"use client";
+
 import type { ComponentProps } from "react";
 
 import NavigationItem from "@/components/NavigationItem";
 import type { IconName } from "@/components/icon";
 import { cn } from "@/shared/lib/util";
+import { useMenu } from "../useMenu";
 
 
 type RootNavigationEntry = {
@@ -22,6 +25,8 @@ const ROOT_NAVIGATION_ITEMS: RootNavigationEntry[] = [
 ];
 
 export function RootNavigationSidebar({ className, ...props }: Props) {
+  const isSidebarOpen = useMenu((state) => state.isSidebarOpen);
+
   return (
     <nav
       aria-label="Root navigation"
@@ -35,6 +40,7 @@ export function RootNavigationSidebar({ className, ...props }: Props) {
           icon={item.icon}
           label={item.label}
           className="w-full"
+          hasLabel={isSidebarOpen}
         />
       ))}
     </nav>

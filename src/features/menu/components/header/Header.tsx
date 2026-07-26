@@ -1,3 +1,5 @@
+"use client";
+
 import type { ComponentProps } from "react";
 import Avator from "@/components/Avator";
 
@@ -8,6 +10,8 @@ import IconButtonOLD from "@/components/button/IconButton2";
 import SearchBar from "@/components/search/SearchBar";
 import ConnectoLogo from "@/components/icon/logo/Connecto";
 import IconButton from "@/components/button/IconButton";
+import PanelControllButton from "@/components/button/PanelControllButton";
+import { useMenu } from "../useMenu";
 
 type RootNavigationEntry = {
   label: string;
@@ -25,6 +29,9 @@ const ROOT_NAVIGATION_ITEMS: RootNavigationEntry[] = [
 ];
 
 export default function Header({ className, ...props }: Props) {
+  const isSidebarOpen = useMenu((state) => state.isSidebarOpen);
+  const toggleSidebar = useMenu((state) => state.toggleSidebar);
+
   return (
     <div
       className={cn("flex items-center px-body-x h-10", className)}
@@ -36,16 +43,30 @@ export default function Header({ className, ...props }: Props) {
         <span className="text-OnSurfaceVariant text-xs font-semibold">
           Connecto
         </span>
-        <IconButtonOLD icon="panelToLeft" className="size-6" />
+        {/* <IconButton icon="panelToLeft" size="lg" /> */}
+        <PanelControllButton
+          size="lg"
+          appearance="text"
+          intent="lightInk"
+          isOpen={isSidebarOpen}
+          onClick={toggleSidebar}
+        />
       </div>
 
       {/* navigation */}
       <div className="flex items-center gap-0 ml-8 mr-auto text-OnSurface">
-        <IconButtonOLD icon="arrow" className="size-6" />
+        <IconButton icon="arrow" size="lg" disabled={false} />
+        <IconButton
+          icon="arrow"
+          size="lg"
+          disabled={true}
+          className="transform rotate-180 "
+        />
+        {/* <IconButtonOLD icon="arrow" className="size-6" />
         <IconButtonOLD
           icon="arrow"
           className="size-6 transform rotate-180 text-OnSurface/40"
-        />
+        /> */}
         <span className="ml-5 font-semibold text-OnSurfaceVariant text-xs">
           alumnos
         </span>
@@ -64,7 +85,7 @@ export default function Header({ className, ...props }: Props) {
             size="medium"
             className="bg-(--ADM-strong)"
           />
-          <span className="absolute inset-0 rounded-full bg-black/20 opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100 pointer-events-none" />
+          <span className="absolute inset-0 rounded-full bg-black/20 opacity-0 transition-opacity duration-150 group-hover:opacity-40 group-focus-visible:opacity-40 pointer-events-none" />
         </button>
       </div>
     </div>

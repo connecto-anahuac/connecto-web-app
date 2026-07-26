@@ -30,6 +30,7 @@ export default function IconButton({
 
   return (
     <button
+      disabled={disabled }
       className={cn(
         iconButtonVariants({
           intent: intent,
