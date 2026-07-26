@@ -28,8 +28,8 @@ import { applyFilters } from "@/features/search/shared/filter-engine";
 type UseStudentDetailResult = {
   loading: boolean;
   definitions: FilterDefinition<StudentClassItem>[];
-  searchText: string;
-  setSearchText: (value: string) => void;
+  // searchText: string;
+  // setSearchText: (value: string) => void;
   hasActiveFilters: boolean;
   allItems: StudentClassItem[];
   filteredItems: StudentClassItem[];
@@ -72,23 +72,23 @@ export function useStudentDetail(studentId: string): UseStudentDetailResult {
     };
   }, [studentId]);
 
-  const { definitions, searchText, setSearchText, hasActiveFilters,relevantConditions } =
-    useFilters(STUDENT_GRADE_FILTER_FIELDS, items);
-  
-    const filteredItems = useMemo(
-      () => applyFilters(items, definitions, relevantConditions),
-      [items, definitions, relevantConditions],
-    );
-    const matchingPlanIds = useMemo(
+  const { definitions, hasActiveFilters, conditions } = useFilters(
+    STUDENT_GRADE_FILTER_FIELDS,
+    items,
+  );
+
+  const filteredItems = useMemo(
+    () => applyFilters(items, definitions, conditions),
+    [items, definitions, conditions],
+  );
+  const matchingPlanIds = useMemo(
     () => new Set(filteredItems.map((item) => item.id)),
     [filteredItems],
   );
-  
+
   return {
     loading,
     definitions,
-    searchText,
-    setSearchText,
     hasActiveFilters,
     allItems: items,
     filteredItems,

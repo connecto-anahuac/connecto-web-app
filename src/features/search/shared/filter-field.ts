@@ -1,15 +1,13 @@
 import { IconName } from "@/components/icon";
-import {
-  FilterPrimitive,
-  Operator,
-  ValueType,
-} from "./filter-definition";
+import { FilterPrimitive, Operator, ValueType } from "./filter-definition";
 
 /**
  * option フィルターの選択肢。
  * select menuの選択アイテム
  */
-export type FilterFieldOption<TValue extends FilterPrimitive = FilterPrimitive> = {
+export type FilterFieldOption<
+  TValue extends FilterPrimitive = FilterPrimitive,
+> = {
   label: string;
   value: TValue;
 };
@@ -23,7 +21,10 @@ export type FilterFieldOption<TValue extends FilterPrimitive = FilterPrimitive> 
  */
 // TItem ->実際の値
 // TValue -> フィルターで扱う値の型
-type BaseFilterField<TItem, TValue extends FilterPrimitive = FilterPrimitive> = {
+type BaseFilterField<
+  TItem,
+  TValue extends FilterPrimitive = FilterPrimitive,
+> = {
   key: string;
   label: string;
   icon: IconName;
@@ -42,22 +43,41 @@ export type FreeFilterField<
 };
 
 /** 選択肢入力（select / multiSelect） */
+type StaticOptionFilterField<
+  TItem,
+  TValue extends FilterPrimitive = FilterPrimitive,
+> = BaseFilterField<TItem, TValue> & {
+  /** 確定している選択肢は static に持たせる */
+  options: FilterFieldOption<TValue>[];
+  /** true の場合、選択肢を dataset から実行時に導出する（不確定な集合向け） */
+  dynamicOptions?: never;
+};
+
+type DynamicOptionFilterField<
+  TItem,
+  TValue extends FilterPrimitive = FilterPrimitive,
+> = BaseFilterField<TItem, TValue> & {
+  /** 確定している選択肢は static に持たせる */
+  options?: never;
+  /** true の場合、選択肢を dataset から実行時に導出する（不確定な集合向け） */
+  dynamicOptions: boolean;
+};
+
 export type OptionFilterField<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
 > = BaseFilterField<TItem, TValue> & {
   inputType: "option";
-  /** 確定している選択肢は static に持たせる */
-  options?: FilterFieldOption<TValue>[];
-  /** true の場合、選択肢を dataset から実行時に導出する（不確定な集合向け） */
-  dynamicOptions?: boolean;
   /**
    * 複数選択を許可するか（チェックリスト UI / operator "in"）。
    * データ型（valueType）は単一値でも、フィルターとしては複数値を選べるため
    * ここで UI の選択多重度を制御する。デフォルトは複数選択（true）。
    */
   multiple?: boolean;
-};
+} & (
+    | StaticOptionFilterField<TItem, TValue>
+    | DynamicOptionFilterField<TItem, TValue>
+  );
 
 export type FilterField<
   TItem,
@@ -68,8 +88,9 @@ export type FilterField<
  * 型付きの field を宣言するためのヘルパー。
  * 型推論を効かせつつ FilterField として扱えるようにする。
  */
-export function defineFilterField<TItem, TValue extends FilterPrimitive = FilterPrimitive>(
-  field: FilterField<TItem, TValue>,
-): FilterField<TItem, TValue> {
+export function defineFilterField<
+  TItem,
+  TValue extends FilterPrimitive = FilterPrimitive,
+>(field: FilterField<TItem, TValue>): FilterField<TItem, TValue> {
   return field;
 }

@@ -7,19 +7,26 @@ import SelectMenu from "@/components/selectMenu";
 import { FilterCard } from "./FilterCard";
 import { FilterSearchInput } from "./FilterSearchInput";
 import { FilterFieldHeader } from "./FilterFieldHeader";
-import { FilterDefinition, FilterPrimitive } from "../../shared/filter-definition";
+import {
+  FilterDefinition,
+  FilterPrimitive,
+} from "../../shared/filter-definition";
 import { useFilterCondition } from "../../shared/use-filter-condition";
 import { IconName } from "@/components/icon";
 
 type Props<TItem> = {
   filter: FilterDefinition<TItem>;
-    icon?: IconName;
+  icon?: IconName;
 } & ComponentPropsWithRef<"section">;
 
 /**
  * option フィールド向けのチェックリスト型フィルター（複数選択 / operator "in"）。
  */
-export function MultiSelectFilter<TItem>({ filter, icon, ...props }: Props<TItem>) {
+export function MultiSelectFilter<TItem>({
+  filter,
+  icon,
+  ...props
+}: Props<TItem>) {
   const { condition, operator, setValue, setOperator, clear } =
     useFilterCondition(filter);
   const [query, setQuery] = useState("");
@@ -74,7 +81,9 @@ export function MultiSelectFilter<TItem>({ filter, icon, ...props }: Props<TItem
       ? selectedValues.filter((current) => current !== key)
       : [...selectedValues, key];
 
-    const nextValues = nextKeys.map((current) => valueByKey.get(current) ?? current);
+    const nextValues = nextKeys.map(
+      (current) => valueByKey.get(current) ?? current,
+    );
     setValue(nextValues, "in");
   };
 
@@ -98,19 +107,21 @@ export function MultiSelectFilter<TItem>({ filter, icon, ...props }: Props<TItem
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         onClear={() => setQuery("")}
-        isFocusedInitially={true} 
+        isFocusedInitially={true}
       />
 
-      <SelectMenu
-        isMulti
-        isOpen
-        hoveredIndex={hoveredIndex}
-        selectedValues={selectedValues}
-        onHoverItem={setHoveredIndex}
-        onSelectItem={toggleValue}
-        className="p-0 border-0 bg-transparent"
-        options={filteredOptions}
-      />
+      <div className="w-full   max-h-96 h-fit overflow-y-auto">
+        <SelectMenu
+          isMulti
+          isOpen
+          hoveredIndex={hoveredIndex}
+          selectedValues={selectedValues}
+          onHoverItem={setHoveredIndex}
+          onSelectItem={toggleValue}
+          className="p-0 border-0 bg-transparent"
+          options={filteredOptions}
+        />
+      </div>
     </FilterCard>
   );
 }

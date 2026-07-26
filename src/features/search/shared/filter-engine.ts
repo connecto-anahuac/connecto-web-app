@@ -209,13 +209,14 @@ export function applyFilters<TItem>(
   definitions: FilterDefinition<TItem>[],
   conditions: FilterCondition[],
 ): TItem[] {
+  if (conditions.length === 0) {
+    return items;
+  }
+  
   const definitionMap = new Map(
     definitions.map((definition) => [definition.key, definition]),
   );
 
-  if (conditions.length === 0) {
-    return items;
-  }
 
   return items.filter((item) =>
     // AND 検索

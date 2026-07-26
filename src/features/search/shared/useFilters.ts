@@ -8,30 +8,29 @@ import { STUDENT_GRADE_FILTER_KEYS } from "@/features/student/types/student-grad
 import { useFilterStore } from "@/features/search/components/useFilterStore";
 import { FilterField } from "@/features/search/shared/filter-field";
 
+
+type UseFiltersResult<TItem> = {
+    definitions: FilterDefinition<TItem>[];
+    hasActiveFilters: boolean;
+    conditions: FilterCondition[];
+}
+
 export function useFilters<TItem>(
   fields: FilterField<TItem>[],
-  filterableList: TItem[],
-):{
-    definitions: FilterDefinition<TItem>[];
-    searchText: string;
-    setSearchText: (value: string) => void;
-    hasActiveFilters: boolean;
-    relevantConditions: FilterCondition[];
-} {
+  targetFilterableList: TItem[],
+):UseFiltersResult<TItem> {
   // TODO textsearcの実装
   const conditions = useFilterStore((state) => state.conditions);
   const upsertCondition = useFilterStore((state) => state.upsertCondition);
   const removeCondition = useFilterStore((state) => state.removeCondition);
 
-  const FILTER_KEY_LOOKUP: Record<string, boolean> = Object.values(
-    STUDENT_GRADE_FILTER_KEYS,
-  ).reduce(
-    (acc, value) => {
-      acc[value] = true;
-      return acc;
-    },
-    {} as Record<string, boolean>,
-  );
+  // const FILTER_KEY_LOOKUP: Record<string, boolean> = Object.keys(conditions).reduce(
+  //   (acc, key) => {
+  //     acc[key] = true;
+  //     return acc;
+  //   },
+  //   {} as Record<string, boolean>,
+  // );
 
   // const FILTER_KEY_LOOKUP: Record<string, boolean> = Object.values(
   //   STUDENT_GRADE_FILTER_KEYS,
@@ -44,7 +43,7 @@ export function useFilters<TItem>(
   // );
 
 
-  /* 
+  /*
   const FILTER_KEY_LOOKUP: Record<string, true> = {
     [STUDENT_PLAN_FILTER_KEYS.className]: true,
     [STUDENT_PLAN_FILTER_KEYS.classCodeAndNumber]: true,
@@ -53,51 +52,52 @@ export function useFilters<TItem>(
   };
   */
 
-  function getRelevantConditions(conditions: FilterCondition[]) {
-    return conditions.filter(
-      (condition) => FILTER_KEY_LOOKUP[condition.fieldKey] === true,
-    );
-  }
+  // TODO filterを全共通にしなければいらない
+  // function getRelevantConditions(conditions: FilterCondition[]) {
+  //   return conditions.filter(
+  //     (condition) => FILTER_KEY_LOOKUP[condition.fieldKey] === true,
+  //   );
+  // }
 
-  const relevantConditions = getRelevantConditions(conditions);
+  // const conditions = getRelevantConditions(conditions);
 
   const definitions = useMemo(
-    () => buildFilterDefinitions(fields, filterableList),
-    [fields, filterableList],
+    () => buildFilterDefinitions(fields, targetFilterableList),
+    [fields, targetFilterableList],
   );
 
   //!Todo textsearcの実装
-  const classNameCondition = relevantConditions.find(
-    (condition) => condition.fieldKey === STUDENT_GRADE_FILTER_KEYS.className,
-  );
+  // const classNameCondition = conditions.find(
+  //   (condition) => condition.fieldKey === STUDENT_GRADE_FILTER_KEYS.className,
+  // );
 
-  const searchText =
-    typeof classNameCondition?.value === "string"
-      ? classNameCondition.value
-      : "";
+  // const searchText =
+  //   typeof classNameCondition?.value === "string"
+  //     ? classNameCondition.value
+  //     : "";
 
-  const setSearchText = useCallback(
-    (value: string) => {
-      if (value === "") {
-        removeCondition(STUDENT_GRADE_FILTER_KEYS.className);
-        return;
-      }
+  // const setSearchText = useCallback(
+  //   (value: string) => {
+  //     if (value === "") {
+  //       removeCondition(STUDENT_GRADE_FILTER_KEYS.className);
+  //       return;
+  //     }
 
-      upsertCondition({
-        id: STUDENT_GRADE_FILTER_KEYS.className,
-        fieldKey: STUDENT_GRADE_FILTER_KEYS.className,
-        operator: classNameCondition?.operator ?? "contains",
-        value,
-      });
-    },
-    [classNameCondition?.operator, removeCondition, upsertCondition],
-  );
+  //     upsertCondition({
+  //       id: STUDENT_GRADE_FILTER_KEYS.className,
+  //       fieldKey: STUDENT_GRADE_FILTER_KEYS.className,
+  //       operator: classNameCondition?.operator ?? "contains",
+  //       value,
+  //     });
+  //   },
+  //   [classNameCondition?.operator, removeCondition, upsertCondition],
+  // );
 
   return {
     definitions,
-    searchText,
-    setSearchText,
-    hasActiveFilters: relevantConditions.length > 0,
-    relevantConditions
+    // searchText,
+    // setSearchText,
+    hasActiveFilters: conditions.length > 0,
+    conditions: conditions
   };
 }

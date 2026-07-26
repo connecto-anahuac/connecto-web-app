@@ -54,6 +54,7 @@ type BaseFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitiv
 //自由入力
 type FreeFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = BaseFilterDefinition<TItem, TValue> & {
   inputType: "free";
+  options?: never;
 };
 
 // 選択肢入力

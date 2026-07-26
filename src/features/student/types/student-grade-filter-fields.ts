@@ -26,6 +26,7 @@ export const STUDENT_GRADE_FILTER_FIELDS: FilterField<StudentClassItem>[] = [
     icon:"hashmark",
     valueType: "enum",
     inputType: "option",
+    dynamicOptions: true,
     getValue: (item) => `${item.keyCode}${item.keyNumber}`.trim(),
   }),
   defineFilterField<StudentClassItem>({

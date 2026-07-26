@@ -20,8 +20,8 @@ export function StudentDetailContainer({ studentId }: Props) {
   const {
     loading: DynamicLoading,
     definitions,
-    searchText,
-    setSearchText,
+    // searchText,
+    // setSearchText,
     hasActiveFilters,
     filteredItems,
     allItems,
@@ -35,8 +35,8 @@ export function StudentDetailContainer({ studentId }: Props) {
       filteredGrades={filteredItems}
       studentDetail={studentDetail}
       definitions={definitions}
-      searchText={searchText}
-      onSearchTextChange={setSearchText}
+      searchText={"searchText"}
+      onSearchTextChange={() => {}}
       matchingPlanIds={matchingPlanIds}
       hasActiveFilters={hasActiveFilters}
       // isFilterOpen={isFilterOpen}
