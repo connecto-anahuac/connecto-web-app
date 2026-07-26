@@ -1,5 +1,5 @@
 import type { StudentListItem } from "@/features/students/types/student-list-item";
-import { defineFilterField, type FilterField } from "../../search/shared/filter-field";
+import { defineFilterField, type FilterDefinitionConfig } from "../../search/shared/filterField";
 
 /**
  * Student フィルターの field key。
@@ -40,7 +40,7 @@ export const STUDENT_STATUS_OPTIONS = [{ label: "Activo", value: "Activo" },
  *   - 実行時に値が確定するもの（status / semester / plan）は dynamicOptions で dataset から導出
  *   - 確定しているもの（career）は static options
  */
-export const STUDENT_FILTER_FIELDS: FilterField<StudentListItem>[] = [
+export const STUDENT_FILTER_FIELDS: FilterDefinitionConfig<StudentListItem>[] = [
   defineFilterField<StudentListItem>({
     key: STUDENT_FILTER_KEYS.name,
     label: "Nombre",

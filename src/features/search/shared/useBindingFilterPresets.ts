@@ -2,17 +2,17 @@
 
 import { useCallback, useMemo } from "react";
 import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
-import type { FilterPreset, FilterPresetConfig } from "./filter-preset-type";
+import type { FilterPreset, FilterPresetConfig } from "./filterPreset.type";
 import {
   getFilterPresetNextCondition,
   isFilterPresetSelected,
-} from "./filter-preset-type";
+} from "./filterPreset.type";
 
 /**
  * Converts declarative preset configurations into controlled chip props backed
  * by the current FilterProvider store.
  */
-export function useFilterPreset<TFilterKey extends string>(
+export function useBindingFilterPresets<TFilterKey extends string>(
   presetConfigs: readonly FilterPresetConfig<TFilterKey>[],
 ): FilterPreset[] {
   const conditions = useFilterStoreProvider((state) => state.conditions);

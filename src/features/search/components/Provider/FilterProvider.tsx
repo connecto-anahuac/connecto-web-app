@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, PropsWithChildren, useRef } from "react";
-import { createFilterStore, FilterStore } from "../../shared/filter-store";
+import { createFilterStore, FilterStore } from "../../shared/filterStore";
 import { StoreApi } from "zustand";
 
 export const FilterContext = createContext<StoreApi<FilterStore> | null>(null);

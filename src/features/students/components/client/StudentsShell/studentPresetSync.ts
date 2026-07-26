@@ -1,5 +1,5 @@
-import type { FilterCondition } from "../../../../search/shared/filter-definition";
-import { STUDENT_FILTER_KEYS } from "../../../../student/types/student-filter-fields";
+import type { FilterCondition } from "../../../../search/shared/filterDefinition";
+import { STUDENT_FILTER_KEYS } from "../../../../student/types/studentFilterConfigs";
 
 const ALERTA_RANGE: [number, number] = [1, 2];
 const ADVERTENCIA_THRESHOLD = 2;

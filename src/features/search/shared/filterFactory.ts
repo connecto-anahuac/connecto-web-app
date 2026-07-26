@@ -2,14 +2,14 @@ import {
   Editor,
   FilterDefinition,
   FilterPrimitive,
-} from "./filter-definition";
-import { FilterField, FilterFieldOption } from "./filter-field";
-import { getOperatorsForValueType } from "./operator-policy";
+} from "./filterDefinition";
+import { FilterDefinitionConfig, FilterFieldOption } from "./filterField";
+import { getOperatorsForValueType } from "./operatorPolicy";
 
 /**
  * valueType + inputType から描画すべき editor（UIコンポーネント種別）を導出する。
  */
-function deriveEditor<TItem>(field: FilterField<TItem>): Editor {
+function deriveEditor<TItem>(field: FilterDefinitionConfig<TItem>): Editor {
   if (field.inputType === "option") {
     // 複数選択（デフォルト）はチェックリスト、明示的に単一選択なら select。
     // return field.multiple === false ? "select" : "multiSelect";
@@ -30,7 +30,7 @@ function deriveEditor<TItem>(field: FilterField<TItem>): Editor {
  * 実データ から distinct な値を集めて選択肢を導出する（dynamicOptions 用）。
  */
 function deriveOptionsFromDataset<TItem>(
-  field: FilterField<TItem>,
+  field: FilterDefinitionConfig<TItem>,
   dataset: readonly TItem[],
 ): FilterFieldOption[] {
   const seen = new Set<FilterPrimitive>();
@@ -64,7 +64,7 @@ function deriveOptionsFromDataset<TItem>(
  * - options: static（field.options）優先、無ければ dynamicOptions 時に dataset から導出
  */
 export function buildFilterDefinition<TItem>(
-  field: FilterField<TItem>,
+  field: FilterDefinitionConfig<TItem>,
   dataset?: readonly TItem[],
 ): FilterDefinition<TItem> {
   const operators = field.operators ?? getOperatorsForValueType(field.valueType);
@@ -103,7 +103,7 @@ export function buildFilterDefinition<TItem>(
  * FilterField の配列から FilterDefinition の配列を生成する。
  */
 export function buildFilterDefinitions<TItem>(
-  fields: readonly FilterField<TItem>[],
+  fields: readonly FilterDefinitionConfig<TItem>[],
   dataset?: readonly TItem[],
 ): FilterDefinition<TItem>[] {
   return fields.map((field) => buildFilterDefinition(field, dataset));

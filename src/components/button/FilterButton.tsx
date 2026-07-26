@@ -17,7 +17,7 @@ import {
   useFloating,
   useInteractions,
 } from "@floating-ui/react";
-import { FilterDefinition } from "@/features/search/shared/filter-definition";
+import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 
 type ButtonProps<TItem> = Partial<ButtonVariantProps> &
   ComponentProps<"button"> &

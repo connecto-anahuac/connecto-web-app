@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { FilterCondition } from "../../../../search/shared/filter-definition";
+import type { FilterCondition } from "../../../../search/shared/filterDefinition";
 import {
   getStudentPresetNextConditions,
   isStudentPresetSelected,

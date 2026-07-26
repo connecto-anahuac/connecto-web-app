@@ -1,7 +1,7 @@
 import { ComponentProps } from "react";
 import SearchToolToggleButton from "./SearchToolButton";
 import SearchToolModal from "./SearchToolModal";
-import { FilterDefinition } from "../../shared/filter-definition";
+import { FilterDefinition } from "../../shared/filterDefinition";
 
 type Props<TItem> = ComponentProps<"div"> & ComponentProps<"button"> & {
     definitions: FilterDefinition<TItem>[];

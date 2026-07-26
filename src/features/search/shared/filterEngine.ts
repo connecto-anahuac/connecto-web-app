@@ -6,7 +6,7 @@ import {
   FilterRangeValue,
   Operator,
   ValueType,
-} from "./filter-definition";
+} from "./filterDefinition";
 
 function isRangeValue(
   value: FilterCondition["value"],

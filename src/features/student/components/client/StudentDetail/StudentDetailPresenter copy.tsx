@@ -5,7 +5,7 @@ import type {
   StudentClassItem,
   StudentProfile,
 } from "@/features/student/types";
-import type { FilterDefinition } from "@/features/search/shared/filter-definition";
+import type { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import { StudentSummaryPanel } from "../../ui/student-summary-panel/StudentSummaryPanel";
 import type { StudentDetail } from "../../ui/student-summary-panel/student-summary.types";
 import ZoomInIcon from "@/components/icon/ZoomInIcon";

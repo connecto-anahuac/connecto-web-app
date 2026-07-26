@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { buildFilterDefinition, buildFilterDefinitions } from "./filter-factory";
-import { defineFilterField } from "./filter-field";
+import { buildFilterDefinition, buildFilterDefinitions } from "./filterFactory";
+import { defineFilterField } from "./filterField";
 
 type Row = {
   name: string;

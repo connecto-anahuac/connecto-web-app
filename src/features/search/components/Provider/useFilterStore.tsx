@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { useStore } from "zustand";
-import { FilterStore } from "../../shared/filter-store";
+import { FilterStore } from "../../shared/filterStore";
 import { FilterContext } from "./FilterProvider";
 
 export function useFilterStoreProvider<T>(selector: (state: FilterStore) => T) {

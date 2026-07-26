@@ -5,11 +5,11 @@ import type { StudentListItem } from "../../../types/student-list-item";
 import {
   STUDENT_FILTER_FIELDS,
   STUDENT_FILTER_KEYS,
-} from "@/features/student/types/student-filter-fields";
-import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
-import { applyFilters } from "@/features/search/shared/filter-engine";
-import { createFilterStore } from "@/features/search/shared/filter-store";
-import type { FilterCondition } from "@/features/search/shared/filter-definition";
+} from "@/features/student/types/studentFilterConfigs";
+import { buildFilterDefinitions } from "@/features/search/shared/filterFactory";
+import { applyFilters } from "@/features/search/shared/filterEngine";
+import { createFilterStore } from "@/features/search/shared/filterStore";
+import type { FilterCondition } from "@/features/search/shared/filterDefinition";
 import {
   getStudentPresetNextConditions,
   isStudentPresetSelected,

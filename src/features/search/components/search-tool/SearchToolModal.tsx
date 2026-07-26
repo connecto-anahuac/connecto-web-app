@@ -5,7 +5,7 @@ import {
 } from "@/features/home/components/server/icons/HomeIcons";
 import { ComponentProps } from "react";
 import { FilterRenderer } from "../filter/FilterRenderer";
-import { FilterDefinition } from "../../shared/filter-definition";
+import { FilterDefinition } from "../../shared/filterDefinition";
 import { cn } from "@/shared/lib/util";
 
 type Props<TItem> = ComponentProps<"div"> & {

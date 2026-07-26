@@ -1,9 +1,9 @@
 import type { StudentClassItem } from "@/features/student/types";
 import {
   defineFilterField,
-  type FilterField,
-} from "../../search/shared/filter-field";
-import type { FilterPresetConfig } from "@/features/search/shared/filter-preset-type";
+  type FilterDefinitionConfig,
+} from "../../search/shared/filterField";
+import type { FilterPresetConfig } from "@/features/search/shared/filterPreset.type";
 
 export const STUDENT_GRADE_FILTER_KEYS = {
   className: "studentPlan.className",
@@ -15,7 +15,7 @@ export const STUDENT_GRADE_FILTER_KEYS = {
 export type StudentPlanFilterKey =
   (typeof STUDENT_GRADE_FILTER_KEYS)[keyof typeof STUDENT_GRADE_FILTER_KEYS];
 
-export const STUDENT_GRADE_FILTER_FIELDS: FilterField<StudentClassItem>[] = [
+export const STUDENT_GRADE_FILTER_FIELDS: FilterDefinitionConfig<StudentClassItem>[] = [
   defineFilterField<StudentClassItem>({
     key: STUDENT_GRADE_FILTER_KEYS.className,
     label: "Nombre de materia",

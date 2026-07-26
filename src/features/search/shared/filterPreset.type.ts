@@ -2,7 +2,7 @@ import type {
   FilterCondition,
   FilterConditionValue,
   Operator,
-} from "./filter-definition";
+} from "./filterDefinition";
 
 /** A declarative filter condition exposed as a selectable UI preset. */
 export type FilterPresetConfig<TFilterKey extends string = string> = {

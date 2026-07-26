@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import type { StudentListItem } from "@/features/students/types/student-list-item";
 import SearchBar from "@/features/search/components/SearchTool";
-import type { FilterDefinition } from "@/features/search/shared/filter-definition";
+import type { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import FilterPresetBadge from "@/components/FilterPresetBadge";
 import { FilterIcon } from "@/features/home/components/server/icons";
 import SearchTool from "@/features/search/components/search-tool/SearchTool";

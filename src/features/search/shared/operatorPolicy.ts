@@ -3,7 +3,7 @@ import {
   ValueType,
   operatorNumberLabels,
   operatorTextLabels,
-} from "./filter-definition";
+} from "./filterDefinition";
 
 /**
  * データ型（valueType）ごとに使用可能な operator を制限する唯一の定義。

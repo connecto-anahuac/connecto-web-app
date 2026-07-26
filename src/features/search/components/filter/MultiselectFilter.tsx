@@ -10,8 +10,8 @@ import { FilterFieldHeader } from "./FilterFieldHeader";
 import {
   FilterDefinition,
   FilterPrimitive,
-} from "../../shared/filter-definition";
-import { useFilterCondition } from "../../shared/use-filter-condition";
+} from "../../shared/filterDefinition";
+import { useFilterCondition } from "../../shared/useFilterCondition";
 import { IconName } from "@/components/icon";
 
 type Props<TItem> = {

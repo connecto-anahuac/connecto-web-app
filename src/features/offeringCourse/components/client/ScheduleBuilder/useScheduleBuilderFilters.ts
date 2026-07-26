@@ -1,14 +1,14 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { applyFilters } from "@/features/search/shared/filter-engine";
-import type { FilterCondition } from "@/features/search/shared/filter-definition";
-import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
+import { applyFilters } from "@/features/search/shared/filterEngine";
+import type { FilterCondition } from "@/features/search/shared/filterDefinition";
+import { buildFilterDefinitions } from "@/features/search/shared/filterFactory";
 import {
   OFFERING_COURSE_FILTER_FIELDS,
   OFFERING_COURSE_FILTER_KEYS,
 } from "@/features/offeringCourse/types/offering-course-filter-fields";
-import { createFilterStore } from "@/features/search/shared/filter-store";
+import { createFilterStore } from "@/features/search/shared/filterStore";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 

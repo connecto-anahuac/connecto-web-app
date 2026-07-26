@@ -1,11 +1,11 @@
 import { describe, expect, it } from "vitest";
-import type { FilterCondition } from "./filter-definition";
+import type { FilterCondition } from "./filterDefinition";
 import {
   getFilterPresetNextCondition,
   isFilterPresetSelected,
   isSameFilterPresetValue,
   type FilterPresetConfig,
-} from "./filter-preset-type";
+} from "./filterPreset.type";
 
 const failingPreset: FilterPresetConfig<"grade"> = {
   label: "reprobado",

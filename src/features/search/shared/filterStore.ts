@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { FilterCondition } from "./filter-definition";
+import { FilterCondition } from "./filterDefinition";
 
 export type FilterState = {
   conditions: FilterCondition[];

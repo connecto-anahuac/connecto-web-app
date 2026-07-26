@@ -6,8 +6,8 @@ import CloseButton from "@/components/button/CloseButton";
 import SelectMenu from "@/components/selectMenu";
 import { FilterCard } from "./FilterCard";
 import { FilterFieldHeader } from "./FilterFieldHeader";
-import { FilterDefinition, FilterPrimitive } from "../../shared/filter-definition";
-import { useFilterCondition } from "../../shared/use-filter-condition";
+import { FilterDefinition, FilterPrimitive } from "../../shared/filterDefinition";
+import { useFilterCondition } from "../../shared/useFilterCondition";
 import { IconName } from "@/components/icon";
 
 type Props<TItem> = {

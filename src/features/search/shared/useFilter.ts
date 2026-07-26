@@ -4,14 +4,14 @@ import { useMemo } from "react";
 import {
   FilterDefinition,
   FilterableItem,
-} from "@/features/search/shared/filter-definition";
+} from "@/features/search/shared/filterDefinition";
 import {
   applyFilterMatches,
   toFilterableItems,
-} from "@/features/search/shared/filter-engine";
-import { FilterField } from "@/features/search/shared/filter-field";
+} from "@/features/search/shared/filterEngine";
+import { FilterDefinitionConfig } from "@/features/search/shared/filterField";
 import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
-import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
+import { buildFilterDefinitions } from "@/features/search/shared/filterFactory";
 
 type UseFilterResult<TItem> = {
   definitions: FilterDefinition<TItem>[];
@@ -19,7 +19,7 @@ type UseFilterResult<TItem> = {
 };
 
 export function useFilter<TItem extends { id: string }>(
-  fields: FilterField<TItem>[],
+  fields: FilterDefinitionConfig<TItem>[],
   items: TItem[],
 ): UseFilterResult<TItem> {
   const inicializedFilterableItems = useMemo(

@@ -8,9 +8,9 @@ import SearchBar from "../search/SearchBar";
 import { cn } from "@/shared/lib/util";
 import IconButton from "../button/IconButton";
 import Button from "../button/Button";
-import { FilterDefinition } from "@/features/search/shared/filter-definition";
+import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import FilterButtonGroup from "../button/FilterButtonGroup";
-import type { FilterPreset } from "@/features/search/shared/filter-preset-type";
+import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
 
@@ -105,9 +105,9 @@ export default function DataSection<TItem>({
       {/* when changed the chip size, still keep the height */}
       {/* //TODO presetfilterchip */}
       <div className="flex gap-3 items-center h-5">
-        {presets?.map((preset) => (
+        {presets?.map((preset,index) => (
           <SearchPresetChip
-            key={preset.label}
+            key={`${preset.label}-${index}`}
             selected={preset.isSelected}
             onClick={preset.onToggle}
           >

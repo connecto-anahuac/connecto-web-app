@@ -1,12 +1,12 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import type { FilterCondition, FilterDefinition } from "@/features/search/shared/filter-definition";
-import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
+import type { FilterCondition, FilterDefinition } from "@/features/search/shared/filterDefinition";
+import { buildFilterDefinitions } from "@/features/search/shared/filterFactory";
 
-import { STUDENT_GRADE_FILTER_KEYS } from "@/features/student/types/student-grade-filter-fields";
+import { STUDENT_GRADE_FILTER_KEYS } from "@/features/student/types/studentGradeFilterConfigs";
 import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
-import { FilterField } from "@/features/search/shared/filter-field";
+import { FilterDefinitionConfig } from "@/features/search/shared/filterField";
 
 
 type UseFiltersResult<TItem> = {
@@ -16,7 +16,7 @@ type UseFiltersResult<TItem> = {
 }
 
 export function useFiltersOLD<TItem>(
-  fields: FilterField<TItem>[],
+  fields: FilterDefinitionConfig<TItem>[],
   targetFilterableList: TItem[],
 ):UseFiltersResult<TItem> {
   // TODO textsearcの実装

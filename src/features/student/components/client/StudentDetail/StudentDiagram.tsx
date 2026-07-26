@@ -4,7 +4,7 @@ import StudentClassCardView from "@/features/student/components/ui/ClassCardView
 import type {
   StudentClassItem,
 } from "@/features/student/types";
-import type { FilterableItem } from "@/features/search/shared/filter-definition";
+import type { FilterableItem } from "@/features/search/shared/filterDefinition";
 import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
 

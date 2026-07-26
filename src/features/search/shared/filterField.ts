@@ -1,5 +1,5 @@
 import { IconName } from "@/components/icon";
-import { FilterPrimitive, Operator, ValueType } from "./filter-definition";
+import { FilterPrimitive, Operator, ValueType } from "./filterDefinition";
 
 /**
  * option フィルターの選択肢。
@@ -21,7 +21,7 @@ export type FilterFieldOption<
  */
 // TItem ->実際の値
 // TValue -> フィルターで扱う値の型
-type BaseFilterField<
+type BaseFilterDefinitionConfig<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
 > = {
@@ -35,10 +35,10 @@ type BaseFilterField<
 };
 
 /** 自由入力（text / number / date） */
-export type FreeFilterField<
+export type FreeFilterDefinitionConfig<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterField<TItem, TValue> & {
+> = BaseFilterDefinitionConfig<TItem, TValue> & {
   inputType: "free";
 };
 
@@ -46,7 +46,7 @@ export type FreeFilterField<
 type StaticOptionFilterField<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterField<TItem, TValue> & {
+> = BaseFilterDefinitionConfig<TItem, TValue> & {
   /** 確定している選択肢は static に持たせる */
   options: FilterFieldOption<TValue>[];
   /** true の場合、選択肢を dataset から実行時に導出する（不確定な集合向け） */
@@ -56,17 +56,17 @@ type StaticOptionFilterField<
 type DynamicOptionFilterField<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterField<TItem, TValue> & {
+> = BaseFilterDefinitionConfig<TItem, TValue> & {
   /** 確定している選択肢は static に持たせる */
   options?: never;
   /** true の場合、選択肢を dataset から実行時に導出する（不確定な集合向け） */
   dynamicOptions: boolean;
 };
 
-export type OptionFilterField<
+export type OptionFilterDefinitionConfig<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterField<TItem, TValue> & {
+> = BaseFilterDefinitionConfig<TItem, TValue> & {
   inputType: "option";
   /**
    * 複数選択を許可するか（チェックリスト UI / operator "in"）。
@@ -79,10 +79,10 @@ export type OptionFilterField<
     | DynamicOptionFilterField<TItem, TValue>
   );
 
-export type FilterField<
+export type FilterDefinitionConfig<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
-> = FreeFilterField<TItem, TValue> | OptionFilterField<TItem, TValue>;
+> = FreeFilterDefinitionConfig<TItem, TValue> | OptionFilterDefinitionConfig<TItem, TValue>;
 
 /**
  * 型付きの field を宣言するためのヘルパー。
@@ -91,6 +91,6 @@ export type FilterField<
 export function defineFilterField<
   TItem,
   TValue extends FilterPrimitive = FilterPrimitive,
->(field: FilterField<TItem, TValue>): FilterField<TItem, TValue> {
+>(field: FilterDefinitionConfig<TItem, TValue>): FilterDefinitionConfig<TItem, TValue> {
   return field;
 }

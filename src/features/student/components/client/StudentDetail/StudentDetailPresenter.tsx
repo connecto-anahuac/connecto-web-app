@@ -1,12 +1,12 @@
 import type {
   StudentClassItem,
 } from "@/features/student/types";
-import type { FilterDefinition, FilterableItem } from "@/features/search/shared/filter-definition";
+import type { FilterDefinition, FilterableItem } from "@/features/search/shared/filterDefinition";
 import type { StudentDetail } from "../../ui/student-summary-panel/student-summary.types";
 import ContentTitleSection from "@/components/ContentTitleSection";
 import DataSection from "@/components/datasection/DataSection";
 import { StudentDiagram } from "./StudentDiagram";
-import type { FilterPreset } from "@/features/search/shared/filter-preset-type";
+import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 
 type Props = {
   loading: boolean;

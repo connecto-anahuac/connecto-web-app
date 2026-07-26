@@ -2,7 +2,7 @@
 
 import { useState, type ComponentProps } from "react";
 import { cn } from "@/shared/lib/util";
-import { FilterDefinition } from "@/features/search/shared/filter-definition";
+import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import FilterButton from "./FilterButton";
 
 type Props<TItem> = ComponentProps<"div"> & {

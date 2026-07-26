@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { applyFilters, isOperatorAllowed, matchesCondition } from "./filter-engine";
-import { FilterCondition, FilterDefinition } from "./filter-definition";
+import { applyFilters, isOperatorAllowed, matchesCondition } from "./filterEngine";
+import { FilterCondition, FilterDefinition } from "./filterDefinition";
 
 type StudentSearchItem = {
   name: string;

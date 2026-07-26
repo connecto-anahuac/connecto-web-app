@@ -3,8 +3,8 @@ import {
   getOperatorLabel,
   getOperatorsForValueType,
   OPERATORS_BY_VALUE_TYPE,
-} from "./operator-policy";
-import { valueTypes } from "./filter-definition";
+} from "./operatorPolicy";
+import { valueTypes } from "./filterDefinition";
 
 describe("operator-policy", () => {
   it("covers every valueType", () => {

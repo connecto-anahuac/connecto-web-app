@@ -4,10 +4,10 @@ import { StudentDetailPresenter } from "./StudentDetailPresenter";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
 import { useFilter } from "@/features/search/shared/useFilter";
 import {
-  STUDENT_GRADE_FILTER_FIELDS,
+  STUDENT_GRADE_FILTER_FIELDS as STUDENT_GRADE_FILTER_CONFIGS,
   STUDENT_GRADE_FILTER_PRESET,
-} from "@/features/student/types/student-grade-filter-fields";
-import { useFilterPreset } from "@/features/search/shared/usePresetFilter";
+} from "@/features/student/types/studentGradeFilterConfigs";
+import { useBindingFilterPresets } from "@/features/search/shared/useBindingFilterPresets";
 
 type Props = {
   studentId: string;
@@ -19,10 +19,10 @@ export function StudentDetailContainer({ studentId }: Props) {
     useStaticStudentDetail(studentId);
 
   const { definitions, filterableItems } = useFilter(
-    STUDENT_GRADE_FILTER_FIELDS,
+    STUDENT_GRADE_FILTER_CONFIGS,
     studentGrades,
   );
-  const presets = useFilterPreset(STUDENT_GRADE_FILTER_PRESET);
+  const presets = useBindingFilterPresets(STUDENT_GRADE_FILTER_PRESET);
 
   return (
     <StudentDetailPresenter

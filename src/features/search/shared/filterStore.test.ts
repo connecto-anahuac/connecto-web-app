@@ -2,7 +2,7 @@
 
 
 import { beforeEach, describe, expect, it } from "vitest";
-import { createFilterStore } from "./filter-store";
+import { createFilterStore } from "./filterStore";
 import { useFilterStoreProvider } from "../components/Provider/useFilterStore";
 
 describe("filter-store", () => {
