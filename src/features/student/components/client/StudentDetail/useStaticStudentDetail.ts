@@ -9,7 +9,6 @@ import {
   toStudentClassItemUI,
   toStudentProfileUI,
   type StudentClassItem,
-  type StudentProfile,
 } from "@/features/student/types";
 import {
   STUDENT_AVATAR_COLOR_PALETTE,
@@ -24,12 +23,14 @@ import {
 type UseStudentPlanResult = {
   loading: boolean;
   studentDetail: StudentDetail | null;
+  studentGrades: StudentClassItem[];
 };
 
 export function useStaticStudentDetail(
   studentId: string,
 ): UseStudentPlanResult {
   const [summary, setSummary] = useState<StudentDetail | null>(null);
+  const [studentGrades, setStudentGrades] = useState<StudentClassItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -52,6 +53,7 @@ export function useStaticStudentDetail(
           ? toStudentProfileUI(studentResult)
           : null;
         const nextPlan = planResult.map(toStudentClassItemUI);
+        setStudentGrades(nextPlan);
 
         setSummary(
           nextStudent
@@ -85,5 +87,6 @@ export function useStaticStudentDetail(
   return {
     loading,
     studentDetail: summary,
+    studentGrades,
   };
 }

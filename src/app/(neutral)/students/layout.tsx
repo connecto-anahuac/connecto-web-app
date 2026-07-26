@@ -1,4 +1,4 @@
-import { FilterProvider } from "@/features/search/components/FilterProvider";
+import { FilterProvider } from "@/features/search/components/Provider/FilterProvider";
 import { StudentsPageTemplate } from "@/features/students/components/server/StudentsPageTemplate";
 
 export default function StudentsLayout({

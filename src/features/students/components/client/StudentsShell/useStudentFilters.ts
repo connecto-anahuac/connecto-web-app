@@ -15,7 +15,7 @@ import {
   isStudentPresetSelected,
   type StudentPresetKey,
 } from "./studentPresetSync";
-import { useFilterStore } from "@/features/search/components/useFilterStore";
+import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 
 const STUDENT_FILTER_KEY_LOOKUP: Record<string, true> = {
   [STUDENT_FILTER_KEYS.career]: true,
@@ -43,9 +43,9 @@ export function useStudentFilters(students: StudentListItem[]) {
   // const conditions = createFilterStore((state) => state.conditions);
   // const upsertCondition = createFilterStore((state) => state.upsertCondition);
   // const removeCondition = createFilterStore((state) => state.removeCondition);
-  const conditions = useFilterStore((state) => state.conditions);
-  const upsertCondition = useFilterStore((state) => state.upsertCondition);
-  const removeCondition = useFilterStore((state) => state.removeCondition);
+  const conditions = useFilterStoreProvider((state) => state.conditions);
+  const upsertCondition = useFilterStoreProvider((state) => state.upsertCondition);
+  const removeCondition = useFilterStoreProvider((state) => state.removeCondition);
   const relevantConditions = getRelevantConditions(conditions);
 
   const definitions = useMemo(

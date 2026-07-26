@@ -5,7 +5,7 @@ import type { FilterCondition, FilterDefinition } from "@/features/search/shared
 import { buildFilterDefinitions } from "@/features/search/shared/filter-factory";
 
 import { STUDENT_GRADE_FILTER_KEYS } from "@/features/student/types/student-grade-filter-fields";
-import { useFilterStore } from "@/features/search/components/useFilterStore";
+import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 import { FilterField } from "@/features/search/shared/filter-field";
 
 
@@ -20,9 +20,9 @@ export function useFiltersOLD<TItem>(
   targetFilterableList: TItem[],
 ):UseFiltersResult<TItem> {
   // TODO textsearcの実装
-  const conditions = useFilterStore((state) => state.conditions);
-  const upsertCondition = useFilterStore((state) => state.upsertCondition);
-  const removeCondition = useFilterStore((state) => state.removeCondition);
+  const conditions = useFilterStoreProvider((state) => state.conditions);
+  const upsertCondition = useFilterStoreProvider((state) => state.upsertCondition);
+  const removeCondition = useFilterStoreProvider((state) => state.removeCondition);
 
   // const FILTER_KEY_LOOKUP: Record<string, boolean> = Object.keys(conditions).reduce(
   //   (acc, key) => {

@@ -7,7 +7,7 @@ import {
   Operator,
 } from "./filter-definition";
 import { createFilterStore } from "./filter-store";
-import { useFilterStore } from "../components/useFilterStore";
+import { useFilterStoreProvider } from "../components/Provider/useFilterStore";
 
 function isEmptyValue(value: FilterConditionValue): boolean {
   if (value === null || value === undefined || value === "") {
@@ -29,11 +29,11 @@ export function useFilterCondition<TItem>(filter: FilterDefinition<TItem>) {
   // );
   // const upsertCondition = createFilterStore((state) => state.upsertCondition);
   // const removeCondition = createFilterStore((state) => state.removeCondition);
-  const condition = useFilterStore((state) =>
+  const condition = useFilterStoreProvider((state) =>
     state.conditions.find((current) => current.fieldKey === filter.key),
   );
-  const upsertCondition = useFilterStore((state) => state.upsertCondition);
-  const removeCondition = useFilterStore((state) => state.removeCondition);
+  const upsertCondition = useFilterStoreProvider((state) => state.upsertCondition);
+  const removeCondition = useFilterStoreProvider((state) => state.removeCondition);
 
   // if (!condition?.operator) {
   //   console.warn(`====================Condition for field ${filter.key} is missing operator. This may indicate a misconfiguration in the filter store or an issue with the filter definition. Defaulting to the first operator in the filter definition.`

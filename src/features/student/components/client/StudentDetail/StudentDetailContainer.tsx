@@ -3,9 +3,7 @@
 import { StudentDetailPresenter } from "./StudentDetailPresenter";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
 import { useFilter } from "@/features/search/shared/useFilter";
-import { fetchStudentPlan } from "@/external/handler/student/query.client";
 import { STUDENT_GRADE_FILTER_FIELDS } from "@/features/student/types/student-grade-filter-fields";
-import { toStudentClassItemUI } from "@/features/student/types";
 
 type Props = {
   studentId: string;
@@ -13,16 +11,17 @@ type Props = {
 
 export function StudentDetailContainer({ studentId }: Props) {
   // const { loading, plan,  summary } = useStudentPlan(studentId);
-  const { loading: staticLoading, studentDetail } =
+  const { loading: staticLoading, studentDetail, studentGrades } =
     useStaticStudentDetail(studentId);
 
-  const { loading: DynamicLoading,
-    definitions,
-    filterableItems } = useFilter(STUDENT_GRADE_FILTER_FIELDS,()=>fetchStudentPlan(studentId),toStudentClassItemUI);
+  const { definitions, filterableItems } = useFilter(
+    STUDENT_GRADE_FILTER_FIELDS,
+    studentGrades,
+  );
 
   return (
     <StudentDetailPresenter
-      loading={staticLoading && DynamicLoading}
+      loading={staticLoading}
       filterableItems={filterableItems}
       studentDetail={studentDetail}
       definitions={definitions}
