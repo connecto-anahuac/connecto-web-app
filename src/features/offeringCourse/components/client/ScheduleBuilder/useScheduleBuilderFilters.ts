@@ -8,7 +8,7 @@ import {
   OFFERING_COURSE_FILTER_FIELDS,
   OFFERING_COURSE_FILTER_KEYS,
 } from "@/features/offeringCourse/types/offering-course-filter-fields";
-import { createFilterStore } from "@/features/search/shared/filterStore";
+import { createFilterStore } from "@/features/search/components/Provider/filterStore";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 

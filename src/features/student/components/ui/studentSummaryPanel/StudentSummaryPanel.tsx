@@ -5,7 +5,7 @@ import WhatsAppIcon from "@/components/icon/contact/WhatsAppIcon";
 import StudyPlan from "@/components/StudyPlan";
 import Memo from "@/features/student/components/ui/Memo";
 import { cn } from "@/shared/lib/util";
-import type { StudentDetail } from "./student-summary.types";
+import type { StudentDetail } from "./studentSummary.type";
 import Alert from "@/components/Alert";
 import SemesterBadge from "@/components/SemesterBadge";
 

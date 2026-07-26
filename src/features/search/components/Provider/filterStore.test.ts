@@ -3,7 +3,7 @@
 
 import { beforeEach, describe, expect, it } from "vitest";
 import { createFilterStore } from "./filterStore";
-import { useFilterStoreProvider } from "../components/Provider/useFilterStore";
+import { useFilterStoreProvider } from "./useFilterStore";
 
 describe("filter-store", () => {
   let store: ReturnType<typeof createFilterStore>;

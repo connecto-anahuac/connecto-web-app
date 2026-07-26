@@ -2,7 +2,7 @@ import type {
   StudentClassItem,
 } from "@/features/student/types";
 import type { FilterDefinition, FilterableItem } from "@/features/search/shared/filterDefinition";
-import type { StudentDetail } from "../../ui/student-summary-panel/student-summary.types";
+import type { StudentDetail } from "../../ui/studentSummaryPanel/studentSummary.type";
 import ContentTitleSection from "@/components/ContentTitleSection";
 import DataSection from "@/components/datasection/DataSection";
 import { StudentDiagram } from "./StudentDiagram";

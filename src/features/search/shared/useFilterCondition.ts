@@ -6,7 +6,7 @@ import {
   FilterDefinition,
   Operator,
 } from "./filterDefinition";
-import { createFilterStore } from "./filterStore";
+import { createFilterStore } from "../components/Provider/filterStore";
 import { useFilterStoreProvider } from "../components/Provider/useFilterStore";
 
 function isEmptyValue(value: FilterConditionValue): boolean {

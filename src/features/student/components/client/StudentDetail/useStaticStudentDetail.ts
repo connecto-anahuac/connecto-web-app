@@ -14,11 +14,11 @@ import {
   STUDENT_AVATAR_COLOR_PALETTE,
   STUDENT_DETAIL_CAREER,
   STUDENT_DETAIL_PLAN,
-} from "../../ui/student-summary-panel/student-summary.constants";
+} from "../../ui/studentSummaryPanel/studentSummary.constant";
 import {
   buildStudentDetail,
   type StudentDetail,
-} from "../../ui/student-summary-panel/student-summary.types";
+} from "../../ui/studentSummaryPanel/studentSummary.type";
 
 type UseStudentPlanResult = {
   loading: boolean;

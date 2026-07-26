@@ -8,7 +8,7 @@ import {
 } from "@/features/student/types/studentFilterConfigs";
 import { buildFilterDefinitions } from "@/features/search/shared/filterFactory";
 import { applyFilters } from "@/features/search/shared/filterEngine";
-import { createFilterStore } from "@/features/search/shared/filterStore";
+import { createFilterStore } from "@/features/search/components/Provider/filterStore";
 import type { FilterCondition } from "@/features/search/shared/filterDefinition";
 import {
   getStudentPresetNextConditions,
