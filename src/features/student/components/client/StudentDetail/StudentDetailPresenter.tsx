@@ -48,6 +48,8 @@ export function StudentDetailPresenter({
         definitions={definitions}
         className="w-full flex-1 min-h-0"
         presets={presets}
+        searchText={searchText}
+        onSearchTextChange={onSearchTextChange}
         listDiagram={<div> LIST VIEW</div>}
         cardDiagram={
           <StudentDiagram loading={loading} filterableItems={filterableItems} />

@@ -221,6 +221,51 @@ function matchesAllConditions<TItem>(
   });
 }
 
+const SEARCH_MATCH_SCORE = {
+  partial: 1,
+  prefix: 2,
+  exact: 3,
+} as const;
+
+function normalizeSearchText(value: string): string {
+  return value.trim().toLocaleLowerCase();
+}
+
+function getSearchableValues<TItem>(
+  item: TItem,
+  definition: FilterDefinition<TItem>,
+): string[] {
+  const rawValue = definition.getValue(item);
+  const values = Array.isArray(rawValue) ? rawValue : [rawValue];
+
+  return values.flatMap((value) => {
+    if (value === null || value === undefined) {
+      return [];
+    }
+
+    if (definition.inputType === "option") {
+      const option = definition.options.find((entry) => entry.value === value);
+      return option ? [option.label] : [];
+    }
+
+    return [String(value)];
+  });
+}
+
+function getSearchMatchScore(candidate: string, query: string): number {
+  const normalizedCandidate = normalizeSearchText(candidate);
+
+  if (normalizedCandidate === query) {
+    return SEARCH_MATCH_SCORE.exact;
+  }
+
+  if (normalizedCandidate.startsWith(query)) {
+    return SEARCH_MATCH_SCORE.prefix;
+  }
+
+  return normalizedCandidate.includes(query) ? SEARCH_MATCH_SCORE.partial : 0;
+}
+
 export function applyFilters<TItem>(
   items: TItem[],
   definitions: FilterDefinition<TItem>[],
@@ -268,6 +313,40 @@ export function toFilterableItems<TItem>(items: TItem[]): FilterableItem<TItem>[
   }));
 }
 
+export function applyTextSearch<TItem>(
+  filterableItems: FilterableItem<TItem>[],
+  definitions: FilterDefinition<TItem>[],
+  searchText: string,
+): FilterableItem<TItem>[] {
+  const query = normalizeSearchText(searchText);
+
+  if (!query) {
+    return filterableItems.map((filterableItem) => ({
+      ...filterableItem,
+      filteringScore: 0,
+    }));
+  }
+
+  return filterableItems.map((filterableItem) => {
+    const filteringScore = definitions.reduce((highestScore, definition) => {
+      const definitionScore = getSearchableValues(filterableItem.item, definition)
+        .reduce(
+          (highestValueScore, candidate) =>
+            Math.max(highestValueScore, getSearchMatchScore(candidate, query)),
+          0,
+        );
+
+      return Math.max(highestScore, definitionScore);
+    }, 0);
+
+    return {
+      ...filterableItem,
+      filteringScore,
+      isMatch: filterableItem.isMatch && filteringScore > 0,
+    };
+  });
+}
+
 
 /**
  * 既存の FilterableItem[] に対して condition を評価し、isMatch を更新する。
@@ -286,7 +365,8 @@ export function applyFilterMatches<TItem>(
   return filterableItems.map((filterableItem) => ({
     ...filterableItem,
     isMatch:
-      conditions.length === 0 ||
-      matchesAllConditions(filterableItem.item, conditions, definitionMap),
+      filterableItem.isMatch &&
+      (conditions.length === 0 ||
+        matchesAllConditions(filterableItem.item, conditions, definitionMap)),
   }));
 }

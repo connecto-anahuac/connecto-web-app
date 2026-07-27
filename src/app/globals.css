@@ -37,26 +37,28 @@
   /*  */
 
   /* --color-border:#D5D5D5; */
-  --color-divider:#D5D5D5;
-  --color-header:#FAFAFA;
-  --color-header-foreground:#7F7F7F;
-  --color-header-container:#E3E3E3;
-  --color-header-on-container-variant:#A0A0A0;
-  --color-header-on-container:#646464;
-  --color-foreground:#2B2B2B;
-  --color-summer:#BD4B4B;
-  --color-ene-mayo:#BD954B;
-  --color-ago-dec:#4B88BD;
+  --color-divider: #d5d5d5;
+  --color-header: #fafafa;
+  --color-header-foreground: #7f7f7f;
+  --color-header-container: #e3e3e3;
+  --color-header-on-container-variant: #a0a0a0;
+  --color-header-on-container: #646464;
+  --color-foreground: #2b2b2b;
+  --color-summer: #bd4b4b;
+  --color-ene-mayo: #bd954b;
+  --color-ago-dec: #4b88bd;
 
-  --spacing-body-frame:0.625rem; /* 10px */
-  --spacing-header-height:3rem; /* 48px */
+  --spacing-body-frame: 0.625rem; /* 10px */
+  --spacing-header-height: 3rem; /* 48px */
   /*  */
-  --spacing-header-logo:1.25rem; /* 20px */
-  --spacing-navitem-icon:1.125rem; /* 18px */
-  --spacing-body-x:0.75rem; /* 12px */ /* header,sidebar */
-  --spacing-nav-left:0.25rem; /* 4px */ /* header-logo,sidebar-navigationitem */
-  --spacing-header-logo-left:calc(var(--spacing-nav-left) - (var(--spacing-header-logo) - var(--spacing-navitem-icon))/2); /* 5px */ /* center of navitem.icon == center of header.logo */
-
+  --spacing-header-logo: 1.25rem; /* 20px */
+  --spacing-navitem-icon: 1.125rem; /* 18px */
+  --spacing-body-x: 0.75rem; /* 12px */ /* header,sidebar */
+  --spacing-nav-left: 0.25rem; /* 4px */ /* header-logo,sidebar-navigationitem */
+  --spacing-header-logo-left: calc(
+    var(--spacing-nav-left) -
+      (var(--spacing-header-logo) - var(--spacing-navitem-icon)) / 2
+  ); /* 5px */ /* center of navitem.icon == center of header.logo */
 }
 
 @utility home-shell-max {
@@ -107,7 +109,6 @@
   color: var(--color-connecto-ink);
 }
 
-
 @utility gap-1px {
   gap: 1px;
 }
@@ -155,13 +156,10 @@
   border-bottom-right-radius: 2px;
 }
 
-
-
 @utility size-search-filter-dismiss {
   width: 22px;
   height: 22px;
 }
-
 
 @layer utilities {
   /* スクロールバー非表示のクラス */
@@ -173,6 +171,23 @@
     scrollbar-width: none;
   }
 }
+
+/* 検索窓などのクリアボタンを非表示にする */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
+/* Edge / IE のパス表示やクリアボタンを消す場合 */
+input::-ms-clear,
+input::-ms-reveal {
+  visibility: hidden;
+  pointer-events: none;
+  display: none;
+}
+
 
 * {
   box-sizing: border-box;

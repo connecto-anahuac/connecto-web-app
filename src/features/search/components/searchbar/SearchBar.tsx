@@ -1,101 +1,113 @@
 import type { ComponentProps } from "react";
+import { useState } from "react";
 
-import SearchInlineChip from "@/components/chip/SearchInlineChip";
 import CloseIcon from "@/components/icon/CloseIcon";
 import SearchIcon from "@/components/icon/SearchIcon";
 import { cn } from "@/shared/lib/util";
 
-import SearchResultPanel from "../../../../components/search/SearchResultPanel";
-
 export type SearchBarState = "empty" | "writing" | "hasDefinedQuery";
 
-type SearchBarProps = ComponentProps<"div"> & {
+type SearchBarProps = Omit<ComponentProps<"input">, "className" | "type"> & {
+  className?: string;
+  inputClassName?: string;
+  onClear?: () => void;
+  /** @deprecated Search state is now derived from the input value. */
   state?: SearchBarState;
-  placeholder?: string;
+  /** @deprecated Use value instead. */
   queryText?: string;
+  /** @deprecated Defined-query UI is not rendered. */
   definedQueryLabel?: string;
+  /** @deprecated Suggestions are not rendered. */
   suggestions?: string[];
+  /** @deprecated Suggestions are not rendered. */
   activeSuggestionIndex?: number;
-  onClear?: ComponentProps<"button">["onClick"];
-  onRemoveDefinedQuery?: ComponentProps<typeof SearchInlineChip>["onRemove"];
+  /** @deprecated Defined-query UI is not rendered. */
+  onRemoveDefinedQuery?: () => void;
+  /** @deprecated Suggestions are not rendered. */
   onSuggestionClick?: (suggestion: string, index: number) => void;
+  /** @deprecated Suggestions are not rendered. */
   panelClassName?: string;
 };
 
-function getContainerStateClassName(state: SearchBarState) {
-  if (state === "writing") {
-    return "gap-3.5 border border-Primary/40 bg-PrimaryContainerLow";
-  }
-
-  if (state === "hasDefinedQuery") {
-    return "gap-3.5 border border-DividerMiddle bg-DividerLow";
-  }
-
-  return "gap-3 border border-transparent bg-DividerLowest";
-}
-
 export default function SearchBar({
-  state = "empty",
-  placeholder = "buscar en los estudiantes",
-  queryText = "arquite",
-  definedQueryLabel = "arquitectura",
-  suggestions = [
-  ],
-  activeSuggestionIndex,
-  onClear,
-  onRemoveDefinedQuery,
-  onSuggestionClick,
   className,
-  panelClassName,
-  ...props
+  inputClassName,
+  onClear,
+  value,
+  defaultValue,
+  onChange,
+  placeholder = "buscar en los estudiantes",
+  disabled,
+  state: _state,
+  queryText: _queryText,
+  definedQueryLabel: _definedQueryLabel,
+  suggestions: _suggestions,
+  activeSuggestionIndex: _activeSuggestionIndex,
+  onRemoveDefinedQuery: _onRemoveDefinedQuery,
+  onSuggestionClick: _onSuggestionClick,
+  panelClassName: _panelClassName,
+  ...inputProps
 }: SearchBarProps) {
+  void _state;
+  void _queryText;
+  void _definedQueryLabel;
+  void _suggestions;
+  void _activeSuggestionIndex;
+  void _onRemoveDefinedQuery;
+  void _onSuggestionClick;
+  void _panelClassName;
+
+  const [uncontrolledValue, setUncontrolledValue] = useState(() =>
+    defaultValue === undefined ? "" : String(defaultValue),
+  );
+  const isControlled = value !== undefined;
+  const inputValue = isControlled ? String(value) : uncontrolledValue;
+
   return (
-    <div className={cn("inline-flex w-full min-w-64 flex-col gap-1.5", className)} {...props}>
+    <div className={cn("inline-flex w-full min-w-64", className)}>
       <div
         className={cn(
-          "flex h-7 items-center rounded-full px-3.5 text-OnSurface",
-          getContainerStateClassName(state),
+          "flex h-7 w-full items-center gap-3 rounded-full border border-transparent bg-DividerLowest px-3.5 text-OnSurface",
+          "focus-within:border-Primary/40 focus-within:bg-PrimaryContainerLow",
+          disabled && "opacity-60",
         )}
       >
         <SearchIcon className="size-4 shrink-0 text-OnSurface" />
-
-        {state === "hasDefinedQuery" ? (
-          <SearchInlineChip
-            className="min-w-0"
-            label={definedQueryLabel}
-            onRemove={onRemoveDefinedQuery}
-          />
-        ) : (
-          <span
-            className={cn(
-              "min-w-0 flex-1 truncate leading-none font-medium",
-              state === "empty" ? "text-xs text-OnSurface-40" : "text-sm text-OnSurface",
-            )}
-          >
-            {state === "empty" ? placeholder : queryText}
-          </span>
-        )}
-
-        {state === "writing" ? (
+        <input
+          {...inputProps}
+          type="search"
+          value={inputValue}
+          disabled={disabled}
+          placeholder={placeholder}
+          aria-label={inputProps["aria-label"] ?? placeholder}
+          className={cn(
+            "min-w-0 flex-1 bg-transparent text-sm leading-none font-medium outline-none placeholder:text-xs placeholder:text-OnSurface-40",
+            disabled && "cursor-not-allowed",
+            inputClassName,
+          )}
+          onChange={(event) => {
+            if (!isControlled) {
+              setUncontrolledValue(event.target.value);
+            }
+            onChange?.(event);
+          }}
+        />
+        {inputValue ? (
           <button
             type="button"
             aria-label="Clear search"
             className="inline-flex size-4 shrink-0 items-center justify-center rounded-full text-OnSurface-60 transition-colors hover:bg-OnSurface/8 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-Primary/30"
-            onClick={onClear}
+            onClick={() => {
+              if (!isControlled) {
+                setUncontrolledValue("");
+              }
+              onClear?.();
+            }}
           >
             <CloseIcon className="size-3" strokeWidth={1.2} />
           </button>
         ) : null}
       </div>
-
-      {state === "writing" ? (
-        <SearchResultPanel
-          suggestions={suggestions}
-          activeIndex={activeSuggestionIndex}
-          className={panelClassName}
-          onSuggestionClick={onSuggestionClick}
-        />
-      ) : null}
     </div>
   );
 }

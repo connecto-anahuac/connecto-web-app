@@ -7,6 +7,7 @@ import {
 } from "@/features/search/shared/filterDefinition";
 import {
   applyFilterMatches,
+  applyTextSearch,
   toFilterableItems,
 } from "@/features/search/shared/filterEngine";
 import { FilterDefinitionConfig } from "@/features/search/shared/filterField";
@@ -21,6 +22,7 @@ type UseFilterResult<TItem> = {
 export function useFilter<TItem extends { id: string }>(
   fields: FilterDefinitionConfig<TItem>[],
   items: TItem[],
+  searchText: string,
 ): UseFilterResult<TItem> {
   const inicializedFilterableItems = useMemo(
     () => toFilterableItems(items),
@@ -40,8 +42,13 @@ export function useFilter<TItem extends { id: string }>(
   );
 
   const filterableItems = useMemo(
-    () => applyFilterMatches(inicializedFilterableItems, definitions, conditions),
-    [inicializedFilterableItems, definitions, conditions],
+    () =>
+      applyFilterMatches(
+        applyTextSearch(inicializedFilterableItems, definitions, searchText),
+        definitions,
+        conditions,
+      ),
+    [inicializedFilterableItems, definitions, searchText, conditions],
   );
 
   return {

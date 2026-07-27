@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { applyFilters, isOperatorAllowed, matchesCondition } from "./filterEngine";
+import {
+  applyFilterMatches,
+  applyFilters,
+  applyTextSearch,
+  isOperatorAllowed,
+  matchesCondition,
+  toFilterableItems,
+} from "./filterEngine";
 import { FilterCondition, FilterDefinition } from "./filterDefinition";
 
 type StudentSearchItem = {
@@ -234,5 +241,95 @@ describe("filter-engine", () => {
     ]);
 
     expect(filtered.map((student) => student.name)).toEqual(["Alice Johnson", "Carla Stone"]);
+  });
+
+  it("scores exact, prefix, and partial text matches", () => {
+    const exactMatches = applyTextSearch(
+      toFilterableItems(students),
+      definitions,
+      "Alice Johnson",
+    );
+    const prefixMatches = applyTextSearch(
+      toFilterableItems(students),
+      definitions,
+      "ali",
+    );
+    const partialMatches = applyTextSearch(
+      toFilterableItems(students),
+      definitions,
+      "lice",
+    );
+
+    expect(exactMatches[0]).toMatchObject({ isMatch: true, filteringScore: 3 });
+    expect(prefixMatches[0]).toMatchObject({ isMatch: true, filteringScore: 2 });
+    expect(partialMatches[0]).toMatchObject({ isMatch: true, filteringScore: 1 });
+    expect(partialMatches[1]).toMatchObject({ isMatch: false, filteringScore: 0 });
+  });
+
+  it("searches option labels but not their internal values", () => {
+    const optionDefinitions: FilterDefinition<StudentSearchItem>[] = [
+      {
+        key: "status",
+        label: "Status",
+        icon: "person",
+        editor: "enum",
+        inputType: "option",
+        valueType: "enum",
+        operators: ["eq"],
+        getValue: (item) => item.status,
+        options: [{ label: "Aprobado", value: "active" }],
+      },
+    ];
+
+    const labelMatches = applyTextSearch(
+      toFilterableItems(students),
+      optionDefinitions,
+      "aprobado",
+    );
+    const valueMatches = applyTextSearch(
+      toFilterableItems(students),
+      optionDefinitions,
+      "active",
+    );
+
+    expect(labelMatches[0]).toMatchObject({ isMatch: true, filteringScore: 3 });
+    expect(valueMatches[0]).toMatchObject({ isMatch: false, filteringScore: 0 });
+  });
+
+  it("combines text search and filter conditions with AND semantics", () => {
+    const searchMatches = applyTextSearch(
+      toFilterableItems(students),
+      definitions,
+      "alice",
+    );
+    const matches = applyFilterMatches(searchMatches, definitions, [
+      {
+        id: "status-leave",
+        fieldKey: "status",
+        operator: "eq",
+        value: "leave",
+      },
+    ]);
+
+    expect(matches.every((item) => !item.isMatch)).toBe(true);
+    expect(matches[0].filteringScore).toBe(2);
+  });
+
+  it("resets search metadata when the pipeline starts from initial items", () => {
+    const searchedItems = applyTextSearch(
+      toFilterableItems(students),
+      definitions,
+      "alice",
+    );
+    const resetItems = applyTextSearch(
+      toFilterableItems(students),
+      definitions,
+      " ",
+    );
+
+    expect(searchedItems[1].isMatch).toBe(false);
+    expect(resetItems).toEqual(
+      toFilterableItems(students),
+    );
   });
 });

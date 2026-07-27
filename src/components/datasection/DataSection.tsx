@@ -2,7 +2,6 @@
 
 import { ComponentProps, useState } from "react";
 import IconButtonOLD from "../button/IconButton2";
-import ToggleButton from "../button/ToggleButton";
 import SearchPresetChip from "../chip/SearchPresetChip";
 import SearchBar from "../../features/search/components/searchbar/SearchBar";
 import { cn } from "@/shared/lib/util";
@@ -11,7 +10,6 @@ import Button from "../button/Button";
 import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import FilterButtonGroup from "../button/FilterButtonGroup";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
-import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
 
@@ -26,10 +24,11 @@ type Props<TItem> = ComponentProps<"div"> & {
   onCardViewClick?: () => void;
   onViewChange?: (view: "list" | "card") => void;
   presets?: readonly FilterPreset[];
+  searchText?: string;
+  onSearchTextChange?: (value: string) => void;
 };
 export default function DataSection<TItem>({
   className,
-  children,
   presets,
   onListClick,
   onCardViewClick,
@@ -40,6 +39,8 @@ export default function DataSection<TItem>({
   cardDiagram,
   defaultView = "list",
   definitions,
+  searchText,
+  onSearchTextChange,
 }: Props<TItem>) {
   const [selectedView, setSelectedView] = useState<"list" | "card">(
     defaultView,
@@ -61,8 +62,12 @@ export default function DataSection<TItem>({
     <div className={cn("flex flex-col gap-2", className)}>
       {/* 1 line */}
       <div className="flex gap-4 w-full items-center">
-        {/* //TODO Searchbar */}
-        <SearchBar className="w-64" />
+        <SearchBar
+          className="w-64"
+          value={searchText}
+          onChange={(event) => onSearchTextChange?.(event.target.value)}
+          onClear={() => onSearchTextChange?.("")}
+        />
 
         {/* when changed the chip size, still keep the height */}
         <div className="flex flex-1 gap-3 items-center overflow-x-auto scrollbar-none">
