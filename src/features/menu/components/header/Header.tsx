@@ -7,7 +7,7 @@ import NavigationItem from "@/components/NavigationItem";
 import type { IconName } from "@/components/icon";
 import { cn } from "@/shared/lib/util";
 import IconButtonOLD from "@/components/button/IconButton2";
-import SearchBar from "@/components/search/SearchBar";
+import SearchBar from "@/features/search/components/searchbar/SearchBar";
 import ConnectoLogo from "@/components/icon/logo/Connecto";
 import IconButton from "@/components/button/IconButton";
 import PanelControllButton from "@/components/button/PanelControllButton";

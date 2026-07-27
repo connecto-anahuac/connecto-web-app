@@ -4,7 +4,7 @@ import { ComponentProps, useState } from "react";
 import IconButtonOLD from "../button/IconButton2";
 import ToggleButton from "../button/ToggleButton";
 import SearchPresetChip from "../chip/SearchPresetChip";
-import SearchBar from "../search/SearchBar";
+import SearchBar from "../../features/search/components/searchbar/SearchBar";
 import { cn } from "@/shared/lib/util";
 import IconButton from "../button/IconButton";
 import Button from "../button/Button";

@@ -5,7 +5,7 @@ import CloseIcon from "@/components/icon/CloseIcon";
 import SearchIcon from "@/components/icon/SearchIcon";
 import { cn } from "@/shared/lib/util";
 
-import SearchResultPanel from "./SearchResultPanel";
+import SearchResultPanel from "../../../../components/search/SearchResultPanel";
 
 export type SearchBarState = "empty" | "writing" | "hasDefinedQuery";
 
@@ -40,9 +40,6 @@ export default function SearchBar({
   queryText = "arquite",
   definedQueryLabel = "arquitectura",
   suggestions = [
-    "Arquitectura de computadoras y la nube",
-    "Arquitectura de braa uyuyube 2",
-    "Arquitectura del mundo ube alalalal alalala",
   ],
   activeSuggestionIndex,
   onClear,
