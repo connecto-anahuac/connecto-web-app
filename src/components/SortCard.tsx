@@ -1,55 +1,60 @@
-import { cn } from '@/shared/lib/util'
-import Divider from '@/components/Divider'
+import { cn } from "@/shared/lib/util";
+import Divider from "@/components/Divider";
 
-import SortCardFieldChip from './SortCardFieldChip'
-import SortCardSortBadge from './SortCardSortBadge'
+import SortCardFieldChip from "./SortCardFieldChip";
+import SortCardSortBadge from "./SortCardSortBadge";
+import HandleGripIcon from "./icon/HandleGripIcon";
+import Button from "./button/Button";
+import SelectBoxUnfill from "./select-box/SelectBoxUnfill";
+import SelectBoxFill from "./SelectBoxFill";
+import PersonIcon from "./icon/PersonIcon";
 
 type SortCardProps = {
-  fieldLabel: string
-  className?: string
-}
+  fieldLabel: string;
+  className?: string;
+};
 
-function DragHandleIcon() {
-  return (
-    <svg
-      viewBox="0 0 12 12"
-      fill="none"
-      aria-hidden="true"
-      className="size-3 text-connecto-muted"
-    >
-      <circle cx="3" cy="2.5" r="0.75" fill="currentColor" />
-      <circle cx="3" cy="6" r="0.75" fill="currentColor" />
-      <circle cx="3" cy="9.5" r="0.75" fill="currentColor" />
-      <circle cx="9" cy="2.5" r="0.75" fill="currentColor" />
-      <circle cx="9" cy="6" r="0.75" fill="currentColor" />
-      <circle cx="9" cy="9.5" r="0.75" fill="currentColor" />
-    </svg>
-  )
-}
+// function DragHandleIcon() {
+//   return (
+//     <svg
+//       viewBox="0 0 12 12"
+//       fill="none"
+//       aria-hidden="true"
+//       className="size-3 text-connecto-muted"
+//     >
+//       <circle cx="3" cy="2.5" r="0.75" fill="currentColor" />
+//       <circle cx="3" cy="6" r="0.75" fill="currentColor" />
+//       <circle cx="3" cy="9.5" r="0.75" fill="currentColor" />
+//       <circle cx="9" cy="2.5" r="0.75" fill="currentColor" />
+//       <circle cx="9" cy="6" r="0.75" fill="currentColor" />
+//       <circle cx="9" cy="9.5" r="0.75" fill="currentColor" />
+//     </svg>
+//   )
+// }
 
-function CloseSmallIcon() {
-  return (
-    <svg
-      viewBox="0 0 16 16"
-      fill="none"
-      aria-hidden="true"
-      className="size-4 text-connecto-muted"
-    >
-      <path
-        d="M4.47 4.47L11.53 11.53M11.53 4.47L4.47 11.53"
-        stroke="currentColor"
-        strokeWidth="1.4"
-        strokeLinecap="round"
-      />
-    </svg>
-  )
-}
+// function CloseSmallIcon() {
+//   return (
+//     <svg
+//       viewBox="0 0 16 16"
+//       fill="none"
+//       aria-hidden="true"
+//       className="size-4 text-connecto-muted"
+//     >
+//       <path
+//         d="M4.47 4.47L11.53 11.53M11.53 4.47L4.47 11.53"
+//         stroke="currentColor"
+//         strokeWidth="1.4"
+//         strokeLinecap="round"
+//       />
+//     </svg>
+//   )
+// }
 
 export default function SortCard({ fieldLabel, className }: SortCardProps) {
   return (
     <div
       className={cn(
-        'inline-flex h-12 w-65 items-center gap-2.5 rounded-md bg-background px-2 py-3 text-sm font-medium text-connecto-ink',
+        "inline-flex h-12 w-65 items-center gap-2.5 rounded-md bg-background px-2 py-3 text-sm font-medium text-connecto-ink",
         className,
       )}
     >
@@ -58,21 +63,39 @@ export default function SortCard({ fieldLabel, className }: SortCardProps) {
         aria-label="Reorder sort rule"
         className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm text-connecto-muted transition-colors hover:bg-connecto-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-connecto-muted/30"
       >
-        <DragHandleIcon />
+        <HandleGripIcon />
       </button>
 
-      <SortCardSortBadge />
-      <SortCardFieldChip label={fieldLabel} />
+      <Button
+        icon="textAscending"
+        label=""
+        intent="lightInk"
+        appearance="filled"
+        size="sm"
+        className="shrink-0 ml-auto "
+      />
+      
+      {/* <SortCardFieldChip label={fieldLabel} /> */}
+      <SelectBoxFill
+        value={fieldLabel}
+        leadingIcon={<PersonIcon/>}
+      />
 
-      <Divider direction="horizontal" className="h-px min-w-0 flex-1 self-center" />
-
-      <button
+      <Button
+        icon="close"
+        label=""
+        intent="darkInk"
+        appearance="text"
+        size="md"
+        className="shrink-0 ml-auto"
+      />
+      {/* <button
         type="button"
         aria-label="Remove sort rule"
-        className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm text-connecto-muted transition-colors hover:bg-connecto-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-connecto-muted/30"
+        className="ml-auto inline-flex size-4 shrink-0 items-center justify-center rounded-sm text-connecto-muted transition-colors hover:bg-connecto-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-connecto-muted/30"
       >
         <CloseSmallIcon />
-      </button>
+      </button> */}
     </div>
-  )
+  );
 }

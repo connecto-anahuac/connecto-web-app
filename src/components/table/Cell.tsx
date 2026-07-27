@@ -4,7 +4,7 @@ import { cn } from "@/shared/lib/util";
 
 type CellProps = ComponentProps<"div">;
 
-export default function Cell({ className, ...props }: CellProps) {
+export default function Cell({ className, children, ...props }: CellProps) {
   return (
     <div
       className={cn(
@@ -12,6 +12,8 @@ export default function Cell({ className, ...props }: CellProps) {
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </div>
   );
 }

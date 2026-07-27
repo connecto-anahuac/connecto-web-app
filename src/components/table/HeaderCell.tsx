@@ -8,6 +8,8 @@ import IconButtonOLD from "../button/IconButton2";
 import PinIcon from "../icon/PinIcon";
 import FilterIcon from "../icon/FilterIcon";
 import { IconName, Icons } from "../icon";
+import Button from "../button/Button";
+import IconButton from "../button/IconButton";
 
 type HeaderCellProps = ComponentProps<"div"> & {
   label?: ReactNode;
@@ -24,7 +26,7 @@ export default function HeaderCell({
   ...props
 }: HeaderCellProps) {
   const content = children ?? label;
-  const isUnpackedTools = false;
+  const isUnpackedTools = true;
   const contentText =
     typeof content === "string" || typeof content === "number"
       ? String(content)
@@ -53,11 +55,29 @@ export default function HeaderCell({
       </div>
 
       {/* tools */}
-      <div className="flex items-center gap-4 ml-auto">
+      <div className="flex items-center gap-4 ml-auto shrink-0">
         {/* if has spacing, visible */}
         {isUnpackedTools && (
-          <div className="flex gap-0.5 shrink-0 ">
-            <IconButtonOLD>
+          <div className="flex gap-0.5 shrink-0 h-fit">
+            <IconButton
+              icon="pin"
+              size={"md"}
+              appearance={"text"}
+              intent="lightInk"
+            />
+            <IconButton
+              icon="unvisible"
+              size={"md"}
+              appearance={"text"}
+              intent="lightInk"
+            />
+            <IconButton
+              icon="filter"
+              size={"md"}
+              appearance={"text"}
+              intent="lightInk"
+            />
+            {/* <IconButtonOLD>
               <PinIcon className="size-4.5" />
             </IconButtonOLD>
             <IconButtonOLD>
@@ -65,20 +85,32 @@ export default function HeaderCell({
             </IconButtonOLD>
             <IconButtonOLD>
               <FilterIcon className="size-4.5" />
-            </IconButtonOLD>
+            </IconButtonOLD> */}
           </div>
         )}
 
         {/* always visible */}
         <div className="shrink-0  flex gap-1">
           {!isUnpackedTools && (
-            <IconButtonOLD>
-              <ThreePointMenuIcon className="size-search-filter-dismiss" />
-            </IconButtonOLD>
+            // <IconButtonOLD>
+            //   <ThreePointMenuIcon className="size-search-filter-dismiss" />
+            // </IconButtonOLD>
+            <IconButton
+              icon="threePointMenu"
+              size={"md"}
+              appearance={"text"}
+              intent="lightInk"
+            />
           )}
-          <IconButtonOLD>
+          {/* <IconButtonOLD>
             <TextAscendingIcon className="size-5" />
-          </IconButtonOLD>
+          </IconButtonOLD> */}
+          <IconButton
+            icon="textAscending"
+            size={"md"}
+            appearance={"text"}
+            intent="lightInk"
+          />
         </div>
       </div>
     </div>
