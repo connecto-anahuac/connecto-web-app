@@ -1,21 +1,20 @@
 "use client";
 
-import { createContext, PropsWithChildren, useRef } from "react";
+import { createContext, PropsWithChildren, useState } from "react";
 import { createFilterStore, FilterStore } from "./filterStore";
 import { StoreApi } from "zustand";
 
 export const FilterContext = createContext<StoreApi<FilterStore> | null>(null);
 
-export function FilterProvider({ children }: PropsWithChildren) {
-  const storeRef = useRef<StoreApi<FilterStore> | null>(null);
-
-  if (!storeRef.current) {
-    storeRef.current = createFilterStore();
-  }
+export function DataSearchProvider({ children }: PropsWithChildren) {
+  const [store] = useState(createFilterStore);
 
   return (
-    <FilterContext.Provider value={storeRef.current}>
+    <FilterContext.Provider value={store}>
       {children}
     </FilterContext.Provider>
   );
 }
+
+/** @deprecated Use DataSearchProvider. */
+export const FilterProvider = DataSearchProvider;

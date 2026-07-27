@@ -1,58 +1,29 @@
 "use client";
 
 import { useMemo } from "react";
-import {
-  FilterDefinition,
-  FilterableItem,
-} from "@/features/search/shared/filterDefinition";
-import {
-  applyFilterMatches,
-  applyTextSearch,
-  toFilterableItems,
-} from "@/features/search/shared/filterEngine";
-import { FilterDefinitionConfig } from "@/features/search/shared/filterField";
-import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
-import { buildFilterDefinitions } from "@/features/search/shared/filterFactory";
+import type { FilterDefinition, FilterableItem } from "./filterDefinition";
+import { runSearch } from "./filterEngine";
+import type { DataPropertyConfig } from "./filterField";
+import { compilePropertySchema } from "./filterFactory";
+import { useFilterStoreProvider } from "../components/Provider/useFilterStore";
 
 type UseFilterResult<TItem> = {
-  definitions: FilterDefinition<TItem>[];
-  filterableItems: FilterableItem<TItem>[];
+  definitions: readonly FilterDefinition<TItem>[];
+  filterableItems: readonly FilterableItem<TItem>[];
 };
 
-export function useFilter<TItem extends { id: string }>(
-  fields: FilterDefinitionConfig<TItem>[],
-  items: TItem[],
+/** @deprecated Prefer useDataSearch. */
+export function useFilter<TItem>(
+  fields: readonly DataPropertyConfig<TItem>[],
+  items: readonly TItem[],
   searchText: string,
 ): UseFilterResult<TItem> {
-  const inicializedFilterableItems = useMemo(
-    () => toFilterableItems(items),
-    [items],
-  );
-
   const conditions = useFilterStoreProvider((state) => state.conditions);
-
-  // itemsの値自体はtoFilterableItemsで変更しない
-  // const sourceItems = useMemo(
-  //   () => inicializedFilterableItems.map((filterableItem) => filterableItem.item),
-  //   [inicializedFilterableItems],
-  // );
-  const definitions = useMemo(
-    () => buildFilterDefinitions(fields, items),
-    [fields, items],
-  );
-
+  const schema = useMemo(() => compilePropertySchema(fields, items), [fields, items]);
   const filterableItems = useMemo(
-    () =>
-      applyFilterMatches(
-        applyTextSearch(inicializedFilterableItems, definitions, searchText),
-        definitions,
-        conditions,
-      ),
-    [inicializedFilterableItems, definitions, searchText, conditions],
+    () => runSearch(items, { text: searchText, conditions }, schema).entries,
+    [conditions, items, schema, searchText],
   );
 
-  return {
-    definitions,
-    filterableItems,
-  };
+  return { definitions: schema.properties, filterableItems };
 }

@@ -1,372 +1,209 @@
-import {
-  FilterableItem,
+import type {
+  CanonicalValue,
+  CompiledProperty,
+  EngineContext,
+  EvaluationEntry,
   FilterCondition,
-  FilterDefinition,
+  FilterConditionValue,
   FilterPrimitive,
-  FilterRangeValue,
-  ValueType,
+  SearchEnginePlugin,
+  SearchHit,
+  SearchMatchKind,
+  SearchQuery,
+  SearchResult,
 } from "./filterDefinition";
-import { Operator } from "./operatorPolicy";
+import type { Operator } from "./operatorPolicy";
 
-function isRangeValue(
-  value: FilterCondition["value"],
-): value is FilterRangeValue {
-  return (
-    Array.isArray(value) &&
-    value.length === 2 &&
-    value.every((entry) => typeof entry !== "object")
-  );
+const SEARCH_SCORES: Record<SearchMatchKind, number> = {
+  partial: 1,
+  prefix: 2,
+  exact: 3,
+};
+
+function toValues(value: CanonicalValue | CanonicalValue[] | null): CanonicalValue[] {
+  return value === null ? [] : Array.isArray(value) ? value : [value];
 }
 
-function normalizeComparableValue(
-  valueType: ValueType,
-  value: unknown,
-): FilterPrimitive | null {
-  if (value === null || value === undefined) {
-    return null;
-  }
-
-  switch (valueType) {
-    case "number":
-      return typeof value === "number" ? value : Number(value);
-
-    case "boolean":
-      return typeof value === "boolean" ? value : String(value) === "true";
-
-    case "date": {
-      const timestamp =
-        value instanceof Date ? value.getTime() : Date.parse(String(value));
-      return Number.isNaN(timestamp) ? null : timestamp;
-    }
-
-    case "text":
-    case "enum":
-      return String(value);
-  }
+function isRangeValue(value: FilterConditionValue): value is [FilterPrimitive, FilterPrimitive] {
+  return Array.isArray(value) && value.length === 2 && value.every((entry) => !Array.isArray(entry));
 }
 
-function compareScalar(
-  left: FilterPrimitive | null,
-  right: FilterPrimitive | null,
-): number | null {
-  if (left === null || right === null) {
-    return null;
-  }
-
-  if (typeof left === "number" && typeof right === "number") {
-    return left - right;
-  }
-
-  if (typeof left === "boolean" && typeof right === "boolean") {
-    return Number(left) - Number(right);
-  }
-
+function compare(left: CanonicalValue, right: CanonicalValue): number {
+  if (typeof left === "number" && typeof right === "number") return left - right;
+  if (typeof left === "boolean" && typeof right === "boolean") return Number(left) - Number(right);
   return String(left).localeCompare(String(right));
 }
 
-// contains
-function includesText(
-  actual: unknown,
-  expected: FilterPrimitive | null,
-): boolean {
-  if (actual === null || actual === undefined || expected === null) {
-    return false;
-  }
-
-  return String(actual)
-    .toLocaleLowerCase()
-    .includes(String(expected).toLocaleLowerCase());
-}
-
-export function isOperatorAllowed<TItem>(
-  definition: FilterDefinition<TItem>,
-  operator: Operator,
-): boolean {
-  return definition.operators.includes(operator);
-}
-
-export function normalizeCondition<TItem>(
-  condition: FilterCondition,
-  definition: FilterDefinition<TItem>,
-): FilterCondition | null {
-  if (!isOperatorAllowed(definition, condition.operator)) {
-    return null;
-  }
-
-  return condition;
-}
-
-export function matchesCondition<TItem>(
+function matchesCondition<TItem>(
   item: TItem,
   condition: FilterCondition,
-  definition: FilterDefinition<TItem>,
+  property: CompiledProperty<TItem>,
 ): boolean {
-  const normalizedCondition = normalizeCondition(condition, definition);
-  if (!normalizedCondition) {
-    return false;
-  }
+  if (!property.operators.includes(condition.operator)) return false;
+  const expected = property.normalizeConditionValue(condition.value);
+  if (expected === null) return false;
+  const actual = toValues(property.readCanonicalValue(item));
 
-  const actualValue = definition.getValue(item);
-  const expectedValue = normalizedCondition.value;
-
-  switch (normalizedCondition.operator) {
-    case "eq": {
-      if (Array.isArray(actualValue)) {
-        // OR 検索
-        return actualValue.some((entry) => entry === expectedValue);
-      }
-
-      return actualValue === expectedValue;
-    }
-    case "in": {
-      if (!Array.isArray(expectedValue)) {
-        return false;
-      }
-
-      if (Array.isArray(actualValue)) {
-        return actualValue.some((entry) => expectedValue.includes(entry));
-      }
-      if (actualValue === null || actualValue === undefined) {
-        return false;
-      }
-      return expectedValue.includes(actualValue);
-    }
-
+  switch (condition.operator) {
+    case "eq":
+      return !Array.isArray(expected) && actual.some((value) => value === expected);
+    case "in":
+      return Array.isArray(expected) && actual.some((value) => expected.includes(value));
     case "contains":
-      return includesText(
-        actualValue,
-        Array.isArray(expectedValue) ? null : expectedValue,
-      );
-
+      return !Array.isArray(expected) && actual.some((value) => String(value).toLocaleLowerCase().includes(String(expected).toLocaleLowerCase()));
     case "between": {
-      if (!isRangeValue(expectedValue) || Array.isArray(actualValue)) {
-        return false;
-      }
-
-      const actualComparable = normalizeComparableValue(
-        definition.valueType,
-        actualValue,
-      );
-      const minComparable = normalizeComparableValue(
-        definition.valueType,
-        expectedValue[0],
-      );
-      const maxComparable = normalizeComparableValue(
-        definition.valueType,
-        expectedValue[1],
-      );
-
-      const minResult = compareScalar(actualComparable, minComparable);
-      const maxResult = compareScalar(actualComparable, maxComparable);
-
-      return (
-        minResult !== null &&
-        maxResult !== null &&
-        minResult >= 0 &&
-        maxResult <= 0
-      );
+      if (!isRangeValue(expected) || actual.length !== 1) return false;
+      const actualValue = actual[0]!;
+      return compare(actualValue, expected[0]) >= 0 && compare(actualValue, expected[1]) <= 0;
     }
-
     case "gt":
     case "gte":
     case "lt":
     case "lte": {
-      if (Array.isArray(actualValue) || Array.isArray(expectedValue)) {
-        return false;
-      }
-
-      const actualComparable = normalizeComparableValue(
-        definition.valueType,
-        actualValue,
-      );
-      const expectedComparable = normalizeComparableValue(
-        definition.valueType,
-        expectedValue,
-      );
-      const result = compareScalar(actualComparable, expectedComparable);
-
-      if (result === null) {
-        return false;
-      }
-
-      switch (normalizedCondition.operator) {
-        case "gt":
-          return result > 0;
-        case "gte":
-          return result >= 0;
-        case "lt":
-          return result < 0;
-        case "lte":
-          return result <= 0;
-        default:
-          return false;
-      }
+      if (Array.isArray(expected) || actual.length !== 1) return false;
+      const result = compare(actual[0]!, expected);
+      return condition.operator === "gt" ? result > 0 : condition.operator === "gte" ? result >= 0 : condition.operator === "lt" ? result < 0 : result <= 0;
     }
   }
 }
-
-function matchesAllConditions<TItem>(
-  item: TItem,
-  conditions: FilterCondition[],
-  definitionMap: Map<string, FilterDefinition<TItem>>,
-): boolean {
-  // AND 検索
-  return conditions.every((condition) => {
-    const definition = definitionMap.get(condition.fieldKey);
-    if (!definition) {
-      return false;
-    }
-
-    return matchesCondition(item, condition, definition);
-  });
-}
-
-const SEARCH_MATCH_SCORE = {
-  partial: 1,
-  prefix: 2,
-  exact: 3,
-} as const;
 
 function normalizeSearchText(value: string): string {
   return value.trim().toLocaleLowerCase();
 }
 
-function getSearchableValues<TItem>(
-  item: TItem,
-  definition: FilterDefinition<TItem>,
-): string[] {
-  const rawValue = definition.getValue(item);
-  const values = Array.isArray(rawValue) ? rawValue : [rawValue];
-
-  return values.flatMap((value) => {
-    if (value === null || value === undefined) {
-      return [];
-    }
-
-    if (definition.inputType === "option") {
-      const option = definition.options.find((entry) => entry.value === value);
-      return option ? [option.label] : [];
-    }
-
-    return [String(value)];
-  });
-}
-
-function getSearchMatchScore(candidate: string, query: string): number {
+function getMatchKind(candidate: string, query: string): SearchMatchKind | null {
   const normalizedCandidate = normalizeSearchText(candidate);
-
-  if (normalizedCandidate === query) {
-    return SEARCH_MATCH_SCORE.exact;
-  }
-
-  if (normalizedCandidate.startsWith(query)) {
-    return SEARCH_MATCH_SCORE.prefix;
-  }
-
-  return normalizedCandidate.includes(query) ? SEARCH_MATCH_SCORE.partial : 0;
+  if (normalizedCandidate === query) return "exact";
+  if (normalizedCandidate.startsWith(query)) return "prefix";
+  return normalizedCandidate.includes(query) ? "partial" : null;
 }
 
-export function applyFilters<TItem>(
-  items: TItem[],
-  definitions: FilterDefinition<TItem>[],
-  conditions: FilterCondition[],
-): TItem[] {
-  if (conditions.length === 0) {
-    return items;
-  }
-
-  const definitionMap = new Map(
-    definitions.map((definition) => [definition.key, definition]),
-  );
-
-  return items.filter((item) => matchesAllConditions(item, conditions, definitionMap));
-}
-
-
-
-
-/**
- * items を FilterableItem に変換する。
- * list/card どちらの表示にも共通で使える形。
- * - isMatch: 条件が無ければ常に true、あれば AND 検索で判定
- * - filteringScore: 現状は未実装（sort 未対応）のため常に 0
- */
-function resolveListId<TItem>(item: TItem, index: number): string {
-  if (
-    typeof item === "object" &&
-    item !== null &&
-    "id" in item &&
-    typeof (item as { id?: unknown }).id === "string"
-  ) {
+function resolveEntryId<TItem>(item: TItem, index: number): string {
+  if (typeof item === "object" && item !== null && "id" in item && typeof (item as { id?: unknown }).id === "string") {
     return (item as { id: string }).id;
   }
-
-  return `filterable-item-${index}`;
+  return `search-entry-${index}`;
 }
 
-export function toFilterableItems<TItem>(items: TItem[]): FilterableItem<TItem>[] {
-  return items.map((item, index) => ({
-    listId: resolveListId(item, index),
-    filteringScore: 0,
-    isMatch: true,
-    item,
-  }));
+export function createEngineContext<TItem>(
+  source: readonly TItem[],
+  query: SearchQuery,
+  runtime: EngineContext<TItem>["runtime"],
+): EngineContext<TItem> {
+  return {
+    source,
+    query,
+    runtime,
+    working: {
+      entries: source.map((item, index) => {
+        const id = resolveEntryId(item, index);
+        return {
+          id,
+          listId: id,
+          item,
+          filterPass: true,
+          searchPass: true,
+          searchHits: [],
+          filteringScore: 0,
+          isMatch: true,
+        };
+      }),
+    },
+  };
 }
 
-export function applyTextSearch<TItem>(
-  filterableItems: FilterableItem<TItem>[],
-  definitions: FilterDefinition<TItem>[],
-  searchText: string,
-): FilterableItem<TItem>[] {
-  const query = normalizeSearchText(searchText);
+export const filterEngine: SearchEnginePlugin<unknown> = {
+  id: "filter",
+  execute: (context) => ({
+    ...context,
+    working: {
+      entries: context.working.entries.map((entry) => ({
+        ...entry,
+        filterPass: context.query.conditions.every((condition) => {
+          const property = context.runtime.byKey.get(condition.fieldKey);
+          return property ? matchesCondition(entry.item, condition, property) : false;
+        }),
+      })),
+    },
+  }),
+};
 
-  if (!query) {
-    return filterableItems.map((filterableItem) => ({
-      ...filterableItem,
-      filteringScore: 0,
-    }));
-  }
-
-  return filterableItems.map((filterableItem) => {
-    const filteringScore = definitions.reduce((highestScore, definition) => {
-      const definitionScore = getSearchableValues(filterableItem.item, definition)
-        .reduce(
-          (highestValueScore, candidate) =>
-            Math.max(highestValueScore, getSearchMatchScore(candidate, query)),
-          0,
-        );
-
-      return Math.max(highestScore, definitionScore);
-    }, 0);
-
+export const searchEngine: SearchEnginePlugin<unknown> = {
+  id: "search",
+  execute: (context) => {
+    const query = normalizeSearchText(context.query.text);
+    if (!query) return context;
     return {
-      ...filterableItem,
-      filteringScore,
-      isMatch: filterableItem.isMatch && filteringScore > 0,
+      ...context,
+      working: {
+        entries: context.working.entries.map((entry) => {
+          const searchHits: SearchHit[] = [];
+          for (const property of context.runtime.properties) {
+            for (const value of property.getSearchText(entry.item)) {
+              const kind = getMatchKind(value, query);
+              if (kind) searchHits.push({ fieldKey: property.key, value, kind });
+            }
+          }
+          return { ...entry, searchPass: searchHits.length > 0, searchHits };
+        }),
+      },
     };
-  });
+  },
+};
+
+export const scoreEngine: SearchEnginePlugin<unknown> = {
+  id: "score",
+  execute: (context) => ({
+    ...context,
+    working: {
+      entries: context.working.entries.map((entry) => ({
+        ...entry,
+        filteringScore: entry.searchHits.reduce(
+          (score, hit) => Math.max(score, SEARCH_SCORES[hit.kind]),
+          0,
+        ),
+      })),
+    },
+  }),
+};
+
+export function finalizeEngineContext<TItem>(context: EngineContext<TItem>): EngineContext<TItem> {
+  const entries = context.working.entries.map((entry) => ({
+    ...entry,
+    isMatch: entry.filterPass && entry.searchPass,
+  }));
+  return {
+    ...context,
+    working: { entries },
+    result: { entries, matchCount: entries.filter((entry) => entry.isMatch).length },
+  };
 }
 
-
-/**
- * 既存の FilterableItem[] に対して condition を評価し、isMatch を更新する。
- * condition が変化した時にこれを呼び出して filterableItems を更新する想定。
- * listId / filteringScore / item はそのまま引き継ぐ。
- */
-export function applyFilterMatches<TItem>(
-  filterableItems: FilterableItem<TItem>[],
-  definitions: FilterDefinition<TItem>[],
-  conditions: FilterCondition[],
-): FilterableItem<TItem>[] {
-  const definitionMap = new Map(
-    definitions.map((definition) => [definition.key, definition]),
+export function runSearch<TItem>(
+  source: readonly TItem[],
+  query: SearchQuery,
+  runtime: EngineContext<TItem>["runtime"],
+  plugins: readonly SearchEnginePlugin<TItem>[] = [
+    filterEngine as SearchEnginePlugin<TItem>,
+    searchEngine as SearchEnginePlugin<TItem>,
+    scoreEngine as SearchEnginePlugin<TItem>,
+  ],
+): SearchResult<TItem> {
+  const context = plugins.reduce(
+    (current, plugin) => plugin.execute(current),
+    createEngineContext(source, query, runtime),
   );
+  return finalizeEngineContext(context).result!;
+}
 
-  return filterableItems.map((filterableItem) => ({
-    ...filterableItem,
-    isMatch:
-      filterableItem.isMatch &&
-      (conditions.length === 0 ||
-        matchesAllConditions(filterableItem.item, conditions, definitionMap)),
-  }));
+export function selectListEntries<TItem>(result: SearchResult<TItem>): EvaluationEntry<TItem>[] {
+  return result.entries.filter((entry) => entry.isMatch);
+}
+
+export function selectGridEntries<TItem>(result: SearchResult<TItem>): readonly EvaluationEntry<TItem>[] {
+  return result.entries;
+}
+
+export function isOperatorAllowed<TItem>(property: CompiledProperty<TItem>, operator: Operator): boolean {
+  return property.operators.includes(operator);
 }

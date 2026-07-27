@@ -1,8 +1,5 @@
 import type { StudentClassItem } from "@/features/student/types";
-import {
-  defineFilterField,
-  type FilterDefinitionConfig,
-} from "../../search/shared/filterField";
+import { defineDataProperty, type DataPropertyConfig } from "../../search/shared/filterField";
 import type { FilterPresetConfig } from "@/features/search/shared/filterPreset.type";
 
 export const STUDENT_GRADE_FILTER_KEYS = {
@@ -16,17 +13,18 @@ export const STUDENT_GRADE_FILTER_KEYS = {
 export type StudentPlanFilterKey =
   (typeof STUDENT_GRADE_FILTER_KEYS)[keyof typeof STUDENT_GRADE_FILTER_KEYS];
 
-export const STUDENT_GRADE_FILTER_FIELDS: FilterDefinitionConfig<StudentClassItem>[] =
+export const STUDENT_GRADE_FILTER_FIELDS: DataPropertyConfig<StudentClassItem>[] =
   [
-    defineFilterField<StudentClassItem>({
+    defineDataProperty<StudentClassItem>({
       key: STUDENT_GRADE_FILTER_KEYS.className,
       label: "Nombre de materia",
       icon: "class",
       valueType: "text",
       inputType: "free",
       getValue: (item) => item.name,
+      search: true,
     }),
-    defineFilterField<StudentClassItem>({
+    defineDataProperty<StudentClassItem>({
       key: STUDENT_GRADE_FILTER_KEYS.classCodeAndNumber,
       label: "Clave de materia",
       icon: "hashmark",
@@ -34,8 +32,9 @@ export const STUDENT_GRADE_FILTER_FIELDS: FilterDefinitionConfig<StudentClassIte
       inputType: "option",
       dynamicOptions: true,
       getValue: (item) => `${item.keyCode}${item.keyNumber}`.trim(),
+      search: true,
     }),
-    defineFilterField<StudentClassItem>({
+    defineDataProperty<StudentClassItem>({
       key: STUDENT_GRADE_FILTER_KEYS.period,
       label: "Periodo",
       icon: "schedule",
@@ -43,16 +42,18 @@ export const STUDENT_GRADE_FILTER_FIELDS: FilterDefinitionConfig<StudentClassIte
       inputType: "option",
       dynamicOptions: true,
       getValue: (item) => item.period?.raw ?? null,
+      search: true,
     }),
-    defineFilterField<StudentClassItem>({
+    defineDataProperty<StudentClassItem>({
       key: STUDENT_GRADE_FILTER_KEYS.grade,
       label: "Calificación",
       icon: "schoolHat",
       valueType: "number",
       inputType: "free",
       getValue: (item) => item.grade,
+      search: true,
     }),
-    defineFilterField<StudentClassItem>({
+    defineDataProperty<StudentClassItem>({
       key: STUDENT_GRADE_FILTER_KEYS.status,
       label: "Estado",
       icon: "status",
@@ -70,6 +71,7 @@ export const STUDENT_GRADE_FILTER_FIELDS: FilterDefinitionConfig<StudentClassIte
         { label: "Bloqueado por otros razones", value: "lockedByOthers" },
       ],
       getValue: (item) => item.status,
+      search: true,
     }),
   ];
 

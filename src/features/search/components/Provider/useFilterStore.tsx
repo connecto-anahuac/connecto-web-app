@@ -10,3 +10,5 @@ export function useFilterStoreProvider<T>(selector: (state: FilterStore) => T) {
 
   return useStore(store, selector);
 }
+
+export const useDataSearchStore = useFilterStoreProvider;

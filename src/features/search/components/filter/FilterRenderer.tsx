@@ -1,4 +1,4 @@
-import type { ComponentPropsWithRef, ReactNode } from "react";
+import type { ComponentPropsWithRef } from "react";
 import { DateFilter } from "./DateFilter";
 import { MultiSelectFilter } from "./MultiselectFilter";
 import { NumberFilter } from "./NumberFilter";
@@ -28,7 +28,7 @@ export function FilterRenderer<TItem>({
     case "select":
       return <SelectFilter filter={filter} icon={icon} {...props} />;
 
-    case "enum":
+    case "multiSelect":
       return <MultiSelectFilter filter={filter} icon={icon} {...props} />;
 
     case "date":

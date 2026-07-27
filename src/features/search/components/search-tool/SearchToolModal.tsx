@@ -9,7 +9,7 @@ import { FilterDefinition } from "../../shared/filterDefinition";
 import { cn } from "@/shared/lib/util";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  definitions: FilterDefinition<TItem>[];
+  definitions: readonly FilterDefinition<TItem>[];
 };
 
 export default function SearchToolModal<TItem>({

@@ -1,97 +1,74 @@
-import { IconName } from "@/components/icon";
-import { FilterPrimitive, ValueType } from "./filterDefinition";
-import { Operator } from "./operatorPolicy";
+import type { IconName } from "@/components/icon";
+import type {
+  CanonicalValue,
+  FilterConditionValue,
+  FilterOption,
+  ValueType,
+} from "./filterDefinition";
+import type { Operator } from "./operatorPolicy";
 
-/**
- * option フィルターの選択肢。
- * select menuの選択アイテム
- */
-export type FilterFieldOption<
-  TValue extends FilterPrimitive = FilterPrimitive,
-> = {
-  label: string;
-  value: TValue;
-};
+export type DataPropertyOption = FilterOption;
 
-/**
- * フィールドの宣言（プレゼンテーション非依存 / シリアライズ可能）。
- *
- * ここでは「そのフィールドが何のデータ型か」だけを宣言する。
- * operator と editor（UIコンポーネント種別）は valueType から自動導出するため持たない。
- * icon などの表示情報は filter-metadata 側で field key に紐付けて管理する。
- */
-// TItem ->実際の値
-// TValue -> フィルターで扱う値の型
-type BaseFilterDefinitionConfig<
-  TItem,
-  TValue extends FilterPrimitive = FilterPrimitive,
-> = {
+export type PropertySearchConfig<TItem> =
+  | boolean
+  | {
+      getText?: (context: {
+        item: TItem;
+        sourceValue: unknown;
+        canonicalValues: readonly CanonicalValue[];
+        displayValues: readonly string[];
+      }) => readonly string[];
+    };
+
+type BaseDataPropertyConfig<TItem> = {
   key: string;
   label: string;
   icon: IconName;
   valueType: ValueType;
-  getValue: (item: TItem) => TValue | TValue[] | null | undefined;
-  /** valueType 由来のデフォルト operator を上書きしたい場合のみ指定 */
-  operators?: Operator[];
+  /** Reads the source value from the view model. */
+  getValue: (item: TItem) => unknown;
+  /** Converts source and filter-input values into comparison values. */
+  normalize?: (value: unknown) => CanonicalValue | CanonicalValue[] | null;
+  /** Converts a value into a visible string when it has no option label. */
+  formatDisplay?: (context: {
+    item: TItem;
+    sourceValue: unknown;
+    canonicalValue: CanonicalValue;
+  }) => string;
+  /** Explicitly controls global-text-search participation. */
+  search?: PropertySearchConfig<TItem>;
+  operators?: readonly Operator[];
 };
 
-/** 自由入力（text / number / date） */
-export type FreeFilterDefinitionConfig<
-  TItem,
-  TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterDefinitionConfig<TItem, TValue> & {
+export type FreeDataPropertyConfig<TItem> = BaseDataPropertyConfig<TItem> & {
   inputType: "free";
 };
 
-/** 選択肢入力（select / multiSelect） */
-type StaticOptionFilterField<
-  TItem,
-  TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterDefinitionConfig<TItem, TValue> & {
-  /** 確定している選択肢は static に持たせる */
-  options: FilterFieldOption<TValue>[];
-  /** true の場合、選択肢を dataset から実行時に導出する（不確定な集合向け） */
-  dynamicOptions?: never;
-};
-
-type DynamicOptionFilterField<
-  TItem,
-  TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterDefinitionConfig<TItem, TValue> & {
-  /** 確定している選択肢は static に持たせる */
-  options?: never;
-  /** true の場合、選択肢を dataset から実行時に導出する（不確定な集合向け） */
-  dynamicOptions: boolean;
-};
-
-export type OptionFilterDefinitionConfig<
-  TItem,
-  TValue extends FilterPrimitive = FilterPrimitive,
-> = BaseFilterDefinitionConfig<TItem, TValue> & {
+export type OptionDataPropertyConfig<TItem> = BaseDataPropertyConfig<TItem> & {
   inputType: "option";
-  /**
-   * 複数選択を許可するか（チェックリスト UI / operator "in"）。
-   * データ型（valueType）は単一値でも、フィルターとしては複数値を選べるため
-   * ここで UI の選択多重度を制御する。デフォルトは複数選択（true）。
-   */
   multiple?: boolean;
-} & (
-    | StaticOptionFilterField<TItem, TValue>
-    | DynamicOptionFilterField<TItem, TValue>
-  );
+  options?: readonly DataPropertyOption[];
+  dynamicOptions?: boolean;
+};
 
-export type FilterDefinitionConfig<
-  TItem,
-  TValue extends FilterPrimitive = FilterPrimitive,
-> = FreeFilterDefinitionConfig<TItem, TValue> | OptionFilterDefinitionConfig<TItem, TValue>;
+/** The sole declaration for a data property and its search/filter metadata. */
+export type DataPropertyConfig<TItem> =
+  | FreeDataPropertyConfig<TItem>
+  | OptionDataPropertyConfig<TItem>;
 
-/**
- * 型付きの field を宣言するためのヘルパー。
- * 型推論を効かせつつ FilterField として扱えるようにする。
- */
-export function defineFilterField<
-  TItem,
-  TValue extends FilterPrimitive = FilterPrimitive,
->(field: FilterDefinitionConfig<TItem, TValue>): FilterDefinitionConfig<TItem, TValue> {
-  return field;
+/** Compatibility alias retained only while all current consumers are migrated. */
+export type FilterDefinitionConfig<TItem> = DataPropertyConfig<TItem>;
+
+export function defineDataProperty<TItem>(
+  property: DataPropertyConfig<TItem>,
+): DataPropertyConfig<TItem> {
+  return property;
+}
+
+export const defineFilterField = defineDataProperty;
+
+export function isFilterConditionValue(
+  value: unknown,
+): value is FilterConditionValue {
+  return value === null || typeof value === "string" || typeof value === "number" || typeof value === "boolean" || Array.isArray(value);
 }

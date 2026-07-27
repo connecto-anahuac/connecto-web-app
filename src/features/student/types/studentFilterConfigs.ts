@@ -1,5 +1,5 @@
 import type { StudentListItem } from "@/features/students/types/student-list-item";
-import { defineFilterField, type FilterDefinitionConfig } from "../../search/shared/filterField";
+import { defineDataProperty, type DataPropertyConfig } from "../../search/shared/filterField";
 
 /**
  * Student フィルターの field key。
@@ -40,16 +40,17 @@ export const STUDENT_STATUS_OPTIONS = [{ label: "Activo", value: "Activo" },
  *   - 実行時に値が確定するもの（status / semester / plan）は dynamicOptions で dataset から導出
  *   - 確定しているもの（career）は static options
  */
-export const STUDENT_FILTER_FIELDS: FilterDefinitionConfig<StudentListItem>[] = [
-  defineFilterField<StudentListItem>({
+export const STUDENT_FILTER_FIELDS: DataPropertyConfig<StudentListItem>[] = [
+  defineDataProperty<StudentListItem>({
     key: STUDENT_FILTER_KEYS.name,
     label: "Nombre",
     icon:"person",
     valueType: "text",
     inputType: "free",
     getValue: (student) => student.name,
+    search: true,
   }),
-  defineFilterField<StudentListItem>({
+  defineDataProperty<StudentListItem>({
     key: STUDENT_FILTER_KEYS.status,
     label: "Estatus",
     icon:"status",
@@ -58,8 +59,9 @@ export const STUDENT_FILTER_FIELDS: FilterDefinitionConfig<StudentListItem>[] = 
     // dynamicOptions: true,
     options: [...STUDENT_STATUS_OPTIONS],
     getValue: (student) => student.status,
+    search: false,
   }),
-  defineFilterField<StudentListItem>({
+  defineDataProperty<StudentListItem>({
     key: STUDENT_FILTER_KEYS.currentSemester,
     label: "Semestre",
     icon:"schedule",
@@ -67,8 +69,9 @@ export const STUDENT_FILTER_FIELDS: FilterDefinitionConfig<StudentListItem>[] = 
     inputType: "option",
     dynamicOptions: true,
     getValue: (student) => student.currentSemester,
+    search: false,
   }),
-  defineFilterField<StudentListItem>({
+  defineDataProperty<StudentListItem>({
     key: STUDENT_FILTER_KEYS.career,
     label: "Carrera",
     icon:"schoolHat",
@@ -76,8 +79,9 @@ export const STUDENT_FILTER_FIELDS: FilterDefinitionConfig<StudentListItem>[] = 
     inputType: "option",
     options: [...STUDENT_CAREER_OPTIONS],
     getValue: (student) => student.career,
+    search: false,
   }),
-  defineFilterField<StudentListItem>({
+  defineDataProperty<StudentListItem>({
     key: STUDENT_FILTER_KEYS.plan,
     label: "Plan",
     icon:"schoolHat",
@@ -85,13 +89,15 @@ export const STUDENT_FILTER_FIELDS: FilterDefinitionConfig<StudentListItem>[] = 
     inputType: "option",
     dynamicOptions: true,
     getValue: (student) => student.plan,
+    search: false,
   }),
-  defineFilterField<StudentListItem>({
+  defineDataProperty<StudentListItem>({
     key: STUDENT_FILTER_KEYS.failCount,
     label: "Numero de materias reprobadas",
     icon:"failedClass",
     valueType: "number",
     inputType: "free",
     getValue: (student) => student.failCount,
+    search: false,
   }),
 ];

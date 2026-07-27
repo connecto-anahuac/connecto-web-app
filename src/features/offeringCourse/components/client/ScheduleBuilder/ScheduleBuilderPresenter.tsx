@@ -11,7 +11,7 @@ import OfferingCourseDetail from "../../OfferingCourseDetail";
 
 type Props = {
   career: string;
-  definitions: FilterDefinition<OfferingCourse>[];
+  definitions: readonly FilterDefinition<OfferingCourse>[];
   error: string | null;
   hasActiveFilters: boolean;
   isFilterOpen: boolean;

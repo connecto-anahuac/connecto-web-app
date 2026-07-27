@@ -1,11 +1,10 @@
 "use client";
 
-import { useState, type ComponentProps } from "react";
+import { useCallback, type ComponentProps } from "react";
 import { cn } from "@/shared/lib/util";
 import { IconName, Icons } from "../icon";
 import { DisableProps, LoadableProps } from "@/shared/lib/cva";
-import { ButtonVariantProps, buttonVariants } from "./button_cva";
-import Button from "./Button";
+import { ButtonVariantProps } from "./button_cva";
 import { FilterRenderer } from "@/features/search/components/filter/FilterRenderer";
 import {
   autoUpdate,
@@ -17,12 +16,7 @@ import {
   useFloating,
   useInteractions,
 } from "@floating-ui/react";
-import {
-  FilterCondition,
-  FilterConditionValue,
-  FilterDefinition,
-} from "@/features/search/shared/filterDefinition";
-import { useFilter } from "@/features/search/shared/useFilter";
+import { FilterConditionValue, FilterDefinition } from "@/features/search/shared/filterDefinition";
 import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 import { operatorNumberButtonLabels } from "@/features/search/shared/operatorPolicy";
 
@@ -35,7 +29,7 @@ type ButtonProps<TItem> = Partial<ButtonVariantProps> &
     hasBadge?: boolean;
     definition: FilterDefinition<TItem>;
     open: boolean;
-    onOpenChange: (open: Boolean) => void;
+    onOpenChange: (open: boolean) => void;
   };
 
 export default function FilterButton<TItem>({
@@ -69,6 +63,14 @@ export default function FilterButton<TItem>({
   const dismiss = useDismiss(context); //when click outside of the modal, it will be closed
 
   const { getReferenceProps } = useInteractions([click, dismiss]);
+  const setReferenceRef = useCallback(
+    (node: HTMLButtonElement | null) => refs.setReference(node),
+    [refs],
+  );
+  const setFloatingRef = useCallback(
+    (node: HTMLElement | null) => refs.setFloating(node),
+    [refs],
+  );
 
   const condition = useFilterStoreProvider((state) =>
     state.getConditionByKey(definition.key),
@@ -130,7 +132,7 @@ export default function FilterButton<TItem>({
   return (
     <>
       {/* <Button
-        ref={refs.setReference}
+        ref={setReferenceRef}
         label={formattedLabel}
         icon={buttonIcon}
         intent={intent}
@@ -147,7 +149,7 @@ export default function FilterButton<TItem>({
 
       <button
         aria-pressed={open}
-        ref={refs.setReference}
+        ref={setReferenceRef}
         className={cn(
           // buttonVariants({
           //   intent: intent,
@@ -203,7 +205,7 @@ export default function FilterButton<TItem>({
 
       {open && (
         <FilterRenderer
-          ref={refs.setFloating}
+          ref={setFloatingRef}
           style={{
             ...floatingStyles,
             zIndex: 9999,

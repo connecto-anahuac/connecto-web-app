@@ -1,9 +1,9 @@
-import { FilterProvider } from "@/features/search/components/Provider/FilterProvider";
+import { DataSearchProvider } from "@/features/search/components/Provider/FilterProvider";
 
 export default function StudentsLayout({ children }: { children: React.ReactNode }) {
   return (
-    <FilterProvider>
+    <DataSearchProvider>
       {children}
-    </FilterProvider>
+    </DataSearchProvider>
   );
 }

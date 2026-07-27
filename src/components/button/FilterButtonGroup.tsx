@@ -7,7 +7,7 @@ import FilterButton from "./FilterButton";
 import Button from "./Button";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  definitions: FilterDefinition<TItem>[];
+  definitions: readonly FilterDefinition<TItem>[];
 };
 
 export default function FilterButtonGroup<TItem>({

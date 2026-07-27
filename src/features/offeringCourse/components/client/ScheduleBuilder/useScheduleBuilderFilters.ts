@@ -1,85 +1,27 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
-import { applyFilters } from "@/features/search/shared/filterEngine";
-import type { FilterCondition } from "@/features/search/shared/filterDefinition";
-import { buildFilterDefinitions } from "@/features/search/shared/filterFactory";
+import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import {
   OFFERING_COURSE_FILTER_FIELDS,
-  OFFERING_COURSE_FILTER_KEYS,
 } from "@/features/offeringCourse/types/offering-course-filter-fields";
-import { createFilterStore } from "@/features/search/components/Provider/filterStore";
-import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
-
-const OFFERING_COURSE_FILTER_KEY_LOOKUP: Record<string, true> = {
-  [OFFERING_COURSE_FILTER_KEYS.className]: true,
-};
-
-function isOfferingCourseFilterKey(fieldKey: string) {
-  return OFFERING_COURSE_FILTER_KEY_LOOKUP[fieldKey] === true;
-}
-
-function getRelevantConditions(conditions: FilterCondition[]) {
-  return conditions.filter((condition) =>
-    isOfferingCourseFilterKey(condition.fieldKey),
-  );
-}
+import { useDataSearch } from "@/features/search/shared/useDataSearch";
 
 export function useScheduleBuilderFilters(offeringCourses: OfferingCourse[]) {
-  // const conditions = createFilterStore((state) => state.conditions);
-  // const upsertCondition = createFilterStore((state) => state.upsertCondition);
-  // const removeCondition = createFilterStore((state) => state.removeCondition);
-  const conditions = useFilterStoreProvider((state) => state.conditions);
-  const upsertCondition = useFilterStoreProvider((state) => state.upsertCondition);
-  const removeCondition = useFilterStoreProvider((state) => state.removeCondition);
-
-  const relevantConditions = getRelevantConditions(conditions);
-
-  const definitions = useMemo(
-    () => buildFilterDefinitions(OFFERING_COURSE_FILTER_FIELDS, offeringCourses),
-    [offeringCourses],
-  );
-
-  const classNameCondition = relevantConditions.find(
-    (condition) => condition.fieldKey === OFFERING_COURSE_FILTER_KEYS.className,
-  );
-
-  const searchText =
-    typeof classNameCondition?.value === "string" ? classNameCondition.value : "";
-
-  const setSearchText = useCallback(
-    (value: string) => {
-      if (value === "") {
-        removeCondition(OFFERING_COURSE_FILTER_KEYS.className);
-        return;
-      }
-
-      upsertCondition({
-        id: OFFERING_COURSE_FILTER_KEYS.className,
-        fieldKey: OFFERING_COURSE_FILTER_KEYS.className,
-        operator: classNameCondition?.operator ?? "contains",
-        value,
-      });
-    },
-    [classNameCondition?.operator, removeCondition, upsertCondition],
-  );
-
-  const filteredOfferingCourses = useMemo(
-    () => applyFilters(offeringCourses, definitions, relevantConditions),
-    [offeringCourses, definitions, relevantConditions],
-  );
-
-  const matchingCourseKeys = useMemo(
-    () => new Set(filteredOfferingCourses.map((item) => item.key)),
-    [filteredOfferingCourses],
-  );
+  const {
+    definitions,
+    gridEntries,
+    query,
+    searchText,
+    setSearchText,
+  } = useDataSearch(OFFERING_COURSE_FILTER_FIELDS, offeringCourses);
 
   return {
     definitions,
     searchText,
     setSearchText,
-    matchingCourseKeys,
-    hasActiveFilters: relevantConditions.length > 0,
+    matchingCourseKeys: new Set(
+      gridEntries.filter((entry) => entry.isMatch).map((entry) => entry.item.key),
+    ),
+    hasActiveFilters: query.conditions.length > 0 || query.text.trim().length > 0,
   };
 }

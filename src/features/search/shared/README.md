@@ -1,235 +1,108 @@
-# Description
-- FilterField
-- FilterDefinition
-- FilterCondition
+# Search shared
 
-filterField -> filterDefinition 
-filterDefinitionをアプリ内では使用。
-これを生成するための値としてfilterFieldで値を定義する。
+データ一覧・カードグリッド共通の、クライアント側検索基盤です。学生一覧、StudentDetail、開講科目スケジュールはこの層を使います。
 
-使用可能なフィルターの定義
+## まず読むファイル
 
-例えば学生が以下のような型だとします。
+- `filterField.ts`: `DataPropertyConfig<TItem>`。データプロパティの唯一の定義元。
+- `filterFactory.ts`: 設定を実行用の `CompiledPropertySchema<TItem>` にコンパイルする。
+- `filterEngine.ts`: `EngineContext` と Filter / Search / Score の実行パイプライン。
+- `useDataSearch.ts`: Reactコンテナが使う標準フック。
+- `../components/Provider/README.md`: `DataSearchProvider` とquery状態の配置ルール。
 
-```ts
-type Student = {
-  id: string;
-  name: string;
-  age: number;
-  faculty: "Engineering" | "Business" | "Law";
-  active: boolean;
-  failedSubjects: string[];
-};
-```
+## 値の責務
 
-# FilterField
+各プロパティでは、同じ値を用途別に分けます。ラベルを条件や比較に保存してはいけません。
 
-## FreeFilterField
+| 値 | 役割 | 例: 状態 |
+| --- | --- | --- |
+| source value | ViewModelから取得した入力値 | `"failed"` |
+| canonical value | 条件、比較、option識別に使う正規値 | `"failed"` |
+| display value | フィルタUIと画面へ表示する値 | `"Reprobado"` |
+| search text | 全文検索の照合対象 | `"Reprobado"` |
 
-自由入力するフィールドです。
+`FilterCondition.value` と `SearchQuery.conditions` に保存できるのは canonical value だけです。optionの `value` はcanonical value、`label` はdisplay valueです。optionフィールドの全文検索はlabelを対象にし、内部valueを検索しません。
 
-```ts
-const nameField: FreeFilterField<Student, string> = {
-  key: "name",
-  label: "名前",
+## プロパティを追加する
 
-  inputType: "free",
-  valueType: "text",
-
-  getValue: student => student.name,
-};
-```
-
-##  OptionFilterField
-
-こちらは選択肢があります。
-
-例えば学部。
+ドメインの `types/*FilterConfigs.ts` に、`defineDataProperty` で定義します。
 
 ```ts
-const facultyField: OptionFilterField<Student, string> = {
-  key: "faculty",
-  label: "学部",
-
-  inputType: "option",
-  valueType: "text",
-
-  options: [
-    {
-      label: "工学部",
-      value: "Engineering",
-    },
-    {
-      label: "経営学部",
-      value: "Business",
-    },
-    {
-      label: "法学部",
-      value: "Law",
-    },
-  ],
-
-  getValue: student => student.faculty,
-};
-```
-
-## dynamicOptions=true
-
-例えば「履修科目」はデータによって変わります。
-
-```ts
-const subjectField: OptionFilterField<Student, string> = {
-  key: "subject",
-  label: "履修科目",
-
-  inputType: "option",
-  valueType: "text",
-
-  dynamicOptions: true,
-
-  getValue: student => student.subject,
-};
-```
-
-データセット
-
-```ts
-[
-    { subject: "Math" },
-    { subject: "English" },
-    { subject: "Math" },
-    { subject: "Physics" }
-]
-```
-
-実行時に
-
-```
-Math
-English
-Physics
-```
-
-を重複除去して生成します。
-
-
-
-
-
-#  FilterDefinition<TItem>
-
-`FilterDefinition<Student>` は `StudentをどうフィルタUIに表示するか` を定義しています。
-
-`TItem`には実際には`Student`が入ります。
-
-```ts
-const studentFilterDefinitions: FilterDefinition<Student>[] = [
-  {
-    key: "name",
-    label: "名前",
-    inputType: "free",
-    editor: "text",
-    valueType: "text",
-    operators: ["contains", "eq"],
-
-    getValue: (student) => student.name,
-  },
-
-  {
-    key: "age",
-    label: "年齢",
-    inputType: "free",
-    editor: "number",
-    valueType: "number",
-    operators: ["eq", "gt", "gte", "lt", "lte", "between"],
-
-    getValue: (student) => student.age,
-  },
-
-  {
-    key: "faculty",
-    label: "学部",
+const properties: DataPropertyConfig<Student>[] = [
+  defineDataProperty<Student>({
+    key: "status",
+    label: "Estado",
+    icon: "status",
+    valueType: "enum",
     inputType: "option",
-    editor: "select",
-    valueType: "text",
-    operators: ["eq", "in"],
-
+    getValue: (student) => student.status,
     options: [
-      { label: "工学部", value: "Engineering" },
-      { label: "経営学部", value: "Business" },
-      { label: "法学部", value: "Law" },
+      { value: "failed", label: "Reprobado" },
+      { value: "passed", label: "Aprobado" },
     ],
-
-    getValue: (student) => student.faculty,
-  },
-
-  {
-    key: "failedSubjects",
-    label: "不合格科目",
-    inputType: "free",
-    editor: "text",
-    valueType: "text",
-    operators: ["contains"],
-
-    getValue: (student) => student.failedSubjects,
-  },
+    search: true,
+  }),
 ];
 ```
 
+- `getValue` はsource valueだけを返す。
+- `normalize` は入力値とsource valueをcanonical valueにそろえる必要がある場合だけ指定する。標準では text/enum は文字列、number は有限数、date はtimestamp、boolean はbooleanへ変換する。
+- `formatDisplay` はoption labelでは表せない表示値にだけ指定する。
+- `search: true` を指定したフィールドだけが全文検索対象になる。検索範囲を意図せず増やさないため、明示指定を推奨する。
+- `dynamicOptions: true` は現在のデータセットからcanonical valueを重複排除してoptionを作る。
 
-#  FilterCondition
+## EngineContext と実行順
 
-実際にユーザーがかけているフィルター条件
+`runSearch` は以下を持つ不変の `EngineContext` を作成し、各Engineは次のcontextを返します。
 
-こちらは
-
-```ts
-{
-    id,
-    fieldKey,
-    operator,
-    value
-}
+```text
+source   : 入力データ。Engineは変更しない
+query    : text と canonical conditions
+runtime  : コンパイル済みプロパティ、option label mapなどの実行メタデータ
+working  : EvaluationEntry[]。各Engineが判定・hit・scoreを更新する作業領域
+result   : finalize後のentriesとmatchCount
 ```
 
-なので、
+標準の順序は次のとおりです。
 
-例えば
-
-### 名前に"田"を含む
-
-```ts
-{
-    id: "1",
-    fieldKey: "name",
-    operator: "contains",
-    value: "田"
-}
+```text
+FilterEngine → SearchEngine → ScoreEngine → finalize
 ```
 
-### 学部が工学部または経営学部
+- FilterEngine: フィールド間はAND、`in` の選択値はORで比較する。
+- SearchEngine: search textの完全一致・前方一致・部分一致を記録する。
+- ScoreEngine: 一致種別を 3 / 2 / 1 点として最高scoreを設定する。
+- finalize: `filterPass && searchPass` を `isMatch` に確定する。
 
-```ts
-{
-    id: "4",
-    fieldKey: "faculty",
-    operator: "in",
-    value: [
-        "Engineering",
-        "Business"
-    ]
-}
+SortやHighlightを追加する場合は `SearchEnginePlugin<TItem>` を実装し、`runSearch` のplugin配列へ明示的に登録する。既存Engineの責務へ混ぜない。
+
+## Reactでの利用
+
+対象画面を `DataSearchProvider` で囲み、コンテナで `useDataSearch` を呼びます。
+
+```tsx
+const {
+  definitions,
+  searchText,
+  setSearchText,
+  listEntries,
+  gridEntries,
+} = useDataSearch(STUDENT_GRADE_FILTER_FIELDS, studentGrades);
 ```
 
+- `definitions` はフィルタUIへ渡すコンパイル済みプロパティ。
+- `listEntries` は一致したレコードだけを元の順序で返す。
+- `gridEntries` は全レコードを返す。カード側が `entry.isMatch` でopacityなどを決める。
+- presetは `FilterCondition` をcanonical valueで作り、Providerのcondition操作を通して更新する。
 
-### 年齢18～22
+## テスト
 
-```ts
-{
-    id: "5",
-    fieldKey: "age",
-    operator: "between",
-    value: [18, 22]
-}
+- schema/value変換: `filterFactory.test.ts`
+- Engineとlist/grid結果: `filterEngine.test.ts`
+- Provider状態: `../components/Provider/filterStore.test.ts`
+
+Storybookのブラウザテストとは分離してユニットテストを実行する場合は、次を使います。
+
+```powershell
+.\node_modules\.bin\vitest.cmd run --config vitest.unit.config.ts
 ```
-

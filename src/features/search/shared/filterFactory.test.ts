@@ -1,12 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { buildFilterDefinition, buildFilterDefinitions } from "./filterFactory";
-import { defineFilterField } from "./filterField";
+import { compilePropertySchema } from "./filterFactory";
+import { defineDataProperty, type DataPropertyConfig } from "./filterField";
 
-type Row = {
-  name: string;
-  semester: number;
-  status: string;
-};
+type Row = { name: string; semester: number; status: "active" | "leave" };
 
 const rows: Row[] = [
   { name: "Ada", semester: 3, status: "active" },
@@ -14,142 +10,38 @@ const rows: Row[] = [
   { name: "Grace", semester: 3, status: "active" },
 ];
 
-describe("filter-factory", () => {
-  it("derives operators and editor from valueType for a free text field", () => {
-    const definition = buildFilterDefinition(
-      defineFilterField<Row>({
-        key: "name",
-    icon:"person",
-        label: "Name",
-        valueType: "text",
-        inputType: "free",
-        getValue: (row) => row.name,
-      }),
-    );
+const properties: DataPropertyConfig<Row>[] = [
+  defineDataProperty<Row>({
+    key: "name", label: "Name", icon: "person", valueType: "text", inputType: "free",
+    getValue: (row) => row.name, search: true,
+  }),
+  defineDataProperty<Row>({
+    key: "status", label: "Status", icon: "status", valueType: "enum", inputType: "option",
+    getValue: (row) => row.status, search: true,
+    options: [{ value: "active", label: "Active" }, { value: "leave", label: "Leave" }],
+  }),
+  defineDataProperty<Row>({
+    key: "semester", label: "Semester", icon: "schedule", valueType: "number", inputType: "option",
+    getValue: (row) => row.semester, dynamicOptions: true, search: false,
+  }),
+];
 
-    expect(definition.editor).toBe("text");
-    expect(definition.inputType).toBe("free");
-    expect(definition.operators).toEqual(["contains", "eq", "in"]);
+describe("compilePropertySchema", () => {
+  it("separates canonical values, display values, and search text", () => {
+    const schema = compilePropertySchema(properties, rows);
+    const status = schema.byKey.get("status")!;
+
+    expect(status.readCanonicalValue(rows[0]!)).toBe("active");
+    expect(status.formatDisplayValue(rows[0]!)).toEqual(["Active"]);
+    expect(status.getSearchText(rows[0]!)).toEqual(["Active"]);
+    expect(status.normalizeConditionValue("active")).toBe("active");
   });
 
-  it("derives number editor and range operators", () => {
-    const definition = buildFilterDefinition(
-      defineFilterField<Row>({
-        key: "semester",
-        label: "Semester",
-        valueType: "number",
-    icon:"person",
-        inputType: "free",
-        getValue: (row) => row.semester,
-      }),
-    );
-
-    expect(definition.editor).toBe("number");
-    expect(definition.operators).toContain("between");
-  });
-
-  it("keeps static options for an option field", () => {
-    const definition = buildFilterDefinition(
-      defineFilterField<Row>({
-        key: "status",
-        label: "Status",
-    icon:"person",
-        valueType: "enum",
-        inputType: "option",
-        multiple: false,
-        getValue: (row) => row.status,
-        options: [
-          { label: "Active", value: "active" },
-          { label: "Leave", value: "leave" },
-        ],
-      }),
-    );
-
-    expect(definition.editor).toBe("select");
-    if (definition.inputType !== "option") {
-      throw new Error("expected option definition");
-    }
-    expect(definition.options).toHaveLength(2);
-  });
-
-  it("defaults an option field to a multi-select checklist", () => {
-    const definition = buildFilterDefinition(
-      defineFilterField<Row>({
-        key: "status",
-    icon:"person",
-        label: "Status",
-        valueType: "enum",
-        inputType: "option",
-        getValue: (row) => row.status,
-        options: [{ label: "Active", value: "active" }],
-      }),
-    );
-
-    expect(definition.editor).toBe("multiSelect");
-  });
-
-  it("derives distinct sorted options from the dataset when dynamicOptions is set", () => {
-    const definition = buildFilterDefinition(
-      defineFilterField<Row>({
-        key: "status",
-        label: "Status",
-    icon:"person",
-        valueType: "enum",
-        inputType: "option",
-        getValue: (row) => row.status,
-        dynamicOptions: true,
-      }),
-      rows,
-    );
-
-    if (definition.inputType !== "option") {
-      throw new Error("expected option definition");
-    }
-    expect(definition.options.map((option) => option.value)).toEqual([
-      "active",
-      "leave",
+  it("generates dynamic options from canonical values without duplicates", () => {
+    const schema = compilePropertySchema(properties, rows);
+    expect(schema.byKey.get("semester")!.options).toEqual([
+      { value: 3, label: "3" },
+      { value: 5, label: "5" },
     ]);
-  });
-
-  it("respects operator overrides", () => {
-    const definition = buildFilterDefinition(
-      defineFilterField<Row>({
-        key: "name",
-        label: "Name",
-        valueType: "text",
-    icon:"person",
-        inputType: "free",
-        getValue: (row) => row.name,
-        operators: ["contains"],
-      }),
-    );
-
-    expect(definition.operators).toEqual(["contains"]);
-  });
-
-  it("builds multiple definitions", () => {
-    const definitions = buildFilterDefinitions(
-      [
-        defineFilterField<Row>({
-          key: "name",
-          label: "Name",
-          valueType: "text",
-    icon:"person",
-          inputType: "free",
-          getValue: (row) => row.name,
-        }),
-        defineFilterField<Row>({
-          key: "semester",
-          label: "Semester",
-    icon:"person",
-          valueType: "number",
-          inputType: "free",
-          getValue: (row) => row.semester,
-        }),
-      ],
-      rows,
-    );
-
-    expect(definitions).toHaveLength(2);
   });
 });

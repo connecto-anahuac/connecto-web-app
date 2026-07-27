@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 import { StudentDetailPresenter } from "./StudentDetailPresenter";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
-import { useFilter } from "@/features/search/shared/useFilter";
+import { useDataSearch } from "@/features/search/shared/useDataSearch";
 import {
   STUDENT_GRADE_FILTER_FIELDS as STUDENT_GRADE_FILTER_CONFIGS,
   STUDENT_GRADE_FILTER_PRESET,
@@ -16,22 +14,19 @@ type Props = {
 };
 
 export function StudentDetailContainer({ studentId }: Props) {
-  const [searchText, setSearchText] = useState("");
-  // const { loading, plan,  summary } = useStudentPlan(studentId);
   const { loading: staticLoading, studentDetail, studentGrades } =
     useStaticStudentDetail(studentId);
 
-  const { definitions, filterableItems } = useFilter(
+  const { definitions, gridEntries, searchText, setSearchText } = useDataSearch(
     STUDENT_GRADE_FILTER_CONFIGS,
     studentGrades,
-    searchText,
   );
   const presets = useBindingFilterPresets(STUDENT_GRADE_FILTER_PRESET);
 
   return (
     <StudentDetailPresenter
       loading={staticLoading}
-      filterableItems={filterableItems}
+      filterableItems={gridEntries}
       studentDetail={studentDetail}
       definitions={definitions}
       searchText={searchText}

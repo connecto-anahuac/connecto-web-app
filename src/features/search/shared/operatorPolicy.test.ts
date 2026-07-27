@@ -42,6 +42,6 @@ describe("operator-policy", () => {
     expect(getOperatorLabel("number", "gt")).toBe(">");
     expect(getOperatorLabel("date", "gte")).toBe("≧");
     expect(getOperatorLabel("text", "eq")).toBe("Es");
-    expect(getOperatorLabel("enum", "in")).toBe("En");
+    expect(getOperatorLabel("enum", "in")).toBe("Es");
   });
 });

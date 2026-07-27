@@ -1,59 +1,23 @@
-import { IconName } from "@/components/icon";
-import { Operator } from "./operatorPolicy";
+import type { IconName } from "@/components/icon";
+import type { Operator } from "./operatorPolicy";
 
-
-
-// UIの入力法式 //TODO select -> singleSelect
-export const editor = ["text", "number", "select", "multiSelect","enum", "date"] as const;
+export const editor = ["text", "number", "select", "multiSelect", "date"] as const;
 export type Editor = (typeof editor)[number];
 
-//valueの型
-export const valueTypes = ["text", "number", "date",  "enum", "boolean"] as const;
+export const valueTypes = ["text", "number", "date", "enum", "boolean"] as const;
 export type ValueType = (typeof valueTypes)[number];
 
-// filterで使える最小単位
 export type FilterPrimitive = string | number | boolean;
-// 範囲検索用のfilterの型
 export type FilterRangeValue = [FilterPrimitive, FilterPrimitive];
-//filterで使えるすべての型
-export type FilterConditionValue = FilterPrimitive | FilterPrimitive[] | FilterRangeValue | null;
+export type FilterConditionValue =
+  | FilterPrimitive
+  | FilterPrimitive[]
+  | FilterRangeValue
+  | null;
 
-type BaseFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = {
-  key: string;
-  label: string;
-  icon: IconName;
-  editor: Editor;
-  valueType: ValueType;
-  operators: Operator[];
-  getValue: (item: TItem) => TValue | TValue[] | null | undefined; //student[definition.key]の回避
-  normalize?: (value: unknown) => TValue | TValue[] | null;
-};
+/** Values stored in queries and used by engines. Labels never enter this type. */
+export type CanonicalValue = FilterPrimitive;
 
-// =============================
-
-//自由入力
-type FreeFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = BaseFilterDefinition<TItem, TValue> & {
-  inputType: "free";
-  options?: never;
-};
-
-// 選択肢入力
-type OptionFilterDefinition<TItem, TValue extends FilterPrimitive = FilterPrimitive> = BaseFilterDefinition<TItem, TValue> & {
-  inputType: "option";
-
-  options: {
-    label: string;
-    value: TValue;
-  }[];
-};
-
-//filterの型
-export type FilterDefinition<TItem = unknown, TValue extends FilterPrimitive = FilterPrimitive> =
-  | FreeFilterDefinition<TItem, TValue>
-  | OptionFilterDefinition<TItem, TValue>;
-
-
-  // 実際のfilterの値
 export type FilterCondition = {
   id: string;
   fieldKey: string;
@@ -61,12 +25,90 @@ export type FilterCondition = {
   value: FilterConditionValue;
 };
 
-export type FilterDefinitionMap<TItem> = Record<string, FilterDefinition<TItem>>;
+export type SearchQuery = {
+  text: string;
+  conditions: FilterCondition[];
+};
 
-// filter適用後のリスト表示用アイテム（list/card 表示共通）
-export type FilterableItem<TItem> = {
+export type FilterOption = {
+  /** Canonical comparison value. */
+  value: CanonicalValue;
+  /** Human-readable value for controls and text search. */
+  label: string;
+};
+
+export type SearchMatchKind = "exact" | "prefix" | "partial";
+
+export type SearchHit = {
+  fieldKey: string;
+  value: string;
+  kind: SearchMatchKind;
+};
+
+export type CompiledProperty<TItem> = {
+  key: string;
+  label: string;
+  icon: IconName;
+  editor: Editor;
+  valueType: ValueType;
+  inputType: "free" | "option";
+  options: readonly FilterOption[];
+  operators: readonly Operator[];
+  isSearchable: boolean;
+  readCanonicalValue: (item: TItem) => CanonicalValue | CanonicalValue[] | null;
+  formatDisplayValue: (item: TItem) => string[];
+  getSearchText: (item: TItem) => string[];
+  normalizeConditionValue: (
+    value: FilterConditionValue,
+  ) => FilterConditionValue | null;
+};
+
+/** Compatibility name for control components while consumers migrate. */
+export type FilterDefinition<TItem = unknown> = CompiledProperty<TItem>;
+
+export type CompiledPropertySchema<TItem> = {
+  properties: readonly CompiledProperty<TItem>[];
+  byKey: ReadonlyMap<string, CompiledProperty<TItem>>;
+};
+
+export type EvaluationEntry<TItem> = {
+  id: string;
+  /** Compatibility identifier for existing card/list consumers. */
   listId: string;
+  item: TItem;
+  filterPass: boolean;
+  searchPass: boolean;
+  searchHits: readonly SearchHit[];
   filteringScore: number;
   isMatch: boolean;
-  item: TItem;
+};
+
+/** Compatibility name for existing grid/card presenters. */
+export type FilterableItem<TItem> = EvaluationEntry<TItem>;
+
+export type SearchWorkingSet<TItem> = {
+  entries: readonly EvaluationEntry<TItem>[];
+};
+
+export type SearchResult<TItem> = {
+  entries: readonly EvaluationEntry<TItem>[];
+  matchCount: number;
+};
+
+/**
+ * A complete, immutable engine run. Source is input-only; query is state-only;
+ * runtime contains compiled/cached field metadata; working is plugin-owned;
+ * result is assigned only by finalization.
+ */
+export type EngineContext<TItem> = {
+  source: readonly TItem[];
+  query: Readonly<SearchQuery>;
+  runtime: CompiledPropertySchema<TItem>;
+  working: SearchWorkingSet<TItem>;
+  result?: SearchResult<TItem>;
+};
+
+export type SearchEnginePlugin<TItem> = {
+  id: string;
+  execute: (context: EngineContext<TItem>) => EngineContext<TItem>;
 };

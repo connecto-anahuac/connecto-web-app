@@ -1,4 +1,4 @@
-import { FilterProvider } from "@/features/search/components/Provider/FilterProvider";
+import { DataSearchProvider } from "@/features/search/components/Provider/FilterProvider";
 import { StudentsPageTemplate } from "@/features/students/components/server/StudentsPageTemplate";
 
 export default function StudentsLayout({
@@ -7,8 +7,8 @@ export default function StudentsLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <FilterProvider>
+    <DataSearchProvider>
       <StudentsPageTemplate> {children}</StudentsPageTemplate>
-    </FilterProvider>
+    </DataSearchProvider>
   );
 }

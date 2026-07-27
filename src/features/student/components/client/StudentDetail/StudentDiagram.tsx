@@ -8,7 +8,7 @@ import { ComponentProps } from "react";
 
 type Props = ComponentProps<"div"> & {
   loading: boolean;
-  filterableItems: FilterableItem<StudentClassItem>[];
+  filterableItems: readonly FilterableItem<StudentClassItem>[];
 };
 
 export function StudentDiagram({

@@ -13,7 +13,7 @@ type Props = {
   children: ReactNode;
   loading: boolean;
   students: StudentListItem[];
-  definitions: FilterDefinition<StudentListItem>[];
+  definitions: readonly FilterDefinition<StudentListItem>[];
   searchText: string;
   onSearchTextChange: (value: string) => void;
   isFilterOpen: boolean;

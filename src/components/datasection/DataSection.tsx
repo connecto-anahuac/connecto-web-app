@@ -14,7 +14,7 @@ import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  definitions: FilterDefinition<TItem>[];
+  definitions: readonly FilterDefinition<TItem>[];
   defaultView?: "list" | "card";
   listTools?: SearchTool[];
   cardviewTools?: SearchTool[];

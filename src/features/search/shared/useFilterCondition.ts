@@ -5,7 +5,6 @@ import {
   FilterConditionValue,
   FilterDefinition,
 } from "./filterDefinition";
-import { createFilterStore } from "../components/Provider/filterStore";
 import { useFilterStoreProvider } from "../components/Provider/useFilterStore";
 import { Operator } from "./operatorPolicy";
 
@@ -50,7 +49,8 @@ export function useFilterCondition<TItem>(filter: FilterDefinition<TItem>) {
 
   const setValue = useCallback(
     (value: FilterConditionValue, nextOperator?: Operator) => {
-      if (isEmptyValue(value)) {
+      const normalizedValue = filter.normalizeConditionValue(value);
+      if (isEmptyValue(normalizedValue)) {
         removeCondition(filter.key);
         return;
       }
@@ -59,10 +59,10 @@ export function useFilterCondition<TItem>(filter: FilterDefinition<TItem>) {
         id: filter.key,
         fieldKey: filter.key,
         operator: nextOperator ?? condition?.operator ?? filter.operators[0],
-        value,
+        value: normalizedValue,
       });
     },
-    [filter.key, filter.operators, condition?.operator, upsertCondition, removeCondition],
+    [filter, condition?.operator, upsertCondition, removeCondition],
   );
 
   const setOperator = useCallback(

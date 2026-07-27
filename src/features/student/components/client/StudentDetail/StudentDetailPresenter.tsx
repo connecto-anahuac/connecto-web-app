@@ -10,9 +10,9 @@ import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 
 type Props = {
   loading: boolean;
-  filterableItems: FilterableItem<StudentClassItem>[];
+  filterableItems: readonly FilterableItem<StudentClassItem>[];
   studentDetail: StudentDetail | null;
-  definitions: FilterDefinition<StudentClassItem>[];
+  definitions: readonly FilterDefinition<StudentClassItem>[];
   searchText: string;
   onSearchTextChange: (value: string) => void;
   presets: readonly FilterPreset[];

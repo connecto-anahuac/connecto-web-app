@@ -1,11 +1,14 @@
 import { create } from "zustand";
-import { FilterCondition } from "../../shared/filterDefinition";
+import type { FilterCondition, SearchQuery } from "../../shared/filterDefinition";
 
 export type FilterState = {
+  query: SearchQuery;
+  /** Compatibility projection for existing controls. */
   conditions: FilterCondition[];
 };
 
 export type FilterCommands = {
+  setSearchText: (text: string) => void;
   setConditions: (conditions: FilterCondition[]) => void;
   upsertCondition: (condition: FilterCondition) => void;
   removeCondition: (conditionId: string) => void;
@@ -15,37 +18,26 @@ export type FilterCommands = {
 
 export type FilterStore = FilterState & FilterCommands;
 
+function withConditions(query: SearchQuery, conditions: FilterCondition[]): FilterState {
+  return { query: { ...query, conditions }, conditions };
+}
+
 export function createFilterStore() {
-  return create<FilterStore>((set,get) => ({
+  return create<FilterStore>((set, get) => ({
+    query: { text: "", conditions: [] },
     conditions: [],
-
-    setConditions: (conditions) => set({ conditions }),
-
+    setSearchText: (text) => set((state) => ({ query: { ...state.query, text } })),
+    setConditions: (conditions) => set((state) => withConditions(state.query, conditions)),
     upsertCondition: (condition) =>
       set((state) => {
-        const nextConditions = state.conditions.some(
-          (current) => current.id === condition.id,
-        )
-          ? state.conditions.map((current) =>
-              current.id === condition.id ? condition : current,
-            )
+        const conditions = state.conditions.some((current) => current.id === condition.id)
+          ? state.conditions.map((current) => current.id === condition.id ? condition : current)
           : [...state.conditions, condition];
-
-        return {
-          conditions: nextConditions,
-        };
+        return withConditions(state.query, conditions);
       }),
-
     removeCondition: (conditionId) =>
-      set((state) => ({
-        conditions: state.conditions.filter(
-          (condition) => condition.id !== conditionId,
-        ),
-      })),
-
-    clear: () => set({ conditions: [] }),
-
-    getConditionByKey: (fieldKey) =>
-      get().conditions.find((condition) => condition.fieldKey === fieldKey),
+      set((state) => withConditions(state.query, state.conditions.filter((condition) => condition.id !== conditionId))),
+    clear: () => set((state) => withConditions({ ...state.query, text: "" }, [])),
+    getConditionByKey: (fieldKey) => get().conditions.find((condition) => condition.fieldKey === fieldKey),
   }));
 }

@@ -4,7 +4,7 @@ import SearchToolModal from "./SearchToolModal";
 import { FilterDefinition } from "../../shared/filterDefinition";
 
 type Props<TItem> = ComponentProps<"div"> & ComponentProps<"button"> & {
-    definitions: FilterDefinition<TItem>[];
+    definitions: readonly FilterDefinition<TItem>[];
     isSelected?: boolean;
 };
 export default function SearchTool<TItem>({ definitions,onClick,isSelected, ...props }: Props<TItem>) {
