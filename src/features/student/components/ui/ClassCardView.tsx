@@ -8,6 +8,7 @@ import { splitPeriod } from "@/shared/lib/tool";
 import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
 import { Period } from "@/shared/types/Period";
 import { GradeStatus } from "../../types/studentGrade.type";
+import LockIcon from "@/components/icon/LockIcon";
 
 type Props = ComponentProps<"div"> & {
   courseCode: string;
@@ -27,7 +28,7 @@ export default function StudentClassCardView({
   hours = "--",
   grade,
   title,
-  period ,
+  period,
   className,
   status,
   ...props
@@ -89,15 +90,20 @@ export default function StudentClassCardView({
           // style={{ color: gradeColor }}
           style={{ color: `var(--${gradeColorBg}-strong)` }}
         >
-          <SchoolHatIcon className="w-4.5 h-4.5 " />
+          {status === "lockedByPreRequisites" || status === "lockedByOthers" ? (
+            <LockIcon className="w-4.5 h-4.5" />
+          ) : (
+            <SchoolHatIcon className="w-4.5 h-4.5 " />
+          )}
+
           {grade !== null &&
           grade !== undefined &&
           grade !== GRADE_NOT_FOUND_VALUE ? (
             grade
-          ) : status==="isTaking" ? (
+          ) : status === "isTaking" ? (
             <span className="text-[0.7rem] uppercase">cruzado</span>
-          ): status==="lockedByPreRequisites" ? (
-            <span className="text-[0.7rem] uppercase">prereq X</span>
+          ) : status === "lockedByPreRequisites" ? (
+            <span className="text-[0.7rem] uppercase mt-0.5">prereq X</span>
           ) : (
             "--"
           )}

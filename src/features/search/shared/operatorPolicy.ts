@@ -24,7 +24,27 @@ export const operatorNumberLabels: Record<Operator, string> = {
   lt: "<",
   lte: "≦",
   between: "Entre",
+  in: "=",
+}
+export const operatorTextButtonLabels: Record<Operator, string> = {
+  eq: ":", 
+  contains: ":",
+  gt: "Mayor que",
+  gte: "Mayor o igual que",
+  lt: "Menor que",
+  lte: "Menor o igual que",
+  between: "Entre",
   in: "Es",
+}
+export const operatorNumberButtonLabels: Record<Operator, string> = {
+  eq: "=",
+  contains: "=",
+  gt: ">",
+  gte: "≧",
+  lt: "<",
+  lte: "≦",
+  between: "<>",
+  in: "=",
 }
 
 

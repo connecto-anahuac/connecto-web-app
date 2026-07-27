@@ -11,6 +11,7 @@ import Button from "../button/Button";
 import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import FilterButtonGroup from "../button/FilterButtonGroup";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
+import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 
 type SearchTool = "sort" | "filter" | "pivot" | "hide";
 
@@ -43,6 +44,8 @@ export default function DataSection<TItem>({
   const [selectedView, setSelectedView] = useState<"list" | "card">(
     defaultView,
   );
+
+  // const registros = useFilterStoreProvider((state) => state.registros);
   const viewChangeHandler = (view: "list" | "card") => {
     setSelectedView(view);
     onViewChange?.(view);
@@ -55,57 +58,58 @@ export default function DataSection<TItem>({
     return cardviewTools.includes(searchTool);
   };
   return (
-    <div className={cn("flex flex-col gap-3", className)}>
+    <div className={cn("flex flex-col gap-2", className)}>
       {/* 1 line */}
-      <div className="flex gap-4 w-full">
+      <div className="flex gap-4 w-full items-center">
         {/* //TODO Searchbar */}
         <SearchBar className="w-64" />
 
-        <div className="flex gap-1.5 flex-1 min-w-0">
-          {/* <ToggleButton label={"Filter"} icon="filter" />
-          <ToggleButton label={"Filter"} icon="plus" /> */}
+        {/* when changed the chip size, still keep the height */}
+        <div className="flex flex-1 gap-3 items-center overflow-x-auto scrollbar-none">
+          {presets?.map((preset, index) => (
+            <SearchPresetChip
+              key={`${preset.label}-${index}`}
+              selected={preset.isSelected}
+              onClick={preset.onToggle}
+            >
+              {preset.label}
+            </SearchPresetChip>
+          ))}
 
-          {/* //TODO filter button　追加tと機能 */}
-          <Button
-            icon="filter"
-            label="Filter"
-            intent="darkInk"
-            appearance="text"
-            size="md"
-          />
-          {/* <Button
-            icon="plus"
-            label="Add"
-            intent="darkInk"
-            appearance="text"
-            size="md"
-          /> */}
-
-          <FilterButtonGroup definitions={definitions} className="flex-1" />
-          {/* {definitions.map((definition, index) => (
-            <FilterButton
-              key={index}
-              label={definition.label}
-              definition={definition}
-            />
-          ))} */}
+          {/* scroll margin */}
+          <div className="w-4/5 shrink-0"/>
         </div>
 
         {/* //TODO zoom */}
-        <IconButton
+        {/* <IconButton
           icon="zoomOut"
           intent="lightInk"
           appearance="filled"
           size="md"
-        />
+          className="shrink-0"
+        /> */}
         {/* <IconButtonOLD icon="zoomOut" className="size-6.5" /> */}
       </div>
 
       {/* 2 line */}
-      {/* when changed the chip size, still keep the height */}
-      {/* //TODO presetfilterchip */}
-      <div className="flex gap-3 items-center h-5">
-        {presets?.map((preset,index) => (
+      <div className="flex gap-1.5 w-full min-w-0 h-fit">
+        {/* //TODO filter button　追加tと機能 */}
+        <Button
+          icon="filter"
+          label="Filter"
+          intent="darkInk"
+          appearance="text"
+          size="md"
+          className="shrink-0 hover:bg-transparent active:bg-transparent"
+        />
+
+        <FilterButtonGroup definitions={definitions} className="flex-1 h-fit" />
+
+        
+      </div>
+
+      {/* <div className="flex gap-3 items-center h-5">
+        {presets?.map((preset, index) => (
           <SearchPresetChip
             key={`${preset.label}-${index}`}
             selected={preset.isSelected}
@@ -114,11 +118,11 @@ export default function DataSection<TItem>({
             {preset.label}
           </SearchPresetChip>
         ))}
-      </div>
+      </div> */}
 
       {/* 3 line */}
 
-      <div className="flex gap-4 items-center">
+      <div className="flex gap-4 items-end">
         <GraphSwitcher
           onListClick={onListClick}
           onCardViewClick={onCardViewClick}
@@ -151,6 +155,15 @@ export default function DataSection<TItem>({
           appearance="text"
           size="md"
           disabled={!isEnable("pivot")}
+        />
+        <span className="ml-auto   text-xs font-medium">{43} registros</span>
+         {/* //TODO zoom */}
+        <IconButton
+          icon="zoomIn"
+          intent="lightInk"
+          appearance="text"
+          size="md"
+          className="shrink-0 "
         />
 
         {/* <ToggleButton label={"Sort"} icon="sort" isEnabled={isEnable("sort")} />

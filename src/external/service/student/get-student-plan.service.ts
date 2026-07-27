@@ -7,7 +7,7 @@ import { PreRequisitoRepository } from "@/external/repository/prerequisito.repos
 import { StudentRepository } from "@/external/repository/student.repository";
 import { GRADE_NOT_FOUND_VALUE, PERIOD_NOT_FOUND_VALUE } from "@/shared/types/consts";
 
-export class GetStudentPlanService {
+export class GetStudentGradeService {
   constructor(
     private readonly planRepository: PlanRepository,
     private readonly courseRepository: CourseRepository,

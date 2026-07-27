@@ -42,7 +42,7 @@ export function StudentDetailPresenter({
 
 
   return (
-   <div className="flex flex-col gap-3 pb-5 w-full h-full">
+   <div className="flex flex-col gap-3 pb-0 w-full h-full">
       <ContentTitleSection title={"Alumnos"} />
       <DataSection
         definitions={definitions}

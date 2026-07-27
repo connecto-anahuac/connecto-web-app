@@ -8,7 +8,7 @@ import { StudentRepository } from "@/external/repository/student.repository";
 import { GetOfferingCoursesByCareerService } from "@/external/service/offering-course/get-offering-courses-by-career.service";
 import { GetSelectedOfferingCoursesService } from "@/external/service/offering-course/get-selected-offering-courses.service";
 import { SetOfferingCourseSelectionService } from "@/external/service/offering-course/set-offering-course-selection.service";
-import { GetStudentPlanService } from "@/external/service/student/get-student-plan.service";
+import { GetStudentGradeService } from "@/external/service/student/get-student-plan.service";
 import { GetStudentsService } from "@/external/service/students/get-students.service";
 
 const studentRepository = new StudentRepository();
@@ -20,7 +20,7 @@ const offeringCourseRepository = new OfferingCourseRepository();
 
 export const getStudentsService = new GetStudentsService(studentRepository);
 
-export const getStudentPlanService = new GetStudentPlanService(
+export const getStudentPlanService = new GetStudentGradeService(
   planRepository,
   courseRepository,
   studentRepository,

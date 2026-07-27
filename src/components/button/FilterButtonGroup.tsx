@@ -4,6 +4,7 @@ import { useState, type ComponentProps } from "react";
 import { cn } from "@/shared/lib/util";
 import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import FilterButton from "./FilterButton";
+import Button from "./Button";
 
 type Props<TItem> = ComponentProps<"div"> & {
   definitions: FilterDefinition<TItem>[];
@@ -38,6 +39,18 @@ export default function FilterButtonGroup<TItem>({
           label={definition.label}
         />
       ))}
+
+      <Button
+          icon="plus"
+          label="Añadir"
+          intent="darkInk"
+          appearance="text"
+        size="md"
+        className="shrink-0"
+      />
+      
+          {/* scroll margin */}
+          <div className="w-4/5 shrink-0"/>
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import ColumnTitle from "@/components/ColumnTitle";
-import RowTitle from "@/components/RowTitle";
+import ColumnTitle from "@/components/diagram/ColumnTitle";
+import RowTitle from "@/components/diagram/RowTitle";
 import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
 import type { StudentClassItem } from "@/features/student/types";
 import type { FilterableItem } from "@/features/search/shared/filterDefinition";
@@ -107,7 +107,7 @@ export function StudentDiagram({
           <div
             key={item.id}
             className={
-              !isMatch ? "grayscale opacity-45 transition" : "transition"
+              !isMatch ? "grayscale opacity-10 transition" : "transition"
             }
             style={{
               gridColumnStart: item.semester + 1 || 2,

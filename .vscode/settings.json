@@ -4,5 +4,6 @@
       "tailwindCSS.classFunctions": [
     "cva",
     "cx"
-  ]
+  ],
+  "tailwindCSS.experimental.configFile": "src/app/globals.css",
 }

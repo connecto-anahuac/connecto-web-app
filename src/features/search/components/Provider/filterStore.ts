@@ -10,12 +10,13 @@ export type FilterCommands = {
   upsertCondition: (condition: FilterCondition) => void;
   removeCondition: (conditionId: string) => void;
   clear: () => void;
+  getConditionByKey: (fieldKey: string) => FilterCondition | undefined;
 };
 
 export type FilterStore = FilterState & FilterCommands;
 
 export function createFilterStore() {
-  return create<FilterStore>((set) => ({
+  return create<FilterStore>((set,get) => ({
     conditions: [],
 
     setConditions: (conditions) => set({ conditions }),
@@ -43,5 +44,8 @@ export function createFilterStore() {
       })),
 
     clear: () => set({ conditions: [] }),
+
+    getConditionByKey: (fieldKey) =>
+      get().conditions.find((condition) => condition.fieldKey === fieldKey),
   }));
 }
