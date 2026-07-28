@@ -1,32 +1,61 @@
-import type { ComponentProps, ReactNode } from "react";
-import VisibleIcon from "../icon/VisibleIcon";
-import ThreePointMenuIcon from "../icon/ThreePointMenuIcon";
-import TextAscendingIcon from "../icon/sorts/TextAscendingIcon";
-
+import type { ComponentProps, ComponentPropsWithRef, ReactNode } from "react";
 import { cn } from "@/shared/lib/util";
-import IconButtonOLD from "../button/IconButton2";
-import PinIcon from "../icon/PinIcon";
-import FilterIcon from "../icon/FilterIcon";
 import { IconName, Icons } from "../icon";
-import Button from "../button/Button";
 import IconButton from "../button/IconButton";
+import { DataViewColumn, DataViewConfig } from "./dataView.types";
+import { Column } from "@tanstack/react-table";
+import ButtonModal from "../ButtonModal";
+import { TableColumnFilterContainer } from "./DataTable/TableColumnFilterContainer";
 
-type HeaderCellProps = ComponentProps<"div"> & {
-  label?: ReactNode;
-  // leading?: ReactNode;
-  icon?: IconName;
+type ColumnActionsProps<TItem> = {
+  column: Column<TItem>;
+  config: DataViewColumn<TItem>;
+  compact: boolean;
+  menuOpen: boolean;
+  filterOpen: boolean;
+  onFilterClose: () => void;
+  onFilterToggle: (columnId: string) => void;
+  onHide: (column: Column<TItem>) => void;
+  onMenuOpenChange: (columnId: string, open: boolean) => void;
+  onPin: (column: Column<TItem>) => void;
+  onSort: (column: Column<TItem>) => void;
 };
 
-export default function HeaderCell({
+type HeaderCellProps<TItem> = ComponentProps<"div"> &
+  ColumnActionsProps<TItem> & {
+    label?: ReactNode;
+    // leading?: ReactNode;
+    icon?: IconName;
+    /** Supplies interactive table actions without changing existing static uses. */
+    actions?: ReactNode;
+    showDefaultActions?: boolean;
+  };
+
+export default function HeaderCell<TItem>({
   label,
   // leading,
   children,
   className,
   icon,
+  actions,
+  showDefaultActions = true,
+
+  //actions
+  column,
+  config,
+  compact,
+  menuOpen,
+  filterOpen,
+  onFilterClose,
+  onFilterToggle,
+  onHide,
+  onMenuOpenChange,
+  onPin,
+  onSort,
+
   ...props
-}: HeaderCellProps) {
+}: HeaderCellProps<TItem>) {
   const content = children ?? label;
-  const isUnpackedTools = true;
   const contentText =
     typeof content === "string" || typeof content === "number"
       ? String(content)
@@ -34,6 +63,16 @@ export default function HeaderCell({
   const contentMinWidth = `${98 + contentText.length * 9}px`; //文字数に合わせて最小幅決定
 
   const IconComponent = icon && Icons[icon];
+
+  const menuItems = [
+    { icon: "pin", label: "pivot", onClick: () => onPin(column) },
+    { icon: "unvisible", label: "ocultar", onClick: () => onHide(column) },
+    {
+      icon: "filter",
+      label: "filtro",
+      onClick: () => onFilterToggle(column.id),
+    },
+  ] satisfies ItemProps[];
   return (
     <div
       className={cn(
@@ -54,65 +93,144 @@ export default function HeaderCell({
         </div>
       </div>
 
-      {/* tools */}
-      <div className="flex items-center gap-4 ml-auto shrink-0">
-        {/* if has spacing, visible */}
-        {isUnpackedTools && (
-          <div className="flex gap-0.5 shrink-0 h-fit">
-            <IconButton
-              icon="pin"
-              size={"md"}
-              appearance={"text"}
-              intent="lightInk"
-            />
-            <IconButton
-              icon="unvisible"
-              size={"md"}
-              appearance={"text"}
-              intent="lightInk"
-            />
-            <IconButton
-              icon="filter"
-              size={"md"}
-              appearance={"text"}
-              intent="lightInk"
-            />
-            {/* <IconButtonOLD>
-              <PinIcon className="size-4.5" />
-            </IconButtonOLD>
-            <IconButtonOLD>
-              <VisibleIcon className="size-4.5" />
-            </IconButtonOLD>
-            <IconButtonOLD>
-              <FilterIcon className="size-4.5" />
-            </IconButtonOLD> */}
-          </div>
-        )}
+      {actions ??
+        (showDefaultActions && (
+          <div className="flex items-center gap-3 ml-auto shrink-0">
+            {/* if has spacing, visible */}
+            {compact && (
+              <div className="flex gap-0.5 shrink-0 h-fit">
+                <IconButton
+                  icon="pin"
+                  size={"md"}
+                  appearance={"text"}
+                  intent="lightInk"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onPin(column);
+                  }}
+                />
+                <IconButton
+                  icon="unvisible"
+                  size={"md"}
+                  appearance={"text"}
+                  intent="lightInk"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    onHide(column);
+                  }}
+                />
+                {config.filterable !== false && (
+                  <ButtonModal
+                    open={filterOpen}
+                    onOpenChange={() => {
+                      onFilterToggle(column.id);
+                    }}
+                  >
+                    <ButtonModal.Trigger>
+                      <IconButton
+                        icon="filter"
+                        size={"md"}
+                        appearance={"text"}
+                        intent="lightInk"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                        }}
+                      />
+                    </ButtonModal.Trigger>
+                    <ButtonModal.Content>
+                      {filterOpen ? (
+                        <div className="absolute right-0 top-9 z-40">
+                          <TableColumnFilterContainer
+                            column={column}
+                            config={config}
+                          />
+                        </div>
+                      ) : (
+                        <div />
+                      )}
+                    </ButtonModal.Content>
+                  </ButtonModal>
+                )}
+              </div>
+            )}
 
-        {/* always visible */}
-        <div className="shrink-0  flex gap-1">
-          {!isUnpackedTools && (
-            // <IconButtonOLD>
-            //   <ThreePointMenuIcon className="size-search-filter-dismiss" />
-            // </IconButtonOLD>
-            <IconButton
-              icon="threePointMenu"
-              size={"md"}
-              appearance={"text"}
-              intent="lightInk"
-            />
-          )}
-          {/* <IconButtonOLD>
+            {/* always visible */}
+            <div className="shrink-0  flex gap-1">
+              {!compact && (
+                // <IconButtonOLD>
+                //   <ThreePointMenuIcon className="size-search-filter-dismiss" />
+                // </IconButtonOLD>
+
+                <ButtonModal
+                  open={menuOpen}
+                  onOpenChange={(open) => onMenuOpenChange(column.id, open)}
+                >
+                  <ButtonModal.Trigger>
+                    <IconButton
+                      icon="threePointMenu"
+                      size={"md"}
+                      appearance={"text"}
+                      intent="lightInk"
+                    />
+                  </ButtonModal.Trigger>
+                  <ButtonModal.Content>
+                    <ColumnToolMenu items={menuItems} />
+                  </ButtonModal.Content>
+                </ButtonModal>
+              )}
+              {/* <IconButtonOLD>
             <TextAscendingIcon className="size-5" />
           </IconButtonOLD> */}
-          <IconButton
-            icon="textAscending"
-            size={"md"}
-            appearance={"text"}
-            intent="lightInk"
-          />
-        </div>
-      </div>
+              <IconButton
+                icon="textAscending"
+                size={"md"}
+                appearance={"text"}
+                intent="lightInk"
+                onClick={() => onSort(column)}
+              />
+            </div>
+          </div>
+        ))}
+
+      {/* <button
+        aria-label={`${columnConfig.label}の幅を変更`}
+        className="h-full w-1 cursor-col-resize self-stretch bg-transparent hover:bg-Primary"
+        onClick={(event) => event.stopPropagation()}
+        onMouseDown={(event) => onResize(header, event)}
+        type="button"
+      /> */}
+    </div>
+  );
+}
+
+type ItemProps = {
+  icon: IconName;
+  label: string;
+  onClick: () => void;
+};
+type ColumnToolMenuProps = ComponentPropsWithRef<"div"> & {
+  items: ItemProps[];
+};
+function ColumnToolMenu({ items, ...props }: ColumnToolMenuProps) {
+  // absolute left-0 top-9 z-40
+  return (
+    <div
+      className=" flex min-w-56 flex-col rounded-md border border-Outline bg-InverseSurface p-1 text-InverseOnSurface shadow-lg"
+      {...props}
+    >
+      {items.map((item, index) => {
+        const Icon = Icons[item.icon];
+        return (
+          <button
+            className="flex items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm hover:bg-Primary hover:text-OnPrimary"
+            key={item.label + index}
+            onClick={item.onClick}
+            type="button"
+          >
+            <Icon className="size-4" /> {item.label}
+          </button>
+        );
+      })}
     </div>
   );
 }
