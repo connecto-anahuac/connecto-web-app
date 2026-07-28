@@ -47,6 +47,7 @@ import HashmarkIcon from "./HashmarkIcon";
 import FrascoOutlineIcon from "./FrascoOutlineIcon";
 import FailedClassIcon from "./FailedClassIcon";
 import ProfessorIcon from "./ProfessorIcon";
+import UnPinIcon from "./UnPinIcon";
 
 export const Icons = {
   admin: AdminIcon,
@@ -76,6 +77,7 @@ export const Icons = {
   professor:ProfessorIcon,
   twoPersons: TwoPersonsIcon,
   pin: PinIcon,
+  unpin:UnPinIcon,
   plus: PlusIcon,
   progress: ProgressIcon,
   schedule: ScheduleIcon,
