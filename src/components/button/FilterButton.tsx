@@ -16,9 +16,14 @@ import {
   useFloating,
   useInteractions,
 } from "@floating-ui/react";
-import { FilterConditionValue, FilterDefinition } from "@/features/search/shared/filterDefinition";
+import {
+  FilterConditionValue,
+  FilterDefinition,
+} from "@/features/search/shared/filterDefinition";
 import { useFilterStoreProvider } from "@/features/search/components/Provider/useFilterStore";
 import { operatorNumberButtonLabels } from "@/features/search/shared/operatorPolicy";
+import ButtonModalComposer from "../ButtonModal";
+import ButtonModal from "../ButtonModal";
 
 type ButtonProps<TItem> = Partial<ButtonVariantProps> &
   ComponentProps<"button"> &
@@ -33,6 +38,130 @@ type ButtonProps<TItem> = Partial<ButtonVariantProps> &
   };
 
 export default function FilterButton<TItem>({
+  className,
+  label,
+  icon,
+  intent = "lightInk",
+  size = "md",
+  appearance = "text",
+  hasBadge = false,
+  disabled = false,
+  loading = false,
+  definition,
+  open,
+  onOpenChange,
+  ...props
+}: ButtonProps<TItem>) {
+  const buttonIcon = icon ? icon : (definition.icon ?? null);
+
+  const IconComponent = buttonIcon ? Icons[buttonIcon] : null;
+
+  const condition = useFilterStoreProvider((state) =>
+    state.getConditionByKey(definition.key),
+  );
+
+  const hasCondition =
+    condition !== undefined &&
+    condition.value !== undefined &&
+    condition.value !== null;
+
+  const operator =
+    hasCondition &&
+    (definition.valueType === "number"
+      ? (operatorNumberButtonLabels[condition.operator] ?? ":")
+      : ":");
+
+  function getSelectedLabel(
+    definition: FilterDefinition<TItem>,
+    conditionValue: FilterConditionValue,
+  ) {
+    if (definition.inputType === "option" && definition.options) {
+      return definition.options.find(
+        (option) => option.value === conditionValue,
+      )?.label;
+    }
+    return conditionValue;
+  }
+
+  const selectedValueLabel =
+    hasCondition &&
+    (Array.isArray(condition.value)
+      ? condition.value.length > 0
+        ? `${condition.value.map((v) => getSelectedLabel(definition, v)).join(",")}`
+        : null
+      : `${condition.value}`);
+
+  return (
+    <>
+      <ButtonModal open={open} onOpenChange={onOpenChange}>
+        <ButtonModal.Trigger>
+          <button
+            className={cn(
+              // buttonVariants({
+              //   intent: intent,
+              //   size: size,
+              //   appearance: "outlined",
+              //   content: "iconLabel",
+              // }),
+
+              "bg-transparent text-OnSurfaceVariant border border-OutlineVariant",
+              "hover:bg-SurfaceContainerLow ",
+              "aria-pressed:text-OnPrimary aria-pressed:bg-Primary",
+              "active:bg-SurfaceContainer active:text-OnSurface",
+              // "disabled:bg-transparent disabled:text-[var(--btn-outline-disable)] disabled:border-[var(--btn-outline-disable)]",
+
+              "rounded-full  h-7 gap-1  flex items-center",
+              "py-2",
+              "pl-3 pr-3.5",
+              "text-sm font-medium",
+              "whitespace-nowrap",
+              className,
+            )}
+            disabled={disabled}
+            {...props}
+          >
+            {/* Icon */}
+            {IconComponent && (
+              <IconComponent
+                className={cn(
+                  size == "sm" && "size-4",
+                  size == "md" && "size-4",
+                  size == "lg" && "size-4.5",
+                )}
+              />
+            )}
+
+            {/* Label */}
+            <span className="flex gap-px items-baseline ">
+              <span className="">{label}</span>
+              <span className="ml-px  font-semibold">{operator}</span>
+              <span className="ml-px text-xs   max-w-30 truncate">
+                {selectedValueLabel}
+              </span>
+            </span>
+
+            {/* Badge */}
+            {hasBadge && (
+              //TODO border color -real bg color?????
+              //temporally containerlowest
+              <div className="border-2 border-SurfaceContainerLowest  absolute size-3 -top-1 -right-1 bg-Tertiary rounded-full" />
+            )}
+          </button>
+        </ButtonModal.Trigger>
+
+        <ButtonModal.Content>
+          <FilterRenderer
+            key={definition.key}
+            filter={definition}
+            icon={definition.icon}
+          />
+        </ButtonModal.Content>
+      </ButtonModal>
+    </>
+  );
+}
+
+export function FilterButton2<TItem>({
   className,
   label,
   icon,
