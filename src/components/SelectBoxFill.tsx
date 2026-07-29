@@ -2,13 +2,14 @@ import type { ReactNode } from "react";
 
 import Arrow from "@/components/icon/Arrow";
 import { cn } from "@/shared/lib/util";
+import { IconName, Icons } from "./icon";
 
 type SelectBoxFillSize = "small" | "middle";
 
 interface SelectBoxFillProps {
   value: string;
   size?: SelectBoxFillSize;
-  leadingIcon?: ReactNode;
+  leadingIcon?: IconName;
   className?: string;
   labelClassName?: string;
   triggerClassName?: string;
@@ -24,13 +25,13 @@ const sizeStyles: Record<
   }
 > = {
   small: {
-    container: "h-[22px]",
-    label: "text-[12px] font-normal",
+    container: "h-6",
+    label: "text-xs font-normal",
     icon: "size-3",
     chevron: "size-4",
   },
   middle: {
-    container: "h-[24px]",
+    container: "h-7",
     label: "text-sm font-medium",
     icon: "size-3",
     chevron: "size-4",
@@ -46,11 +47,12 @@ export default function SelectBoxFill({
   triggerClassName,
 }: SelectBoxFillProps) {
   const styles = sizeStyles[size];
+  const IconComponent = leadingIcon ? Icons[leadingIcon] : undefined;
 
   return (
     <div
       className={cn(
-        "inline-flex items-center gap-[1px] text-OnSurface",
+        "inline-flex items-center gap-px text-OnSurface",
         styles.container,
         className,
       )}
@@ -58,19 +60,12 @@ export default function SelectBoxFill({
       <div
         className={cn(
           "inline-flex h-full items-center rounded-select-fill-left bg-DividerLow ",
-          leadingIcon ? "gap-[3px] pl-4px pr-7px py-5px" : "px-7px",
+          leadingIcon ? "gap-1 pl-4px pr-7px py-5px" : "px-7px",
         )}
       >
-        {leadingIcon ? (
-          <span
-            className={cn(
-              "inline-flex shrink-0 items-center justify-center",
-              styles.icon,
-            )}
-          >
-            {leadingIcon}
-          </span>
-        ) : null}
+        {IconComponent && (
+            <IconComponent className="size-4" />
+        )}
         <span
           className={cn(
             "leading-none whitespace-nowrap",
@@ -86,7 +81,7 @@ export default function SelectBoxFill({
         type="button"
         aria-label={`${value} options`}
         className={cn(
-          "inline-flex h-full w-[22px] items-center justify-center rounded-select-fill-right bg-DividerLow px-3px text-OnSurface",
+          "inline-flex h-full w-6 items-center justify-center rounded-select-fill-right bg-DividerLow px-1 text-OnSurface",
           triggerClassName,
         )}
       >

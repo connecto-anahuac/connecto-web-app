@@ -1,18 +1,21 @@
 import type {
   StudentClassItem,
 } from "@/features/student/types";
-import type { FilterDefinition, FilterableItem } from "@/features/search/shared/filterDefinition";
 import type { StudentDetail } from "../../ui/studentSummaryPanel/studentSummary.type";
 import ContentTitleSection from "@/components/ContentTitleSection";
 import DataSection from "@/components/datasection/DataSection";
 import { StudentDiagram } from "./StudentDiagram";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
+import type { Table } from "@tanstack/react-table";
+import type { DataViewConfig } from "@/components/table/dataView.types";
+import { DataTable } from "@/components/table/DataTable";
 
 type Props = {
   loading: boolean;
-  filterableItems: readonly FilterableItem<StudentClassItem>[];
+  studentGrades: readonly StudentClassItem[];
   studentDetail: StudentDetail | null;
-  definitions: readonly FilterDefinition<StudentClassItem>[];
+  table: Table<StudentClassItem>;
+  tableConfig: DataViewConfig<StudentClassItem>;
   searchText: string;
   onSearchTextChange: (value: string) => void;
   presets: readonly FilterPreset[];
@@ -22,9 +25,10 @@ type Props = {
 
 export function StudentDetailPresenter({
   loading,
-  filterableItems,
+  studentGrades,
   studentDetail,
-  definitions,
+  table,
+  tableConfig,
   searchText,
   onSearchTextChange,
   presets,
@@ -45,14 +49,16 @@ export function StudentDetailPresenter({
    <div className="flex flex-col gap-3 pb-0 w-full h-full">
       <ContentTitleSection title={"Alumnos"} />
       <DataSection
-        definitions={definitions}
         className="w-full flex-1 min-h-0"
         presets={presets}
         searchText={searchText}
         onSearchTextChange={onSearchTextChange}
-        listDiagram={<div> LIST VIEW</div>}
+        table={table}
+        tableConfig={tableConfig}
+        listDiagram={<DataTable config={tableConfig} table={table} />}
         cardDiagram={
-          <StudentDiagram loading={loading} filterableItems={filterableItems} />
+          // <StudentDiagram loading={loading} items={studentGrades} />
+          <div>DIAGRAM</div>
         }
       />
     </div>

@@ -2,18 +2,17 @@ import ColumnTitle from "@/components/diagram/ColumnTitle";
 import RowTitle from "@/components/diagram/RowTitle";
 import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
 import type { StudentClassItem } from "@/features/student/types";
-import type { FilterableItem } from "@/features/search/shared/filterDefinition";
 import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
 
 type Props = ComponentProps<"div"> & {
   loading: boolean;
-  filterableItems: readonly FilterableItem<StudentClassItem>[];
+  items: readonly StudentClassItem[];
 };
 
 export function StudentDiagram({
   loading,
-  filterableItems,
+  items,
   className,
   ...props
 }: Props) {
@@ -21,9 +20,7 @@ export function StudentDiagram({
     return <div>Loading...</div>;
   }
 
-  const allGrades = filterableItems.map(
-    (filterableItem) => filterableItem.item,
-  );
+  const allGrades = items;
 
   const semesters = Array.from(
     new Set(allGrades.map((item) => item.semester).filter(Boolean)),
@@ -103,12 +100,10 @@ export function StudentDiagram({
         })}
 
         {/* data */}
-        {filterableItems.map(({ item, isMatch }) => (
+        {items.map((item) => (
           <div
             key={item.id}
-            className={
-              !isMatch ? "grayscale opacity-10 transition" : "transition"
-            }
+            className="transition"
             style={{
               gridColumnStart: item.semester + 1 || 2,
               gridRowStart: item.position + 2 || 2,

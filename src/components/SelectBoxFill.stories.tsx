@@ -3,6 +3,7 @@ import { expect, userEvent, within } from 'storybook/test'
 
 import TabBadge from './TabBadge'
 import SelectBoxFill from './SelectBoxFill'
+import { Icons } from './icon'
 
 const meta = {
   title: 'Components/SelectBoxFill',
@@ -14,7 +15,7 @@ const meta = {
   argTypes: {
     value: { control: 'text' },
     size: { control: 'select', options: ['small', 'middle'] },
-    leadingIcon: { table: { disable: true } },
+    leadingIcon: {control: 'select', options: Object.keys(Icons)},
     className: { table: { disable: true } },
     labelClassName: { table: { disable: true } },
     triggerClassName: { table: { disable: true } },
@@ -39,7 +40,7 @@ export const Middle: Story = {
 
 export const WithLeadingIcon: Story = {
   args: {
-    leadingIcon: <TabBadge label="A" selected aria-label="Filter icon" />,
+    leadingIcon: "admin",
   },
 }
 

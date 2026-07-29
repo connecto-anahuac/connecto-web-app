@@ -49,9 +49,9 @@ export function StudentsShellPresenter({
   }
 
   return (
-    <div className="flex   h-full w-full max-h-full min-h-0 gap-5 p-2.5 overflow-x-visible">
-      <div className="flex z-50 h-full min-h-0 w-80 shrink-0 flex-col gap-2  rounded-lg border border-divider bg-header p-2.5">
-        <div className="flex items-center gap-3">
+    <div className="  w-full   flex   h-full max-h-full min-h-0 gap-5 p-2.5 overflow-x-visible">
+     {/* w-80 */} <div className="overflow-x-auto  w-12 flex z-50 h-full min-h-0 shrink-0 flex-col gap-2  rounded-lg border border-divider bg-header p-2.5">
+        <div className="flex items-center gap-3 ">
           
           <SearchBar
               value={searchText}
