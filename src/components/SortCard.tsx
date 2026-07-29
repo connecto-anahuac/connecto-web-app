@@ -1,17 +1,20 @@
 import { cn } from "@/shared/lib/util";
-import Divider from "@/components/Divider";
-
-import SortCardFieldChip from "./SortCardFieldChip";
-import SortCardSortBadge from "./SortCardSortBadge";
 import HandleGripIcon from "./icon/HandleGripIcon";
 import Button from "./button/Button";
-import SelectBoxUnfill from "./select-box/SelectBoxUnfill";
 import SelectBoxFill from "./SelectBoxFill";
 import PersonIcon from "./icon/PersonIcon";
+import type { DragEventHandler } from "react";
 
 type SortCardProps = {
   fieldLabel: string;
   className?: string;
+  descending?: boolean;
+  onDirectionToggle?: () => void;
+  onRemove?: () => void;
+  draggable?: boolean;
+  onDragStart?: DragEventHandler<HTMLDivElement>;
+  onDragOver?: DragEventHandler<HTMLDivElement>;
+  onDrop?: DragEventHandler<HTMLDivElement>;
 };
 
 // function DragHandleIcon() {
@@ -50,35 +53,52 @@ type SortCardProps = {
 //   )
 // }
 
-export default function SortCard({ fieldLabel, className }: SortCardProps) {
+// TODO button, color, selectbox function
+export default function SortCard({
+  fieldLabel,
+  className,
+  descending = false,
+  onDirectionToggle,
+  onRemove,
+  draggable,
+  onDragStart,
+  onDragOver,
+  onDrop,
+}: SortCardProps) {
   return (
     <div
       className={cn(
-        "inline-flex h-12 w-65 items-center gap-2.5 rounded-md bg-background px-2 py-3 text-sm font-medium text-connecto-ink",
+        "inline-flex h-12 w-full min-w-fit justify-start  items-center gap-2.5 rounded-md bg-background px-2 py-3 text-sm font-medium text-OnSurfaceVariant",
         className,
       )}
+      draggable={draggable}
+      onDragOver={onDragOver}
+      onDragStart={onDragStart}
+      onDrop={onDrop}
     >
       <button
         type="button"
         aria-label="Reorder sort rule"
-        className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm text-connecto-muted transition-colors hover:bg-connecto-surface focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-connecto-muted/30"
+        className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm  transition-colors hover:text-OnSurface"
       >
         <HandleGripIcon />
       </button>
 
       <Button
-        icon="textAscending"
+        icon={descending ? "textDescending" : "textAscending"}
         label=""
         intent="lightInk"
         appearance="filled"
         size="sm"
-        className="shrink-0 ml-auto "
+        className="shrink-0 ml-2 "
+        onClick={onDirectionToggle}
       />
       
       {/* <SortCardFieldChip label={fieldLabel} /> */}
       <SelectBoxFill
         value={fieldLabel}
-        leadingIcon={<PersonIcon/>}
+        leadingIcon={<PersonIcon />}
+        className="ml-2 mr-4"
       />
 
       <Button
@@ -88,6 +108,7 @@ export default function SortCard({ fieldLabel, className }: SortCardProps) {
         appearance="text"
         size="md"
         className="shrink-0 ml-auto"
+        onClick={onRemove}
       />
       {/* <button
         type="button"
