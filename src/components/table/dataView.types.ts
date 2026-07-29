@@ -14,7 +14,8 @@ export type DataViewColumn<TItem> = {
   accessor: (item: TItem) => string | number | null;//colIdから返す値。filter,sortに使う
   format: (item: TItem) => string;//Cellに渡す値
   searchTexts?:(item: TItem) => string[];//テキスト検索時の文字列
-  initialSize?: number;
+  minWidth?: number;
+  maxWidth?: number;
   filterable?: boolean;
   options?: readonly { label: string; value: string }[];
 };

@@ -1,6 +1,6 @@
 # Table components
 
-TanStack Table の状態を受け取り、テーブル表示と列単位の操作 UI を提供する共有コンポーネントです。ここではデータ取得やドメイン固有の列定義を持ちません。
+TaTanStack Table の状態を受け取り、テーブル表示と列単位の操作 UI を提供する共有コンポーネントです。ここではデータ取得やドメイン固有の列定義を持ちません。
 
 ## 主なファイル
 
@@ -29,6 +29,9 @@ filter検索にかけられる値は、accessor,searchtexts,options.labelすべ�
 - `searchTexts`: テキスト検索時の文字列、複数指定したい場合。
 - `valueType`: `text`、`number`、`enum`。enum は `options` を指定すると複数選択フィルターになります。
 - `initialSize`: 指定がなければヘッダー文字数から最小サイズを計算します。
+- `minWidth` / `maxWidth`: optional width bounds. Defaults are `140` and `1200`.
+
+Initial column width is not stored in config. `useTable` estimates it from the header label length plus the compact header action area and then clamps it with `minWidth` / `maxWidth`.
 
 設定の実体はドメイン側に置きます。現在の StudentClassItem 用設定は `features/student/types/studentClassViewConfig.ts` です。
 

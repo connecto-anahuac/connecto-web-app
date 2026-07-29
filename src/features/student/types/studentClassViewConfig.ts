@@ -37,7 +37,6 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
       valueType: "text",
       accessor: (item) => item.name,
       format: (item) => item.name,
-      initialSize: 240,
       searchTexts: (item) => generateAccentCombinations(item.name),
     },
     {
@@ -76,7 +75,6 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
         item.preRequisites.length
           ? item.preRequisites.map((course) => course.name).join(", ")
           : "--",
-      initialSize: 260,
       searchTexts: (item) =>
         item.preRequisites
           .map((course) => generateAccentCombinations(course.name))
@@ -122,18 +120,12 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
         const statusOption = STATUS_OPTIONS.find(
           (option) => option.value === item.status,
         );
-        return statusOption ? generateAccentCombinations(statusOption.label.toLocaleLowerCase()): [];
+        return statusOption
+          ? generateAccentCombinations(
+              statusOption.label.toLocaleLowerCase(),
+            )
+          : [];
       },
-      initialSize: 220,
     },
   ],
 };
-
-// function generateAccentCombinations(text: string): string[] {
-//   const normalized = text
-//     .normalize("NFD")
-//     .replace(/[\u0300-\u036f]/g, "")
-//     .normalize("NFC");
-
-//   return [...new Set([text, normalized])];
-// }

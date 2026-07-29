@@ -22,6 +22,16 @@ type UseTableOptions<TItem extends RowData> = {
   data: readonly TItem[];
 };
 
+const DEFAULT_COLUMN_MIN_WIDTH = 140;
+const DEFAULT_COLUMN_MAX_WIDTH = 1200;
+const HEADER_LABEL_CHAR_WIDTH = 9;
+const HEADER_ICON_WIDTH = 18;
+const HEADER_ICON_GAP = 3;
+const HEADER_ACTION_BUTTON_WIDTH = 32;
+const HEADER_ACTIONS_GAP = 4;
+const HEADER_HORIZONTAL_PADDING = 20;
+const HEADER_ESTIMATE_BUFFER = 20;
+
 function tableFilter(rawValue: unknown, filterValue: unknown) {
   if (
     filterValue === undefined ||
@@ -44,8 +54,22 @@ function tableFilter(rawValue: unknown, filterValue: unknown) {
     .includes(String(filterValue).toLocaleLowerCase());
 }
 
-function contentMinSize(label: string) {
-  return 98 + label.length * 12;
+function clampWidth(width: number, minWidth: number, maxWidth: number) {
+  return Math.min(Math.max(width, minWidth), maxWidth);
+}
+
+function estimateColumnWidth(label: string) {
+  const compactHeaderWidth =
+    HEADER_ICON_WIDTH +
+    HEADER_ICON_GAP +
+    HEADER_ACTION_BUTTON_WIDTH * 2 +
+    HEADER_ACTIONS_GAP +
+    HEADER_HORIZONTAL_PADDING;
+  //console.log(`estimateColumnWidth: label=${label}, width=${label.length * HEADER_LABEL_CHAR_WIDTH + compactHeaderWidth + HEADER_ESTIMATE_BUFFER}`);
+
+  return label.length * HEADER_LABEL_CHAR_WIDTH +
+    compactHeaderWidth +
+    HEADER_ESTIMATE_BUFFER;
 }
 
 export function useTable<TItem extends RowData>({
@@ -84,31 +108,37 @@ export function useTable<TItem extends RowData>({
 
   const columns = useMemo<ColumnDef<TItem>[]>(
     () =>
-      config.columns.map((column) => ({
-        id: column.id,
-        accessorFn: column.accessor,
-        cell: (context) => column.format(context.row.original),
-        filterFn: dataViewFilter,
-        header: column.label,
-        minSize: contentMinSize(column.label),
-        size: Math.max(column.initialSize ?? 0, contentMinSize(column.label)),
-        sortDescFirst: false,
-      })),
+      config.columns.map((column) => {
+        const minWidth = column.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH;
+        const maxWidth = column.maxWidth ?? DEFAULT_COLUMN_MAX_WIDTH;
+        const estimatedWidth = clampWidth(
+          estimateColumnWidth(column.label),
+          minWidth,
+          maxWidth,
+        );
+
+        return {
+          id: column.id,
+          accessorFn: column.accessor,
+          cell: (context) => column.format(context.row.original),
+          filterFn: dataViewFilter,
+          header: column.label,
+          minSize: minWidth,
+          maxSize: maxWidth,
+          size: estimatedWidth,
+          sortDescFirst: false,
+        };
+      }),
     [config.columns, dataViewFilter],
   );
 
   const tableData = useMemo(() => [...data], [data]);
-//   const filterFns = useMemo(
-//     () => ({ dataView: dataViewFilter }),
-//     [dataViewFilter],
-//   );
 
   // TanStack intentionally returns a mutable table instance for event handlers.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     columns,
     data: tableData,
-    // filterFns,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
