@@ -26,8 +26,8 @@ function ButtonItem({
       {...props}
       onClick={(event) => {
         onClick?.(event);
-        item.onClick?.();
         onItemSelect?.();
+        item.onClick?.();
       }}
     >
       <Icon className="size-4" /> {item.label}
@@ -57,6 +57,7 @@ function ColumnToolMenu({
 }
 
 export function HeaderCellPresenter<TItem>({
+  //TODO compact, width中身調整。 label長さ、icon
   className,
   actions,
   showDefaultActions = true,
@@ -66,7 +67,7 @@ export function HeaderCellPresenter<TItem>({
   onHide,
   onPin,
   onSort,
-  content,
+  title,
   contentMinWidth,
   icon,
   menuButtonRef,
@@ -79,25 +80,27 @@ export function HeaderCellPresenter<TItem>({
   const IconComponent = icon ? Icons[icon] : undefined;
   return (
     <div
+      // when click the cell, open menue btm-str of cellRef
       ref={cellRef}
       className={cn(
-        "flex h-9 items-center border border-DividerMiddle bg-DividerLowest px-2.5 text-xs font-medium text-OnSurface/60",
+        "cursor-default flex h-9 items-center border border-DividerMiddle bg-DividerLowest px-2.5 text-xs font-medium text-OnSurface/60",
         className,
       )}
-      onClick={() => menuModalRef.current?.open(cellRef.current ?? undefined)}
+      onClick={() =>
+        compact && menuModalRef.current?.open(cellRef.current ?? undefined)
+      }
+      style={{ minWidth: contentMinWidth }}
       {...props}
     >
-      <div className="flex gap-[3px] items-center">
+      <div className="flex gap-[3px] items-center flex-1 min-w-0">
         {IconComponent && <IconComponent className="size-4.5" />}
-        <div
-          className="min-w-0 flex-1 truncate text-sm"
-          style={{ minWidth: contentMinWidth }}
-        >
-          {content}
-        </div>
+        <div className="min-w-0 flex-1 truncate text-sm" data-position="header-title">{title}</div>
       </div>
 
-      <ModalProvider ref={filterModalRef}>
+      <ModalProvider
+        // To share FILTER menu in filterModalRef
+        ref={filterModalRef}
+      >
         <Modal.Content>
           <TableColumnFilterContainer column={column} config={config} />
         </Modal.Content>
@@ -144,9 +147,13 @@ export function HeaderCellPresenter<TItem>({
 
               <div className="flex shrink-0 gap-1">
                 {compact && (
-                  <ButtonModal ref={menuModalRef}>
+                  <ButtonModal
+                    // when click menu item, close menu
+                    ref={menuModalRef}
+                  >
                     <ButtonModal.Trigger>
                       <IconButton
+                        // when click filter in menu, close menu and open filtermodal in btm-str of menuButtonRef
                         ref={menuButtonRef}
                         icon="threePointMenu"
                         size="md"
@@ -162,6 +169,9 @@ export function HeaderCellPresenter<TItem>({
                       <ColumnToolMenu
                         items={menuItems}
                         onItemSelect={() => menuModalRef.current?.close()}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                        }}
                       />
                     </ButtonModal.Content>
                   </ButtonModal>

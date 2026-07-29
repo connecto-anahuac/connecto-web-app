@@ -25,7 +25,7 @@ export type HeaderCellActionProps<TItem> = {
 
 export type HeaderCellProps<TItem> = ComponentProps<"div"> &
   HeaderCellActionProps<TItem> & {
-    label?: ReactNode;
+    label: string;
     icon?: IconName;
     actions?: ReactNode;
     showDefaultActions?: boolean;
@@ -48,7 +48,7 @@ export type ButtonItemProps = ComponentProps<"button"> & {
 };
 
 export type HeaderCellPresenterProps<TItem> = HeaderCellProps<TItem> & {
-  content: ReactNode;
+  title: string;
   contentMinWidth: string;
   menuButtonRef: RefObject<HTMLButtonElement | null>;
   menuItems: HeaderMenuItem[];

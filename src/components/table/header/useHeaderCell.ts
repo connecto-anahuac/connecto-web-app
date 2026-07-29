@@ -20,12 +20,12 @@ export function useHeaderCell<TItem>({
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuModalRef = useRef<ModalHandle>(null);
   const filterModalRef = useRef<ModalHandle>(null);
-  const content = children ?? label;
-  const contentText =
-    typeof content === "string" || typeof content === "number"
-      ? String(content)
+  const title = label;//children ?? label;
+  const titleText =
+    typeof title === "string" || typeof title === "number"
+      ? String(title)
       : "";
-  const contentMinWidth = `${98 + contentText.length * 9}px`;
+  const contentMinWidth = `${98 + titleText.length * 9}px`;
 
   const menuItems: HeaderMenuItem[] = [
     {
@@ -51,7 +51,7 @@ export function useHeaderCell<TItem>({
     menuButtonRef,
     menuModalRef,
     filterModalRef,
-    content,
+    title,
     contentMinWidth,
     icon,
     menuItems,

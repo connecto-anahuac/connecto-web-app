@@ -7,12 +7,31 @@ import { useHeaderCell } from "./useHeaderCell";
 export default function HeaderCellContainer<TItem>(
   props: HeaderCellProps<TItem>,
 ) {
-  const headerCell = useHeaderCell(props);
+  const {
+    cellRef,
+    menuButtonRef,
+    menuModalRef,
+    filterModalRef,
+    title: content,
+    contentMinWidth,
+    icon,
+    menuItems,
+  } = useHeaderCell(props);
 
   return (
+    //TODO error
     <HeaderCellPresenter
       {...props}
-      {...headerCell}
+
+      cellRef={cellRef}
+      menuButtonRef={menuButtonRef}
+      menuModalRef={menuModalRef}
+      filterModalRef={filterModalRef}
+      title={content}
+      contentMinWidth={contentMinWidth}
+      icon={icon}
+      menuItems={menuItems}
+
       compact={true}
     />
   );
