@@ -45,6 +45,7 @@ next-env.d.ts
 /dev_untrack
 /dev_untrack/*
 
+/secreto
 /secrets
 /secrets/*
 *storybook.log

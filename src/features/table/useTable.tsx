@@ -32,7 +32,9 @@ const HEADER_ACTIONS_GAP = 4;
 const HEADER_HORIZONTAL_PADDING = 20;
 const HEADER_ESTIMATE_BUFFER = 20;
 
-function tableFilter(rawValue: unknown, filterValue: unknown) {
+function include(rawValue: unknown, filterValue: unknown) {
+  // rawValue in filterValue
+
   if (
     filterValue === undefined ||
     filterValue === "" ||
@@ -67,9 +69,11 @@ function estimateColumnWidth(label: string) {
     HEADER_HORIZONTAL_PADDING;
   //console.log(`estimateColumnWidth: label=${label}, width=${label.length * HEADER_LABEL_CHAR_WIDTH + compactHeaderWidth + HEADER_ESTIMATE_BUFFER}`);
 
-  return label.length * HEADER_LABEL_CHAR_WIDTH +
+  return (
+    label.length * HEADER_LABEL_CHAR_WIDTH +
     compactHeaderWidth +
-    HEADER_ESTIMATE_BUFFER;
+    HEADER_ESTIMATE_BUFFER
+  );
 }
 
 export function useTable<TItem extends RowData>({
@@ -83,30 +87,33 @@ export function useTable<TItem extends RowData>({
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({});
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 
-  const columnsById = useMemo(
+  const columnConfigMapById = useMemo(
     () => new Map(config.columns.map((column) => [column.id, column])),
     [config.columns],
   );
 
   const dataViewFilter = useCallback<FilterFn<TItem>>(
     (row, columnId, filterValue) => {
+      // filterValue would be 
+      // rawvalue, option.label, static searchTexts
+
       const rawValue = row.getValue(columnId);
-      const column = columnsById.get(columnId);
-      const optionLabel = column?.options?.find(
+      const columnConfig = columnConfigMapById.get(columnId);
+      const optionLabel = columnConfig?.options?.find(
         (option) => option.value === String(rawValue),
       )?.label;
       const searchValues = [
         rawValue,
         optionLabel,
-        ...(column?.searchTexts?.(row.original) ?? []),
+        ...(columnConfig?.searchTexts?.(row.original) ?? []),
       ];
 
-      return searchValues.some((value) => tableFilter(value, filterValue));
+      return searchValues.some((value) => include(value, filterValue));
     },
-    [columnsById],
+    [columnConfigMapById],
   );
 
-  const columns = useMemo<ColumnDef<TItem>[]>(
+  const columnDefs = useMemo<ColumnDef<TItem>[]>(
     () =>
       config.columns.map((column) => {
         const minWidth = column.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH;
@@ -137,7 +144,7 @@ export function useTable<TItem extends RowData>({
   // TanStack intentionally returns a mutable table instance for event handlers.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
-    columns,
+    columns: columnDefs,
     data: tableData,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),

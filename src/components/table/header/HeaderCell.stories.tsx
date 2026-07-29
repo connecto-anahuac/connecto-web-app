@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import HeaderCell from "./HeaderCell";
-import PersonIcon from "../icon/PersonIcon";
-import { IconName, Icons } from "../icon";
+import HeaderCell from ".";
+import PersonIcon from "../../icon/PersonIcon";
+import { IconName, Icons } from "../../icon";
 
 const meta = {
   title: "Components/Table/HeaderCell",
