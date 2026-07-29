@@ -18,7 +18,7 @@ const STATUS_PRESETS = [
 ] as const;
 
 export function useStudentClassTable(data: readonly StudentClassItem[]) {
-  const { globalFilter, setGlobalFilter, table } = useTable({
+  const {  globalFilter, setGlobalFilter, table } = useTable({
     config: STUDENT_GRADE_VIEW_CONFIG,
     data,
   });
@@ -41,7 +41,7 @@ export function useStudentClassTable(data: readonly StudentClassItem[]) {
   });
 
   return {
-    config: STUDENT_GRADE_VIEW_CONFIG,
+    config:STUDENT_GRADE_VIEW_CONFIG,
     globalFilter,
     presets,
     setGlobalFilter,

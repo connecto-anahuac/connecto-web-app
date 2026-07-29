@@ -15,12 +15,13 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { useCallback, useMemo, useState } from "react";
-import type { DataViewConfig,  } from "@/components/table/dataView.types";
+import type { DataViewConfig, Option } from "@/components/table/dataView.types";
 
 type UseTableOptions<TItem extends RowData> = {
   config: DataViewConfig<TItem>;
   data: readonly TItem[];
 };
+
 
 const DEFAULT_COLUMN_MIN_WIDTH = 140;
 const DEFAULT_COLUMN_MAX_WIDTH = 1200;
@@ -76,8 +77,57 @@ function estimateColumnWidth(label: string) {
   );
 }
 
+function addOption(options: Map<string, Option>, option: Option) {
+  const current = options.get(option.value);
+  if (current) {
+    options.set(option.value, {
+      ...current,
+      searchTexts: [...new Set([...current.searchTexts, ...option.searchTexts])],
+    });
+    return;
+  }
 
-  
+  options.set(option.value, option);
+}
+
+function createOptionMaps<TItem extends RowData>(
+  config: DataViewConfig<TItem>,
+  data: readonly TItem[],
+) {
+  return new Map(
+    config.columns.map((column) => {
+      const options = new Map<string, Option>();
+
+      for (const option of column.options ?? []) {
+        addOption(options, {
+          ...option,
+          searchTexts: [option.label, option.value],
+        });
+      }
+
+      if (column.dynamicOption) {
+        for (const item of data) {
+          const rawValue = column.accessor(item);
+          if (rawValue === null) continue;
+
+          const value = String(rawValue);
+          addOption(options, {
+            label: column.format(item),
+            value,
+            searchTexts: [
+              value,
+              column.format(item),
+              ...(column.searchTexts?.(item) ?? []),
+            ],
+          });
+        }
+      }
+
+      return [column.id, options] as const;
+    }),
+  );
+}
+
 export function useTable<TItem extends RowData>({
   config,
   data,
@@ -89,36 +139,47 @@ export function useTable<TItem extends RowData>({
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({});
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 
+  const optionMapsByColumnId = useMemo(
+    () => createOptionMaps(config, data),
+    [config, data],
+  );
 
-  const columnConfigMapById = useMemo(
-    () => new Map(config.columns.map((column) => [column.id, column])),
-    [config.columns],
+  const tableConfig = useMemo<DataViewConfig<TItem>>(
+    () => ({
+      ...config,
+      columns: config.columns.map((column) => {
+        const options = optionMapsByColumnId.get(column.id);
+        return options?.size
+          ? { ...column, options: [...options.values()] }
+          : column;
+      }),
+    }),
+    [config, optionMapsByColumnId],
   );
 
   const dataViewFilter = useCallback<FilterFn<TItem>>(
     (row, columnId, filterValue) => {
-      // filterValue would be
+      // filterValue would be 
       // rawvalue, option.label, static searchTexts
 
       const rawValue = row.getValue(columnId);
-      const columnConfig = columnConfigMapById.get(columnId);
-      const optionLabel = columnConfig?.options?.find(
-        (option) => option.value === String(rawValue),
-      )?.label;
+      const option = optionMapsByColumnId
+        .get(columnId)
+        ?.get(String(rawValue));
       const searchValues = [
         rawValue,
-        optionLabel,
-        ...(columnConfig?.searchTexts?.(row.original) ?? []),
+        option?.label,
+        ...(option?.searchTexts ?? []),
       ];
 
       return searchValues.some((value) => include(value, filterValue));
     },
-    [columnConfigMapById],
+    [optionMapsByColumnId],
   );
 
   const columnDefs = useMemo<ColumnDef<TItem>[]>(
     () =>
-      config.columns.map((column) => {
+      tableConfig.columns.map((column) => {
         const minWidth = column.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH;
         const maxWidth = column.maxWidth ?? DEFAULT_COLUMN_MAX_WIDTH;
         const estimatedWidth = clampWidth(
@@ -139,7 +200,7 @@ export function useTable<TItem extends RowData>({
           sortDescFirst: false,
         };
       }),
-    [config.columns, dataViewFilter],
+    [dataViewFilter, tableConfig.columns],
   );
 
   const tableData = useMemo(() => [...data], [data]);
@@ -171,7 +232,9 @@ export function useTable<TItem extends RowData>({
   });
 
   return {
+    config: tableConfig,
     globalFilter,
+    optionMapsByColumnId,
     setGlobalFilter,
     table,
   };

@@ -14,6 +14,7 @@ const STATUS_OPTIONS = [
 const displayNumber = (value: number | null) =>
   value === null || Number.isNaN(value) ? "--" : String(value);
 
+
 export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
   columns: [
     {
@@ -74,7 +75,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
       format: (item) =>
         item.preRequisites.length
           ? item.preRequisites.map((course) => course.name).join(", ")
-          : "--",
+          : "",
       searchTexts: (item) =>
         item.preRequisites
           .map((course) => generateAccentCombinations(course.name))
@@ -84,7 +85,8 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
       id: "period",
       label: "Periodo de inscripción",
       icon: "schedule",
-      valueType: "text",
+      valueType: "enum",
+      dynamicOption: true,
       accessor: (item) => item.period?.raw ?? null,
       format: (item) => item.period?.label ?? "",
       searchTexts: (item) =>
@@ -124,7 +126,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
           ? generateAccentCombinations(
               statusOption.label.toLocaleLowerCase(),
             )
-          : [];
+          : [item.status.toLocaleLowerCase()];
       },
     },
   ],

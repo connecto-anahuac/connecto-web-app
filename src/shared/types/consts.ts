@@ -18,3 +18,4 @@ export enum StudentStatus {
   BAJA_VOLUNTARIA = "baja voluntaria",
 }
 
+export type DATA_CACHE_ID = "studentGrade" | "student" | "professor" | "class";

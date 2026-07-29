@@ -1,11 +1,11 @@
 import type { ComponentPropsWithRef } from "react";
 import { DateFilter } from "./DateFilter";
-import { MultiSelectFilter } from "./MultiselectFilter";
 import { NumberFilter } from "./NumberFilter";
 import { SelectFilter } from "./SelectFilter";
 import { TextFilter } from "./TextFilter";
 import { FilterDefinition } from "../../shared/filterDefinition";
 import { IconName } from "@/components/icon";
+import { MultiSelectFilter } from "./multiselector/MultiselectFilter";
 
 type Props<TItem> = ComponentPropsWithRef<"section"> & {
   
