@@ -2,12 +2,11 @@
 
 import {
   DataTablePresenter,
-  TableFilterButtonGroupPresenter,
+  // TableFilterButtonGroupPresenter,
 } from "./DataTablePresenter";
 import type { DataTableProps } from "./DataTable.types";
 import {
   useDataTable,
-  useTableFilterButtonGroup,
 } from "./useDataTable";
 
 export function DataTableContainer<TItem>({
@@ -49,19 +48,17 @@ export function DataTableContainer<TItem>({
   );
 }
 
-export function TableFilterButtonGroupContainer<TItem>({
-  table,
-  config,
-  className,
-}: DataTableProps<TItem>) {
-  const filterButtonGroup = useTableFilterButtonGroup();
+// export function TableFilterButtonGroupContainer<TItem>({
+//   table,
+//   config,
+//   className,
+// }: DataTableProps<TItem>) {
 
-  return (
-    <TableFilterButtonGroupPresenter
-      className={className}
-      config={config}
-      table={table}
-      {...filterButtonGroup}
-    />
-  );
-}
+//   return (
+//     <TanstackFilterButtonGroup
+//      className={className}
+//    config={config}
+//    table={table}
+//     />
+//   );
+// }

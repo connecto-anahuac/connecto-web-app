@@ -1,20 +1,27 @@
 "use client";
 
 import { ComponentProps, useState } from "react";
-import IconButtonOLD from "../button/IconButton2";
+import type { Table } from "@tanstack/react-table";
 import SearchPresetChip from "../chip/SearchPresetChip";
 import SearchBar from "../../features/search/components/searchbar/SearchBar";
 import { cn } from "@/shared/lib/util";
 import IconButton from "../button/IconButton";
 import Button from "../button/Button";
 import { FilterDefinition } from "@/features/search/shared/filterDefinition";
-import FilterButtonGroup from "../button/FilterButtonGroup";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
+import type { DataViewConfig } from "@/components/table/dataView.types";
+// import { TableFilterButtonGroup } from "@/components/table/DataTable";
+import SortCard from "@/components/SortCard";
+import ButtonModal from "../ButtonModal";
+import { TanstackFilterButtonGroup } from "../button/TanstackFilterButtonGroup";
+import { GraphSwitcher } from "./GraphSwitcher";
+import { SearchTool } from "./buttonmodal/type";
+import HideButtonModal from "./buttonmodal/HideButtonModal";
+import PivotButtonModal from "./buttonmodal/PivotButtonModal";
 
-type SearchTool = "sort" | "filter" | "pivot" | "hide";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  definitions: readonly FilterDefinition<TItem>[];
+  definitions?: readonly FilterDefinition<TItem>[];
   defaultView?: "list" | "card";
   listTools?: SearchTool[];
   cardviewTools?: SearchTool[];
@@ -26,6 +33,8 @@ type Props<TItem> = ComponentProps<"div"> & {
   presets?: readonly FilterPreset[];
   searchText?: string;
   onSearchTextChange?: (value: string) => void;
+  table?: Table<TItem>;
+  tableConfig?: DataViewConfig<TItem>;
 };
 export default function DataSection<TItem>({
   className,
@@ -38,13 +47,16 @@ export default function DataSection<TItem>({
   listDiagram,
   cardDiagram,
   defaultView = "list",
-  definitions,
   searchText,
   onSearchTextChange,
+  table,
+  tableConfig,
 }: Props<TItem>) {
   const [selectedView, setSelectedView] = useState<"list" | "card">(
     defaultView,
   );
+  const [openedTool, setOpenedTool] = useState<SearchTool | null>(null);
+  const [draggedSortId, setDraggedSortId] = useState<string | null>(null);
 
   // const registros = useFilterStoreProvider((state) => state.registros);
   const viewChangeHandler = (view: "list" | "card") => {
@@ -52,12 +64,24 @@ export default function DataSection<TItem>({
     onViewChange?.(view);
   };
 
-  const isEnable = (searchTool: SearchTool) => {
+  const isToolEnable = (searchTool: SearchTool) => {
     if (selectedView === "list") {
       return listTools.includes(searchTool);
     }
     return cardviewTools.includes(searchTool);
   };
+
+  const moveSort = (fromId: string, toId: string) => {
+    if (!table || fromId === toId) return;
+    const sorting = [...table.getState().sorting];
+    const fromIndex = sorting.findIndex((sort) => sort.id === fromId);
+    const toIndex = sorting.findIndex((sort) => sort.id === toId);
+    if (fromIndex < 0 || toIndex < 0) return;
+    const [moved] = sorting.splice(fromIndex, 1);
+    sorting.splice(toIndex, 0, moved!);
+    table.setSorting(sorting);
+  };
+
   return (
     <div className={cn("flex flex-col gap-2", className)}>
       {/* 1st line */}
@@ -82,7 +106,7 @@ export default function DataSection<TItem>({
           ))}
 
           {/* scroll margin */}
-          <div className="w-4/5 shrink-0"/>
+          <div className="w-4/5 shrink-0" />
         </div>
 
         {/* //TODO zoom */}
@@ -108,9 +132,16 @@ export default function DataSection<TItem>({
           className="shrink-0 hover:bg-transparent active:bg-transparent"
         />
 
-        <FilterButtonGroup definitions={definitions} className="flex-1 h-fit" />
-
-        
+        {table && tableConfig ? (
+          <TanstackFilterButtonGroup
+            className="flex-1 h-fit"
+            config={tableConfig}
+            table={table}
+          />
+        ) : (
+          <div>Filter button group. table couldn&apos;t have</div>
+          // <FilterButtonGroup definitions={definitions} className="flex-1 h-fit" />
+        )}
       </div>
 
       {/* <div className="flex gap-3 items-center h-5">
@@ -135,34 +166,123 @@ export default function DataSection<TItem>({
         />
         {/* //TODO switch切り替え時のフィルター変更処理  */}
 
-        <Button
-          icon="sort"
-          label="Sort"
-          intent="darkInk"
-          appearance="text"
-          size="md"
-          disabled={!isEnable("sort")}
+        {/* sort */}
+        <ButtonModal
+          open={
+            openedTool === "sort" &&
+            table !== undefined &&
+            tableConfig !== undefined
+          }
+          onOpenChange={() =>
+            setOpenedTool((tool) => (tool === "sort" ? null : "sort"))
+          }
+        >
+          <ButtonModal.Trigger>
+            <Button
+              icon="sort"
+              label="Sort"
+              intent="darkInk"
+              appearance="text"
+              size="md"
+              disabled={!isToolEnable("sort")}
+              // onClick={() => setOpenedTool((tool) => tool === "sort" ? null : "sort")}
+            />
+          </ButtonModal.Trigger>
+          <ButtonModal.Content>
+            <div className=" flex min-w-72 w-fit flex-col gap-2 rounded-md border border-Outline bg-InverseSurface p-2 text-InverseOnSurface shadow-lg">
+              {table!.getState().sorting.map((sort) => {
+                const config = tableConfig!.columns.find(
+                  (column) => column.id === sort.id,
+                );
+                if (!config) return null;
+                return (
+                  <SortCard
+                    descending={sort.desc}
+                    draggable
+                    fieldLabel={config.label}
+                    key={sort.id}
+                    onDirectionToggle={() =>
+                      table!.setSorting((current) =>
+                        current.map((item) =>
+                          item.id === sort.id
+                            ? { ...item, desc: !item.desc }
+                            : item,
+                        ),
+                      )
+                    }
+                    onDragOver={(event) => event.preventDefault()}
+                    onDragStart={() => setDraggedSortId(sort.id)}
+                    onDrop={() => {
+                      if (draggedSortId) moveSort(draggedSortId, sort.id);
+                      setDraggedSortId(null);
+                    }}
+                    onRemove={() =>
+                      table!.setSorting((current) =>
+                        current.filter((item) => item.id !== sort.id),
+                      )
+                    }
+                  />
+                );
+              })}
+              <div className="border-t border-Outline pt-1">
+                {tableConfig!.columns
+                  .filter(
+                    (column) =>
+                      !table!
+                        .getState()
+                        .sorting.some((sort) => sort.id === column.id),
+                  )
+                  .map((column) => (
+                    <button
+                      className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm hover:bg-Primary hover:text-OnPrimary"
+                      key={column.id}
+                      onClick={() =>
+                        table!.setSorting((current) => [
+                          ...current,
+                          { id: column.id, desc: false },
+                        ])
+                      }
+                      type="button"
+                    >
+                      <span className="text-base">+</span>
+                      {column.label}
+                    </button>
+                  ))}
+              </div>
+            </div>
+          </ButtonModal.Content>
+        </ButtonModal>
+
+        <HideButtonModal
+          open={
+            openedTool === "hide" && table !== undefined && tableConfig !== undefined
+          }
+          onOpenChange={() =>
+            setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
+          }
+          disabled={!isToolEnable("hide")}
+          table={table}
+          tableConfig={tableConfig}
         />
 
-        <Button
-          icon="unvisible"
-          label="Ocultar"
-          intent="darkInk"
-          appearance="text"
-          size="md"
-          disabled={!isEnable("hide")}
+        <PivotButtonModal
+          open={
+            openedTool === "pivot" &&
+            table !== undefined &&
+            tableConfig !== undefined
+          }
+          onOpenChange={() =>
+            setOpenedTool((tool) => (tool === "pivot" ? null : "pivot"))
+          }
+          disabled={!isToolEnable("pivot")}
+          table={table}
+          tableConfig={tableConfig}
         />
 
-        <Button
-          icon="pin"
-          label="Pivot"
-          intent="darkInk"
-          appearance="text"
-          size="md"
-          disabled={!isEnable("pivot")}
-        />
-        <span className="ml-auto   text-xs font-medium">{43} registros</span>
-         {/* //TODO zoom */}
+        <span className="ml-auto   text-xs font-medium">
+          {table ? table.getFilteredRowModel().rows.length : "--"} registros
+        </span>
+        {/* //TODO zoom */}
         <IconButton
           icon="zoomIn"
           intent="lightInk"
@@ -188,71 +308,6 @@ export default function DataSection<TItem>({
       <div className="w-full flex-1 min-h-0">
         {selectedView === "list" ? listDiagram : cardDiagram}
       </div>
-    </div>
-  );
-}
-
-function GraphSwitcher({
-  onListClick,
-  onCardViewClick,
-  onViewChange,
-}: {
-  onListClick?: () => void;
-  onCardViewClick?: () => void;
-  onViewChange?: (view: "list" | "card") => void;
-}) {
-  const [selectedView, setSelectedView] = useState<"list" | "card">("list");
-  const unselectedStyle =
-    "bg-transparent text-OnSurface/60 hover:bg-OnSurface/10";
-  const selectedStyle = "bg-OnSurface/60 text-white hover:bg-OnSurface/60";
-
-  const handleClick = (view: "list" | "card") => {
-    setSelectedView(view);
-    onViewChange?.(view);
-
-    if (view === "list") {
-      onListClick?.();
-      return;
-    }
-
-    onCardViewClick?.();
-  };
-
-  return (
-    <div className="flex gap-0 rounded-md bg-DividerMiddle p-0.5">
-      {/* <IconButton
-          icon="list"
-          intent="lightInk"
-          appearance="filled"
-        size="md"
-        onClick={() => handleClick("list")}
-        
-      />
-      
-        <IconButton
-          icon="cardView"
-          intent="lightInk"
-          appearance="filled"
-          size="md"
-          onClick={() => handleClick("card")}
-        /> */}
-
-      <IconButtonOLD
-        icon="list"
-        className={cn(
-          "rounded-md size-6",
-          selectedView === "list" ? selectedStyle : unselectedStyle,
-        )}
-        onClick={() => handleClick("list")}
-      />
-      <IconButtonOLD
-        icon="cardView"
-        className={cn(
-          "rounded-md size-6",
-          selectedView === "card" ? selectedStyle : unselectedStyle,
-        )}
-        onClick={() => handleClick("card")}
-      />
     </div>
   );
 }
