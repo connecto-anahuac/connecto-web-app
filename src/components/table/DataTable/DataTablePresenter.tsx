@@ -160,6 +160,8 @@ export function DataTablePresenter<TItem>({
   config,
   className,
   resized,
+  hoveredResizeColumnId,
+  focusedResizeColumnId,
   preferredTotal,
   openMenuId,
   openFilterId,
@@ -169,10 +171,14 @@ export function DataTablePresenter<TItem>({
   onMenuOpenChange,
   onPin,
   onResize,
+  onResizeHoverChange,
+  onResizeFocusChange,
   onSort,
 }: DataTablePresenterProps<TItem>) {
   return (
-    <div className={cn("h-full w-full overflow-auto rounded-md", className)}>
+    <div className={cn("h-full w-full overflow-auto rounded-md",
+    // isResizing&&"cursor-col-resize",
+      className)}>
       <div
         className="min-w-max relative"
         role="table"
@@ -197,6 +203,11 @@ export function DataTablePresenter<TItem>({
               const pinned = column.getIsPinned() === "left";
               const open = openMenuId === column.id;
               const openFilter = openFilterId === column.id;
+              const canResize = header.column.getCanResize();
+              const isResizeBoundaryHighlighted =
+                hoveredResizeColumnId === column.id ||
+                focusedResizeColumnId === column.id ||
+                column.getIsResizing();
               return (
                 <HeaderCell<TItem>
                   icon={columnConfig.icon}
@@ -210,7 +221,21 @@ export function DataTablePresenter<TItem>({
                   onHide={onHide}
                   onMenuOpenChange={onMenuOpenChange}
                   onPin={onPin}
-                  // onResize={onResize} //TODO resize
+                  isResizing={column.getIsResizing()}
+                  isResizeBoundaryHighlighted={isResizeBoundaryHighlighted}
+                  onResize={
+                    canResize ? (event) => onResize(header, event) : undefined
+                  }
+                  onResizeHoverChange={
+                    canResize
+                      ? (hovered) => onResizeHoverChange(column.id, hovered)
+                      : undefined
+                  }
+                  onResizeFocusChange={
+                    canResize
+                      ? (focused) => onResizeFocusChange(column.id, focused)
+                      : undefined
+                  }
                   onSort={onSort}
                   className={cn(pinned && "sticky z-20 ")}
                   style={{
@@ -220,7 +245,6 @@ export function DataTablePresenter<TItem>({
                   }}
                   key={header.id}
                   role="columnheader"
-                  compact={true}
                   menuOpen={open}
                   filterOpen={openFilter}
                 />
@@ -235,9 +259,18 @@ export function DataTablePresenter<TItem>({
             {row.getVisibleCells().map((cell) => {
               const column = cell.column;
               const pinned = column.getIsPinned() === "left";
+              const isResizeBoundaryHighlighted =
+                hoveredResizeColumnId === column.id ||
+                focusedResizeColumnId === column.id ||
+                column.getIsResizing();
               return (
                 <Cell
-                  className={cn("truncate", pinned && "sticky z-10")}
+                  className={cn(
+                    "relative truncate",
+                    // isResizeBoundaryHighlighted &&
+                    //   "after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:translate-x-1/2  after:z-20 after:w-0.5 after:bg-Primary",
+                    pinned && "sticky z-10",
+                  )}
                   key={cell.id}
                   role="cell"
                   style={{
@@ -261,7 +294,11 @@ export function DataTablePresenter<TItem>({
           </div>
         )}
       </div>
-      {resized && <span className="sr-only">Columnas redimensionadas</span>}
+      {resized && (
+        <span aria-live="polite" className="sr-only" role="status">
+          Columnas redimensionadas
+        </span>
+      )}
     </div>
   );
 }

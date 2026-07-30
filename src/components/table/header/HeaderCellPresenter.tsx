@@ -25,6 +25,7 @@ function ButtonItem({
       type="button"
       {...props}
       onClick={(event) => {
+        event.stopPropagation();
         onClick?.(event);
         onItemSelect?.();
         item.onClick?.();
@@ -63,10 +64,15 @@ export function HeaderCellPresenter<TItem>({
   showDefaultActions = true,
   column,
   config,
-  compact,
+  isCompact,
   onHide,
   onPin,
+  onResize,
+  onResizeFocusChange,
+  onResizeHoverChange,
   onSort,
+  isResizing = false,
+  isResizeBoundaryHighlighted = false,
   title,
   contentMinWidth,
   icon,
@@ -75,6 +81,7 @@ export function HeaderCellPresenter<TItem>({
   menuModalRef,
   filterModalRef,
   cellRef,
+  measureHeaderTitle,
   ...props
 }: HeaderCellPresenterProps<TItem>) {
   const IconComponent = icon ? Icons[icon] : undefined;
@@ -83,19 +90,70 @@ export function HeaderCellPresenter<TItem>({
       // when click the cell, open menue btm-str of cellRef
       ref={cellRef}
       className={cn(
-        "cursor-default flex h-9 items-center border border-DividerMiddle bg-DividerLowest px-2.5 text-xs font-medium text-OnSurface/60",
+        "relative cursor-default flex h-9 items-center border border-DividerMiddle bg-DividerLowest hover:bg-DividerLow active:bg-DividerMiddle px-2.5 text-xs font-medium text-OnSurface/60",
+        // (isResizing || isResizeBoundaryHighlighted) &&
+        //   "after:pointer-events-none after:absolute after:inset-y-0 after:right-[-1px] after:z-20 after:w-0.5 after:bg-Primary",
         className,
       )}
       onClick={() =>
-        compact && menuModalRef.current?.open(cellRef.current ?? undefined)
+        isCompact && menuModalRef.current?.open(cellRef.current ?? undefined)
       }
       style={{ minWidth: contentMinWidth }}
       {...props}
     >
       <div className="flex gap-[3px] items-center flex-1 min-w-0">
         {IconComponent && <IconComponent className="size-4.5" />}
-        <div className="min-w-0 flex-1 truncate text-sm" data-position="header-title">{title}</div>
+        <div
+          ref={measureHeaderTitle}
+          className="min-w-0 flex-1 truncate text-sm"
+          data-position="header-title"
+        >
+          {title}
+        </div>
       </div>
+
+      {/* resize handler */}
+      {onResize && (
+        <button
+          aria-label={`${title} の列幅を変更`}
+          className={cn(
+            "inset-y-0",
+            // "h-screen top-0 ",
+            "absolute right-0 z-30 w-3 translate-x-1/2 touch-none border-0 bg-transparent p-0 ",
+            "cursor-col-resize ", // in table, useeffect bodt.importatn
+            "group flex justify-center",
+            //  isResizing && "bg-Primary/30",
+          )}
+          onClick={(event) => event.stopPropagation()}
+          onBlur={() => onResizeFocusChange?.(false)}
+          onFocus={() => onResizeFocusChange?.(true)}
+          onMouseEnter={() => onResizeHoverChange?.(true)}
+          onMouseLeave={() => onResizeHoverChange?.(false)}
+          onMouseDown={onResize}
+          onTouchStart={onResize}
+          type="button"
+        >
+          <div
+            className={cn(
+              "w-1",
+              // "h-full",
+              " h-screen",
+              !isResizing && "group-hover:bg-Primary/20  ",
+              isResizing && "bg-Primary/40 w-0.5",
+            )}
+            style={
+              isResizing
+                ? {
+                    boxShadow: `
+                -2px 0 4px color-mix(in srgb, var(--Primary) 25%, transparent),
+                2px 0 4px color-mix(in srgb, var(--Primary) 25%, transparent)
+              `,
+                  }
+                : undefined
+            }
+          />
+        </button>
+      )}
 
       <ModalProvider
         // To share FILTER menu in filterModalRef
@@ -107,7 +165,7 @@ export function HeaderCellPresenter<TItem>({
         {actions ??
           (showDefaultActions && (
             <div className="ml-auto flex shrink-0 items-center gap-3">
-              {!compact && (
+              {!isCompact && (
                 <div className="flex h-fit shrink-0 gap-0.5">
                   <IconButton
                     icon="pin"
@@ -146,7 +204,7 @@ export function HeaderCellPresenter<TItem>({
               )}
 
               <div className="flex shrink-0 gap-1">
-                {compact && (
+                {isCompact && (
                   <ButtonModal
                     // when click menu item, close menu
                     ref={menuModalRef}

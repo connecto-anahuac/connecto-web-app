@@ -2,8 +2,11 @@ import type { Column } from "@tanstack/react-table";
 import type {
   ComponentProps,
   ComponentPropsWithRef,
+  MouseEvent as ReactMouseEvent,
   ReactNode,
+  RefCallback,
   RefObject,
+  TouchEvent as ReactTouchEvent,
 } from "react";
 import type { IconName } from "@/components/icon";
 import type { ModalHandle } from "@/components/modal/Modal";
@@ -12,7 +15,6 @@ import type { DataViewColumn } from "../dataView.types";
 export type HeaderCellActionProps<TItem> = {
   column: Column<TItem>;
   config: DataViewColumn<TItem>;
-  compact: boolean;
   onHide: (column: Column<TItem>) => void;
   onPin: (column: Column<TItem>) => void;
   onSort: (column: Column<TItem>) => void;
@@ -21,6 +23,15 @@ export type HeaderCellActionProps<TItem> = {
   onFilterClose?: () => void;
   onFilterToggle?: (columnId: string) => void;
   onMenuOpenChange?: (columnId: string, open: boolean) => void;
+  isResizing?: boolean;
+  isResizeBoundaryHighlighted?: boolean;
+  onResize?: (
+    event:
+      | ReactMouseEvent<HTMLButtonElement>
+      | ReactTouchEvent<HTMLButtonElement>,
+  ) => void;
+  onResizeHoverChange?: (hovered: boolean) => void;
+  onResizeFocusChange?: (focused: boolean) => void;
 };
 
 export type HeaderCellProps<TItem> = ComponentProps<"div"> &
@@ -50,6 +61,8 @@ export type ButtonItemProps = ComponentProps<"button"> & {
 export type HeaderCellPresenterProps<TItem> = HeaderCellProps<TItem> & {
   title: string;
   contentMinWidth: string;
+  isCompact: boolean;
+  measureHeaderTitle: RefCallback<HTMLDivElement>;
   menuButtonRef: RefObject<HTMLButtonElement | null>;
   menuItems: HeaderMenuItem[];
   menuModalRef: RefObject<ModalHandle | null>;

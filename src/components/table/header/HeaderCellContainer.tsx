@@ -16,6 +16,8 @@ export default function HeaderCellContainer<TItem>(
     contentMinWidth,
     icon,
     menuItems,
+    isCompact,
+    measureHeaderTitle,
   } = useHeaderCell(props);
 
   return (
@@ -31,8 +33,8 @@ export default function HeaderCellContainer<TItem>(
       contentMinWidth={contentMinWidth}
       icon={icon}
       menuItems={menuItems}
-
-      compact={true}
+      isCompact={isCompact}
+      measureHeaderTitle={measureHeaderTitle}
     />
   );
 }

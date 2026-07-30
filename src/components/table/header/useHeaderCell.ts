@@ -1,31 +1,114 @@
 "use client";
 
-import { useRef } from "react";
-import { Icons } from "@/components/icon";
+import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { ModalHandle } from "@/components/modal/Modal";
 import type { HeaderCellProps, HeaderMenuItem } from "./HeaderCell.types";
 
 export function useHeaderCell<TItem>({
-  children,
   label,
   icon,
   column,
+  config,
+  showDefaultActions = true,
   onHide,
   onPin,
 }: Pick<
   HeaderCellProps<TItem>,
-  "children" | "label" | "icon" | "column" | "onHide" | "onPin"
+  | "label"
+  | "icon"
+  | "column"
+  | "config"
+  | "showDefaultActions"
+  | "onHide"
+  | "onPin"
 >) {
   const cellRef = useRef<HTMLDivElement>(null);
+  const headerTitleRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuModalRef = useRef<ModalHandle>(null);
   const filterModalRef = useRef<ModalHandle>(null);
-  const title = label;//children ?? label;
+  const [isCompact, setIsCompact] = useState(false);
+  const isCompactRef = useRef(isCompact);
+  const title = label; // children ?? label;
   const titleText =
     typeof title === "string" || typeof title === "number"
       ? String(title)
       : "";
   const contentMinWidth = `${98 + titleText.length * 9}px`;
+  const measurementLayoutKey = JSON.stringify([
+    titleText,
+    icon,
+    config.filterable !== false,
+    showDefaultActions,
+  ]);
+  const measuredLayoutKeyRef = useRef(measurementLayoutKey);
+
+  const measureHeaderTitle = useCallback(
+    (headerTitleGivenRef: HTMLDivElement | null) => {
+      headerTitleRef.current = headerTitleGivenRef;
+
+      if (!headerTitleGivenRef) {
+        return;
+      }
+
+      const layoutChanged =
+        measuredLayoutKeyRef.current !== measurementLayoutKey;
+      measuredLayoutKeyRef.current = measurementLayoutKey;
+
+      if (isCompactRef.current) {
+        if (!layoutChanged) {
+          return;
+        }
+
+        isCompactRef.current = false;
+        setIsCompact(false);
+        return;
+      }
+
+      const nextIsCompact =
+        headerTitleGivenRef.scrollWidth > headerTitleGivenRef.clientWidth;
+      isCompactRef.current = nextIsCompact;
+      setIsCompact(nextIsCompact);
+    },
+    [measurementLayoutKey],
+  );
+
+  useLayoutEffect(() => {
+    isCompactRef.current = isCompact;
+
+    if (!isCompact) {
+      measureHeaderTitle(headerTitleRef.current);
+    }
+  }, [isCompact, measureHeaderTitle]);
+
+  useLayoutEffect(() => {
+    const cell = cellRef.current;
+
+    if (!cell) {
+      return;
+    }
+
+    let previousWidth = cell.getBoundingClientRect().width;
+    const observer = new ResizeObserver(() => {
+      const currentWidth = cell.getBoundingClientRect().width;
+
+      if (currentWidth === previousWidth) {
+        return;
+      }
+      previousWidth = currentWidth;
+
+      if (isCompactRef.current) {
+        isCompactRef.current = false;
+        setIsCompact(false);
+        return;
+      }
+
+      measureHeaderTitle(headerTitleRef.current);
+    });
+
+    observer.observe(cell);
+    return () => observer.disconnect();
+  }, [measureHeaderTitle]);
 
   const menuItems: HeaderMenuItem[] = [
     {
@@ -55,5 +138,7 @@ export function useHeaderCell<TItem>({
     contentMinWidth,
     icon,
     menuItems,
+    isCompact,
+    measureHeaderTitle,
   };
 }

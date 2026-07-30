@@ -13,7 +13,7 @@ export default function Cell({ className, children, ...props }: CellProps) {
       )}
       {...props}
     >
-      {children}
+      <span className="truncate w-full">{children}</span>
     </div>
   );
 }
