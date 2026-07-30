@@ -9,6 +9,7 @@ export default function PivotButtonModal<TItem>({
   disabled,
   table,
   tableConfig,
+  hasBadge,
 }: ColumnToolButtonModalProps<TItem>) {
   return (
     <ButtonModal open={open} onOpenChange={onOpenChange}>
@@ -20,6 +21,7 @@ export default function PivotButtonModal<TItem>({
           appearance="text"
           size="md"
           disabled={disabled}
+          hasBadge={hasBadge}
         />
       </ButtonModal.Trigger>
       <ButtonModal.Content>

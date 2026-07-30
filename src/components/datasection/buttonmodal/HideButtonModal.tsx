@@ -9,7 +9,9 @@ export default function HideButtonModal<TItem>({
   disabled,
   table,
   tableConfig,
+  hasBadge,
 }: ColumnToolButtonModalProps<TItem>) {
+  console.log("HideButtonModal hasBadge:", hasBadge);
   return (
     <ButtonModal open={open} onOpenChange={onOpenChange}>
       <ButtonModal.Trigger>
@@ -20,6 +22,7 @@ export default function HideButtonModal<TItem>({
           appearance="text"
           size="md"
           disabled={disabled}
+          hasBadge={hasBadge}
         />
       </ButtonModal.Trigger>
       <ButtonModal.Content>

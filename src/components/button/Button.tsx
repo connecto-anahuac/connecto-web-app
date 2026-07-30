@@ -39,32 +39,52 @@ export default function Button({
           appearance: appearance,
           content: buttonContent,
         }),
-        "whitespace-nowrap",
+        "whitespace-nowrap relative",
         className,
       )}
-      disabled={disabled }
+      disabled={disabled}
       {...props}
     >
       {/* Icon */}
       {IconComponent && (
         <IconComponent
           className={cn(
-            size=="sm" && "size-4",
-            size=="md" && "size-4",
-            size=="lg" && "size-4.5",
-
+            size == "sm" && "size-4",
+            size == "md" && "size-4",
+            size == "lg" && "size-4.5",
           )}
         />
       )}
 
       {/* Label */}
-      {label && <span>{label}</span>}
+      {label && (
+        <span className="relative">
+          {label}
+          {hasBadge && appearance === "text" && (
+            //TODO border color -real bg color?????
+            //temporally containerlowest
+            <div
+              className={cn(
+                "border-2 border-SurfaceContainerLowest  size-3  bg-Tertiary rounded-full",
+                "absolute -right-1 top-1/2 -translate-y-1/2 translate-x-full",
+                // "  absolute  -top-1 -right-1 ",
+              )}
+            />
+          )}
+        </span>
+      )}
 
       {/* Badge */}
-      {hasBadge && (
+      {hasBadge && appearance !== "text" && (
         //TODO border color -real bg color?????
         //temporally containerlowest
-        <div className="border-2 border-SurfaceContainerLowest  absolute size-3 -top-1 -right-1 bg-Tertiary rounded-full" />
+        <div
+          className={cn(
+            "border-2 border-SurfaceContainerLowest  size-3  bg-Tertiary rounded-full",
+            "  absolute  -top-1 -right-1 ",
+            // "  absolute  -top-1 -right-1 ",
+          )}
+        />
       )}
     </button>
   );
