@@ -9,4 +9,5 @@ export type ColumnToolButtonModalProps<TItem> = {
   disabled: boolean;
   table?: Table<TItem>;
   tableConfig?: DataViewConfig<TItem>;
+  hasBadge?: boolean;
 };
