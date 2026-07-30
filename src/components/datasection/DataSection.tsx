@@ -19,7 +19,6 @@ import { SearchTool } from "./buttonmodal/type";
 import HideButtonModal from "./buttonmodal/HideButtonModal";
 import PivotButtonModal from "./buttonmodal/PivotButtonModal";
 
-
 type Props<TItem> = ComponentProps<"div"> & {
   definitions?: readonly FilterDefinition<TItem>[];
   defaultView?: "list" | "card";
@@ -185,6 +184,10 @@ export default function DataSection<TItem>({
               appearance="text"
               size="md"
               disabled={!isToolEnable("sort")}
+              hasBadge={
+                table?.getState().sorting.length !== undefined &&
+                table?.getState().sorting.length > 0
+              }
               // onClick={() => setOpenedTool((tool) => tool === "sort" ? null : "sort")}
             />
           </ButtonModal.Trigger>
@@ -255,7 +258,9 @@ export default function DataSection<TItem>({
 
         <HideButtonModal
           open={
-            openedTool === "hide" && table !== undefined && tableConfig !== undefined
+            openedTool === "hide" &&
+            table !== undefined &&
+            tableConfig !== undefined
           }
           onOpenChange={() =>
             setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
@@ -263,6 +268,9 @@ export default function DataSection<TItem>({
           disabled={!isToolEnable("hide")}
           table={table}
           tableConfig={tableConfig}
+              hasBadge={
+                table?.getAllLeafColumns().some((column) => !column.getIsVisible()) 
+               }
         />
 
         <PivotButtonModal
@@ -277,6 +285,10 @@ export default function DataSection<TItem>({
           disabled={!isToolEnable("pivot")}
           table={table}
           tableConfig={tableConfig}
+              hasBadge={
+                table?.getState().columnPinning?.left?.length !== undefined &&
+                table?.getState().columnPinning?.left?.length! > 0
+              }
         />
 
         <span className="ml-auto   text-xs font-medium">
