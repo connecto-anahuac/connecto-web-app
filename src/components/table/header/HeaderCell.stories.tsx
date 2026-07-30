@@ -1,7 +1,22 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Column } from "@tanstack/react-table";
 import HeaderCell from ".";
-import PersonIcon from "../../icon/PersonIcon";
 import { IconName, Icons } from "../../icon";
+import type { DataViewColumn } from "../dataView.types";
+
+const column = {
+  id: "name",
+  getIsSorted: () => false,
+} as unknown as Column<unknown>;
+
+const config: DataViewColumn<unknown> = {
+  id: "name",
+  label: "Nombre",
+  icon: "person",
+  valueType: "text",
+  accessor: () => null,
+  format: () => "",
+};
 
 const meta = {
   title: "Components/Table/HeaderCell",
@@ -19,6 +34,11 @@ const meta = {
   args: {
     label: "Nombre",
     icon: "person",
+    column,
+    config,
+    onHide: () => undefined,
+    onPin: () => undefined,
+    onSort: () => undefined,
   },
   tags: ["autodocs"],
   render: (args) => (

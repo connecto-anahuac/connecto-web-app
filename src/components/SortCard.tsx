@@ -97,7 +97,7 @@ export default function SortCard({
       {/* <SortCardFieldChip label={fieldLabel} /> */}
       <SelectBoxFill
         value={fieldLabel}
-        leadingIcon={<PersonIcon />}
+        leadingIcon={"person"}
         className="ml-2 mr-4"
       />
 
