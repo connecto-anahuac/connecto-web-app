@@ -1,6 +1,12 @@
 import type { IconName } from "@/components/icon";
 
-export type DataViewValueType = "text" | "number" | "enum";
+export type DataViewValueType = "text" | "number" | "enum"| "date"  | "boolean";
+
+export type Option = {
+  label: string;
+  value: string;
+  searchTexts: readonly string[];
+};
 
 /**
  * One declarative description shared by tabular and card/grid consumers.
@@ -17,7 +23,9 @@ export type DataViewColumn<TItem> = {
   minWidth?: number;
   maxWidth?: number;
   filterable?: boolean;
-  options?: readonly { label: string; value: string }[];
+  /** Generate unique filter options from the table data at runtime. */
+  dynamicOption?: boolean;
+  options?: readonly Pick<Option, "label" | "value">[];
 };
 
 export type DataViewConfig<TItem> = {

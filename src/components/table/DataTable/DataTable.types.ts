@@ -1,6 +1,10 @@
 import type { Column, Header, Table } from "@tanstack/react-table";
-import type { MouseEvent as ReactMouseEvent } from "react";
+import type {
+  MouseEvent as ReactMouseEvent,
+  TouchEvent as ReactTouchEvent,
+} from "react";
 import type { DataViewColumn, DataViewConfig } from "../dataView.types";
+import type { FilterValue } from "@/features/table/type";
 
 export type DataTableProps<TItem> = {
   table: Table<TItem>;
@@ -8,10 +12,10 @@ export type DataTableProps<TItem> = {
   className?: string;
 };
 
-export type FilterValue = string | number | string[] | undefined;
-
 export type DataTablePresenterProps<TItem> = DataTableProps<TItem> & {
   resized: boolean;
+  hoveredResizeColumnId: string | null;
+  focusedResizeColumnId: string | null;
   preferredTotal: number;
   openMenuId: string | null;
   openFilterId: string | null;
@@ -22,8 +26,12 @@ export type DataTablePresenterProps<TItem> = DataTableProps<TItem> & {
   onPin: (column: Column<TItem>) => void;
   onResize: (
     header: Header<TItem, unknown>,
-    event: ReactMouseEvent<HTMLButtonElement>,
+    event:
+      | ReactMouseEvent<HTMLButtonElement>
+      | ReactTouchEvent<HTMLButtonElement>,
   ) => void;
+  onResizeHoverChange: (columnId: string, hovered: boolean) => void;
+  onResizeFocusChange: (columnId: string, focused: boolean) => void;
   onSort: (column: Column<TItem>) => void;
 };
 
@@ -42,7 +50,7 @@ export type TableColumnFilterProps<TItem> = {
 
 export type TableColumnFilterPresenterProps<TItem> =
   TableColumnFilterProps<TItem> & {
-    currentValue: FilterValue;
+    currentValue: FilterValue | undefined;
     onClear: () => void;
     onEnumValueToggle: (value: string) => void;
     onInputChange: (value: string) => void;
