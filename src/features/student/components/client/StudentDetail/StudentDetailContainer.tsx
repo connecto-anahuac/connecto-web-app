@@ -1,5 +1,6 @@
 "use client";
 
+import { DataSearchScopeProvider } from "@/features/search/components/Provider/FilterProvider";
 import { StudentDetailPresenter } from "./StudentDetailPresenter";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
 import { useStudentClassTable } from "./useStudentClassTable";
@@ -9,6 +10,14 @@ type Props = {
 };
 
 export function StudentDetailContainer({ studentId }: Props) {
+  return (
+    <DataSearchScopeProvider scopeId={`student:grades:${studentId}`}>
+      <StudentDetailContent studentId={studentId} />
+    </DataSearchScopeProvider>
+  );
+}
+
+function StudentDetailContent({ studentId }: Props) {
   const { loading: staticLoading, studentDetail, studentGrades } =
     useStaticStudentDetail(studentId);
 
@@ -29,7 +38,5 @@ export function StudentDetailContainer({ studentId }: Props) {
       // onFilterToggle={() => setIsFilterOpen((open) => !open)}
       filterResult={filterResult}
     />
-
-    
   );
 }

@@ -7,7 +7,7 @@ type Props = {
 
 export function ScheduleBuilderPageTemplate({ career }: Props) {
   return (
-    <DataSearchProvider>
+    <DataSearchProvider scopeId={`schedule-builder:${career}`}>
       <ScheduleBuilderContainer career={career} />
     </DataSearchProvider>
   );

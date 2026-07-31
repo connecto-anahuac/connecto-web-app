@@ -7,7 +7,7 @@ export default function StudentsLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <DataSearchProvider>
+    <DataSearchProvider scopeId="students:list">
       <StudentsPageTemplate> {children}</StudentsPageTemplate>
     </DataSearchProvider>
   );

@@ -61,7 +61,7 @@ describe("useStudentFilters preset sync helpers", () => {
     expect(nextConditions).toEqual([
       {
         
-        fieldKey: STUDENT_FILTER_KEYS.career,
+        columnId: STUDENT_FILTER_KEYS.career,
         operator: "in",
         value: ["Civil", "TIND"],
       },
@@ -82,8 +82,7 @@ describe("useStudentFilters preset sync helpers", () => {
 
     expect(nextConditions).toEqual([
       {
-        id: STUDENT_FILTER_KEYS.status,
-        fieldKey: STUDENT_FILTER_KEYS.status,
+        columnId: STUDENT_FILTER_KEYS.status,
         operator: "in",
         value: [STUDENT_STATUS_OPTIONS[1].value],
       },
@@ -105,7 +104,7 @@ describe("useStudentFilters preset sync helpers", () => {
     expect(nextConditions).toEqual([
       {
        
-        fieldKey: STUDENT_FILTER_KEYS.failCount,
+        columnId: STUDENT_FILTER_KEYS.failCount,
         operator: "gt",
         value: 2,
       },
