@@ -4,7 +4,7 @@ import type {
   TouchEvent as ReactTouchEvent,
 } from "react";
 import type { DataViewColumn, DataViewConfig } from "../dataView.types";
-import type { FilterValue } from "@/features/table/type";
+import type { FilterCondition } from "@/features/table/type";
 
 export type DataTableProps<TItem> = {
   table: Table<TItem>;
@@ -50,7 +50,7 @@ export type TableColumnFilterProps<TItem> = {
 
 export type TableColumnFilterPresenterProps<TItem> =
   TableColumnFilterProps<TItem> & {
-    currentValue: FilterValue | undefined;
+    currentValue: FilterCondition | undefined;
     onClear: () => void;
     onEnumValueToggle: (value: string) => void;
     onInputChange: (value: string) => void;

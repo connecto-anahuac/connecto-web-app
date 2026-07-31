@@ -16,3 +16,32 @@
 
 
 // ctrl + shift + B
+
+
+
+// {
+//   "version": "2.0.0",
+//   "tasks": [
+//     {
+//       "type": "process",
+//       "command": "node",
+//       "args": [
+//         "scripts/typecheck-watch.mjs",
+//         "tsconfig.json"
+//       ],
+//       "isBackground": true,
+//       "problemMatcher": {
+//         "base": "$tsc-watch",
+//         "applyTo": "allDocuments"
+//       },
+//       "options": {
+//         "cwd": "${workspaceFolder}"
+//       },
+//       "group": "build",
+//       "label": "TypeScript: watch all diagnostics"
+//     }
+//   ]
+// }
+
+
+// // ctrl + shift + B

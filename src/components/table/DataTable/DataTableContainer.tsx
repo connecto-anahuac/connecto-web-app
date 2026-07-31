@@ -16,6 +16,8 @@ export function DataTableContainer<TItem>({
 }: DataTableProps<TItem>) {
   const {
       resized,
+      hoveredResizeColumnId,
+      focusedResizeColumnId,
       preferredTotal,
       openMenuId,
       openFilterId,
@@ -25,6 +27,8 @@ export function DataTableContainer<TItem>({
       onMenuOpenChange,
       onPin,
       onResize,
+      onResizeHoverChange,
+      onResizeFocusChange,
       onSort,
     } = useDataTable(table);
 
@@ -34,6 +38,8 @@ export function DataTableContainer<TItem>({
       config={config}
       table={table}
       resized={resized}
+      hoveredResizeColumnId={hoveredResizeColumnId}
+      focusedResizeColumnId={focusedResizeColumnId}
       preferredTotal={preferredTotal}
       openMenuId={openMenuId}
       openFilterId={openFilterId}
@@ -43,6 +49,8 @@ export function DataTableContainer<TItem>({
       onMenuOpenChange={onMenuOpenChange}
       onPin={onPin}
       onResize={onResize}
+      onResizeHoverChange={onResizeHoverChange}
+      onResizeFocusChange={onResizeFocusChange}
       onSort={onSort}
     />
   );

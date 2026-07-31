@@ -1,14 +1,23 @@
 "use client";
 
 import type { Column, Header, Table } from "@tanstack/react-table";
-import { useState, type MouseEvent as ReactMouseEvent } from "react";
+import {
+  useState,
+  type MouseEvent as ReactMouseEvent,
+  type TouchEvent as ReactTouchEvent,
+} from "react";
 import type { DataViewColumn, DataViewConfig } from "../dataView.types";
-import type { FilterValue } from "./DataTable.types";
 import { getSortIcon } from "@/components/icon/sorts/util";
 import { IconName } from "@/components/icon";
 
 export function useDataTable<TItem>(table: Table<TItem>) {
   const [resized, setResized] = useState(false);
+  const [hoveredResizeColumnId, setHoveredResizeColumnId] = useState<
+    string | null
+  >(null);
+  const [focusedResizeColumnId, setFocusedResizeColumnId] = useState<
+    string | null
+  >(null);
   const [openMenuId, setOpenMenuId] = useState<string | null>(null);
   const [openFilterId, setOpenFilterId] = useState<string | null>(null);
   const preferredTotal = table
@@ -32,11 +41,30 @@ export function useDataTable<TItem>(table: Table<TItem>) {
 
   const handleResize = (
     header: Header<TItem, unknown>,
-    event: ReactMouseEvent<HTMLButtonElement>,
+    event:
+      | ReactMouseEvent<HTMLButtonElement>
+      | ReactTouchEvent<HTMLButtonElement>,
   ) => {
     event.stopPropagation();
     setResized(true);
     header.getResizeHandler()(event);
+  };
+
+  const handleResizeHoverChange = (
+    columnId: string,
+    hovered: boolean,
+  ) => {
+    setHoveredResizeColumnId((currentColumnId) => {
+      if (hovered) return columnId;
+      return currentColumnId === columnId ? null : currentColumnId;
+    });
+  };
+
+  const handleResizeFocusChange = (columnId: string, focused: boolean) => {
+    setFocusedResizeColumnId((currentColumnId) => {
+      if (focused) return columnId;
+      return currentColumnId === columnId ? null : currentColumnId;
+    });
   };
 
   const handleSort = (column: Column<TItem>) => {
@@ -45,6 +73,8 @@ export function useDataTable<TItem>(table: Table<TItem>) {
 
   return {
     resized,
+    hoveredResizeColumnId,
+    focusedResizeColumnId,
     preferredTotal,
     openMenuId,
     openFilterId,
@@ -54,6 +84,8 @@ export function useDataTable<TItem>(table: Table<TItem>) {
     onMenuOpenChange: handleMenuOpenChange,
     onPin: handlePin,
     onResize: handleResize,
+    onResizeHoverChange: handleResizeHoverChange,
+    onResizeFocusChange: handleResizeFocusChange,
     onSort: handleSort,
   };
 }

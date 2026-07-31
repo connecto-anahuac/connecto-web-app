@@ -1,3 +1,5 @@
+"use client";
+
 import type { ComponentPropsWithRef } from "react";
 import type { IconName } from "@/components/icon";
 import CloseButton from "@/components/button/CloseButton";

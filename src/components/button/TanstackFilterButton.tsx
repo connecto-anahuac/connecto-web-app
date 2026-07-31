@@ -6,6 +6,7 @@ import { Icons } from "../icon";
 import { TableColumnFilterContainer } from "../table/DataTable/TableColumnFilterContainer";
 import type { DataViewColumn } from "../table/dataView.types";
 import ButtonModal from "../ButtonModal";
+import type { FilterCondition } from "@/features/table/type";
 
 type TanstackFilterButtonProps<TItem> = {
   column: Column<TItem>;
@@ -36,11 +37,9 @@ export function TanstackFilterButton<TItem>({
   open,
   onOpenChange,
 }: TanstackFilterButtonProps<TItem>) {
-  const filterValue = column.getFilterValue();
-  const hasCondition = Array.isArray(filterValue)
-    ? filterValue.length > 0
-    : filterValue !== undefined && filterValue !== null;
-  const selectedValueLabel = getSelectedValueLabel(config, filterValue);
+  const filterValue = column.getFilterValue() as FilterCondition | undefined;
+  const hasCondition = filterValue !== undefined;
+  const selectedValueLabel = getSelectedValueLabel(config, filterValue?.value);
   const Icon = Icons[config.icon];
 
   return (

@@ -7,7 +7,7 @@ import type {
 } from "../../../shared/filterDefinition";
 import { useFilterCondition } from "../../../shared/useFilterCondition";
 
-export function useMultiselectFilter<TItem>(filter: FilterDefinition<TItem>) {
+export const useMultiselectFilter =<TItem>(filter: FilterDefinition<TItem>)=>{
   const { condition, operator, setValue, setOperator, clear } =
     useFilterCondition(filter);
   const [query, setQuery] = useState("");

@@ -1,10 +1,15 @@
-import {
-  ValueType,
-} from "./filterDefinition";
+import { ValueType } from "./filterDefinition";
 
-
-
-export const operators = ["eq", "contains", "gt", "gte", "lt", "lte",  "between","in"] as const;
+export const operators = [
+  "eq",
+  "contains",
+  "gt",
+  "gte",
+  "lt",
+  "lte",
+  "between",
+  "in",
+] as const;
 export type Operator = (typeof operators)[number];
 export const operatorTextLabels: Record<Operator, string> = {
   eq: "Es", //ToDo eq ->in 統合？？？
@@ -15,7 +20,7 @@ export const operatorTextLabels: Record<Operator, string> = {
   lte: "Menor o igual que",
   between: "Entre",
   in: "Es",
-}
+};
 export const operatorNumberLabels: Record<Operator, string> = {
   eq: "=",
   contains: "Contiene",
@@ -25,9 +30,9 @@ export const operatorNumberLabels: Record<Operator, string> = {
   lte: "≦",
   between: "Entre",
   in: "=",
-}
+};
 export const operatorTextButtonLabels: Record<Operator, string> = {
-  eq: ":", 
+  eq: ":",
   contains: ":",
   gt: "Mayor que",
   gte: "Mayor o igual que",
@@ -35,7 +40,7 @@ export const operatorTextButtonLabels: Record<Operator, string> = {
   lte: "Menor o igual que",
   between: "Entre",
   in: "Es",
-}
+};
 export const operatorNumberButtonLabels: Record<Operator, string> = {
   eq: "=",
   contains: "=",
@@ -45,13 +50,7 @@ export const operatorNumberButtonLabels: Record<Operator, string> = {
   lte: "≦",
   between: "<>",
   in: "=",
-}
-
-
-
-
-
-
+};
 
 /**
  * データ型（valueType）ごとに使用可能な operator を制限する唯一の定義。

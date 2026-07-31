@@ -1,6 +1,7 @@
 import type { IconName } from "@/components/icon";
+import { ValueType } from "@/features/search/shared/filterDefinition";
 
-export type DataViewValueType = "text" | "number" | "enum"| "date"  | "boolean";
+// export type DataViewValueType = "text" | "number" | "enum"| "date"  | "boolean";
 
 export type Option = {
   label: string;
@@ -16,7 +17,7 @@ export type DataViewColumn<TItem> = {
   id: string;
   label: string;
   icon: IconName;
-  valueType: DataViewValueType;
+  valueType: ValueType;
   accessor: (item: TItem) => string | number | null;//colIdから返す値。filter,sortに使う
   format: (item: TItem) => string;//Cellに渡す値
   searchTexts?:(item: TItem) => string[];//テキスト検索時の文字列
