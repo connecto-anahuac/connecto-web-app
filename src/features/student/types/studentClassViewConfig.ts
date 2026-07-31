@@ -11,6 +11,19 @@ const STATUS_OPTIONS = [
   { label: "Bloqueado por otros razones", value: "lockedByOthers" },
 ] as const;
 
+
+export const STATUS_PRESETS = [
+  { label: "Reprobado", columnId: "status", value: ["failed"] },
+  { label: "Aprobado", columnId: "status", value: ["passed"] },
+  { label: "Cruzado", columnId: "status", value: ["isTaking"] },
+  { label: "Posibles", columnId: "status", value: ["enrollable"] },
+  {
+    label: "Bloqueado",
+    columnId: "status",
+    value: ["lockedByPreRequisites", "lockedByOthers"],
+  },
+] as const;
+
 const displayNumber = (value: number | null) =>
   value === null || Number.isNaN(value) ? "--" : String(value);
 

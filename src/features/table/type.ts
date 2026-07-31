@@ -17,7 +17,7 @@ export type FilterCondition = {
   value: FilterConditionValue;
 };
 
-export function defineFilterValue(value: unknown): value is FilterCondition {
+export function defineFilterCondition(value: unknown): value is FilterCondition {
   return (
     typeof value === "object" &&
     value !== null &&

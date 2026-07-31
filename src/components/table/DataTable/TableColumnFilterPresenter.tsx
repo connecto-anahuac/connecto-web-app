@@ -13,7 +13,7 @@ export function TableColumnFilterPresenter<TItem>({
   ...props
 }: TableColumnFilterPresenterProps<TItem>) {
   if (config.valueType === "enum") {
-    const values = Array.isArray(currentValue) ? currentValue : [];
+    const values = Array.isArray(currentValue?.value) ? currentValue.value : [];
     return (
       <div className="min-w-52 rounded-md border border-Outline bg-InverseSurface p-1 text-InverseOnSurface shadow-lg" {...props}>
         <p className="px-2 py-1 text-xs font-semibold">{config.label}</p>
@@ -57,7 +57,12 @@ export function TableColumnFilterPresenter<TItem>({
         id={`filter-${column.id}`}
         onChange={(event) => onInputChange(event.target.value)}
         type={config.valueType === "number" ? "number" : "search"}
-        value={currentValue ?? ""}
+        value={
+          typeof currentValue?.value === "string" ||
+          typeof currentValue?.value === "number"
+            ? currentValue.value
+            : ""
+        }
       />
       <button
         className="mt-2 w-full rounded-sm px-2 py-1 text-left text-xs hover:bg-Primary hover:text-OnPrimary"

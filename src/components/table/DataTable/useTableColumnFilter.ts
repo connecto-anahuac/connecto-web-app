@@ -1,15 +1,23 @@
 "use client";
 
-import type { Column, Header, Table } from "@tanstack/react-table";
-import type { DataViewColumn, DataViewConfig } from "../dataView.types";
-import type { FilterValue } from "./DataTable.types";
+import type { Column } from "@tanstack/react-table";
+import type { DataViewColumn } from "../dataView.types";
+import type { FilterCondition } from "@/features/table/type";
+
+function getDefaultOperator(
+  valueType: DataViewColumn<never>["valueType"],
+): FilterCondition["operator"] {
+  if (valueType === "enum") return "in";
+  if (valueType === "number" || valueType === "date") return "eq";
+  return valueType === "text" ? "contains" : "eq";
+}
 
 export function useTableColumnFilter<TItem>(
   column: Column<TItem>,
   config: DataViewColumn<TItem>,
   onClose?: () => void,
 ) {
-  const currentValue = column.getFilterValue() as FilterValue;
+  const currentValue = column.getFilterValue() as FilterCondition | undefined;
 
   const handleClear = () => {
     column.setFilterValue(undefined);
@@ -17,18 +25,26 @@ export function useTableColumnFilter<TItem>(
   };
 
   const handleEnumValueToggle = (value: string) => {
-    const values = Array.isArray(currentValue) ? currentValue : [];
+    const values = Array.isArray(currentValue?.value) ? currentValue.value : [];
     const next = values.includes(value)
       ? values.filter((current) => current !== value)
       : [...values, value];
-    column.setFilterValue(next.length ? next : undefined);
+    column.setFilterValue(
+      next.length
+        ? { columnId: config.id, operator: "in", value: next }
+        : undefined,
+    );
   };
 
   const handleInputChange = (value: string) => {
     column.setFilterValue(
-      config.valueType === "number" && value !== ""
-        ? Number(value)
-        : value || undefined,
+      value
+        ? {
+            columnId: config.id,
+            operator: getDefaultOperator(config.valueType),
+            value: config.valueType === "number" ? Number(value) : value,
+          }
+        : undefined,
     );
   };
 

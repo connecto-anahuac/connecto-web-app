@@ -14,8 +14,22 @@ import {
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useCallback, useMemo, useState } from "react";
-import type { DataViewConfig,  } from "@/components/table/dataView.types";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import type {
+  DataViewConfig,
+  // DataViewValueType,
+} from "@/components/table/dataView.types";
+// import { getOperatorsForDataViewValueType } from "./operatorPolicy";
+import { defineFilterCondition, type FilterCondition } from "./type";
+
+//TODO deprecated? custom engine Value
+import {
+  defineFilterPrimitive,
+  FilterConditionValue,
+  FilterPrimitive,
+  ValueType,
+} from "../search/shared/filterDefinition";
+import { getOperatorsForValueType } from "../search/shared/operatorPolicy";
 
 type UseTableOptions<TItem extends RowData> = {
   config: DataViewConfig<TItem>;
@@ -33,8 +47,6 @@ const HEADER_HORIZONTAL_PADDING = 20;
 const HEADER_ESTIMATE_BUFFER = 20;
 
 function include(rawValue: unknown, filterValue: unknown) {
-  // rawValue in filterValue
-
   if (
     filterValue === undefined ||
     filterValue === "" ||
@@ -56,6 +68,122 @@ function include(rawValue: unknown, filterValue: unknown) {
     .includes(String(filterValue).toLocaleLowerCase());
 }
 
+function isRangeValue(
+  value: FilterConditionValue,
+): value is [FilterPrimitive, FilterPrimitive] {
+  return (
+    Array.isArray(value) &&
+    value.length === 2 &&
+    value.every(
+      (entry) => !Array.isArray(entry) && defineFilterPrimitive(entry),
+    )
+  );
+}
+
+function compare(left: FilterPrimitive, right: FilterPrimitive): number {
+  if (typeof left === "number" && typeof right === "number") {
+    return left - right;
+  }
+
+  if (typeof left === "boolean" && typeof right === "boolean") {
+    return Number(left) - Number(right);
+  }
+
+  return String(left).localeCompare(String(right));
+}
+
+type MatchesConditionOptions = {
+  actual: unknown;
+  filterValue: FilterCondition;
+  searchValues: readonly unknown[];
+  valueType: ValueType;
+};
+
+export function matchesCondition({
+  actual,
+  filterValue,
+  searchValues,
+  valueType,
+}: MatchesConditionOptions): boolean {
+  if (!getOperatorsForValueType(valueType).includes(filterValue.operator)) {
+    return false;
+  }
+
+  const actualValues = Array.isArray(actual)
+    ? actual
+    : actual === null
+      ? []
+      : [actual];
+  if (!actualValues.every(defineFilterPrimitive)) {
+    return false;
+  }
+
+  const expected = filterValue.value;
+  if (expected === null) {
+    return false;
+  }
+
+  switch (filterValue.operator) {
+    case "eq":
+      return (
+        !Array.isArray(expected) &&
+        actualValues.some(
+          (value) =>
+            String(value ?? "").toLocaleLowerCase() ===
+            String(expected).toLocaleLowerCase(),
+        )
+      );
+    case "in":
+      return (
+        Array.isArray(expected) &&
+        searchValues.some((value) =>
+          expected.some(
+            (filterValueItem) =>
+              String(value ?? "").toLocaleLowerCase() ===
+              String(filterValueItem).toLocaleLowerCase(),
+          ),
+        )
+      );
+    case "contains":
+      return (
+        !Array.isArray(expected) &&
+        searchValues.some((value) =>
+          String(value ?? "")
+            .toLocaleLowerCase()
+            .includes(String(expected).toLocaleLowerCase()),
+        )
+      );
+    case "between": {
+      if (!isRangeValue(expected) || actualValues.length !== 1) {
+        return false;
+      }
+
+      const actualValue = actualValues[0]!;
+      return (
+        compare(actualValue, expected[0]) >= 0 &&
+        compare(actualValue, expected[1]) <= 0
+      );
+    }
+    case "gt":
+    case "gte":
+    case "lt":
+    case "lte": {
+      if (Array.isArray(expected) || actualValues.length !== 1) {
+        return false;
+      }
+
+      const result = compare(actualValues[0]!, expected);
+      return filterValue.operator === "gt"
+        ? result > 0
+        : filterValue.operator === "gte"
+          ? result >= 0
+          : filterValue.operator === "lt"
+            ? result < 0
+            : result <= 0;
+    }
+  }
+}
+
 function clampWidth(width: number, minWidth: number, maxWidth: number) {
   return Math.min(Math.max(width, minWidth), maxWidth);
 }
@@ -67,7 +195,6 @@ function estimateColumnWidth(label: string) {
     HEADER_ACTION_BUTTON_WIDTH * 2 +
     HEADER_ACTIONS_GAP +
     HEADER_HORIZONTAL_PADDING;
-  //console.log(`estimateColumnWidth: label=${label}, width=${label.length * HEADER_LABEL_CHAR_WIDTH + compactHeaderWidth + HEADER_ESTIMATE_BUFFER}`);
 
   return (
     label.length * HEADER_LABEL_CHAR_WIDTH +
@@ -76,8 +203,6 @@ function estimateColumnWidth(label: string) {
   );
 }
 
-
-  
 export function useTable<TItem extends RowData>({
   config,
   data,
@@ -89,7 +214,6 @@ export function useTable<TItem extends RowData>({
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({});
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 
-
   const columnConfigMapById = useMemo(
     () => new Map(config.columns.map((column) => [column.id, column])),
     [config.columns],
@@ -97,9 +221,6 @@ export function useTable<TItem extends RowData>({
 
   const dataViewFilter = useCallback<FilterFn<TItem>>(
     (row, columnId, filterValue) => {
-      // filterValue would be
-      // rawvalue, option.label, static searchTexts
-
       const rawValue = row.getValue(columnId);
       const columnConfig = columnConfigMapById.get(columnId);
       const optionLabel = columnConfig?.options?.find(
@@ -110,6 +231,19 @@ export function useTable<TItem extends RowData>({
         optionLabel,
         ...(columnConfig?.searchTexts?.(row.original) ?? []),
       ];
+
+      if (defineFilterCondition(filterValue)) {
+        return (
+          filterValue.columnId === columnId &&
+          columnConfig !== undefined &&
+          matchesCondition({
+            actual: rawValue,
+            filterValue,
+            searchValues,
+            valueType: columnConfig.valueType,
+          })
+        );
+      }
 
       return searchValues.some((value) => include(value, filterValue));
     },
@@ -149,6 +283,7 @@ export function useTable<TItem extends RowData>({
   const table = useReactTable({
     columns: columnDefs,
     data: tableData,
+    
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
@@ -169,6 +304,20 @@ export function useTable<TItem extends RowData>({
       sorting,
     },
   });
+
+  // resizing handler
+
+  const isResizing =
+    table.getState().columnSizingInfo.isResizingColumn !== false;
+  useEffect(() => {
+    if (isResizing) {
+      document.body.classList.add("cursor-col-resize-important");
+    } else {
+      document.body.classList.remove("cursor-col-resize-important");
+    }
+
+    return () => document.body.classList.remove("cursor-col-resize-important");
+  }, [isResizing]);
 
   return {
     globalFilter,
