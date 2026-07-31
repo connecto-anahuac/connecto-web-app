@@ -4,7 +4,8 @@ import type {
   TouchEvent as ReactTouchEvent,
 } from "react";
 import type { DataViewColumn, DataViewConfig } from "../dataView.types";
-import type { FilterCondition } from "@/features/table/type";
+import { FilterCondition } from "@/features/search/shared/filterDefinition";
+// import type { FilterCondition } from "@/features/table/type";
 
 export type DataTableProps<TItem> = {
   table: Table<TItem>;

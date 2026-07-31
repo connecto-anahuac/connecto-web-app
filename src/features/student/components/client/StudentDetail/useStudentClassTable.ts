@@ -1,13 +1,13 @@
 "use client";
 
-import { GetRowId } from "@/features/search/shared/filterDefinition";
+import { FilterCondition, GetRowId } from "@/features/search/shared/filterDefinition";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 import type { StudentClassItem } from "@/features/student/types";
 import {
   STATUS_PRESETS,
   STUDENT_GRADE_VIEW_CONFIG,
 } from "@/features/student/types/studentClassViewConfig";
-import type { FilterCondition } from "@/features/table/type";
+// import type { FilterCondition } from "@/features/table/type";
 import { useTable } from "@/features/table/useTable";
 
 const getStudentGradeRowId: GetRowId<StudentClassItem> = (row: StudentClassItem) => row.id;

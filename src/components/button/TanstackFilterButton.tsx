@@ -6,7 +6,8 @@ import { Icons } from "../icon";
 import { TableColumnFilterContainer } from "../table/DataTable/TableColumnFilterContainer";
 import type { DataViewColumn } from "../table/dataView.types";
 import ButtonModal from "../ButtonModal";
-import type { FilterCondition } from "@/features/table/type";
+import { FilterCondition } from "@/features/search/shared/filterDefinition";
+// import type { FilterCondition } from "@/features/table/type";
 
 type TanstackFilterButtonProps<TItem> = {
   column: Column<TItem>;

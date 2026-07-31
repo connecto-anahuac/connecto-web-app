@@ -2,7 +2,8 @@
 
 import type { Column } from "@tanstack/react-table";
 import type { DataViewColumn } from "../dataView.types";
-import type { FilterCondition } from "@/features/table/type";
+import { FilterCondition } from "@/features/search/shared/filterDefinition";
+// import type { FilterCondition } from "@/features/table/type";
 
 function getDefaultOperator(
   valueType: DataViewColumn<never>["valueType"],
@@ -43,7 +44,7 @@ export function useTableColumnFilter<TItem>(
             columnId: config.id,
             operator: getDefaultOperator(config.valueType),
             value: config.valueType === "number" ? Number(value) : value,
-          }
+          }satisfies FilterCondition
         : undefined,
     );
   };
