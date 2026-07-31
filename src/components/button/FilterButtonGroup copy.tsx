@@ -5,15 +5,14 @@ import { cn } from "@/shared/lib/util";
 import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import FilterButton from "./FilterButton";
 import Button from "./Button";
-import { DataViewConfig } from "../table/dataView.types";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  config: DataViewConfig<TItem>
+  definitions: readonly FilterDefinition<TItem>[];
 };
 
 export default function FilterButtonGroup<TItem>({
   className,
-  config,
+  definitions,
   ...props
 }: Props<TItem>) {
   const [openedKey, setOpenedKey] = useState<string | null>(null);
@@ -28,14 +27,14 @@ export default function FilterButtonGroup<TItem>({
       )}
       {...props}
     >
-      {config.columns.map((definition) => (
+      {definitions.map((definition) => (
         <FilterButton
           // icon={} //TODO icon
-          key={definition.id}
+          key={definition.key}
           definition={definition}
-          open={openedKey === definition.id}
+          open={openedKey === definition.key}
           onOpenChange={(open) => {
-            setOpenedKey(open ? definition.id : null);
+            setOpenedKey(open ? definition.key : null);
           }}
           label={definition.label}
         />

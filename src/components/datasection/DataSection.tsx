@@ -18,6 +18,7 @@ import { GraphSwitcher } from "./GraphSwitcher";
 import { SearchTool } from "./buttonmodal/type";
 import HideButtonModal from "./buttonmodal/HideButtonModal";
 import PivotButtonModal from "./buttonmodal/PivotButtonModal";
+import FilterButtonGroup from "../button/FilterButtonGroup";
 
 type Props<TItem> = ComponentProps<"div"> & {
   definitions?: readonly FilterDefinition<TItem>[];
@@ -133,11 +134,15 @@ export default function DataSection<TItem>({
 
         {table && tableConfig ? (
           // aaaaaaaaa
-          <TanstackFilterButtonGroup
-            className="flex-1 h-fit"
-            config={tableConfig}
-            table={table}
-          />
+          <>
+            {/* <FilterButtonGroup 
+              config={tableConfig} /> */}
+            <TanstackFilterButtonGroup
+              className="flex-1 h-fit"
+              config={tableConfig}
+              table={table}
+            />
+          </>
         ) : (
           <div>Filter button group. table couldn&apos;t have</div>
           // <FilterButtonGroup definitions={definitions} className="flex-1 h-fit" />
@@ -269,9 +274,9 @@ export default function DataSection<TItem>({
           disabled={!isToolEnable("hide")}
           table={table}
           tableConfig={tableConfig}
-              hasBadge={
-                table?.getAllLeafColumns().some((column) => !column.getIsVisible()) 
-               }
+          hasBadge={table
+            ?.getAllLeafColumns()
+            .some((column) => !column.getIsVisible())}
         />
 
         <PivotButtonModal
@@ -286,10 +291,10 @@ export default function DataSection<TItem>({
           disabled={!isToolEnable("pivot")}
           table={table}
           tableConfig={tableConfig}
-              hasBadge={
-                table?.getState().columnPinning?.left?.length !== undefined &&
-                table?.getState().columnPinning?.left?.length! > 0
-              }
+          hasBadge={
+            table?.getState().columnPinning?.left?.length !== undefined &&
+            table?.getState().columnPinning?.left?.length! > 0
+          }
         />
 
         <span className="ml-auto   text-xs font-medium">
