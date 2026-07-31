@@ -14,22 +14,22 @@ describe("filter-store", () => {
 
   it("upserts a condition by id", () => {
     store.getState().upsertCondition({
-      id: "status",
-      fieldKey: "status",
+      
+      columnId: "status",
       operator: "eq",
       value: "active",
     });
 
     store.getState().upsertCondition({
-      id: "status",
-      fieldKey: "status",
+      
+      columnId: "status",
       operator: "eq",
       value: "leave",
     });
 
     expect(store.getState().conditions).toEqual([
       {
-        id: "status",
+        
         fieldKey: "status",
         operator: "eq",
         value: "leave",
@@ -41,15 +41,15 @@ describe("filter-store", () => {
     // const store = useFilterStore.getState();
 
     store.getState().upsertCondition({
-      id: "status",
-      fieldKey: "status",
+      
+      columnId: "status",
       operator: "eq",
       value: "active",
     });
 
     store.getState().upsertCondition({
-      id: "semester",
-      fieldKey: "semester",
+      // id: "semester",
+      columnId: "semester",
       operator: "gte",
       value: 5,
     });
@@ -81,14 +81,14 @@ describe("filter-store", () => {
 
 //   it("upserts a condition by id", () => {
 //     createFilterStore.getState().upsertCondition({
-//       id: "status",
+//       
 //       fieldKey: "status",
 //       operator: "eq",
 //       value: "active",
 //     });
 
 //     createFilterStore.getState().upsertCondition({
-//       id: "status",
+//       
 //       fieldKey: "status",
 //       operator: "eq",
 //       value: "leave",
@@ -96,7 +96,7 @@ describe("filter-store", () => {
 
 //     expect(createFilterStore.getState().conditions).toEqual([
 //       {
-//         id: "status",
+//         
 //         fieldKey: "status",
 //         operator: "eq",
 //         value: "leave",
@@ -108,7 +108,7 @@ describe("filter-store", () => {
 //     const store = createFilterStore.getState();
 
 //     store.upsertCondition({
-//       id: "status",
+//       
 //       fieldKey: "status",
 //       operator: "eq",
 //       value: "active",

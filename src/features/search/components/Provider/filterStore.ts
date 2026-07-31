@@ -30,14 +30,14 @@ export function createFilterStore() {
     setConditions: (conditions) => set((state) => withConditions(state.query, conditions)),
     upsertCondition: (condition) =>
       set((state) => {
-        const conditions = state.conditions.some((current) => current.id === condition.id)
-          ? state.conditions.map((current) => current.id === condition.id ? condition : current)
+        const conditions = state.conditions.some((current) => current.columnId === condition.columnId)
+          ? state.conditions.map((current) => current.columnId === condition.columnId ? condition : current)
           : [...state.conditions, condition];
         return withConditions(state.query, conditions);
       }),
     removeCondition: (conditionId) =>
-      set((state) => withConditions(state.query, state.conditions.filter((condition) => condition.id !== conditionId))),
+      set((state) => withConditions(state.query, state.conditions.filter((condition) => condition.columnId !== conditionId))),
     clear: () => set((state) => withConditions({ ...state.query, text: "" }, [])),
-    getConditionByKey: (fieldKey) => get().conditions.find((condition) => condition.fieldKey === fieldKey),
+    getConditionByKey: (fieldKey) => get().conditions.find((condition) => condition.columnId === fieldKey),
   }));
 }

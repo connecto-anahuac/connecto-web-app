@@ -10,7 +10,6 @@ import { Operator } from "../search/shared/operatorPolicy";
 //   | FilterRangeValue
 //   | null;
 
-//TODO deprecated? custom engine Value 
 export type FilterCondition = {
   columnId: string;
   operator: Operator;

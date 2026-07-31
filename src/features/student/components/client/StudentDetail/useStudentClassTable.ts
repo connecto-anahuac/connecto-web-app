@@ -1,21 +1,22 @@
 "use client";
 
+import { GetRowId } from "@/features/search/shared/filterDefinition";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 import type { StudentClassItem } from "@/features/student/types";
 import {
   STATUS_PRESETS,
   STUDENT_GRADE_VIEW_CONFIG,
 } from "@/features/student/types/studentClassViewConfig";
-import {
-  defineFilterCondition,
-  type FilterCondition,
-} from "@/features/table/type";
+import type { FilterCondition } from "@/features/table/type";
 import { useTable } from "@/features/table/useTable";
 
+const getStudentGradeRowId: GetRowId<StudentClassItem> = (row: StudentClassItem) => row.id;
+
 export function useStudentClassTable(data: readonly StudentClassItem[]) {
-  const { globalFilter, setGlobalFilter, table } = useTable({
+  const { globalFilter, setGlobalFilter, table, filterResult } = useTable({
     config: STUDENT_GRADE_VIEW_CONFIG,
     data,
+    getRowId: getStudentGradeRowId,
   });
 
   const presets: FilterPreset[] = STATUS_PRESETS.map((preset) => {
@@ -54,5 +55,6 @@ export function useStudentClassTable(data: readonly StudentClassItem[]) {
     presets,
     setGlobalFilter,
     table,
+    filterResult,
   };
 }

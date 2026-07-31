@@ -29,7 +29,7 @@ export function useFilterCondition<TItem>(filter: FilterDefinition<TItem>) {
   // const upsertCondition = createFilterStore((state) => state.upsertCondition);
   // const removeCondition = createFilterStore((state) => state.removeCondition);
   const condition = useFilterStoreProvider((state) =>
-    state.conditions.find((current) => current.fieldKey === filter.key),
+    state.conditions.find((current) => current.columnId === filter.key),
   );
   const upsertCondition = useFilterStoreProvider((state) => state.upsertCondition);
   const removeCondition = useFilterStoreProvider((state) => state.removeCondition);
@@ -56,8 +56,8 @@ export function useFilterCondition<TItem>(filter: FilterDefinition<TItem>) {
       }
 
       upsertCondition({
-        id: filter.key,
-        fieldKey: filter.key,
+        // id: filter.key,
+        columnId: filter.key,
         operator: nextOperator ?? condition?.operator ?? filter.operators[0],
         value: normalizedValue,
       });

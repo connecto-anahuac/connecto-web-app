@@ -25,7 +25,7 @@ const STUDENT_FILTER_KEY_LOOKUP: Record<string, true> = {
 };
 
 function getRelevantConditions(conditions: readonly FilterCondition[]) {
-  return conditions.filter((condition) => STUDENT_FILTER_KEY_LOOKUP[condition.fieldKey] === true);
+  return conditions.filter((condition) => STUDENT_FILTER_KEY_LOOKUP[condition.columnId] === true);
 }
 
 export function useStudentFilters(students: StudentListItem[]) {
@@ -47,9 +47,9 @@ export function useStudentFilters(students: StudentListItem[]) {
     (presetKey: StudentPresetKey) => {
       const nextConditions = getStudentPresetNextConditions(relevantConditions, presetKey);
       const nextCondition = nextConditions.find((condition) => {
-        if (presetKey === "career") return condition.fieldKey === STUDENT_FILTER_KEYS.career;
-        if (presetKey === "status") return condition.fieldKey === STUDENT_FILTER_KEYS.status;
-        return condition.fieldKey === STUDENT_FILTER_KEYS.failCount;
+        if (presetKey === "career") return condition.columnId === STUDENT_FILTER_KEYS.career;
+        if (presetKey === "status") return condition.columnId === STUDENT_FILTER_KEYS.status;
+        return condition.columnId === STUDENT_FILTER_KEYS.failCount;
       });
       const fieldKey = presetKey === "career"
         ? STUDENT_FILTER_KEYS.career

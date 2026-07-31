@@ -14,7 +14,7 @@ export function StudentDetailContainer({ studentId }: Props) {
   const { loading: staticLoading, studentDetail, studentGrades } =
     useStaticStudentDetail(studentId);
 
-  const { config, globalFilter, presets, setGlobalFilter, table } =
+  const { config, globalFilter, presets, setGlobalFilter, table,filterResult } =
     useStudentClassTable(studentGrades);
 
   const {} = useOptions({
@@ -31,7 +31,7 @@ export function StudentDetailContainer({ studentId }: Props) {
       tableConfig={config}
       searchText={globalFilter}
       onSearchTextChange={setGlobalFilter}
-      presets={presets}
+      presets={presets} filterResult={filterResult}      
       // isFilterOpen={isFilterOpen}
       // onFilterToggle={() => setIsFilterOpen((open) => !open)}
     />

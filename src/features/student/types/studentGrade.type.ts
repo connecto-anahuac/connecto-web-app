@@ -17,7 +17,7 @@ export const gradeStatus = {
 
 export type GradeStatus = (typeof gradeStatus)[keyof typeof gradeStatus];
 
-export type StudentClassItem = {
+export type StudentGradeItem = {
   id: string;
   keyCode: string;
   keyNumber: string;
@@ -25,7 +25,7 @@ export type StudentClassItem = {
   hours: number;
   credits: number;
   block: string;
-  preRequisites: StudentClassItem[];
+  preRequisites: StudentGradeItem[];
   period: Period | null;
   grade: number | null;
   semester: number;
@@ -39,7 +39,7 @@ export type StudentClassItem = {
 
 export function toStudentClassItemUI(
   studentClassItem: StudentPlanItemDto,
-): StudentClassItem {
+): StudentGradeItem {
   return {
     id: studentClassItem.id,
     keyCode: studentClassItem.keyCode,

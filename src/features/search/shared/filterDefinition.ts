@@ -28,8 +28,9 @@ export type FilterConditionValue =
 export type CanonicalValue = FilterPrimitive;
 
 export type FilterCondition = {
-  id: string;
-  fieldKey: string;
+  // TODO src\features\table\type.ts の FilterConditionに統一
+  // id: string;
+  columnId: string;
   operator: Operator;
   value: FilterConditionValue;
 };
@@ -103,6 +104,20 @@ export type SearchResult<TItem> = {
   entries: readonly EvaluationEntry<TItem>[];
   matchCount: number;
 };
+
+export type RowId = string;
+
+export type MatchState = {
+  matched: boolean;
+  score?: number;
+  reason?: string[];
+};
+
+export type FilterResult = {
+  matches: Map<RowId, MatchState>;
+};
+
+export type GetRowId<TItem> = (row: TItem) => RowId;
 
 /**
  * A complete, immutable engine run. Source is input-only; query is state-only;

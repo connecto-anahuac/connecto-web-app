@@ -12,7 +12,7 @@ export function StudentDetailContainer({ studentId }: Props) {
   const { loading: staticLoading, studentDetail, studentGrades } =
     useStaticStudentDetail(studentId);
 
-  const { config, globalFilter, presets, setGlobalFilter, table } =
+  const { config, globalFilter, presets, setGlobalFilter, table, filterResult } =
     useStudentClassTable(studentGrades);
 
   return (
@@ -27,6 +27,7 @@ export function StudentDetailContainer({ studentId }: Props) {
       presets={presets}
       // isFilterOpen={isFilterOpen}
       // onFilterToggle={() => setIsFilterOpen((open) => !open)}
+      filterResult={filterResult}
     />
 
     

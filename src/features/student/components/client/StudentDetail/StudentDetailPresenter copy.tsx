@@ -1,7 +1,7 @@
 import type {
   StudentClassItem,
 } from "@/features/student/types";
-import type { FilterDefinition, FilterableItem } from "@/features/search/shared/filterDefinition";
+import type { FilterDefinition, FilterResult, FilterableItem } from "@/features/search/shared/filterDefinition";
 import type { StudentDetail } from "../../ui/studentSummaryPanel/studentSummary.type";
 import ContentTitleSection from "@/components/ContentTitleSection";
 import DataSection from "@/components/datasection/DataSection";
@@ -16,6 +16,7 @@ type Props = {
   searchText: string;
   onSearchTextChange: (value: string) => void;
   presets: readonly FilterPreset[];
+  filterResult: FilterResult;
   // isFilterOpen: boolean;
   // onFilterToggle: () => void;
 };
@@ -28,6 +29,7 @@ export function StudentDetailPresenter({
   searchText,
   onSearchTextChange,
   presets,
+  filterResult,
   // isFilterOpen,
   // onFilterToggle,
 }: Props) {
@@ -55,6 +57,7 @@ export function StudentDetailPresenter({
           <StudentDiagram
             loading={loading}
             items={filterableItems.map((filterableItem) => filterableItem.item)}
+            filterResult={filterResult}
           />
         }
       />

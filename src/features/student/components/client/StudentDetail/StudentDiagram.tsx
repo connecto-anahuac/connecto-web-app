@@ -1,5 +1,6 @@
 import ColumnTitle from "@/components/diagram/ColumnTitle";
 import RowTitle from "@/components/diagram/RowTitle";
+import { FilterResult } from "@/features/search/shared/filterDefinition";
 import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
 import type { StudentClassItem } from "@/features/student/types";
 import { cn } from "@/shared/lib/util";
@@ -8,12 +9,14 @@ import { ComponentProps } from "react";
 type Props = ComponentProps<"div"> & {
   loading: boolean;
   items: readonly StudentClassItem[];
+  filterResult: FilterResult;
 };
 
 export function StudentDiagram({
   loading,
   items,
   className,
+  filterResult,
   ...props
 }: Props) {
   if (loading) {
@@ -103,7 +106,9 @@ export function StudentDiagram({
         {items.map((item) => (
           <div
             key={item.id}
-            className="transition"
+            className={cn("transition",
+              !filterResult.matches.get(item.id)?.matched && "opacity-10 pointer-events-none"
+            )}
             style={{
               gridColumnStart: item.semester + 1 || 2,
               gridRowStart: item.position + 2 || 2,

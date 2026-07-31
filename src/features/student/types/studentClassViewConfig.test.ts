@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { STUDENT_GRADE_VIEW_CONFIG } from "./studentClassViewConfig";
-import type { StudentClassItem } from "./studentGrade.type";
+import type { StudentGradeItem } from "./studentGrade.type";
 
 const item = {
   block: "A",
@@ -16,7 +16,7 @@ const item = {
   preRequisites: [{ name: "Fundamentos" }],
   semester: 1,
   status: "passed",
-} as unknown as StudentClassItem;
+} as unknown as StudentGradeItem;
 
 describe("STUDENT_CLASS_VIEW_CONFIG", () => {
   it("excludes internal id and position columns", () => {

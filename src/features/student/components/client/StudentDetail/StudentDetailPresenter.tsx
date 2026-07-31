@@ -7,6 +7,7 @@ import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 import type { Table } from "@tanstack/react-table";
 import type { DataViewConfig } from "@/components/table/dataView.types";
 import { DataTable } from "@/components/table/DataTable";
+import { FilterResult } from "@/features/search/shared/filterDefinition";
 
 type Props = {
   loading: boolean;
@@ -19,6 +20,7 @@ type Props = {
   presets: readonly FilterPreset[];
   // isFilterOpen: boolean;
   // onFilterToggle: () => void;
+  filterResult: FilterResult; 
 };
 
 export function StudentDetailPresenter({
@@ -32,6 +34,7 @@ export function StudentDetailPresenter({
   presets,
   // isFilterOpen,
   // onFilterToggle,
+  filterResult,
 }: Props) {
   if (loading) {
     return <div>Loading...</div>;
@@ -53,7 +56,7 @@ export function StudentDetailPresenter({
         tableConfig={tableConfig}
         listDiagram={<DataTable config={tableConfig} table={table} />}
         cardDiagram={
-          <StudentDiagram loading={loading} items={studentGrades} />
+          <StudentDiagram loading={loading} items={studentGrades} filterResult={filterResult} />
           // <div>DIAGRAM</div>
         }
       />

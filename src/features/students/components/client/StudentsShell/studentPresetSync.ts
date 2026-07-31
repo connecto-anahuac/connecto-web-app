@@ -20,7 +20,7 @@ function toArrayValue(value: unknown): string[] {
 
 function isAdvertenciaCondition(condition: FilterCondition | undefined): boolean {
   return (
-    condition?.fieldKey === STUDENT_FILTER_KEYS.failCount &&
+    condition?.columnId === STUDENT_FILTER_KEYS.failCount &&
     condition.operator === "gt" &&
     condition.value === ADVERTENCIA_THRESHOLD
   );
@@ -28,7 +28,7 @@ function isAdvertenciaCondition(condition: FilterCondition | undefined): boolean
 
 function isAlertaCondition(condition: FilterCondition | undefined): boolean {
   return (
-    condition?.fieldKey === STUDENT_FILTER_KEYS.failCount &&
+    condition?.columnId === STUDENT_FILTER_KEYS.failCount &&
     condition.operator === "between" &&
     Array.isArray(condition.value) &&
     condition.value.length === 2 &&
@@ -53,13 +53,13 @@ export function isStudentPresetSelected(
   conditions: FilterCondition[],
 ): boolean {
   const careerCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.career,
+    (condition) => condition.columnId === STUDENT_FILTER_KEYS.career,
   );
   const statusCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.status,
+    (condition) => condition.columnId === STUDENT_FILTER_KEYS.status,
   );
   const reprobadoCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.failCount,
+    (condition) => condition.columnId === STUDENT_FILTER_KEYS.failCount,
   );
 
   switch (presetKey) {
@@ -79,19 +79,19 @@ export function getStudentPresetNextConditions(
   presetKey: StudentPresetKey,
 ): FilterCondition[] {
   const careerCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.career,
+    (condition) => condition.columnId === STUDENT_FILTER_KEYS.career,
   );
   const statusCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.status,
+    (condition) => condition.columnId === STUDENT_FILTER_KEYS.status,
   );
   const reprobadoCondition = conditions.find(
-    (condition) => condition.fieldKey === STUDENT_FILTER_KEYS.failCount,
+    (condition) => condition.columnId === STUDENT_FILTER_KEYS.failCount,
   );
 
   if (presetKey === "career") {
     const nextValues = togglePresetOption(careerCondition, "TIND");
     const rest = conditions.filter(
-      (condition) => condition.fieldKey !== STUDENT_FILTER_KEYS.career,
+      (condition) => condition.columnId !== STUDENT_FILTER_KEYS.career,
     );
 
     return nextValues.length === 0
@@ -99,8 +99,8 @@ export function getStudentPresetNextConditions(
       : [
           ...rest,
           {
-            id: STUDENT_FILTER_KEYS.career,
-            fieldKey: STUDENT_FILTER_KEYS.career,
+            
+            columnId: STUDENT_FILTER_KEYS.career,
             operator: "in",
             value: nextValues,
           },
@@ -110,7 +110,7 @@ export function getStudentPresetNextConditions(
   if (presetKey === "status") {
     const nextValues = togglePresetOption(statusCondition, "Activo");
     const rest = conditions.filter(
-      (condition) => condition.fieldKey !== STUDENT_FILTER_KEYS.status,
+      (condition) => condition.columnId !== STUDENT_FILTER_KEYS.status,
     );
 
     return nextValues.length === 0
@@ -118,8 +118,8 @@ export function getStudentPresetNextConditions(
       : [
           ...rest,
           {
-            id: STUDENT_FILTER_KEYS.status,
-            fieldKey: STUDENT_FILTER_KEYS.status,
+            // id: STUDENT_FILTER_KEYS.status,
+            columnId: STUDENT_FILTER_KEYS.status,
             operator: "in",
             value: nextValues,
           },
@@ -127,7 +127,7 @@ export function getStudentPresetNextConditions(
   }
 
   const rest = conditions.filter(
-    (condition) => condition.fieldKey !== STUDENT_FILTER_KEYS.failCount,
+    (condition) => condition.columnId !== STUDENT_FILTER_KEYS.failCount,
   );
 
   if (presetKey === "alerta") {
@@ -136,8 +136,8 @@ export function getStudentPresetNextConditions(
       : [
           ...rest,
           {
-            id: STUDENT_FILTER_KEYS.failCount,
-            fieldKey: STUDENT_FILTER_KEYS.failCount,
+            // id: STUDENT_FILTER_KEYS.failCount,
+            columnId: STUDENT_FILTER_KEYS.failCount,
             operator: "between",
             value: ALERTA_RANGE,
           },
@@ -149,8 +149,8 @@ export function getStudentPresetNextConditions(
     : [
         ...rest,
         {
-          id: STUDENT_FILTER_KEYS.failCount,
-          fieldKey: STUDENT_FILTER_KEYS.failCount,
+          // id: STUDENT_FILTER_KEYS.failCount,
+          columnId: STUDENT_FILTER_KEYS.failCount,
           operator: "gt",
           value: ADVERTENCIA_THRESHOLD,
         },

@@ -1,5 +1,5 @@
 import type { DataViewConfig } from "@/components/table/dataView.types";
-import type { StudentClassItem } from "./studentGrade.type";
+import type { StudentGradeItem } from "./studentGrade.type";
 import { generateAccentCombinations } from "@/shared/lib/util";
 
 const STATUS_OPTIONS = [
@@ -28,7 +28,7 @@ const displayNumber = (value: number | null) =>
   value === null || Number.isNaN(value) ? "--" : String(value);
 
 
-export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentClassItem> = {
+export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
   columns: [
     {
       id: "keyCode",
