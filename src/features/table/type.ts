@@ -16,3 +16,13 @@ export type FilterCondition = {
   operator: Operator;
   value: FilterConditionValue;
 };
+
+export function defineFilterValue(value: unknown): value is FilterCondition {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "columnId" in value &&
+    "operator" in value &&
+    "value" in value
+  );
+}

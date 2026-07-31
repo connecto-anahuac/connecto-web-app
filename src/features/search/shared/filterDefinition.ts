@@ -8,6 +8,15 @@ export const valueTypes = ["text", "number", "date", "enum", "boolean"] as const
 export type ValueType = (typeof valueTypes)[number];
 
 export type FilterPrimitive = string | number | boolean;
+
+export function defineFilterPrimitive(value: unknown): value is FilterPrimitive {
+  return (
+    typeof value === "string" ||
+    typeof value === "number" ||
+    typeof value === "boolean"
+  );
+}
+
 export type FilterRangeValue = [FilterPrimitive, FilterPrimitive];
 export type FilterConditionValue =
   | FilterPrimitive
