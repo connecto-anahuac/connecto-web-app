@@ -1,13 +1,13 @@
 import type {
-  DataViewColumn,
+  DataFieldConfig,
   DataViewConfig,
   DataViewMetadata,
-  Option,
+  DataFieldOption,
 } from "./dataView.types";
 
 function addDynamicOption(
-  options: Map<string, Option>,
-  option: Option,
+  options: Map<string, DataFieldOption>,
+  option: DataFieldOption,
 ) {
   const current = options.get(option.value);
   if (!current) {
@@ -23,10 +23,10 @@ function addDynamicOption(
   });
 }
 
-function buildColumnOptions<TItem>(
-  column: DataViewColumn<TItem>,
+function buildDataFieldOptions<TItem>(
+  column: DataFieldConfig<TItem>,
   items: readonly TItem[],
-): readonly Option[] {
+): readonly DataFieldOption[] {
   if (column.options !== undefined) {
     //TODO staticoption accessor, format使いたい
     return column.options.map((option) => ({
@@ -37,7 +37,7 @@ function buildColumnOptions<TItem>(
 
   if (!column.dynamicOption) return [];
 
-  const options = new Map<string, Option>();
+  const options = new Map<string, DataFieldOption>();
   for (const item of items) {
     const rawValue = column.accessor(item);
     if (rawValue === null) continue;
@@ -60,22 +60,22 @@ export function buildDataViewMetadata<TItem>(
   items: readonly TItem[],
 ): DataViewMetadata {
   return {
-    optionsByColumnId: Object.fromEntries(
-      config.columns.map((column) => [
-        column.id,
-        buildColumnOptions(column, items),
+    optionsByFieldId: Object.fromEntries(
+      config.fields.map((column) => [
+        column.fieldId,
+        buildDataFieldOptions(column, items),
       ]),
     ),
   };
 }
 
 export function getDataViewColumnSearchTexts<TItem>(
-  column: DataViewColumn<TItem>,
+  column: DataFieldConfig<TItem>,
   metadata: DataViewMetadata,
   item: TItem,
 ): readonly string[] {
   const rawValue = column.accessor(item);
-  const option = metadata.optionsByColumnId[column.id]?.find(
+  const option = metadata.optionsByFieldId[column.fieldId]?.find(
     (candidate) => candidate.value === String(rawValue),
   );
 
@@ -88,10 +88,10 @@ export function getDataViewColumnSearchTexts<TItem>(
   ];
 }
 
-export function runFilterDataViewOptions(
-  options: readonly Option[],
+export function runFilterDataFieldOptions(
+  options: readonly DataFieldOption[],
   query: string,
-): readonly Option[] {
+): readonly DataFieldOption[] {
   const normalizedQuery = query.toLocaleLowerCase();
   return options.filter((option) =>
     [option.value, option.label, ...option.searchTexts].some((text) =>

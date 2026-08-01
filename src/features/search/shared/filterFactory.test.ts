@@ -11,9 +11,9 @@ const rows: Row[] = [
 ];
 
 const config: DataViewConfig<Row> = {
-  columns: [
+  fields: [
     {
-      id: "name",
+      fieldId: "name",
       label: "Name",
       icon: "person",
       valueType: "text",
@@ -21,7 +21,7 @@ const config: DataViewConfig<Row> = {
       format: (row) => row.name,
     },
     {
-      id: "status",
+      fieldId: "status",
       label: "Status",
       icon: "status",
       valueType: "enum",
@@ -33,7 +33,7 @@ const config: DataViewConfig<Row> = {
       ],
     },
     {
-      id: "hidden",
+      fieldId: "hidden",
       label: "Hidden",
       icon: "unvisible",
       valueType: "text",

@@ -4,19 +4,19 @@ import { useMemo, useState, type ComponentPropsWithRef } from "react";
 import CloseButton from "@/components/button/CloseButton";
 import SelectMenu from "@/components/selectMenu";
 import type {
-  DataViewColumn,
-  Option,
+  DataFieldConfig,
+  DataFieldOption,
 } from "@/components/table/dataView.types";
-import { runFilterDataViewOptions } from "@/components/table/buildDataViewMetadata";
+import { runFilterDataFieldOptions } from "@/components/table/buildDataViewMetadata";
 import type { Operator } from "../../../shared/operatorPolicy";
 import { FilterCard } from "../FilterCard";
 import { FilterFieldHeader } from "../FilterFieldHeader";
 import { FilterSearchInput } from "../FilterSearchInput";
 
 type Props<TItem> = ComponentPropsWithRef<"section"> & {
-  column: DataViewColumn<TItem>;
+  column: DataFieldConfig<TItem>;
   operator: Operator;
-  options: readonly Option[];
+  options: readonly DataFieldOption[];
   value: readonly string[];
   onClear: () => void;
   onOperatorChange: (operator: Operator) => void;
@@ -36,7 +36,7 @@ export function MultiSelectFilter<TItem>({
   const [query, setQuery] = useState("");
   const [hoveredIndex, setHoveredIndex] = useState(0);
   const filteredOptions = useMemo(() => {
-    return runFilterDataViewOptions(options, query)
+    return runFilterDataFieldOptions(options, query)
       .map((option) => ({
         label: option.label,
         value: option.value,

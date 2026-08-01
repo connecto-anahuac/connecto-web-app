@@ -1,14 +1,14 @@
 import type {
   CanonicalValue,
-  CompiledProperty,
-  EngineContext,
-  EvaluationEntry,
+  CompiledSearchField,
+  SearchPipelineContext,
+  SearchEvaluationEntry,
   FilterCondition,
   FilterConditionValue,
   FilterResult,
   FilterPrimitive,
-  GetRowId,
-  SearchEnginePlugin,
+  GetItemId,
+  SearchPipelineStage,
   SearchHit,
   SearchMatchKind,
   SearchQuery,
@@ -39,12 +39,12 @@ function compare(left: CanonicalValue, right: CanonicalValue): number {
 function matchesCondition<TItem>(
   item: TItem,
   condition: FilterCondition,
-  property: CompiledProperty<TItem>,
+  filterField: CompiledSearchField<TItem>,
 ): boolean {
-  if (!property.operators.includes(condition.operator)) return false;
-  const expected = property.normalizeConditionValue(condition.value);
+  if (!filterField.operators.includes(condition.operator)) return false;
+  const expected = filterField.normalizeConditionValue(condition.value);
   if (expected === null) return false;
-  const actual = toListValues(property.readCanonicalValue(item));
+  const actual = toListValues(filterField.readCanonicalValue(item));
 
   switch (condition.operator) {
     case "eq":
@@ -87,11 +87,11 @@ function resolveEntryId<TItem>(item: TItem, index: number): string {
   return `search-entry-${index}`;
 }
 
-export function createEngineContext<TItem>(
+export function createSearchPipelineContext<TItem>(
   source: readonly TItem[],
   query: SearchQuery,
-  runtime: EngineContext<TItem>["runtime"],
-): EngineContext<TItem> {
+  runtime: SearchPipelineContext<TItem>["runtime"],
+): SearchPipelineContext<TItem> {
   return {
     source,
     query,
@@ -114,7 +114,7 @@ export function createEngineContext<TItem>(
   };
 }
 
-export const filterEngine: SearchEnginePlugin<unknown> = {
+export const filterEngine: SearchPipelineStage<unknown> = {
   id: "filter",
   execute: (context) => ({
     ...context,
@@ -122,7 +122,7 @@ export const filterEngine: SearchEnginePlugin<unknown> = {
       entries: context.working.entries.map((entry) => ({
         ...entry,
         filterPass: context.query.conditions.every((condition) => {
-          const property = context.runtime.byKey.get(condition.columnId);
+          const property = context.runtime.byKey.get(condition.fieldId);
           return property ? matchesCondition(entry.item, condition, property) : false;
         }),
       })),
@@ -130,7 +130,7 @@ export const filterEngine: SearchEnginePlugin<unknown> = {
   }),
 };
 
-export const searchEngine: SearchEnginePlugin<unknown> = {
+export const searchEngine: SearchPipelineStage<unknown> = {
   id: "search",
   execute: (context) => {
     const query = normalizeSearchText(context.query.globalTextQuery);
@@ -140,10 +140,10 @@ export const searchEngine: SearchEnginePlugin<unknown> = {
       working: {
         entries: context.working.entries.map((entry) => {
           const searchHits: SearchHit[] = [];
-          for (const property of context.runtime.properties) {
+          for (const property of context.runtime.fields) {
             for (const value of property.getSearchText(entry.item)) {
               const kind = getMatchKind(value, query);
-              if (kind) searchHits.push({ fieldKey: property.key, value, kind });
+              if (kind) searchHits.push({ fieldId: property.fieldId, value, kind });
             }
           }
           return { ...entry, searchPass: searchHits.length > 0, searchHits };
@@ -153,7 +153,7 @@ export const searchEngine: SearchEnginePlugin<unknown> = {
   },
 };
 
-export const scoreEngine: SearchEnginePlugin<unknown> = {
+export const scoreEngine: SearchPipelineStage<unknown> = {
   id: "score",
   execute: (context) => ({
     ...context,
@@ -169,7 +169,7 @@ export const scoreEngine: SearchEnginePlugin<unknown> = {
   }),
 };
 
-export function finalizeEngineContext<TItem>(context: EngineContext<TItem>): EngineContext<TItem> {
+export function finalizeEngineContext<TItem>(context: SearchPipelineContext<TItem>): SearchPipelineContext<TItem> {
   const entries = context.working.entries.map((entry) => ({
     ...entry,
     isMatch: entry.filterPass && entry.searchPass,
@@ -184,16 +184,16 @@ export function finalizeEngineContext<TItem>(context: EngineContext<TItem>): Eng
 export function runSearch<TItem>(
   source: readonly TItem[],
   query: SearchQuery,
-  runtime: EngineContext<TItem>["runtime"],
-  plugins: readonly SearchEnginePlugin<TItem>[] = [
-    filterEngine as SearchEnginePlugin<TItem>,
-    searchEngine as SearchEnginePlugin<TItem>,
-    scoreEngine as SearchEnginePlugin<TItem>,
+  runtime: SearchPipelineContext<TItem>["runtime"],
+  plugins: readonly SearchPipelineStage<TItem>[] = [
+    filterEngine as SearchPipelineStage<TItem>,
+    searchEngine as SearchPipelineStage<TItem>,
+    scoreEngine as SearchPipelineStage<TItem>,
   ],
 ): SearchResult<TItem> {
   const context = plugins.reduce(
     (current, plugin) => plugin.execute(current),
-    createEngineContext(source, query, runtime),
+    createSearchPipelineContext(source, query, runtime),
   );
   return finalizeEngineContext(context).result!;
 }
@@ -201,8 +201,8 @@ export function runSearch<TItem>(
 export function runFilter<TItem>(
   source: readonly TItem[],
   query: SearchQuery,
-  runtime: EngineContext<TItem>["runtime"],
-  getRowId: GetRowId<TItem>,
+  runtime: SearchPipelineContext<TItem>["runtime"],
+  getRowId: GetItemId<TItem>,
 ): FilterResult {
   const result = runSearch(source, query, runtime);
   const matches: FilterResult["matches"] = new Map();
@@ -221,21 +221,21 @@ export function runFilter<TItem>(
 export function selectMatchedRows<TItem>(
   source: readonly TItem[],
   result: FilterResult,
-  getRowId: GetRowId<TItem>,
+  getRowId: GetItemId<TItem>,
 ): TItem[] {
   return source.filter(
     (row) => result.matches.get(getRowId(row))?.matched === true,
   );
 }
 
-export function selectListEntries<TItem>(result: SearchResult<TItem>): EvaluationEntry<TItem>[] {
+export function selectListEntries<TItem>(result: SearchResult<TItem>): SearchEvaluationEntry<TItem>[] {
   return result.entries.filter((entry) => entry.isMatch);
 }
 
-export function selectGridEntries<TItem>(result: SearchResult<TItem>): readonly EvaluationEntry<TItem>[] {
+export function selectGridEntries<TItem>(result: SearchResult<TItem>): readonly SearchEvaluationEntry<TItem>[] {
   return result.entries;
 }
 
-export function isOperatorAllowed<TItem>(property: CompiledProperty<TItem>, operator: Operator): boolean {
+export function isOperatorAllowed<TItem>(property: CompiledSearchField<TItem>, operator: Operator): boolean {
   return property.operators.includes(operator);
 }

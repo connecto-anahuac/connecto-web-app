@@ -4,11 +4,11 @@ import {
   getOperatorsForValueType,
   OPERATORS_BY_VALUE_TYPE,
 } from "./operatorPolicy";
-import { valueTypes } from "@/components/table/dataView.types";
+import { dataFieldValueTypes } from "@/components/table/dataView.types";
 
 describe("operator-policy", () => {
   it("covers every valueType", () => {
-    for (const valueType of valueTypes) {
+    for (const valueType of dataFieldValueTypes) {
       expect(OPERATORS_BY_VALUE_TYPE[valueType]).toBeDefined();
       expect(OPERATORS_BY_VALUE_TYPE[valueType].length).toBeGreaterThan(0);
     }

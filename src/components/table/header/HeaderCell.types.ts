@@ -10,11 +10,11 @@ import type {
 } from "react";
 import type { IconName } from "@/components/icon";
 import type { ModalHandle } from "@/components/modal/Modal";
-import type { DataViewColumn } from "../dataView.types";
+import type { DataFieldConfig } from "../dataView.types";
 
 export type HeaderCellActionProps<TItem> = {
   column: Column<TItem>;
-  config: DataViewColumn<TItem>;
+  config: DataFieldConfig<TItem>;
   onHide: (column: Column<TItem>) => void;
   onPin: (column: Column<TItem>) => void;
   onSort: (column: Column<TItem>) => void;

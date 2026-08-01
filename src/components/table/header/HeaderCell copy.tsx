@@ -2,14 +2,14 @@ import type { ComponentProps, ComponentPropsWithRef, ReactNode } from "react";
 import { cn } from "@/shared/lib/util";
 import { IconName, Icons } from "../../icon";
 import IconButton from "../../button/IconButton";
-import { DataViewColumn, DataViewConfig } from "../dataView.types";
+import { DataFieldConfig, DataViewConfig } from "../dataView.types";
 import { Column } from "@tanstack/react-table";
 import ButtonModal from "../../ButtonModal";
 import { TableColumnFilterContainer } from "../DataTable/TableColumnFilterContainer";
 
 type ColumnActionsProps<TItem> = {
   column: Column<TItem>;
-  config: DataViewColumn<TItem>;
+  config: DataFieldConfig<TItem>;
   compact: boolean;
   menuOpen: boolean;
   filterOpen: boolean;

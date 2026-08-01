@@ -2,14 +2,14 @@
 
 import type { ComponentPropsWithRef } from "react";
 import CloseButton from "@/components/button/CloseButton";
-import type { DataViewColumn } from "@/components/table/dataView.types";
+import type { DataFieldConfig } from "@/components/table/dataView.types";
 import type { Operator } from "../../shared/operatorPolicy";
 import { FilterCard } from "./FilterCard";
 import { FilterFieldHeader } from "./FilterFieldHeader";
 import { FilterSearchInput } from "./FilterSearchInput";
 
 type Props<TItem> = ComponentPropsWithRef<"section"> & {
-  column: DataViewColumn<TItem>;
+  column: DataFieldConfig<TItem>;
   operator: Operator;
   value: string;
   onClear: () => void;

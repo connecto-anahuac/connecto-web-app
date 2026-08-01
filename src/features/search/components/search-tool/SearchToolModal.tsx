@@ -36,13 +36,13 @@ export default function SearchToolModal<TItem>({
       </div>
       <div className="w-full min-h-px bg-Outline/40" />
       <div className="flex flex-col gap-5 pb-5 flex-1 w-full overflow-auto scrollbar-none">
-        {config.columns
+        {config.fields
           .filter((column) => column.filterable !== false)
           .map((column) => (
             <FilterRenderer
-              key={column.id}
+              key={column.fieldId}
               column={column}
-              options={metadata.optionsByColumnId[column.id] ?? []}
+              options={metadata.optionsByFieldId[column.fieldId] ?? []}
             />
           ))}
       </div>

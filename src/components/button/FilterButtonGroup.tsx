@@ -31,15 +31,15 @@ export default function FilterButtonGroup<TItem>({
       )}
       {...props}
     >
-      {config.columns
+      {config.fields
         .filter((column) => column.filterable !== false)
         .map((column) => (
           <FilterButton
-            key={column.id}
+            key={column.fieldId}
             column={column}
-            options={metadata.optionsByColumnId[column.id] ?? []}
-            open={openedId === column.id}
-            onOpenChange={(open) => setOpenedId(open ? column.id : null)}
+            options={metadata.optionsByFieldId[column.fieldId] ?? []}
+            open={openedId === column.fieldId}
+            onOpenChange={(open) => setOpenedId(open ? column.fieldId : null)}
           />
         ))}
       <Button

@@ -10,13 +10,13 @@ describe("filter-store", () => {
 
   it("upserts a condition by column within a scope", () => {
     store.getState().upsertCondition("student:grades:a", {
-      columnId: "status",
+      fieldId: "status",
       operator: "eq",
       value: "active",
     });
 
     store.getState().upsertCondition("student:grades:a", {
-      columnId: "status",
+      fieldId: "status",
       operator: "eq",
       value: "leave",
     });
@@ -36,7 +36,7 @@ describe("filter-store", () => {
     store.getState().setSearchText("student:grades:a", "algebra");
     store.getState().setSearchText("student:grades:b", "history");
     store.getState().upsertCondition("student:grades:a", {
-      columnId: "semester",
+      fieldId: "semester",
       operator: "gte",
       value: 5,
     });
@@ -55,12 +55,12 @@ describe("filter-store", () => {
 
   it("removes and clears only the selected scope", () => {
     store.getState().upsertCondition("student:grades:a", {
-      columnId: "status",
+      fieldId: "status",
       operator: "eq",
       value: "active",
     });
     store.getState().upsertCondition("student:grades:b", {
-      columnId: "semester",
+      fieldId: "semester",
       operator: "gte",
       value: 5,
     });

@@ -17,7 +17,7 @@ const failingPreset: FilterPresetConfig<"grade"> = {
 describe("filter presets", () => {
   it("selects a preset when a manually entered condition exactly matches it", () => {
     const conditions: FilterCondition[] = [
-      { columnId: "grade", operator: "lt", value: 6 },
+      { fieldId: "grade", operator: "lt", value: 6 },
     ];
 
     expect(isFilterPresetSelected(failingPreset, conditions)).toBe(true);
@@ -26,12 +26,12 @@ describe("filter presets", () => {
   it("does not select a preset when the value or operator differs", () => {
     expect(
       isFilterPresetSelected(failingPreset, [
-        { columnId: "grade", operator: "gte", value: 6 },
+        { fieldId: "grade", operator: "gte", value: 6 },
       ]),
     ).toBe(false);
     expect(
       isFilterPresetSelected(failingPreset, [
-        { columnId: "grade", operator: "lt", value: 5 },
+        { fieldId: "grade", operator: "lt", value: 5 },
       ]),
     ).toBe(false);
   });
@@ -39,7 +39,7 @@ describe("filter presets", () => {
   it("returns a replacement condition for an unselected preset using the same key", () => {
     expect(
       getFilterPresetNextCondition(failingPreset, [
-        { columnId: "grade", operator: "gte", value: 6 },
+        { fieldId: "grade", operator: "gte", value: 6 },
       ]),
     ).toEqual({ columnId: "grade", operator: "lt", value: 6 });
   });
@@ -47,7 +47,7 @@ describe("filter presets", () => {
   it("returns null when toggling an active preset off", () => {
     expect(
       getFilterPresetNextCondition(failingPreset, [
-        { columnId: "grade", operator: "lt", value: 6 },
+        { fieldId: "grade", operator: "lt", value: 6 },
       ]),
     ).toBeNull();
   });

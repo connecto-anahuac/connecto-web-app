@@ -11,7 +11,7 @@ describe("useStudentFilters preset sync helpers", () => {
     const conditions: FilterCondition[] = [
       {
         // 
-        columnId: STUDENT_FILTER_KEYS.career,
+        fieldId: STUDENT_FILTER_KEYS.career,
         operator: "in",
         value: ["Civil", "TIND"],
       },
@@ -24,7 +24,7 @@ describe("useStudentFilters preset sync helpers", () => {
     const conditions: FilterCondition[] = [
       {
         // id: STUDENT_FILTER_KEYS.status,
-        columnId: STUDENT_FILTER_KEYS.status,
+        fieldId: STUDENT_FILTER_KEYS.status,
         operator: "in",
         value: [STUDENT_STATUS_OPTIONS[0].value, STUDENT_STATUS_OPTIONS[1].value],
       },
@@ -37,7 +37,7 @@ describe("useStudentFilters preset sync helpers", () => {
     const conditions: FilterCondition[] = [
       {
        
-        columnId: STUDENT_FILTER_KEYS.failCount,
+        fieldId: STUDENT_FILTER_KEYS.failCount,
         operator: "gt",
         value: 2,
       },
@@ -50,7 +50,7 @@ describe("useStudentFilters preset sync helpers", () => {
     const conditions: FilterCondition[] = [
       {
         
-        columnId: STUDENT_FILTER_KEYS.career,
+        fieldId: STUDENT_FILTER_KEYS.career,
         operator: "in",
         value: ["Civil"],
       },
@@ -72,7 +72,7 @@ describe("useStudentFilters preset sync helpers", () => {
     const conditions: FilterCondition[] = [
       {
         // id: STUDENT_FILTER_KEYS.status,
-        columnId: STUDENT_FILTER_KEYS.status,
+        fieldId: STUDENT_FILTER_KEYS.status,
         operator: "in",
         value: [STUDENT_STATUS_OPTIONS[0].value, STUDENT_STATUS_OPTIONS[1].value],
       },
@@ -93,7 +93,7 @@ describe("useStudentFilters preset sync helpers", () => {
     const conditions: FilterCondition[] = [
       {
        
-        columnId: STUDENT_FILTER_KEYS.failCount,
+        fieldId: STUDENT_FILTER_KEYS.failCount,
         operator: "eq",
         value: 1,
       },
@@ -115,7 +115,7 @@ describe("useStudentFilters preset sync helpers", () => {
     const conditions: FilterCondition[] = [
       {
        
-        columnId: STUDENT_FILTER_KEYS.failCount,
+        fieldId: STUDENT_FILTER_KEYS.failCount,
         operator: "gt",
         value: 2,
       },

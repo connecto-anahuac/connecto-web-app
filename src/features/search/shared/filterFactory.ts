@@ -5,18 +5,18 @@ import {
 import type {
   DataViewConfig,
   DataViewMetadata,
-  ValueType,
+  DataFieldValueType,
 } from "@/components/table/dataView.types";
 import type {
   CanonicalValue,
-  CompiledProperty,
-  CompiledPropertySchema,
+  CompiledSearchField,
+  CompiledSearchSchema,
   FilterConditionValue,
 } from "./filterDefinition";
 import { getOperatorsForValueType } from "./operatorPolicy";
 
 function normalizeValue(
-  valueType: ValueType,
+  valueType: DataFieldValueType,
   value: unknown,
 ): CanonicalValue | null {
   if (value === null || value === undefined) return null;
@@ -40,7 +40,7 @@ function normalizeValue(
 }
 
 function normalizeConditionValue(
-  valueType: ValueType,
+  valueType: DataFieldValueType,
   value: FilterConditionValue,
 ): FilterConditionValue | null {
   if (value === null) return null;
@@ -58,12 +58,12 @@ export function compileDataViewSchema<TItem>(
   config: DataViewConfig<TItem>,
   dataset: readonly TItem[],
   metadata: DataViewMetadata = buildDataViewMetadata(config, dataset),
-): CompiledPropertySchema<TItem> {
-  const properties = config.columns
+): CompiledSearchSchema<TItem> {
+  const properties = config.fields
     .filter((column) => column.filterable !== false)
     .map(
-      (column): CompiledProperty<TItem> => ({
-        key: column.id,
+      (column): CompiledSearchField<TItem> => ({
+        fieldId: column.fieldId,
         operators: getOperatorsForValueType(column.valueType),
         readCanonicalValue: (item) =>
           normalizeValue(column.valueType, column.accessor(item)),
@@ -76,7 +76,7 @@ export function compileDataViewSchema<TItem>(
     );
 
   return {
-    properties,
-    byKey: new Map(properties.map((property) => [property.key, property])),
+    fields: properties,
+    byKey: new Map(properties.map((property) => [property.fieldId, property])),
   };
 }

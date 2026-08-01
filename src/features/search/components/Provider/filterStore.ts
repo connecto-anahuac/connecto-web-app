@@ -69,10 +69,10 @@ export function createFilterStore() {
       set((state) => {
         const query = getSearchQuery(state, scopeId);
         const conditions = query.conditions.some(
-          (current) => current.columnId === condition.columnId,
+          (current) => current.fieldId === condition.fieldId,
         )
           ? query.conditions.map((current) =>
-              current.columnId === condition.columnId ? condition : current,
+              current.fieldId === condition.fieldId ? condition : current,
             )
           : [...query.conditions, condition];
         return setScopedQuery(state, scopeId, { ...query, conditions });
@@ -83,7 +83,7 @@ export function createFilterStore() {
         return setScopedQuery(state, scopeId, {
           ...query,
           conditions: query.conditions.filter(
-            (condition) => condition.columnId !== columnId,
+            (condition) => condition.fieldId !== columnId,
           ),
         });
       }),
@@ -91,7 +91,7 @@ export function createFilterStore() {
       set((state) => setScopedQuery(state, scopeId, EMPTY_SEARCH_QUERY)),
     getConditionByKey: (scopeId, fieldKey) =>
       getSearchQuery(get(), scopeId).conditions.find(
-        (condition) => condition.columnId === fieldKey,
+        (condition) => condition.fieldId === fieldKey,
       ),
   }));
 }

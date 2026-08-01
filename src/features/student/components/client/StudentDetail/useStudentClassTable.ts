@@ -6,7 +6,7 @@ import {
 } from "@/features/search/components/Provider/useFilterStore";
 import type {
   FilterCondition,
-  GetRowId,
+  GetItemId,
 } from "@/features/search/shared/filterDefinition";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 import type { StudentClassItem } from "@/features/student/types";
@@ -16,7 +16,7 @@ import {
 } from "@/features/student/types/studentClassViewConfig";
 import { useTable } from "@/features/table/useTable";
 
-const getStudentGradeRowId: GetRowId<StudentClassItem> = (row) => row.id;
+const getStudentGradeRowId: GetItemId<StudentClassItem> = (row) => row.id;
 
 export function useStudentClassTable(data: readonly StudentClassItem[]) {
   const query = useDataSearchQuery();
@@ -37,7 +37,7 @@ export function useStudentClassTable(data: readonly StudentClassItem[]) {
 
   const presets: FilterPreset[] = STATUS_PRESETS.map((preset) => {
     const currentFilterValue = query.conditions.find(
-      (condition) => condition.columnId === preset.columnId,
+      (condition) => condition.fieldId === preset.columnId,
     );
     const selectedFilterValues =
       currentFilterValue?.operator === "in" &&
@@ -58,7 +58,7 @@ export function useStudentClassTable(data: readonly StudentClassItem[]) {
         }
 
         upsertCondition({
-          columnId: preset.columnId,
+          fieldId: preset.columnId,
           operator: "in",
           value: [...preset.value],
         } satisfies FilterCondition);

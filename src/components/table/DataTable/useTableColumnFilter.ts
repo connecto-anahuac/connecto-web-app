@@ -1,12 +1,12 @@
 "use client";
 
 import type { Column } from "@tanstack/react-table";
-import type { DataViewColumn } from "../dataView.types";
+import type { DataFieldConfig } from "../dataView.types";
 import { FilterCondition } from "@/features/search/shared/filterDefinition";
 // import type { FilterCondition } from "@/features/table/type";
 
 function getDefaultOperator(
-  valueType: DataViewColumn<never>["valueType"],
+  valueType: DataFieldConfig<never>["valueType"],
 ): FilterCondition["operator"] {
   if (valueType === "enum") return "in";
   if (valueType === "number" || valueType === "date") return "eq";
@@ -15,7 +15,7 @@ function getDefaultOperator(
 
 export function useTableColumnFilter<TItem>(
   column: Column<TItem>,
-  config: DataViewColumn<TItem>,
+  config: DataFieldConfig<TItem>,
   onClose?: () => void,
 ) {
   const currentValue = column.getFilterValue() as FilterCondition | undefined;
@@ -32,7 +32,7 @@ export function useTableColumnFilter<TItem>(
       : [...values, value];
     column.setFilterValue(
       next.length
-        ? { columnId: config.id, operator: "in", value: next }
+        ? { columnId: config.fieldId, operator: "in", value: next }
         : undefined,
     );
   };
@@ -41,7 +41,7 @@ export function useTableColumnFilter<TItem>(
     column.setFilterValue(
       value
         ? {
-            columnId: config.id,
+            fieldId: config.fieldId,
             operator: getDefaultOperator(config.valueType),
             value: config.valueType === "number" ? Number(value) : value,
           }satisfies FilterCondition

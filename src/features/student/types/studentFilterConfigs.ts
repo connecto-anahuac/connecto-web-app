@@ -28,9 +28,9 @@ export const STUDENT_STATUS_OPTIONS = [
 ] as const;
 
 export const STUDENT_VIEW_CONFIG: DataViewConfig<StudentListItem> = {
-  columns: [
+  fields: [
     {
-      id: STUDENT_FILTER_KEYS.name,
+      fieldId: STUDENT_FILTER_KEYS.name,
       label: "Nombre",
       icon: "person",
       valueType: "text",
@@ -38,7 +38,7 @@ export const STUDENT_VIEW_CONFIG: DataViewConfig<StudentListItem> = {
       format: (student) => student.name,
     },
     {
-      id: STUDENT_FILTER_KEYS.status,
+      fieldId: STUDENT_FILTER_KEYS.status,
       label: "Estatus",
       icon: "status",
       valueType: "enum",
@@ -47,7 +47,7 @@ export const STUDENT_VIEW_CONFIG: DataViewConfig<StudentListItem> = {
       format: (student) => student.status,
     },
     {
-      id: STUDENT_FILTER_KEYS.currentSemester,
+      fieldId: STUDENT_FILTER_KEYS.currentSemester,
       label: "Semestre",
       icon: "schedule",
       valueType: "enum",
@@ -56,7 +56,7 @@ export const STUDENT_VIEW_CONFIG: DataViewConfig<StudentListItem> = {
       format: (student) => String(student.currentSemester),
     },
     {
-      id: STUDENT_FILTER_KEYS.career,
+      fieldId: STUDENT_FILTER_KEYS.career,
       label: "Carrera",
       icon: "schoolHat",
       valueType: "enum",
@@ -65,7 +65,7 @@ export const STUDENT_VIEW_CONFIG: DataViewConfig<StudentListItem> = {
       format: (student) => student.career,
     },
     {
-      id: STUDENT_FILTER_KEYS.plan,
+      fieldId: STUDENT_FILTER_KEYS.plan,
       label: "Plan",
       icon: "schoolHat",
       valueType: "enum",
@@ -74,7 +74,7 @@ export const STUDENT_VIEW_CONFIG: DataViewConfig<StudentListItem> = {
       format: (student) => student.plan,
     },
     {
-      id: STUDENT_FILTER_KEYS.failCount,
+      fieldId: STUDENT_FILTER_KEYS.failCount,
       label: "Numero de materias reprobadas",
       icon: "failedClass",
       valueType: "number",

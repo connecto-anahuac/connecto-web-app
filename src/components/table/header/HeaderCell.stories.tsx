@@ -2,15 +2,15 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { Column } from "@tanstack/react-table";
 import HeaderCell from ".";
 import { IconName, Icons } from "../../icon";
-import type { DataViewColumn } from "../dataView.types";
+import type { DataFieldConfig } from "../dataView.types";
 
 const column = {
   id: "name",
   getIsSorted: () => false,
 } as unknown as Column<unknown>;
 
-const config: DataViewColumn<unknown> = {
-  id: "name",
+const config: DataFieldConfig<unknown> = {
+  fieldId: "name",
   label: "Nombre",
   icon: "person",
   valueType: "text",

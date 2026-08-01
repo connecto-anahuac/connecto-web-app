@@ -20,18 +20,18 @@ const item = {
 
 describe("STUDENT_CLASS_VIEW_CONFIG", () => {
   it("excludes internal id and position columns", () => {
-    const ids = STUDENT_GRADE_VIEW_CONFIG.columns.map((column) => column.id);
+    const ids = STUDENT_GRADE_VIEW_CONFIG.fields.map((column) => column.fieldId);
 
     expect(ids).not.toContain("id");
     expect(ids).not.toContain("position");
   });
 
   it("formats prerequisite names and status labels for list consumers", () => {
-    const prerequisites = STUDENT_GRADE_VIEW_CONFIG.columns.find(
-      (column) => column.id === "preRequisites",
+    const prerequisites = STUDENT_GRADE_VIEW_CONFIG.fields.find(
+      (column) => column.fieldId === "preRequisites",
     );
-    const status = STUDENT_GRADE_VIEW_CONFIG.columns.find(
-      (column) => column.id === "status",
+    const status = STUDENT_GRADE_VIEW_CONFIG.fields.find(
+      (column) => column.fieldId === "status",
     );
 
     expect(prerequisites?.format(item)).toBe("Fundamentos");

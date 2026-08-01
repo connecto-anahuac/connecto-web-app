@@ -1,4 +1,4 @@
-import type { ValueType } from "@/components/table/dataView.types";
+import type { DataFieldValueType } from "@/components/table/dataView.types";
 
 export const operators = [
   "eq",
@@ -66,7 +66,7 @@ export const operatorNumberButtonLabels: Record<Operator, string> = {
 //   multiSelect: ["in"], //TODO remove??
 //   boolean: ["eq"],
 // };
-export const OPERATORS_BY_VALUE_TYPE: Record<ValueType, Operator[]> = {
+export const OPERATORS_BY_VALUE_TYPE: Record<DataFieldValueType, Operator[]> = {
   text: ["contains", "eq"],
   number: ["eq", "gt", "gte", "lt", "lte", "between"],
   date: ["eq", "gt", "gte", "lt", "lte", "between"],
@@ -74,11 +74,11 @@ export const OPERATORS_BY_VALUE_TYPE: Record<ValueType, Operator[]> = {
   boolean: ["eq"],
 };
 
-export function getOperatorsForValueType(valueType: ValueType): Operator[] {
+export function getOperatorsForValueType(valueType: DataFieldValueType): Operator[] {
   return OPERATORS_BY_VALUE_TYPE[valueType];
 }
 
-const NUMERIC_LABEL_VALUE_TYPES: ReadonlySet<ValueType> = new Set<ValueType>([
+const NUMERIC_LABEL_VALUE_TYPES: ReadonlySet<DataFieldValueType> = new Set<DataFieldValueType>([
   "number",
   "date",
 ]);
@@ -88,7 +88,7 @@ const NUMERIC_LABEL_VALUE_TYPES: ReadonlySet<ValueType> = new Set<ValueType>([
  * number / date は記号ラベル（>, ≧ など）、それ以外はテキストラベル（Es, Contiene など）。
  */
 export function getOperatorLabel(
-  valueType: ValueType,
+  valueType: DataFieldValueType,
   operator: Operator,
 ): string {
   const labels = NUMERIC_LABEL_VALUE_TYPES.has(valueType)

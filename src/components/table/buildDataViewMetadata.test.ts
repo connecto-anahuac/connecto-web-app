@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { DataViewConfig } from "./dataView.types";
 import {
   buildDataViewMetadata,
-  runFilterDataViewOptions,
+  runFilterDataFieldOptions,
 } from "./buildDataViewMetadata";
 
 type Row = {
@@ -17,12 +17,12 @@ const rows: Row[] = [
 ];
 
 function createConfig(
-  overrides: Partial<DataViewConfig<Row>["columns"][number]> = {},
+  overrides: Partial<DataViewConfig<Row>["fields"][number]> = {},
 ): DataViewConfig<Row> {
   return {
-    columns: [
+    fields: [
       {
-        id: "period",
+        fieldId: "period",
         label: "Periodo",
         icon: "schedule",
         valueType: "enum",
@@ -41,7 +41,7 @@ describe("buildDataViewMetadata", () => {
   it("builds dynamic options from accessor, format, and searchTexts", () => {
     const metadata = buildDataViewMetadata(createConfig(), rows);
 
-    expect(metadata.optionsByColumnId.period).toEqual([
+    expect(metadata.optionsByFieldId.period).toEqual([
       {
         value: "2025-1",
         label: "Primavera 2025",
@@ -63,7 +63,7 @@ describe("buildDataViewMetadata", () => {
       rows,
     );
 
-    expect(metadata.optionsByColumnId.period).toEqual([
+    expect(metadata.optionsByFieldId.period).toEqual([
       {
         label: "Periodo fijo",
         value: "fixed",
@@ -75,14 +75,14 @@ describe("buildDataViewMetadata", () => {
   it("treats an empty static option list as an explicit override", () => {
     const metadata = buildDataViewMetadata(createConfig({ options: [] }), rows);
 
-    expect(metadata.optionsByColumnId.period).toEqual([]);
+    expect(metadata.optionsByFieldId.period).toEqual([]);
   });
 
   it("searches options by value, label, and searchTexts", () => {
     const options = buildDataViewMetadata(createConfig(), rows)
-      .optionsByColumnId.period!;
+      .optionsByFieldId.period!;
 
-    expect(runFilterDataViewOptions(options, "2025-1")).toHaveLength(1);
-    expect(runFilterDataViewOptions(options, "Primavera")).toHaveLength(1);
+    expect(runFilterDataFieldOptions(options, "2025-1")).toHaveLength(1);
+    expect(runFilterDataFieldOptions(options, "Primavera")).toHaveLength(1);
   });
 });

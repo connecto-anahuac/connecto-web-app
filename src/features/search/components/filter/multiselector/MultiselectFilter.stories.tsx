@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { MultiSelectFilter } from "./MultiselectFilter";
 
 const column = {
-  id: "career",
+  fieldId: "career",
   label: "Carrera",
   valueType: "enum" as const,
   icon: "person" as const,

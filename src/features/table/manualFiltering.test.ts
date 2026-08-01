@@ -28,8 +28,8 @@ describe("manual table filtering", () => {
   it("passes matched rows to TanStack and keeps its default sorting", () => {
     const schema = compileDataViewSchema(
       {
-        columns: [{
-          id: "semester",
+        fields: [{
+          fieldId: "semester",
           label: "Semester",
           icon: "schedule",
           valueType: "number",
@@ -46,7 +46,7 @@ describe("manual table filtering", () => {
         conditions: [
           {
             // id: "semester",
-            columnId: "semester",
+            fieldId: "semester",
             operator: "gte",
             value: 5,
           },

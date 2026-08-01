@@ -1,6 +1,6 @@
 import { Icons } from "@/components/icon";
 import SelectBoxUnfill from "@/components/select-box/SelectBoxUnfill";
-import type { DataViewColumn } from "@/components/table/dataView.types";
+import type { DataFieldConfig } from "@/components/table/dataView.types";
 import { cn } from "@/shared/lib/util";
 import {
   getOperatorLabel,
@@ -9,7 +9,7 @@ import {
 } from "../../shared/operatorPolicy";
 
 type Props<TItem> = {
-  column: DataViewColumn<TItem>;
+  column: DataFieldConfig<TItem>;
   operator: Operator;
   onOperatorChange: (operator: Operator) => void;
 };

@@ -29,9 +29,9 @@ const displayNumber = (value: number | null) =>
 
 
 export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
-  columns: [
+  fields: [
     {
-      id: "keyCode",
+      fieldId: "keyCode",
       label: "Clave",
       icon: "hashmark",
       valueType: "text",
@@ -45,7 +45,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
       ],
     },
     {
-      id: "name",
+      fieldId: "name",
       label: "Nombre de materia",
       icon: "class",
       valueType: "text",
@@ -54,7 +54,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
       searchTexts: (item) => generateAccentCombinations(item.name),
     },
     {
-      id: "hours",
+      fieldId: "hours",
       label: "Horas",
       icon: "schedule",
       valueType: "number",
@@ -62,7 +62,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
       format: (item) => displayNumber(item.hours),
     },
     {
-      id: "credits",
+      fieldId: "credits",
       label: "Créditos",
       icon: "schoolHat",
       valueType: "number",
@@ -78,7 +78,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
     //   format: (item) => item.block || "--",
     // },
     {
-      id: "preRequisites",
+      fieldId: "preRequisites",
       label: "Prerequisitos",
       icon: "class",
       valueType: "text",
@@ -95,7 +95,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
           .flat(),
     },
     {
-      id: "period",
+      fieldId: "period",
       label: "Periodo de inscripción",
       icon: "schedule",
       valueType: "enum",
@@ -106,7 +106,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
         item.period ? [item.period.label, String(item.period.raw)] : [],
     },
     {
-      id: "grade",
+      fieldId: "grade",
       label: "Calificación",
       icon: "schoolHat",
       valueType: "number",
@@ -114,7 +114,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
       format: (item) => displayNumber(item.grade),
     },
     {
-      id: "semester",
+      fieldId: "semester",
       label: "Semestre",
       icon: "schedule",
       valueType: "number",
@@ -122,7 +122,7 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
       format: (item) => displayNumber(item.semester),
     },
     {
-      id: "status",
+      fieldId: "status",
       label: "Estado",
       icon: "status",
       valueType: "enum",

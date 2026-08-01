@@ -3,7 +3,7 @@ import type {
   MouseEvent as ReactMouseEvent,
   TouchEvent as ReactTouchEvent,
 } from "react";
-import type { DataViewColumn, DataViewConfig } from "../dataView.types";
+import type { DataFieldConfig, DataViewConfig } from "../dataView.types";
 import { FilterCondition } from "@/features/search/shared/filterDefinition";
 // import type { FilterCondition } from "@/features/table/type";
 
@@ -45,7 +45,7 @@ export type TableFilterButtonGroupPresenterProps<TItem> =
 
 export type TableColumnFilterProps<TItem> = {
   column: Column<TItem>;
-  config: DataViewColumn<TItem>;
+  config: DataFieldConfig<TItem>;
   onClose?: () => void;
 };
 

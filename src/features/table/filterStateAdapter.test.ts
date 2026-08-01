@@ -7,7 +7,7 @@ import {
 } from "./useTable";
 
 const statusCondition: FilterCondition = {
-  columnId: "status",
+  fieldId: "status",
   operator: "in",
   value: ["active"],
 };
@@ -44,7 +44,7 @@ describe("table filter state adapter", () => {
 
     expect(next).toEqual([
       statusCondition,
-      { columnId: "semester", operator: "gte", value: 5 },
+      { fieldId: "semester", operator: "gte", value: 5 },
     ]);
   });
 

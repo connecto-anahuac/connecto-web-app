@@ -1,6 +1,6 @@
 import type { Operator } from "./operatorPolicy";
 
-export type { ValueType } from "@/components/table/dataView.types";
+export type { DataFieldValueType as ValueType } from "@/components/table/dataView.types";
 
 export type FilterPrimitive = string | number | boolean;
 
@@ -29,7 +29,7 @@ export type CanonicalValue = FilterPrimitive;
 // "31 Jul 2026"
 
 export type FilterCondition = {
-  columnId: string;
+  fieldId: string;
   operator: Operator;
   value: FilterConditionValue;
 };
@@ -54,13 +54,13 @@ export type SearchQuery = {
 export type SearchMatchKind = "exact" | "prefix" | "partial";
 
 export type SearchHit = {
-  fieldKey: string;// TODO columinId
+  fieldId: string;// TODO columinId
   value: string;
   kind: SearchMatchKind;
 };
 
-export type CompiledProperty<TItem> = {
-  key: string;
+export type CompiledSearchField<TItem> = {
+  fieldId: string;
   operators: readonly Operator[];
   /** 計算に用いられる値をitemから取得 accessor経由済み*/
   readCanonicalValue: (item: TItem) => CanonicalValue | CanonicalValue[] | null;
@@ -70,12 +70,12 @@ export type CompiledProperty<TItem> = {
   ) => FilterConditionValue | null;
 };
 
-export type CompiledPropertySchema<TItem> = {
-  properties: readonly CompiledProperty<TItem>[];
-  byKey: ReadonlyMap<string, CompiledProperty<TItem>>;
+export type CompiledSearchSchema<TItem> = {
+  fields: readonly CompiledSearchField<TItem>[];
+  byKey: ReadonlyMap<string, CompiledSearchField<TItem>>;
 };
 
-export type EvaluationEntry<TItem> = {//TODO ????
+export type SearchEvaluationEntry<TItem> = {//TODO ????
   id: string;
   /** Compatibility identifier for existing card/list consumers. */
   listId: string;
@@ -87,19 +87,17 @@ export type EvaluationEntry<TItem> = {//TODO ????
   isMatch: boolean;
 };
 
-/** Compatibility name for existing grid/card presenters. */
-export type FilterableItem<TItem> = EvaluationEntry<TItem>;
 
-export type SearchWorkingSet<TItem> = {
-  entries: readonly EvaluationEntry<TItem>[];
+export type SearchPipelineState<TItem> = {
+  entries: readonly SearchEvaluationEntry<TItem>[];
 };
 
 export type SearchResult<TItem> = {
-  entries: readonly EvaluationEntry<TItem>[];//TODO ???
+  entries: readonly SearchEvaluationEntry<TItem>[];//TODO ???
   matchCount: number;
 };
 
-export type RowId = string;
+export type ItemId = string;
 
 export type MatchState = {
   matched: boolean;
@@ -108,25 +106,25 @@ export type MatchState = {
 };
 
 export type FilterResult = {
-  matches: Map<RowId, MatchState>;
+  matches: Map<ItemId, MatchState>;
 };
 
-export type GetRowId<TItem> = (row: TItem) => RowId;
+export type GetItemId<TItem> = (item: TItem) => ItemId;
 
 /**
  * A complete, immutable engine run. Source is input-only; query is state-only;
  * runtime contains compiled/cached field metadata; working is plugin-owned;
  * result is assigned only by finalization.
  */
-export type EngineContext<TItem> = {
+export type SearchPipelineContext<TItem> = {
   source: readonly TItem[];
   query: Readonly<SearchQuery>;
-  runtime: CompiledPropertySchema<TItem>;
-  working: SearchWorkingSet<TItem>;
+  runtime: CompiledSearchSchema<TItem>;
+  working: SearchPipelineState<TItem>;
   result?: SearchResult<TItem>;
 };
 
-export type SearchEnginePlugin<TItem> = {
+export type SearchPipelineStage<TItem> = {
   id: string;
-  execute: (context: EngineContext<TItem>) => EngineContext<TItem>;
+  execute: (context: SearchPipelineContext<TItem>) => SearchPipelineContext<TItem>;
 };

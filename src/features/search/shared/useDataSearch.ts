@@ -41,8 +41,8 @@ export function useDataSearch<TItem>(
       }
       upsertCondition({
         // id: fieldKey,
-        columnId: fieldKey,
-        operator: operator ?? query.conditions.find((condition) => condition.columnId === fieldKey)?.operator ?? property.operators[0]!,
+        fieldId: fieldKey,
+        operator: operator ?? query.conditions.find((condition) => condition.fieldId === fieldKey)?.operator ?? property.operators[0]!,
         value: canonicalValue,
       });
     },
@@ -53,7 +53,7 @@ export function useDataSearch<TItem>(
   const setPresetCondition = useCallback(
     (condition: FilterCondition | null) => {
       if (!condition) return;
-      setCondition(condition.columnId, condition.value, condition.operator);
+      setCondition(condition.fieldId, condition.value, condition.operator);
     },
     [setCondition],
   );

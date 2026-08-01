@@ -25,17 +25,17 @@ const students: Student[] = [
 ];
 
 const config: DataViewConfig<Student> = {
-  columns: [
+  fields: [
     {
-      id: "name", label: "Name", icon: "person", valueType: "text",
+      fieldId: "name", label: "Name", icon: "person", valueType: "text",
       accessor: (student) => student.name, format: (student) => student.name,
     },
     {
-      id: "semester", label: "Semester", icon: "schedule", valueType: "number",
+      fieldId: "semester", label: "Semester", icon: "schedule", valueType: "number",
       accessor: (student) => student.semester, format: (student) => String(student.semester),
     },
     {
-      id: "status", label: "Status", icon: "status", valueType: "enum",
+      fieldId: "status", label: "Status", icon: "status", valueType: "enum",
       accessor: (student) => student.status, format: (student) => student.status,
       options: [
         { value: "active", label: "Aprobado" },
@@ -51,7 +51,7 @@ describe("EngineContext search pipeline", () => {
   it("filters and searches the shared option values", () => {
     const filtered = runSearch(students, {
       globalTextQuery: "aprobado",
-      conditions: [{ columnId: "status", operator: "in", value: ["active"] }],
+      conditions: [{ fieldId: "status", operator: "in", value: ["active"] }],
     }, schema);
 
     expect(selectListEntries(filtered).map((entry) => entry.item.id)).toEqual(["1", "3"]);
@@ -84,7 +84,7 @@ describe("EngineContext search pipeline", () => {
     for (const { operator, value } of matchingQueries) {
       const result = runSearch(students, {
         globalTextQuery: "",
-        conditions: [{ columnId: "semester", operator, value }],
+        conditions: [{ fieldId: "semester", operator, value }],
       }, schema);
       expect(result.entries[0]!.isMatch).toBe(true);
     }
@@ -93,7 +93,7 @@ describe("EngineContext search pipeline", () => {
   it("rejects operators that are not allowed by the column policy", () => {
     const result = runSearch(students, {
       globalTextQuery: "",
-      conditions: [{ columnId: "semester", operator: "contains", value: "3" }],
+      conditions: [{ fieldId: "semester", operator: "contains", value: "3" }],
     }, schema);
     expect(result.matchCount).toBe(0);
   });
@@ -106,8 +106,8 @@ describe("runFilter", () => {
       {
         globalTextQuery: "stone",
         conditions: [
-          { columnId: "status", operator: "in", value: ["active"] },
-          { columnId: "semester", operator: "gte", value: 5 },
+          { fieldId: "status", operator: "in", value: ["active"] },
+          { fieldId: "semester", operator: "gte", value: 5 },
         ],
       },
       schema,

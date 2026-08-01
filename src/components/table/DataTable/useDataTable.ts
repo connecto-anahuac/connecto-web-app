@@ -6,7 +6,7 @@ import {
   type MouseEvent as ReactMouseEvent,
   type TouchEvent as ReactTouchEvent,
 } from "react";
-import type { DataViewColumn, DataViewConfig } from "../dataView.types";
+import type { DataFieldConfig, DataViewConfig } from "../dataView.types";
 import { getSortIcon } from "@/components/icon/sorts/util";
 import { IconName } from "@/components/icon";
 
@@ -96,12 +96,12 @@ export function getColumnConfig<TItem>(
   config: DataViewConfig<TItem>,
   id: string,
 ) {
-  return config.columns.find((column) => column.id === id);
+  return config.fields.find((column) => column.fieldId === id);
 }
 
 export function getTableSortIcon<TItem>(
   column: Column<TItem>,
-  config: DataViewColumn<TItem>,
+  config: DataFieldConfig<TItem>,
 ):IconName {
   const sorting = column.getIsSorted();
   if (!sorting) return getSortIcon("asc", config.valueType);

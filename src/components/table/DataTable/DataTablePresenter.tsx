@@ -11,7 +11,7 @@ import type {
   TableFilterButtonGroupPresenterProps,
 } from "./DataTable.types";
 import { getColumnConfig, getTableSortIcon } from "./useDataTable";
-import type { DataViewColumn } from "../dataView.types";
+import type { DataFieldConfig } from "../dataView.types";
 
 // type ColumnActionsProps<TItem> = {
 //   column: Column<TItem>;

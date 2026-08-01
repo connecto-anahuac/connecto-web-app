@@ -19,7 +19,7 @@ import { buildDataViewMetadata } from "@/components/table/buildDataViewMetadata"
 import {
   defineFilterCondition,
   type FilterCondition,
-  type GetRowId,
+  type GetItemId,
   type SearchQuery,
 } from "@/features/search/shared/filterDefinition";
 import {
@@ -31,7 +31,7 @@ import { compileDataViewSchema } from "@/features/search/shared/filterFactory";
 type UseTableOptions<TItem extends RowData> = {
   config: DataViewConfig<TItem>;
   data: readonly TItem[];
-  getRowId: GetRowId<TItem>;
+  getRowId: GetItemId<TItem>;
   query: SearchQuery;
   setSearchText: (text: string) => void;
   setConditions: (conditions: FilterCondition[]) => void;
@@ -70,7 +70,7 @@ export function toTanstacColumnFiltersState(//TODO header-> menu complete->remov
   conditions: readonly FilterCondition[],
 ): ColumnFiltersState {
   return conditions.map((condition) => ({
-    id: condition.columnId,
+    id: condition.fieldId,
     value: condition,
   }));
 }
@@ -83,7 +83,7 @@ export function toFilterConditions(
   for (const columnFilter of columnFilters) {
     if (!defineFilterCondition(columnFilter.value)) continue;
     conditions.push({
-      columnId: columnFilter.id,
+      fieldId: columnFilter.id,
       operator: columnFilter.value.operator,
       value: columnFilter.value.value,
     });
@@ -143,7 +143,7 @@ export function useTable<TItem extends RowData>({
 
   const columnDefs = useMemo<ColumnDef<TItem>[]>(
     () =>
-      config.columns.map((column) => {
+      config.fields.map((column) => {
         const minWidth = column.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH;
         const maxWidth = column.maxWidth ?? DEFAULT_COLUMN_MAX_WIDTH;
         const estimatedWidth = clampWidth(
@@ -153,7 +153,7 @@ export function useTable<TItem extends RowData>({
         );
 
         return {
-          id: column.id,
+          id: column.fieldId,
           accessorFn: column.accessor,
           cell: (context) => column.format(context.row.original),
           header: column.label,
@@ -163,7 +163,7 @@ export function useTable<TItem extends RowData>({
           sortDescFirst: false,
         };
       }),
-    [config.columns],
+    [config.fields],
   );
 
   // TanStack intentionally returns a mutable table instance for event handlers.

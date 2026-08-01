@@ -30,7 +30,7 @@ export function ColumnToolMenu<TItem>({
     {...props}>
       {columns.map((column) => {
         //TODO 配列、型問題ない？
-        const entry = config.columns.find((item) => item.id === column.id);
+        const entry = config.fields.find((item) => item.fieldId === column.id);
         if (!entry) return null;
         const Icon = value(column) ? Icons[visibleIcon] : Icons[hiddenIcon];
         return (

@@ -3,8 +3,8 @@
 import type { ComponentProps } from "react";
 import { Icons } from "../icon";
 import type {
-  DataViewColumn,
-  Option,
+  DataFieldConfig,
+  DataFieldOption,
 } from "../table/dataView.types";
 import { cn } from "@/shared/lib/util";
 import { FilterRenderer } from "@/features/search/components/filter/FilterRenderer";
@@ -13,8 +13,8 @@ import { operatorNumberButtonLabels } from "@/features/search/shared/operatorPol
 import ButtonModal from "../ButtonModal";
 
 type Props<TItem> = ComponentProps<"button"> & {
-  column: DataViewColumn<TItem>;
-  options: readonly Option[];
+  column: DataFieldConfig<TItem>;
+  options: readonly DataFieldOption[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
 };
@@ -29,7 +29,7 @@ export default function FilterButton<TItem>({
 }: Props<TItem>) {
   const query = useDataSearchQuery();
   const condition = query.conditions.find(
-    (current) => current.columnId === column.id,
+    (current) => current.fieldId === column.fieldId,
   );
   const hasCondition = condition?.value !== undefined && condition.value !== null;
   const operator =

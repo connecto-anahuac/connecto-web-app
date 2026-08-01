@@ -195,8 +195,8 @@ export default function DataSection<TItem>({
           <ButtonModal.Content>
             <div className=" flex min-w-72 w-fit flex-col gap-2 rounded-md border border-Outline bg-InverseSurface p-2 text-InverseOnSurface shadow-lg">
               {table!.getState().sorting.map((sort) => {
-                const config = tableConfig!.columns.find(
-                  (column) => column.id === sort.id,
+                const config = tableConfig!.fields.find(
+                  (column) => column.fieldId === sort.id,
                 );
                 if (!config) return null;
                 return (
@@ -229,21 +229,21 @@ export default function DataSection<TItem>({
                 );
               })}
               <div className="border-t border-Outline pt-1">
-                {tableConfig!.columns
+                {tableConfig!.fields
                   .filter(
                     (column) =>
                       !table!
                         .getState()
-                        .sorting.some((sort) => sort.id === column.id),
+                        .sorting.some((sort) => sort.id === column.fieldId),
                   )
                   .map((column) => (
                     <button
                       className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm hover:bg-Primary hover:text-OnPrimary"
-                      key={column.id}
+                      key={column.fieldId}
                       onClick={() =>
                         table!.setSorting((current) => [
                           ...current,
-                          { id: column.id, desc: false },
+                          { id: column.fieldId, desc: false },
                         ])
                       }
                       type="button"

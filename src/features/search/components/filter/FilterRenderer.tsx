@@ -2,8 +2,8 @@
 
 import { useCallback, type ComponentPropsWithRef } from "react";
 import type {
-  DataViewColumn,
-  Option,
+  DataFieldConfig,
+  DataFieldOption,
 } from "@/components/table/dataView.types";
 import {
   useDataSearchActions,
@@ -19,8 +19,8 @@ import { NumberFilter } from "./NumberFilter";
 import { TextFilter } from "./TextFilter";
 
 type Props<TItem> = ComponentPropsWithRef<"section"> & {
-  column: DataViewColumn<TItem>;
-  options: readonly Option[];
+  column: DataFieldConfig<TItem>;
+  options: readonly DataFieldOption[];
 };
 
 function isEmptyValue(value: FilterConditionValue): boolean {
@@ -39,29 +39,29 @@ export function FilterRenderer<TItem>({
   const query = useDataSearchQuery();
   const { removeCondition, upsertCondition } = useDataSearchActions();
   const condition = query.conditions.find(
-    (current) => current.columnId === column.id,
+    (current) => current.fieldId === column.fieldId,
   );
   const operators = getOperatorsForValueType(column.valueType);
   const operator = condition?.operator ?? operators[0];
 
   const clear = useCallback(() => {
-    removeCondition(column.id);
-  }, [column.id, removeCondition]);
+    removeCondition(column.fieldId);
+  }, [column.fieldId, removeCondition]);
 
   const setValue = useCallback(
     (value: FilterConditionValue, nextOperator?: Operator) => {
       if (isEmptyValue(value)) {
-        removeCondition(column.id);
+        removeCondition(column.fieldId);
         return;
       }
 
       upsertCondition({
-        columnId: column.id,
+        fieldId: column.fieldId,
         operator: nextOperator ?? condition?.operator ?? operators[0],
         value,
       });
     },
-    [column.id, condition?.operator, operators, removeCondition, upsertCondition],
+    [column.fieldId, condition?.operator, operators, removeCondition, upsertCondition],
   );
 
   const setOperator = useCallback(

@@ -70,7 +70,7 @@ export function isFilterPresetSelected<TFilterKey extends string>(
   conditions: readonly FilterCondition[],
 ): boolean {
   const condition = conditions.find(
-    (current) => current.columnId === preset.filterKey,
+    (current) => current.fieldId === preset.filterKey,
   );
 
   return (
@@ -94,7 +94,7 @@ export function getFilterPresetNextCondition<TFilterKey extends string>(
 
   return {
     // id: preset.filterKey,
-    columnId: preset.filterKey,
+    fieldId: preset.filterKey,
     operator: preset.operator,
     value: preset.conditionValue,
   };

@@ -14,8 +14,8 @@ const meta = {
     </DataSearchProvider>
   ),
   args: {
-    tableConfig: { columns: [] },
-    metadata: { optionsByColumnId: {} },
+    tableConfig: { fields: [] },
+    metadata: { optionsByFieldId: {} },
     listDiagram: <div>List view</div>,
     cardDiagram: <div>Grid view</div>,
   },
