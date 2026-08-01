@@ -5,7 +5,10 @@ import DataSection from "@/components/datasection/DataSection";
 import { StudentDiagram } from "./StudentDiagram";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 import type { Table } from "@tanstack/react-table";
-import type { DataViewConfig } from "@/components/table/dataView.types";
+import type {
+  DataViewConfig,
+  DataViewMetadata,
+} from "@/components/table/dataView.types";
 import { DataTable } from "@/components/table/DataTable";
 import { FilterResult } from "@/features/search/shared/filterDefinition";
 
@@ -21,6 +24,7 @@ type Props = {
   // isFilterOpen: boolean;
   // onFilterToggle: () => void;
   filterResult: FilterResult; 
+  metadata: DataViewMetadata;
 };
 
 export function StudentDetailPresenter({
@@ -35,6 +39,7 @@ export function StudentDetailPresenter({
   // isFilterOpen,
   // onFilterToggle,
   filterResult,
+  metadata,
 }: Props) {
   if (loading) {
     return <div>Loading...</div>;
@@ -54,6 +59,7 @@ export function StudentDetailPresenter({
         onSearchTextChange={onSearchTextChange}
         table={table}
         tableConfig={tableConfig}
+        metadata={metadata}
         listDiagram={<DataTable config={tableConfig} table={table} />}
         cardDiagram={
           <StudentDiagram loading={loading} items={studentGrades} filterResult={filterResult} />

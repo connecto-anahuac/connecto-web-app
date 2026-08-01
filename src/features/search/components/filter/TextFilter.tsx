@@ -1,48 +1,50 @@
 "use client";
 
-import type { ComponentPropsWithRef, ReactNode } from "react";
+import type { ComponentPropsWithRef } from "react";
 import CloseButton from "@/components/button/CloseButton";
+import type { DataViewColumn } from "@/components/table/dataView.types";
+import type { Operator } from "../../shared/operatorPolicy";
 import { FilterCard } from "./FilterCard";
-import { FilterSearchInput } from "./FilterSearchInput";
 import { FilterFieldHeader } from "./FilterFieldHeader";
-import { FilterDefinition } from "../../shared/filterDefinition";
-import { useFilterCondition } from "../../shared/useFilterCondition";
-import { IconName } from "@/components/icon";
+import { FilterSearchInput } from "./FilterSearchInput";
 
-type Props<TItem> = {
-  filter: FilterDefinition<TItem>;
-  icon?: IconName;
-} & ComponentPropsWithRef<"section">;
+type Props<TItem> = ComponentPropsWithRef<"section"> & {
+  column: DataViewColumn<TItem>;
+  operator: Operator;
+  value: string;
+  onClear: () => void;
+  onOperatorChange: (operator: Operator) => void;
+  onValueChange: (value: string) => void;
+};
 
-/**
- * 自由入力テキストフィルター（operator: eq / contains / in）。
- */
-export function TextFilter<TItem>({ filter, icon, ...props }: Props<TItem>) {
-  const { condition, operator, setValue, setOperator, clear } =
-    useFilterCondition(filter);
-
-  const value = typeof condition?.value === "string" ? condition.value : "";
-
+export function TextFilter<TItem>({
+  column,
+  operator,
+  value,
+  onClear,
+  onOperatorChange,
+  onValueChange,
+  ...props
+}: Props<TItem>) {
   return (
     <FilterCard
       {...props}
-      aria-label={`${filter.label} filter`}
+      aria-label={`${column.label} filter`}
       header={
         <FilterFieldHeader
-          filter={filter}
-          icon={icon}
+          column={column}
           operator={operator}
-          onOperatorChange={setOperator}
+          onOperatorChange={onOperatorChange}
         />
       }
-      trailingAction={<CloseButton onClick={clear} />}
+      trailingAction={<CloseButton onClick={onClear} />}
     >
       <FilterSearchInput
-        aria-label={filter.label}
-        placeholder={filter.label}
+        aria-label={column.label}
+        placeholder={column.label}
         value={value}
-        onChange={(event) => setValue(event.target.value)}
-        onClear={clear}
+        onChange={(event) => onValueChange(event.target.value)}
+        onClear={onClear}
       />
     </FilterCard>
   );

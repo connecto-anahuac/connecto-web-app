@@ -7,13 +7,14 @@ import SearchBar from "../../features/search/components/searchbar/SearchBar";
 import { cn } from "@/shared/lib/util";
 import IconButton from "../button/IconButton";
 import Button from "../button/Button";
-import { FilterDefinition } from "@/features/search/shared/filterDefinition";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
-import type { DataViewConfig } from "@/components/table/dataView.types";
+import type {
+  DataViewConfig,
+  DataViewMetadata,
+} from "@/components/table/dataView.types";
 // import { TableFilterButtonGroup } from "@/components/table/DataTable";
 import SortCard from "@/components/SortCard";
 import ButtonModal from "../ButtonModal";
-import { TanstackFilterButtonGroup } from "../button/TanstackFilterButtonGroup";
 import { GraphSwitcher } from "./GraphSwitcher";
 import { SearchTool } from "./buttonmodal/type";
 import HideButtonModal from "./buttonmodal/HideButtonModal";
@@ -21,7 +22,6 @@ import PivotButtonModal from "./buttonmodal/PivotButtonModal";
 import FilterButtonGroup from "../button/FilterButtonGroup";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  definitions?: readonly FilterDefinition<TItem>[];
   defaultView?: "list" | "card";
   listTools?: SearchTool[];
   cardviewTools?: SearchTool[];
@@ -35,6 +35,7 @@ type Props<TItem> = ComponentProps<"div"> & {
   onSearchTextChange?: (value: string) => void;
   table?: Table<TItem>;
   tableConfig?: DataViewConfig<TItem>;
+  metadata?: DataViewMetadata;
 };
 export default function DataSection<TItem>({
   className,
@@ -51,6 +52,7 @@ export default function DataSection<TItem>({
   onSearchTextChange,
   table,
   tableConfig,
+  metadata,
 }: Props<TItem>) {
   const [selectedView, setSelectedView] = useState<"list" | "card">(
     defaultView,
@@ -58,7 +60,6 @@ export default function DataSection<TItem>({
   const [openedTool, setOpenedTool] = useState<SearchTool | null>(null);
   const [draggedSortId, setDraggedSortId] = useState<string | null>(null);
 
-  // const registros = useFilterStoreProvider((state) => state.registros);
   const viewChangeHandler = (view: "list" | "card") => {
     setSelectedView(view);
     onViewChange?.(view);
@@ -132,20 +133,14 @@ export default function DataSection<TItem>({
           className="shrink-0 hover:bg-transparent active:bg-transparent"
         />
 
-        {table && tableConfig ? (
-          // aaaaaaaaa
-          <>
-            {/* <FilterButtonGroup 
-              config={tableConfig} /> */}
-            <TanstackFilterButtonGroup
-              className="flex-1 h-fit"
-              config={tableConfig}
-              table={table}
-            />
-          </>
+        {tableConfig && metadata ? (
+          <FilterButtonGroup
+            className="flex-1 h-fit"
+            config={tableConfig}
+            metadata={metadata}
+          />
         ) : (
           <div>Filter button group. table couldn&apos;t have</div>
-          // <FilterButtonGroup definitions={definitions} className="flex-1 h-fit" />
         )}
       </div>
 
@@ -292,8 +287,7 @@ export default function DataSection<TItem>({
           table={table}
           tableConfig={tableConfig}
           hasBadge={
-            table?.getState().columnPinning?.left?.length !== undefined &&
-            table?.getState().columnPinning?.left?.length! > 0
+            (table?.getState().columnPinning?.left?.length ?? 0) > 0
           }
         />
 

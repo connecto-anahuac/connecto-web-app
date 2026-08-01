@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import type { FilterCondition } from "@/features/search/shared/filterDefinition";
 import {
   resolveFilterConditionsUpdate,
-  toColumnFiltersState,
+  toTanstacColumnFiltersState,
   toFilterConditions,
 } from "./useTable";
 
@@ -14,7 +14,7 @@ const statusCondition: FilterCondition = {
 
 describe("table filter state adapter", () => {
   it("projects independent conditions into TanStack column filters", () => {
-    expect(toColumnFiltersState([statusCondition])).toEqual([
+    expect(toTanstacColumnFiltersState([statusCondition])).toEqual([
       { id: "status", value: statusCondition },
     ]);
   });

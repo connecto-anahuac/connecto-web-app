@@ -1,26 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-
 import { MultiSelectFilter } from "./MultiselectFilter";
-import PersonIcon from "@/components/icon/PersonIcon";
-import { buildFilterDefinition } from "../../../shared/filterFactory";
-import { defineFilterField } from "../../../shared/filterField";
-import { DataSearchProvider } from "../../Provider/FilterProvider";
 
-const baseFilter = buildFilterDefinition(
-  defineFilterField<unknown>({
-    key: "name",
-    label: "Nombre",
-    valueType: "enum",
-    icon: "person",
-    inputType: "option",
-    getValue: () => null,
-    options: [
-      { label: "Ingenieria", value: "engineering" },
-      { label: "Derecho", value: "law" },
-      { label: "Diseno", value: "design" },
-    ],
-  }),
-);
+const column = {
+  id: "career",
+  label: "Carrera",
+  valueType: "enum" as const,
+  icon: "person" as const,
+  accessor: () => null,
+  format: () => "",
+};
 
 const meta = {
   title: "Features/Search/MultiselectFilter",
@@ -29,19 +17,20 @@ const meta = {
     layout: "centered",
     a11y: { test: "todo" },
   },
-  argTypes: {
-    filter: { table: { disable: true } },
-  },
   args: {
-    filter: baseFilter,
-    icon: "person",
+    column,
+    operator: "in",
+    options: [
+      { label: "Ingenieria", value: "engineering", searchTexts: [] },
+      { label: "Derecho", value: "law", searchTexts: [] },
+      { label: "Diseno", value: "design", searchTexts: [] },
+    ],
+    value: [],
+    onClear: () => undefined,
+    onOperatorChange: () => undefined,
+    onValueChange: () => undefined,
   },
   tags: ["autodocs"],
-  render: (args) => (
-    <DataSearchProvider>
-      <MultiSelectFilter {...args} />
-    </DataSearchProvider>
-  ),
 } satisfies Meta<typeof MultiSelectFilter<unknown>>;
 
 export default meta;
@@ -51,41 +40,21 @@ export const Default: Story = {};
 
 export const LongOptions: Story = {
   args: {
-    filter: buildFilterDefinition(
-      defineFilterField<unknown>({
-        key: "name",
-        label: "Nombre",
-        valueType: "enum",
-        icon: "person",
-        inputType: "option",
-        getValue: () => null,
-        options: [
-          {
-            label: "Ingenieria en Sistemas Computacionales Avanzados",
-            value: "systems",
-          },
-          {
-            label: "Administracion y Direccion Estrategica de Empresas",
-            value: "business",
-          },
-        ],
-      }),
-    ),
+    options: [
+      {
+        label: "Ingenieria en Sistemas Computacionales Avanzados",
+        value: "systems",
+        searchTexts: [],
+      },
+      {
+        label: "Administracion y Direccion Estrategica de Empresas",
+        value: "business",
+        searchTexts: [],
+      },
+    ],
   },
 };
 
 export const EmptyOptions: Story = {
-  args: {
-    filter: buildFilterDefinition(
-      defineFilterField<unknown>({
-        key: "name",
-        label: "Nombre",
-        valueType: "enum",
-        inputType: "option",
-        icon: "person",
-        getValue: () => null,
-        options: [],
-      }),
-    ),
-  },
+  args: { options: [] },
 };

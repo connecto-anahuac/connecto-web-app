@@ -28,7 +28,7 @@ export type FilterCommands = {
 export type FilterStore = FilterState & FilterCommands;
 
 export const EMPTY_SEARCH_QUERY: SearchQuery = {
-  text: "",
+  globalTextQuery: "",
   conditions: [],
 };
 
@@ -58,7 +58,7 @@ export function createFilterStore() {
     setSearchText: (scopeId, text) =>
       set((state) => {
         const query = getSearchQuery(state, scopeId);
-        return setScopedQuery(state, scopeId, { ...query, text });
+        return setScopedQuery(state, scopeId, { ...query, globalTextQuery: text });
       }),
     setConditions: (scopeId, conditions) =>
       set((state) => {

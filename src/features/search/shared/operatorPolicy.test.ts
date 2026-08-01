@@ -4,7 +4,7 @@ import {
   getOperatorsForValueType,
   OPERATORS_BY_VALUE_TYPE,
 } from "./operatorPolicy";
-import { valueTypes } from "./filterDefinition";
+import { valueTypes } from "@/components/table/dataView.types";
 
 describe("operator-policy", () => {
   it("covers every valueType", () => {

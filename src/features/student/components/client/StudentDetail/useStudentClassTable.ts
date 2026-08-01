@@ -1,29 +1,44 @@
 "use client";
 
-import { FilterCondition, GetRowId } from "@/features/search/shared/filterDefinition";
+import {
+  useDataSearchActions,
+  useDataSearchQuery,
+} from "@/features/search/components/Provider/useFilterStore";
+import type {
+  FilterCondition,
+  GetRowId,
+} from "@/features/search/shared/filterDefinition";
 import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
 import type { StudentClassItem } from "@/features/student/types";
 import {
   STATUS_PRESETS,
   STUDENT_GRADE_VIEW_CONFIG,
 } from "@/features/student/types/studentClassViewConfig";
-// import type { FilterCondition } from "@/features/table/type";
 import { useTable } from "@/features/table/useTable";
 
-const getStudentGradeRowId: GetRowId<StudentClassItem> = (row: StudentClassItem) => row.id;
+const getStudentGradeRowId: GetRowId<StudentClassItem> = (row) => row.id;
 
 export function useStudentClassTable(data: readonly StudentClassItem[]) {
-  const { globalFilter, setGlobalFilter, table, filterResult } = useTable({
+  const query = useDataSearchQuery();
+  const {
+    removeCondition,
+    setConditions,
+    setSearchText,
+    upsertCondition,
+  } = useDataSearchActions();
+  const { globalFilter, setGlobalFilter, table, filterResult, metadata } = useTable({
     config: STUDENT_GRADE_VIEW_CONFIG,
     data,
     getRowId: getStudentGradeRowId,
+    query,
+    setConditions,
+    setSearchText,
   });
 
   const presets: FilterPreset[] = STATUS_PRESETS.map((preset) => {
-    const column = table.getColumn(preset.columnId);
-    const currentFilterValue = column?.getFilterValue() as
-      | FilterCondition
-      | undefined;
+    const currentFilterValue = query.conditions.find(
+      (condition) => condition.columnId === preset.columnId,
+    );
     const selectedFilterValues =
       currentFilterValue?.operator === "in" &&
       Array.isArray(currentFilterValue.value)
@@ -36,16 +51,18 @@ export function useStudentClassTable(data: readonly StudentClassItem[]) {
     return {
       label: preset.label,
       isSelected: selected,
-      onToggle: () =>
-        column?.setFilterValue(
-          selected
-            ? undefined
-            : {
-                columnId: preset.columnId,
-                operator: "in",
-                value: [...preset.value],
-              } satisfies FilterCondition,
-        ),
+      onToggle: () => {
+        if (selected) {
+          removeCondition(preset.columnId);
+          return;
+        }
+
+        upsertCondition({
+          columnId: preset.columnId,
+          operator: "in",
+          value: [...preset.value],
+        } satisfies FilterCondition);
+      },
     };
   });
 
@@ -56,5 +73,6 @@ export function useStudentClassTable(data: readonly StudentClassItem[]) {
     setGlobalFilter,
     table,
     filterResult,
+    metadata,
   };
 }

@@ -1,37 +1,23 @@
-import type { ComponentProps } from "react";
-import { useEffect, useRef, useState } from "react"; // 💡 useState をインポート
-import { cn } from "@/shared/lib/util";
+import { useEffect, useRef, type ComponentProps } from "react";
 import InsideCircleCloseButton from "@/components/InsideCircleCloseButton";
+import { cn } from "@/shared/lib/util";
 
 type FilterSearchInputProps = ComponentProps<"input"> & {
   onClear?: () => void;
-  isFocusedInitially?: boolean; // 💡 初期フォーカス状態を受け取るプロパティ
+  isFocusedInitially?: boolean;
 };
 
 export function FilterSearchInput({
   className,
   onClear,
-  onFocus, // 💡 外部からのイベントハンドラーも受け取れるように分解
-  onBlur,
-  isFocusedInitially = true, 
+  isFocusedInitially = true,
   ...props
 }: FilterSearchInputProps) {
- const inputRef = useRef<HTMLInputElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    if (isFocusedInitially) {
-      // DOMの描画完了後にフォーカスするため、わずかに遅らせるかそのまま実行
-      inputRef.current?.focus();
-    }
-  }, []);
-
-  // 💡 フォーカス状態を管理するState
-  const [isFocused, setIsFocused] = useState(isFocusedInitially);
-
-  const hasValue = Boolean(props.value);
-
-  // 💡 「文字がある」または「フォーカスされている」どちらか一方でも満たせば表示
-  const shouldShowButton = hasValue;// || isFocused;
+    if (isFocusedInitially) inputRef.current?.focus();
+  }, [isFocusedInitially]);
 
   return (
     <div className="relative w-full h-9">
@@ -44,24 +30,9 @@ export function FilterSearchInput({
         )}
         type="text"
         {...props}
-        // 💡 フォーカスが当たったとき
-        onFocus={(e) => {
-          setIsFocused(true);
-          onFocus?.(e); // 外部から渡された onFocus があれば実行
-        }}
-        // 💡 フォーカスが外れたとき
-        onBlur={(e) => {
-          // pointerdown（クリック）との競合を防ぐため、少しだけタイミングを遅らせる
-          //   setTimeout(() => {
-          //     setIsFocused(false);
-          //   }, 150);
-          setIsFocused(false);
-          onBlur?.(e); // 外部から渡された onBlur があれば実行
-        }}
       />
 
-      {/* 💡 条件に合致するときだけボタンを表示 */}
-      {shouldShowButton && (
+      {Boolean(props.value) && (
         <InsideCircleCloseButton
           className="absolute right-2 top-1/2 -translate-y-1/2 size-4"
           onClick={onClear}

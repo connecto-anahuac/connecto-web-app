@@ -1,25 +1,32 @@
 "use client";
 
 import { useCallback, useMemo } from "react";
-import { useDataSearchStore } from "@/features/search/components/Provider/useFilterStore";
-import type { DataPropertyConfig } from "./filterField";
-import { compilePropertySchema } from "./filterFactory";
+import {
+  useDataSearchActions,
+  useDataSearchQuery,
+} from "@/features/search/components/Provider/useFilterStore";
+import type { DataViewConfig } from "@/components/table/dataView.types";
+import { buildDataViewMetadata } from "@/components/table/buildDataViewMetadata";
+import { compileDataViewSchema } from "./filterFactory";
 import { runSearch, selectGridEntries, selectListEntries } from "./filterEngine";
 import type { FilterCondition, FilterConditionValue } from "./filterDefinition";
 import type { Operator } from "./operatorPolicy";
 
 export function useDataSearch<TItem>(
-  properties: readonly DataPropertyConfig<TItem>[],
+  config: DataViewConfig<TItem>,
   items: readonly TItem[],
 ) {
-  const query = useDataSearchStore((state) => state.query);
-  const setSearchText = useDataSearchStore((state) => state.setSearchText);
-  const upsertCondition = useDataSearchStore((state) => state.upsertCondition);
-  const removeCondition = useDataSearchStore((state) => state.removeCondition);
+  const query = useDataSearchQuery();
+  const { removeCondition, setSearchText, upsertCondition } =
+    useDataSearchActions();
 
+  const metadata = useMemo(
+    () => buildDataViewMetadata(config, items),
+    [config, items],
+  );
   const schema = useMemo(
-    () => compilePropertySchema(properties, items),
-    [items, properties],
+    () => compileDataViewSchema(config, items, metadata),
+    [config, items, metadata],
   );
   const result = useMemo(() => runSearch(items, query, schema), [items, query, schema]);
 
@@ -42,6 +49,7 @@ export function useDataSearch<TItem>(
     [query.conditions, removeCondition, schema.byKey, upsertCondition],
   );
 
+  //TODO presetは自動でfilter読み取ってない？
   const setPresetCondition = useCallback(
     (condition: FilterCondition | null) => {
       if (!condition) return;
@@ -51,12 +59,13 @@ export function useDataSearch<TItem>(
   );
 
   return {
-    definitions: schema.properties,
+    config,
+    metadata,
     query,
     result,
     listEntries: selectListEntries(result),
     gridEntries: selectGridEntries(result),
-    searchText: query.text,
+    searchText: query.globalTextQuery,
     setSearchText,
     setCondition,
     setPresetCondition,

@@ -1,15 +1,12 @@
-import type { IconName } from "@/components/icon";
 import type { Operator } from "./operatorPolicy";
 
-export const editor = ["text", "number", "select", "multiSelect", "date"] as const;
-export type Editor = (typeof editor)[number];
-
-export const valueTypes = ["text", "number", "date", "enum", "boolean"] as const;
-export type ValueType = (typeof valueTypes)[number];
+export type { ValueType } from "@/components/table/dataView.types";
 
 export type FilterPrimitive = string | number | boolean;
 
-export function defineFilterPrimitive(value: unknown): value is FilterPrimitive {
+export function defineFilterPrimitive(
+  value: unknown,
+): value is FilterPrimitive {
   return (
     typeof value === "string" ||
     typeof value === "number" ||
@@ -24,19 +21,22 @@ export type FilterConditionValue =
   | FilterRangeValue
   | null;
 
+// canonical :「正準」「標準形」「唯一の正しい表現」
 /** Values stored in queries and used by engines. Labels never enter this type. */
 export type CanonicalValue = FilterPrimitive;
+// "2026/07/31"
+// "2026-7-31"    -> "20260731"  Standardize the format
+// "31 Jul 2026"
 
 export type FilterCondition = {
-  // TODO src\features\table\type.ts の FilterConditionに統一
-  // id: string;
   columnId: string;
   operator: Operator;
   value: FilterConditionValue;
 };
 
-
-export function defineFilterCondition(value: unknown): value is FilterCondition {
+export function defineFilterCondition(
+  value: unknown,
+): value is FilterCondition {
   return (
     typeof value === "object" &&
     value !== null &&
@@ -47,52 +47,35 @@ export function defineFilterCondition(value: unknown): value is FilterCondition 
 }
 
 export type SearchQuery = {
-  text: string;
+  globalTextQuery: string;
   conditions: FilterCondition[];
-};
-
-export type FilterOption = {
-  /** Canonical comparison value. */
-  value: CanonicalValue;
-  /** Human-readable value for controls and text search. */
-  label: string;
 };
 
 export type SearchMatchKind = "exact" | "prefix" | "partial";
 
 export type SearchHit = {
-  fieldKey: string;
+  fieldKey: string;// TODO columinId
   value: string;
   kind: SearchMatchKind;
 };
 
 export type CompiledProperty<TItem> = {
   key: string;
-  label: string;
-  icon: IconName;
-  editor: Editor;
-  valueType: ValueType;
-  inputType: "free" | "option";
-  options: readonly FilterOption[];
   operators: readonly Operator[];
-  isSearchable: boolean;
+  /** 計算に用いられる値をitemから取得 accessor経由済み*/
   readCanonicalValue: (item: TItem) => CanonicalValue | CanonicalValue[] | null;
-  formatDisplayValue: (item: TItem) => string[];
   getSearchText: (item: TItem) => string[];
   normalizeConditionValue: (
     value: FilterConditionValue,
   ) => FilterConditionValue | null;
 };
 
-/** Compatibility name for control components while consumers migrate. */
-export type FilterDefinition<TItem = unknown> = CompiledProperty<TItem>;
-
 export type CompiledPropertySchema<TItem> = {
   properties: readonly CompiledProperty<TItem>[];
   byKey: ReadonlyMap<string, CompiledProperty<TItem>>;
 };
 
-export type EvaluationEntry<TItem> = {
+export type EvaluationEntry<TItem> = {//TODO ????
   id: string;
   /** Compatibility identifier for existing card/list consumers. */
   listId: string;
@@ -112,7 +95,7 @@ export type SearchWorkingSet<TItem> = {
 };
 
 export type SearchResult<TItem> = {
-  entries: readonly EvaluationEntry<TItem>[];
+  entries: readonly EvaluationEntry<TItem>[];//TODO ???
   matchCount: number;
 };
 

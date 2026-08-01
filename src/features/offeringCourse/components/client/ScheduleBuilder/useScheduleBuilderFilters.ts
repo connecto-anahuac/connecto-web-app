@@ -2,26 +2,28 @@
 
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import {
-  OFFERING_COURSE_FILTER_FIELDS,
+  OFFERING_COURSE_VIEW_CONFIG,
 } from "@/features/offeringCourse/types/offering-course-filter-fields";
 import { useDataSearch } from "@/features/search/shared/useDataSearch";
 
 export function useScheduleBuilderFilters(offeringCourses: OfferingCourse[]) {
   const {
-    definitions,
+    config,
+    metadata,
     gridEntries,
     query,
     searchText,
     setSearchText,
-  } = useDataSearch(OFFERING_COURSE_FILTER_FIELDS, offeringCourses);
+  } = useDataSearch(OFFERING_COURSE_VIEW_CONFIG, offeringCourses);
 
   return {
-    definitions,
+    config,
+    metadata,
     searchText,
     setSearchText,
     matchingCourseKeys: new Set(
       gridEntries.filter((entry) => entry.isMatch).map((entry) => entry.item.key),
     ),
-    hasActiveFilters: query.conditions.length > 0 || query.text.trim().length > 0,
+    hasActiveFilters: query.conditions.length > 0 || query.globalTextQuery.trim().length > 0,
   };
 }

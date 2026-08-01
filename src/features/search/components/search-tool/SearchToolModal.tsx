@@ -1,19 +1,24 @@
+import type { ComponentProps } from "react";
 import TabBadge from "@/components/TabBadge";
+import type {
+  DataViewConfig,
+  DataViewMetadata,
+} from "@/components/table/dataView.types";
 import {
   FilterIcon,
   SortIcon,
 } from "@/features/home/components/server/icons/HomeIcons";
-import { ComponentProps } from "react";
-import { FilterRenderer } from "../filter/FilterRenderer";
-import { FilterDefinition } from "../../shared/filterDefinition";
 import { cn } from "@/shared/lib/util";
+import { FilterRenderer } from "../filter/FilterRenderer";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  definitions: readonly FilterDefinition<TItem>[];
+  config: DataViewConfig<TItem>;
+  metadata: DataViewMetadata;
 };
 
 export default function SearchToolModal<TItem>({
-  definitions,
+  config,
+  metadata,
   className,
   ...props
 }: Props<TItem>) {
@@ -25,21 +30,21 @@ export default function SearchToolModal<TItem>({
       )}
       {...props}
     >
-      {/* <div className="flex flex-col  gap-3 sticky top-0 z-20"> */}
-        <div className="flex items-center gap-2.5 ">
-              <TabBadge label={"filter"} icon={<FilterIcon />} selected={true} />
-          <TabBadge label={"sort"} icon={<SortIcon />} />
-        </div>
-        <div className="w-full  min-h-px bg-Outline/40" />
-      {/* </div> */}
-      <div className="flex flex-col gap-5 pb-5 flex-1 w-full   overflow-auto scrollbar-none">
-        {definitions.map((definition) => (
-          <FilterRenderer
-            key={definition.key}
-            filter={definition}
-            icon={definition.icon}
-          />
-        ))}
+      <div className="flex items-center gap-2.5">
+        <TabBadge label="filter" icon={<FilterIcon />} selected />
+        <TabBadge label="sort" icon={<SortIcon />} />
+      </div>
+      <div className="w-full min-h-px bg-Outline/40" />
+      <div className="flex flex-col gap-5 pb-5 flex-1 w-full overflow-auto scrollbar-none">
+        {config.columns
+          .filter((column) => column.filterable !== false)
+          .map((column) => (
+            <FilterRenderer
+              key={column.id}
+              column={column}
+              options={metadata.optionsByColumnId[column.id] ?? []}
+            />
+          ))}
       </div>
     </div>
   );

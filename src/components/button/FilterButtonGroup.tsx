@@ -1,51 +1,52 @@
 "use client";
 
 import { useState, type ComponentProps } from "react";
+import type {
+  DataViewConfig,
+  DataViewMetadata,
+} from "../table/dataView.types";
 import { cn } from "@/shared/lib/util";
-import { FilterDefinition } from "@/features/search/shared/filterDefinition";
-import FilterButton from "./FilterButton";
 import Button from "./Button";
-import { DataViewConfig } from "../table/dataView.types";
+import FilterButton from "./FilterButton";
 
 type Props<TItem> = ComponentProps<"div"> & {
-  config: DataViewConfig<TItem>
+  config: DataViewConfig<TItem>;
+  metadata: DataViewMetadata;
 };
 
 export default function FilterButtonGroup<TItem>({
   className,
   config,
+  metadata,
   ...props
 }: Props<TItem>) {
-  const [openedKey, setOpenedKey] = useState<string | null>(null);
+  const [openedId, setOpenedId] = useState<string | null>(null);
 
   return (
     <div
       className={cn(
-        "flex items-center min-w-0 gap-2   scrollbar-none",
-
-        openedKey ? "overflow-x-hidden" : "overflow-x-auto",
+        "flex items-center min-w-0 gap-2 scrollbar-none",
+        openedId ? "overflow-x-hidden" : "overflow-x-auto",
         className,
       )}
       {...props}
     >
-      {config.columns.map((definition) => (
-        <FilterButton
-          // icon={} //TODO icon
-          key={definition.id}
-          definition={definition}
-          open={openedKey === definition.id}
-          onOpenChange={(open) => {
-            setOpenedKey(open ? definition.id : null);
-          }}
-          label={definition.label}
-        />
-      ))}
-
+      {config.columns
+        .filter((column) => column.filterable !== false)
+        .map((column) => (
+          <FilterButton
+            key={column.id}
+            column={column}
+            options={metadata.optionsByColumnId[column.id] ?? []}
+            open={openedId === column.id}
+            onOpenChange={(open) => setOpenedId(open ? column.id : null)}
+          />
+        ))}
       <Button
-          icon="plus"
-          label="Añadir"
-          intent="darkInk"
-          appearance="text"
+        icon="plus"
+        label="Añadir"
+        intent="darkInk"
+        appearance="text"
         size="md"
         className="shrink-0"
       />

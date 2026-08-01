@@ -4,7 +4,7 @@ import { useCallback, useMemo } from "react";
 import type { StudentListItem } from "../../../types/student-list-item";
 import {
   STUDENT_FILTER_KEYS,
-  STUDENT_FILTER_FIELDS,
+  STUDENT_VIEW_CONFIG,
 } from "@/features/student/types/studentFilterConfigs";
 import { useDataSearch } from "@/features/search/shared/useDataSearch";
 import type { FilterCondition } from "@/features/search/shared/filterDefinition";
@@ -13,7 +13,10 @@ import {
   isStudentPresetSelected,
   type StudentPresetKey,
 } from "./studentPresetSync";
-import { useDataSearchStore } from "@/features/search/components/Provider/useFilterStore";
+import {
+  useDataSearchActions,
+  useDataSearchQuery,
+} from "@/features/search/components/Provider/useFilterStore";
 
 const STUDENT_FILTER_KEY_LOOKUP: Record<string, true> = {
   [STUDENT_FILTER_KEYS.career]: true,
@@ -29,13 +32,12 @@ function getRelevantConditions(conditions: readonly FilterCondition[]) {
 }
 
 export function useStudentFilters(students: StudentListItem[]) {
-  const { definitions, listEntries, searchText, setSearchText } = useDataSearch(
-    STUDENT_FILTER_FIELDS,
+  const { config, metadata, listEntries, searchText, setSearchText } = useDataSearch(
+    STUDENT_VIEW_CONFIG,
     students,
   );
-  const conditions = useDataSearchStore((state) => state.conditions);
-  const upsertCondition = useDataSearchStore((state) => state.upsertCondition);
-  const removeCondition = useDataSearchStore((state) => state.removeCondition);
+  const { conditions } = useDataSearchQuery();
+  const { removeCondition, upsertCondition } = useDataSearchActions();
   const relevantConditions = getRelevantConditions(conditions);
 
   const isPresetSelected = useCallback(
@@ -67,7 +69,8 @@ export function useStudentFilters(students: StudentListItem[]) {
 
   return {
     filteredStudents: listEntries.map((entry) => entry.item),
-    definitions,
+    config,
+    metadata,
     searchText,
     setSearchText,
     presetState: useMemo(

@@ -1,10 +1,11 @@
 "use client";
 
+import { useMemo } from "react";
+import { useLiveQuery } from "dexie-react-hooks";
 import {
   fetchStudentById,
   fetchStudentPlan,
 } from "@/external/handler/student/query.client";
-import { useEffect, useState } from "react";
 import {
   toStudentClassItemUI,
   toStudentProfileUI,
@@ -26,67 +27,54 @@ type UseStudentPlanResult = {
   studentGrades: StudentClassItem[];
 };
 
+type StudentPlanSnapshot = {
+  student: Awaited<ReturnType<typeof fetchStudentById>>;
+  plan: Awaited<ReturnType<typeof fetchStudentPlan>>;
+};
+
+const EMPTY_STUDENT_GRADES: StudentClassItem[] = [];
+
 export function useStaticStudentDetail(
   studentId: string,
 ): UseStudentPlanResult {
-  const [summary, setSummary] = useState<StudentDetail | null>(null);
-  const [studentGrades, setStudentGrades] = useState<StudentClassItem[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let mounted = true;
-
-    async function loadStudentPlan() {
-      setLoading(true);
-
+  const snapshot = useLiveQuery<StudentPlanSnapshot | null>(
+    async () => {
       try {
-        const [studentResult, planResult] = await Promise.all([
+        const [student, plan] = await Promise.all([
           fetchStudentById(studentId),
           fetchStudentPlan(studentId),
         ]);
-
-        if (!mounted) {
-          return;
-        }
-
-        const nextStudent = studentResult
-          ? toStudentProfileUI(studentResult)
-          : null;
-        const nextPlan = planResult.map(toStudentClassItemUI);
-        setStudentGrades(nextPlan);
-
-        setSummary(
-          nextStudent
-            ? buildStudentDetail(nextStudent, nextPlan, {
-                avatarColorCssVar:
-                  STUDENT_AVATAR_COLOR_PALETTE[
-                    nextStudent.avatarColorRef %
-                      STUDENT_AVATAR_COLOR_PALETTE.length
-                  ] ?? STUDENT_AVATAR_COLOR_PALETTE[0],
-                career: STUDENT_DETAIL_CAREER,
-                planLabel: STUDENT_DETAIL_PLAN,
-              })
-            : null,
-        );
+        return { student, plan };
       } catch (error) {
         console.error("Failed loading student plan", error);
-      } finally {
-        if (mounted) {
-          setLoading(false);
-        }
+        return null;
       }
-    }
+    },
+    [studentId],
+  );
 
-    void loadStudentPlan();
+  const studentGrades = useMemo(
+    () =>
+      snapshot?.plan.map(toStudentClassItemUI) ?? EMPTY_STUDENT_GRADES,
+    [snapshot],
+  );
+  const studentDetail = useMemo(() => {
+    if (!snapshot?.student) return null;
 
-    return () => {
-      mounted = false;
-    };
-  }, [studentId]);
+    const student = toStudentProfileUI(snapshot.student);
+    return buildStudentDetail(student, studentGrades, {
+      avatarColorCssVar:
+        STUDENT_AVATAR_COLOR_PALETTE[
+          student.avatarColorRef % STUDENT_AVATAR_COLOR_PALETTE.length
+        ] ?? STUDENT_AVATAR_COLOR_PALETTE[0],
+      career: STUDENT_DETAIL_CAREER,
+      planLabel: STUDENT_DETAIL_PLAN,
+    });
+  }, [snapshot, studentGrades]);
 
   return {
-    loading,
-    studentDetail: summary,
+    loading: snapshot === undefined,
+    studentDetail,
     studentGrades,
   };
 }

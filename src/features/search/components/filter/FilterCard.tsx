@@ -1,4 +1,4 @@
-import type { ComponentPropsWithRef, HTMLAttributes, ReactNode } from "react";
+import type { ComponentPropsWithRef, ReactNode } from "react";
 
 import { cn } from "@/shared/lib/util";
 

@@ -19,7 +19,8 @@ export function ScheduleBuilderContainer({ career }: Props) {
     toggleOfferingCourse,
   } = useScheduleBuilder(career);
   const {
-    definitions,
+    config,
+    metadata,
     searchText,
     setSearchText,
     matchingCourseKeys,
@@ -30,7 +31,8 @@ export function ScheduleBuilderContainer({ career }: Props) {
   return (
     <ScheduleBuilderPresenter
       career={career}
-      definitions={definitions}
+      config={config}
+      metadata={metadata}
       error={error}
       hasActiveFilters={hasActiveFilters}
       isFilterOpen={isFilterOpen}

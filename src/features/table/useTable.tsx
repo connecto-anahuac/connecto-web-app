@@ -2,38 +2,39 @@
 
 import {
   getCoreRowModel,
-  getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
   type ColumnFiltersState,
   type ColumnPinningState,
   type ColumnSizingState,
-  type FilterFn,
   type RowData,
   type SortingState,
+  type Updater,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import type {
-  DataViewConfig,
-  // DataViewValueType,
-} from "@/components/table/dataView.types";
-// import { getOperatorsForDataViewValueType } from "./operatorPolicy";
-import { defineFilterCondition, type FilterCondition } from "./type";
-
-//TODO deprecated? custom engine Value
+import { useEffect, useMemo, useState } from "react";
+import type { DataViewConfig } from "@/components/table/dataView.types";
+import { buildDataViewMetadata } from "@/components/table/buildDataViewMetadata";
 import {
-  defineFilterPrimitive,
-  FilterConditionValue,
-  FilterPrimitive,
-  ValueType,
-} from "../search/shared/filterDefinition";
-import { getOperatorsForValueType } from "../search/shared/operatorPolicy";
+  defineFilterCondition,
+  type FilterCondition,
+  type GetRowId,
+  type SearchQuery,
+} from "@/features/search/shared/filterDefinition";
+import {
+  runFilter,
+  selectMatchedRows,
+} from "@/features/search/shared/filterEngine";
+import { compileDataViewSchema } from "@/features/search/shared/filterFactory";
 
 type UseTableOptions<TItem extends RowData> = {
   config: DataViewConfig<TItem>;
   data: readonly TItem[];
+  getRowId: GetRowId<TItem>;
+  query: SearchQuery;
+  setSearchText: (text: string) => void;
+  setConditions: (conditions: FilterCondition[]) => void;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 140;
@@ -45,144 +46,6 @@ const HEADER_ACTION_BUTTON_WIDTH = 32;
 const HEADER_ACTIONS_GAP = 4;
 const HEADER_HORIZONTAL_PADDING = 20;
 const HEADER_ESTIMATE_BUFFER = 20;
-
-function include(rawValue: unknown, filterValue: unknown) {
-  if (
-    filterValue === undefined ||
-    filterValue === "" ||
-    (Array.isArray(filterValue) && !filterValue.length)
-  ) {
-    return true;
-  }
-
-  if (Array.isArray(filterValue)) {
-    return filterValue.includes(String(rawValue));
-  }
-
-  if (typeof rawValue === "number" && typeof filterValue === "number") {
-    return rawValue === filterValue;
-  }
-
-  return String(rawValue ?? "")
-    .toLocaleLowerCase()
-    .includes(String(filterValue).toLocaleLowerCase());
-}
-
-function isRangeValue(
-  value: FilterConditionValue,
-): value is [FilterPrimitive, FilterPrimitive] {
-  return (
-    Array.isArray(value) &&
-    value.length === 2 &&
-    value.every(
-      (entry) => !Array.isArray(entry) && defineFilterPrimitive(entry),
-    )
-  );
-}
-
-function compare(left: FilterPrimitive, right: FilterPrimitive): number {
-  if (typeof left === "number" && typeof right === "number") {
-    return left - right;
-  }
-
-  if (typeof left === "boolean" && typeof right === "boolean") {
-    return Number(left) - Number(right);
-  }
-
-  return String(left).localeCompare(String(right));
-}
-
-type MatchesConditionOptions = {
-  actual: unknown;
-  filterValue: FilterCondition;
-  searchValues: readonly unknown[];
-  valueType: ValueType;
-};
-
-export function matchesCondition({
-  actual,
-  filterValue,
-  searchValues,
-  valueType,
-}: MatchesConditionOptions): boolean {
-  if (!getOperatorsForValueType(valueType).includes(filterValue.operator)) {
-    return false;
-  }
-
-  const actualValues = Array.isArray(actual)
-    ? actual
-    : actual === null
-      ? []
-      : [actual];
-  if (!actualValues.every(defineFilterPrimitive)) {
-    return false;
-  }
-
-  const expected = filterValue.value;
-  if (expected === null) {
-    return false;
-  }
-
-  switch (filterValue.operator) {
-    case "eq":
-      return (
-        !Array.isArray(expected) &&
-        actualValues.some(
-          (value) =>
-            String(value ?? "").toLocaleLowerCase() ===
-            String(expected).toLocaleLowerCase(),
-        )
-      );
-    case "in":
-      return (
-        Array.isArray(expected) &&
-        searchValues.some((value) =>
-          expected.some(
-            (filterValueItem) =>
-              String(value ?? "").toLocaleLowerCase() ===
-              String(filterValueItem).toLocaleLowerCase(),
-          ),
-        )
-      );
-    case "contains":
-      return (
-        !Array.isArray(expected) &&
-        searchValues.some((value) =>
-          String(value ?? "")
-            .toLocaleLowerCase()
-            .includes(String(expected).toLocaleLowerCase()),
-        )
-      );
-    case "between": {
-      if (!isRangeValue(expected) || actualValues.length !== 1) {
-        return false;
-      }
-
-      const actualValue = actualValues[0]!;
-      return (
-        compare(actualValue, expected[0]) >= 0 &&
-        compare(actualValue, expected[1]) <= 0
-      );
-    }
-    case "gt":
-    case "gte":
-    case "lt":
-    case "lte": {
-      if (Array.isArray(expected) || actualValues.length !== 1) {
-        return false;
-      }
-
-      const result = compare(actualValues[0]!, expected);
-      return filterValue.operator === "gt"
-        ? result > 0
-        : filterValue.operator === "gte"
-          ? result >= 0
-          : filterValue.operator === "lt"
-            ? result < 0
-            : result <= 0;
-    }
-  }
-}
 
 function clampWidth(width: number, minWidth: number, maxWidth: number) {
   return Math.min(Math.max(width, minWidth), maxWidth);
@@ -203,51 +66,79 @@ function estimateColumnWidth(label: string) {
   );
 }
 
+export function toTanstacColumnFiltersState(//TODO header-> menu complete->remove
+  conditions: readonly FilterCondition[],
+): ColumnFiltersState {
+  return conditions.map((condition) => ({
+    id: condition.columnId,
+    value: condition,
+  }));
+}
+
+export function toFilterConditions(
+  columnFilters: ColumnFiltersState,
+): FilterCondition[] {
+  const conditions: FilterCondition[] = [];
+
+  for (const columnFilter of columnFilters) {
+    if (!defineFilterCondition(columnFilter.value)) continue;
+    conditions.push({
+      columnId: columnFilter.id,
+      operator: columnFilter.value.operator,
+      value: columnFilter.value.value,
+    });
+  }
+
+  return conditions;
+}
+
+function resolveUpdater<T>(updater: Updater<T>, previous: T): T {
+  return typeof updater === "function"
+    ? (updater as (value: T) => T)(previous)
+    : updater;
+}
+
+export function resolveFilterConditionsUpdate(//TODO header-> menu complete->remove
+  updater: Updater<ColumnFiltersState>,
+  currentConditions: readonly FilterCondition[],
+): FilterCondition[] {
+  return toFilterConditions(
+    resolveUpdater(updater, toTanstacColumnFiltersState(currentConditions)),
+  );
+}
+
 export function useTable<TItem extends RowData>({
   config,
   data,
+  getRowId,
+  query,
+  setSearchText,
+  setConditions,
 }: UseTableOptions<TItem>) {
-  const [globalFilter, setGlobalFilter] = useState("");
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({});
   const [columnSizing, setColumnSizing] = useState<ColumnSizingState>({});
 
-  const columnConfigMapById = useMemo(
-    () => new Map(config.columns.map((column) => [column.id, column])),
-    [config.columns],
+  const metadata = useMemo(
+    () => buildDataViewMetadata(config, data),
+    [config, data],
   );
-
-  const dataViewFilter = useCallback<FilterFn<TItem>>(
-    (row, columnId, filterValue) => {
-      const rawValue = row.getValue(columnId);
-      const columnConfig = columnConfigMapById.get(columnId);
-      const optionLabel = columnConfig?.options?.find(
-        (option) => option.value === String(rawValue),
-      )?.label;
-      const searchValues = [
-        rawValue,
-        optionLabel,
-        ...(columnConfig?.searchTexts?.(row.original) ?? []),
-      ];
-
-      if (defineFilterCondition(filterValue)) {
-        return (
-          filterValue.columnId === columnId &&
-          columnConfig !== undefined &&
-          matchesCondition({
-            actual: rawValue,
-            filterValue,
-            searchValues,
-            valueType: columnConfig.valueType,
-          })
-        );
-      }
-
-      return searchValues.some((value) => include(value, filterValue));
-    },
-    [columnConfigMapById],
+  const schema = useMemo(
+    () => compileDataViewSchema(config, data, metadata),
+    [config, data, metadata],
+  );
+  const columnFilters = useMemo(//TODO header-> menu complete->remove
+    () => toTanstacColumnFiltersState(query.conditions),
+    [query.conditions],
+  );
+  const filterResult = useMemo(
+    () => runFilter(data, query, schema, getRowId),
+    [data, getRowId, query, schema],
+  );
+  const filteredRows = useMemo(
+    () => selectMatchedRows(data, filterResult, getRowId),
+    [data, filterResult, getRowId],
   );
 
   const columnDefs = useMemo<ColumnDef<TItem>[]>(
@@ -265,7 +156,6 @@ export function useTable<TItem extends RowData>({
           id: column.id,
           accessorFn: column.accessor,
           cell: (context) => column.format(context.row.original),
-          filterFn: dataViewFilter,
           header: column.label,
           minSize: minWidth,
           maxSize: maxWidth,
@@ -273,39 +163,38 @@ export function useTable<TItem extends RowData>({
           sortDescFirst: false,
         };
       }),
-    [config.columns, dataViewFilter],
+    [config.columns],
   );
-
-  const tableData = useMemo(() => [...data], [data]);
 
   // TanStack intentionally returns a mutable table instance for event handlers.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     columns: columnDefs,
-    data: tableData,
-    
+    data: filteredRows,
     getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
+    getRowId,
     getSortedRowModel: getSortedRowModel(),
-    globalFilterFn: dataViewFilter,
+    manualFiltering: true,
     columnResizeMode: "onChange",
-    onColumnFiltersChange: setColumnFilters,
+    onColumnFiltersChange: (updater) =>//TODO header-> menu complete->remove
+      setConditions(
+        resolveFilterConditionsUpdate(updater, query.conditions),
+      ),
     onColumnPinningChange: setColumnPinning,
     onColumnSizingChange: setColumnSizing,
     onColumnVisibilityChange: setColumnVisibility,
-    onGlobalFilterChange: setGlobalFilter,
+    onGlobalFilterChange: (updater) =>
+      setSearchText(resolveUpdater(updater, query.globalTextQuery)),
     onSortingChange: setSorting,
     state: {
-      columnFilters,
+      columnFilters,//TODO header-> menu complete->remove
       columnPinning,
       columnSizing,
       columnVisibility,
-      globalFilter,
+      globalFilter: query.globalTextQuery,
       sorting,
     },
   });
-
-  // resizing handler
 
   const isResizing =
     table.getState().columnSizingInfo.isResizingColumn !== false;
@@ -320,8 +209,10 @@ export function useTable<TItem extends RowData>({
   }, [isResizing]);
 
   return {
-    globalFilter,
-    setGlobalFilter,
+    globalFilter: query.globalTextQuery,
+    setGlobalFilter: setSearchText,
     table,
+    filterResult,
+    metadata,
   };
 }

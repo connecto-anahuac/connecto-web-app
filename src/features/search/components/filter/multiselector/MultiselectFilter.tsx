@@ -1,121 +1,84 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import type { ComponentPropsWithRef, ReactNode } from "react";
+import { useMemo, useState, type ComponentPropsWithRef } from "react";
 import CloseButton from "@/components/button/CloseButton";
 import SelectMenu from "@/components/selectMenu";
+import type {
+  DataViewColumn,
+  Option,
+} from "@/components/table/dataView.types";
+import { runFilterDataViewOptions } from "@/components/table/buildDataViewMetadata";
+import type { Operator } from "../../../shared/operatorPolicy";
 import { FilterCard } from "../FilterCard";
-import { FilterSearchInput } from "../FilterSearchInput";
 import { FilterFieldHeader } from "../FilterFieldHeader";
-import {
-  FilterDefinition,
-  FilterPrimitive,
-} from "../../../shared/filterDefinition";
-import { useFilterCondition } from "../../../shared/useFilterCondition";
-import { IconName } from "@/components/icon";
+import { FilterSearchInput } from "../FilterSearchInput";
 
-type Props<TItem> = {
-  filter: FilterDefinition<TItem>;
-  icon?: IconName;
-} & ComponentPropsWithRef<"section">;
+type Props<TItem> = ComponentPropsWithRef<"section"> & {
+  column: DataViewColumn<TItem>;
+  operator: Operator;
+  options: readonly Option[];
+  value: readonly string[];
+  onClear: () => void;
+  onOperatorChange: (operator: Operator) => void;
+  onValueChange: (value: string[]) => void;
+};
 
-/**
- * option フィールド向けのチェックリスト型フィルター（複数選択 / operator "in"）。
- */
 export function MultiSelectFilter<TItem>({
-  filter,
-  icon,
+  column,
+  operator,
+  options,
+  value,
+  onClear,
+  onOperatorChange,
+  onValueChange,
   ...props
 }: Props<TItem>) {
-  const { condition, operator, setValue, setOperator, clear } =
-    useFilterCondition(filter);
   const [query, setQuery] = useState("");
   const [hoveredIndex, setHoveredIndex] = useState(0);
+  const filteredOptions = useMemo(() => {
+    return runFilterDataViewOptions(options, query)
+      .map((option) => ({
+        label: option.label,
+        value: option.value,
+      }));
+  }, [options, query]);
 
-  const options = useMemo(
-    () =>
-      filter.inputType === "option"
-        ? filter.options.map((option) => ({
-            label: option.label,
-            value: String(option.value),
-          }))
-        : [],
-    [filter],
-  );
-
-  const valueByKey = useMemo(() => {
-    const map = new Map<string, FilterPrimitive>();
-    if (filter.inputType === "option") {
-      for (const option of filter.options) {
-        map.set(String(option.value), option.value);
-      }
-    }
-    return map;
-  }, [filter]);
-
-  const selectedValues = useMemo(() => {
-    const value = condition?.value;
-    if (Array.isArray(value)) {
-      return value.map(String);
-    }
-    if (value === null || value === undefined) {
-      return [];
-    }
-    return [String(value)];
-  }, [condition?.value]);
-
-  const filteredOptions = useMemo(
-    () =>
-      options.filter((option) =>
-        option.label.toLocaleLowerCase().includes(query.toLocaleLowerCase()),
-      ),
-    [options, query],
-  );
-
-  if (filter.inputType !== "option") {
-    return null;
-  }
-
-  const toggleValue = (key: string) => {
-    const nextKeys = selectedValues.includes(key)
-      ? selectedValues.filter((current) => current !== key)
-      : [...selectedValues, key];
-
-    const nextValues = nextKeys.map(
-      (current) => valueByKey.get(current) ?? current,
+  const toggleValue = (nextValue: string) => {
+    onValueChange(
+      value.includes(nextValue)
+        ? value.filter((current) => current !== nextValue)
+        : [...value, nextValue],
     );
-    setValue(nextValues, "in");
   };
 
   return (
     <FilterCard
       {...props}
-      aria-label={`${filter.label} filter`}
+      aria-label={`${column.label} filter`}
       header={
         <FilterFieldHeader
-          filter={filter}
-          icon={icon}
+          column={column}
           operator={operator}
-          onOperatorChange={setOperator}
+          onOperatorChange={onOperatorChange}
         />
       }
-      trailingAction={<CloseButton onClick={clear} />}
+      trailingAction={<CloseButton onClick={onClear} />}
     >
       <FilterSearchInput
-        aria-label={filter.label}
+        aria-label={column.label}
         placeholder="Buscar opciones"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
         onClear={() => setQuery("")}
-        isFocusedInitially={true}
+        isFocusedInitially
       />
 
-      <div className="w-full   max-h-96 h-fit overflow-y-auto">
+      <div className="w-full max-h-96 h-fit overflow-y-auto">
         <SelectMenu
           isMulti
           isOpen
           hoveredIndex={hoveredIndex}
-          selectedValues={selectedValues}
+          selectedValues={[...value]}
           onHoverItem={setHoveredIndex}
           onSelectItem={toggleValue}
           className="p-0 border-0 bg-transparent"

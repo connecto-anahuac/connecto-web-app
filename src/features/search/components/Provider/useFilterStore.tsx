@@ -7,18 +7,6 @@ import {
 } from "./filterStore";
 import { FilterContext, FilterScopeContext } from "./FilterProvider";
 
-type ScopedFilterStore = {
-  query: SearchQuery;
-  /** Compatibility projection. The source of truth is query.conditions. */
-  conditions: FilterCondition[];
-  setSearchText: (text: string) => void;
-  setConditions: (conditions: FilterCondition[]) => void;
-  upsertCondition: (condition: FilterCondition) => void;
-  removeCondition: (columnId: string) => void;
-  clear: () => void;
-  getConditionByKey: (fieldKey: string) => FilterCondition | undefined;
-};
-
 function useFilterContext() {
   const store = useContext(FilterContext);
 
@@ -74,24 +62,3 @@ export function useDataSearchActions() {
     };
   }, [scopeId, store]);
 }
-
-/** @deprecated Prefer useDataSearchQuery and useDataSearchActions. */
-export function useFilterStoreProvider<T>(
-  selector: (state: ScopedFilterStore) => T,
-) {
-  const query = useDataSearchQuery();
-  const actions = useDataSearchActions();
-
-  const scopedStore = useMemo<ScopedFilterStore>(
-    () => ({
-      query,
-      conditions: query.conditions,
-      ...actions,
-    }),
-    [actions, query],
-  );
-
-  return selector(scopedStore);
-}
-
-export const useDataSearchStore = useFilterStoreProvider;

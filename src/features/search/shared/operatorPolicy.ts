@@ -1,4 +1,4 @@
-import { ValueType } from "./filterDefinition";
+import type { ValueType } from "@/components/table/dataView.types";
 
 export const operators = [
   "eq",

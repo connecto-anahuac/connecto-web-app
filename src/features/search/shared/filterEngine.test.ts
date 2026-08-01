@@ -1,4 +1,5 @@
 import { describe, expect, it } from "vitest";
+import type { DataViewConfig } from "@/components/table/dataView.types";
 import {
   runFilter,
   runSearch,
@@ -6,12 +7,16 @@ import {
   selectListEntries,
   selectMatchedRows,
 } from "./filterEngine";
-import { compilePropertySchema } from "./filterFactory";
-import { defineDataProperty, type DataPropertyConfig } from "./filterField";
+import { compileDataViewSchema } from "./filterFactory";
 import type { FilterConditionValue } from "./filterDefinition";
 import type { Operator } from "./operatorPolicy";
 
-type Student = { id: string; name: string; semester: number; status: "active" | "leave" };
+type Student = {
+  id: string;
+  name: string;
+  semester: number;
+  status: "active" | "leave";
+};
 
 const students: Student[] = [
   { id: "1", name: "Alice Johnson", semester: 3, status: "active" },
@@ -19,46 +24,55 @@ const students: Student[] = [
   { id: "3", name: "Carla Stone", semester: 5, status: "active" },
 ];
 
-const properties: DataPropertyConfig<Student>[] = [
-  defineDataProperty<Student>({ key: "name", label: "Name", icon: "person", valueType: "text", inputType: "free", getValue: (student) => student.name, search: true }),
-  defineDataProperty<Student>({ key: "semester", label: "Semester", icon: "schedule", valueType: "number", inputType: "free", getValue: (student) => student.semester, search: false }),
-  defineDataProperty<Student>({
-    key: "status", label: "Status", icon: "status", valueType: "enum", inputType: "option", getValue: (student) => student.status, search: true,
-    options: [{ value: "active", label: "Aprobado" }, { value: "leave", label: "Baja" }],
-  }),
-];
+const config: DataViewConfig<Student> = {
+  columns: [
+    {
+      id: "name", label: "Name", icon: "person", valueType: "text",
+      accessor: (student) => student.name, format: (student) => student.name,
+    },
+    {
+      id: "semester", label: "Semester", icon: "schedule", valueType: "number",
+      accessor: (student) => student.semester, format: (student) => String(student.semester),
+    },
+    {
+      id: "status", label: "Status", icon: "status", valueType: "enum",
+      accessor: (student) => student.status, format: (student) => student.status,
+      options: [
+        { value: "active", label: "Aprobado" },
+        { value: "leave", label: "Baja" },
+      ],
+    },
+  ],
+};
 
-const schema = compilePropertySchema(properties, students);
+const schema = compileDataViewSchema(config, students);
 
 describe("EngineContext search pipeline", () => {
-  it("filters by canonical values while searching labels instead of option values", () => {
+  it("filters and searches the shared option values", () => {
     const filtered = runSearch(students, {
-      text: "aprobado",
-      conditions: [{  columnId: "status", operator: "in", value: ["active"] }],
+      globalTextQuery: "aprobado",
+      conditions: [{ columnId: "status", operator: "in", value: ["active"] }],
     }, schema);
 
     expect(selectListEntries(filtered).map((entry) => entry.item.id)).toEqual(["1", "3"]);
-    expect(runSearch(students, { text: "active", conditions: [] }, schema).matchCount).toBe(0);
+    expect(runSearch(students, { globalTextQuery: "active", conditions: [] }, schema).matchCount).toBe(2);
   });
 
   it("scores exact, prefix, and partial text matches", () => {
-    expect(runSearch(students, { text: "Alice Johnson", conditions: [] }, schema).entries[0]!.filteringScore).toBe(3);
-    expect(runSearch(students, { text: "ali", conditions: [] }, schema).entries[0]!.filteringScore).toBe(2);
-    expect(runSearch(students, { text: "lice", conditions: [] }, schema).entries[0]!.filteringScore).toBe(1);
+    expect(runSearch(students, { globalTextQuery: "Alice Johnson", conditions: [] }, schema).entries[0]!.filteringScore).toBe(3);
+    expect(runSearch(students, { globalTextQuery: "ali", conditions: [] }, schema).entries[0]!.filteringScore).toBe(2);
+    expect(runSearch(students, { globalTextQuery: "lice", conditions: [] }, schema).entries[0]!.filteringScore).toBe(1);
   });
 
   it("keeps every row for grid presentation while list presentation excludes misses", () => {
-    const result = runSearch(students, { text: "alice", conditions: [] }, schema);
+    const result = runSearch(students, { globalTextQuery: "alice", conditions: [] }, schema);
     expect(selectListEntries(result)).toHaveLength(1);
     expect(selectGridEntries(result)).toHaveLength(3);
     expect(selectGridEntries(result)[1]!.isMatch).toBe(false);
   });
 
   it("evaluates comparison and inclusive range operators", () => {
-    const matchingQueries: {
-      operator: Operator;
-      value: FilterConditionValue;
-    }[] = [
+    const matchingQueries: { operator: Operator; value: FilterConditionValue }[] = [
       { operator: "eq", value: 3 },
       { operator: "gt", value: 2 },
       { operator: "gte", value: 3 },
@@ -68,64 +82,32 @@ describe("EngineContext search pipeline", () => {
     ];
 
     for (const { operator, value } of matchingQueries) {
-      const result = runSearch(
-        students,
-        {
-          text: "",
-          conditions: [
-            {
-              
-              columnId: "semester",
-              operator,
-              value,
-            },
-          ],
-        },
-        schema,
-      );
+      const result = runSearch(students, {
+        globalTextQuery: "",
+        conditions: [{ columnId: "semester", operator, value }],
+      }, schema);
       expect(result.entries[0]!.isMatch).toBe(true);
     }
   });
 
-  it("rejects operators that are not allowed by the property policy", () => {
-    const result = runSearch(
-      students,
-      {
-        text: "",
-        conditions: [
-          {
-            
-            columnId: "semester",
-            operator: "contains",
-            value: "3",
-          },
-        ],
-      },
-      schema,
-    );
-
+  it("rejects operators that are not allowed by the column policy", () => {
+    const result = runSearch(students, {
+      globalTextQuery: "",
+      conditions: [{ columnId: "semester", operator: "contains", value: "3" }],
+    }, schema);
     expect(result.matchCount).toBe(0);
   });
 });
 
 describe("runFilter", () => {
-  it("returns matched state for every stable row id without score or reason", () => {
+  it("returns matched state for every stable row id", () => {
     const result = runFilter(
       students,
       {
-        text: "stone",
+        globalTextQuery: "stone",
         conditions: [
-          {
-            
-            columnId: "status",
-            operator: "in",
-            value: ["active"],
-          },
-          {
-            columnId: "semester",
-            operator: "gte",
-            value: 5,
-          },
+          { columnId: "status", operator: "in", value: ["active"] },
+          { columnId: "semester", operator: "gte", value: 5 },
         ],
       },
       schema,
@@ -137,19 +119,12 @@ describe("runFilter", () => {
       ["2", { matched: false }],
       ["3", { matched: true }],
     ]);
-    expect(
-      selectMatchedRows(students, result, (student) => student.id),
-    ).toEqual([students[2]]);
+    expect(selectMatchedRows(students, result, (student) => student.id)).toEqual([students[2]]);
   });
 
   it("rejects duplicate row ids", () => {
     expect(() =>
-      runFilter(
-        students,
-        { text: "", conditions: [] },
-        schema,
-        () => "duplicate",
-      ),
+      runFilter(students, { globalTextQuery: "", conditions: [] }, schema, () => "duplicate"),
     ).toThrowError("Duplicate row id: duplicate");
   });
 });

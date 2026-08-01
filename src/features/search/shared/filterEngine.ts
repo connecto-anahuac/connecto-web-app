@@ -5,7 +5,9 @@ import type {
   EvaluationEntry,
   FilterCondition,
   FilterConditionValue,
+  FilterResult,
   FilterPrimitive,
+  GetRowId,
   SearchEnginePlugin,
   SearchHit,
   SearchMatchKind,
@@ -20,7 +22,7 @@ const SEARCH_SCORES: Record<SearchMatchKind, number> = {
   exact: 3,
 };
 
-function toValues(value: CanonicalValue | CanonicalValue[] | null): CanonicalValue[] {
+function toListValues(value: CanonicalValue | CanonicalValue[] | null): CanonicalValue[] {
   return value === null ? [] : Array.isArray(value) ? value : [value];
 }
 
@@ -42,7 +44,7 @@ function matchesCondition<TItem>(
   if (!property.operators.includes(condition.operator)) return false;
   const expected = property.normalizeConditionValue(condition.value);
   if (expected === null) return false;
-  const actual = toValues(property.readCanonicalValue(item));
+  const actual = toListValues(property.readCanonicalValue(item));
 
   switch (condition.operator) {
     case "eq":
@@ -120,7 +122,7 @@ export const filterEngine: SearchEnginePlugin<unknown> = {
       entries: context.working.entries.map((entry) => ({
         ...entry,
         filterPass: context.query.conditions.every((condition) => {
-          const property = context.runtime.byKey.get(condition.fieldKey);
+          const property = context.runtime.byKey.get(condition.columnId);
           return property ? matchesCondition(entry.item, condition, property) : false;
         }),
       })),
@@ -131,7 +133,7 @@ export const filterEngine: SearchEnginePlugin<unknown> = {
 export const searchEngine: SearchEnginePlugin<unknown> = {
   id: "search",
   execute: (context) => {
-    const query = normalizeSearchText(context.query.text);
+    const query = normalizeSearchText(context.query.globalTextQuery);
     if (!query) return context;
     return {
       ...context,
@@ -194,6 +196,36 @@ export function runSearch<TItem>(
     createEngineContext(source, query, runtime),
   );
   return finalizeEngineContext(context).result!;
+}
+
+export function runFilter<TItem>(
+  source: readonly TItem[],
+  query: SearchQuery,
+  runtime: EngineContext<TItem>["runtime"],
+  getRowId: GetRowId<TItem>,
+): FilterResult {
+  const result = runSearch(source, query, runtime);
+  const matches: FilterResult["matches"] = new Map();
+
+  for (const entry of result.entries) {
+    const rowId = getRowId(entry.item);
+    if (matches.has(rowId)) {
+      throw new Error(`Duplicate row id: ${rowId}`);
+    }
+    matches.set(rowId, { matched: entry.isMatch });
+  }
+
+  return { matches };
+}
+
+export function selectMatchedRows<TItem>(
+  source: readonly TItem[],
+  result: FilterResult,
+  getRowId: GetRowId<TItem>,
+): TItem[] {
+  return source.filter(
+    (row) => result.matches.get(getRowId(row))?.matched === true,
+  );
 }
 
 export function selectListEntries<TItem>(result: SearchResult<TItem>): EvaluationEntry<TItem>[] {

@@ -5,13 +5,17 @@ import OfferingClassCardView from "@/features/offeringCourse/components/Offering
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import SearchBar from "@/features/search/components/SearchTool";
 import SearchTool from "@/features/search/components/search-tool/SearchTool";
-import type { FilterDefinition } from "@/features/search/shared/filterDefinition";
+import type {
+  DataViewConfig,
+  DataViewMetadata,
+} from "@/components/table/dataView.types";
 import { useState } from "react";
 import OfferingCourseDetail from "../../OfferingCourseDetail";
 
 type Props = {
   career: string;
-  definitions: readonly FilterDefinition<OfferingCourse>[];
+  config: DataViewConfig<OfferingCourse>;
+  metadata: DataViewMetadata;
   error: string | null;
   hasActiveFilters: boolean;
   isFilterOpen: boolean;
@@ -28,7 +32,8 @@ type Props = {
 
 export function ScheduleBuilderPresenter({
   career,
-  definitions,
+  config,
+  metadata,
   error,
   hasActiveFilters,
   isFilterOpen,
@@ -73,7 +78,8 @@ export function ScheduleBuilderPresenter({
           placeholder="buscar por nombre de clase"
         />
         <SearchTool
-          definitions={definitions}
+          config={config}
+          metadata={metadata}
           onClick={onFilterToggle}
           isSelected={isFilterOpen}
         />

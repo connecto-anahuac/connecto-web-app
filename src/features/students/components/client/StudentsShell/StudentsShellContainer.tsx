@@ -15,7 +15,8 @@ export function StudentsShellContainer({ children }: Props) {
   const { students, loading } = useStudentsList();
   const {
     filteredStudents,
-    definitions,
+    config,
+    metadata,
     searchText,
     setSearchText,
     presetState,
@@ -32,7 +33,8 @@ export function StudentsShellContainer({ children }: Props) {
       activeStudentId={activeStudentId}
       loading={loading}
       students={filteredStudents}
-      definitions={definitions}
+      config={config}
+      metadata={metadata}
       searchText={searchText}
       onSearchTextChange={setSearchText}
       isFilterOpen={isFilterOpen}

@@ -9,8 +9,7 @@ import {
   runFilter,
   selectMatchedRows,
 } from "@/features/search/shared/filterEngine";
-import { compilePropertySchema } from "@/features/search/shared/filterFactory";
-import { defineDataProperty } from "@/features/search/shared/filterField";
+import { compileDataViewSchema } from "@/features/search/shared/filterFactory";
 
 type Row = {
   id: string;
@@ -27,23 +26,23 @@ const getRowId = (row: Row) => row.id;
 
 describe("manual table filtering", () => {
   it("passes matched rows to TanStack and keeps its default sorting", () => {
-    const schema = compilePropertySchema(
-      [
-        defineDataProperty<Row>({
-          key: "semester",
+    const schema = compileDataViewSchema(
+      {
+        columns: [{
+          id: "semester",
           label: "Semester",
           icon: "schedule",
           valueType: "number",
-          inputType: "free",
-          getValue: (row) => row.semester,
-        }),
-      ],
+          accessor: (row: Row) => row.semester,
+          format: (row: Row) => String(row.semester),
+        }],
+      },
       rows,
     );
     const filterResult = runFilter(
       rows,
       {
-        text: "",
+        globalTextQuery: "",
         conditions: [
           {
             // id: "semester",
