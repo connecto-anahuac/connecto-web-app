@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 import Arrow from "@/shared/component/primitive/icon/Arrow";
 import { cn } from "@/shared/lib/util";
-import { IconName, Icons } from "./icon";
+import { IconName, Icons } from "../icon";
 
 type SelectBoxFillSize = "small" | "middle";
 

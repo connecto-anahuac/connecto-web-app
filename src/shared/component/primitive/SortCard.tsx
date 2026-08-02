@@ -1,7 +1,7 @@
 import { cn } from "@/shared/lib/util";
 import HandleGripIcon from "./icon/HandleGripIcon";
 import Button from "./button/Button";
-import SelectBoxFill from "./SelectBoxFill";
+import SelectBoxFill from "./select-box/SelectBoxFill";
 import PersonIcon from "./icon/PersonIcon";
 import type { DragEventHandler } from "react";
 

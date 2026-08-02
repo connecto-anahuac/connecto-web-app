@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
 import { expect, userEvent, within } from 'storybook/test'
 
-import TabBadge from './TabBadge'
+import TabBadge from '../TabBadge'
 import SelectBoxFill from './SelectBoxFill'
-import { Icons } from './icon'
+import { Icons } from '../icon'
 
 const meta = {
   title: 'Components/SelectBoxFill',
