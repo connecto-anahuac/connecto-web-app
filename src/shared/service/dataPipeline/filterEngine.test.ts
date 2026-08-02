@@ -21,7 +21,7 @@ type Student = {
 const students: Student[] = [
   { id: "1", name: "Alice Johnson", semester: 3, status: "active" },
   { id: "2", name: "Bob Smith", semester: 7, status: "leave" },
-  { id: "3", name: "Carla Stone", semester: 5, status: "active" },
+  { id: "3", name: "Cárla Stone", semester: 5, status: "active" },
 ];
 
 const config: DataViewConfig<Student> = {
@@ -62,6 +62,28 @@ describe("EngineContext search pipeline", () => {
     expect(runSearch(students, { globalTextQuery: "Alice Johnson", conditions: [] }, schema).entries[0]!.filteringScore).toBe(3);
     expect(runSearch(students, { globalTextQuery: "ali", conditions: [] }, schema).entries[0]!.filteringScore).toBe(2);
     expect(runSearch(students, { globalTextQuery: "lice", conditions: [] }, schema).entries[0]!.filteringScore).toBe(1);
+  });
+
+  it("matches text regardless of Spanish accents or case", () => {
+    expect(runSearch(students, { globalTextQuery: "CARLA", conditions: [] }, schema).matchCount).toBe(1);
+
+    const containsResult = runSearch(students, {
+      globalTextQuery: "",
+      conditions: [{ fieldId: "name", operator: "contains", value: "cArLa" }],
+    }, schema);
+    expect(containsResult.matchCount).toBe(1);
+
+    const eqResult = runSearch(students, {
+      globalTextQuery: "",
+      conditions: [{ fieldId: "name", operator: "eq", value: "cArLa stone" }],
+    }, schema);
+    expect(eqResult.matchCount).toBe(1);
+
+    const inResult = runSearch(students, {
+      globalTextQuery: "",
+      conditions: [{ fieldId: "status", operator: "in", value: ["ACTIVE"] }],
+    }, schema);
+    expect(inResult.matchCount).toBe(2);
   });
 
   it("keeps every row for grid presentation while list presentation excludes misses", () => {

@@ -15,6 +15,7 @@ import type {
   SearchResult,
 } from "./filterDefinition";
 import type { Operator } from "./operatorPolicy";
+import { removeSpanishAccents } from "../../lib/util";
 
 const SEARCH_SCORES: Record<SearchMatchKind, number> = {
   partial: 1,
@@ -36,6 +37,12 @@ function compare(left: CanonicalValue, right: CanonicalValue): number {
   return String(left).localeCompare(String(right));
 }
 
+function matchesCanonicalValue(left: CanonicalValue, right: CanonicalValue): boolean {
+  return typeof left === "string" && typeof right === "string"
+    ? normalizeMatchText(left) === normalizeMatchText(right)
+    : left === right;
+}
+
 function matchesCondition<TItem>(
   item: TItem,
   condition: FilterCondition,
@@ -48,11 +55,15 @@ function matchesCondition<TItem>(
 
   switch (condition.operator) {
     case "eq":
-      return !Array.isArray(expected) && actual.some((value) => value === expected);
+      return !Array.isArray(expected) && actual.some((value) => matchesCanonicalValue(value, expected));
     case "in":
-      return Array.isArray(expected) && actual.some((value) => expected.includes(value));
+      return Array.isArray(expected) && actual.some((value) =>
+        expected.some((expectedValue) => matchesCanonicalValue(value, expectedValue)),
+      );
     case "contains":
-      return !Array.isArray(expected) && actual.some((value) => String(value).toLocaleLowerCase().includes(String(expected).toLocaleLowerCase()));
+      return !Array.isArray(expected) && actual.some((value) =>
+        normalizeMatchText(String(value)).includes(normalizeMatchText(String(expected))),
+      );
     case "between": {
       if (!isRangeValue(expected) || actual.length !== 1) return false;
       const actualValue = actual[0]!;
@@ -70,7 +81,11 @@ function matchesCondition<TItem>(
 }
 
 function normalizeSearchText(value: string): string {
-  return value.trim().toLocaleLowerCase();
+  return normalizeMatchText(value.trim());
+}
+
+function normalizeMatchText(value: string): string {
+  return removeSpanishAccents(value).toLocaleLowerCase();
 }
 
 function getMatchKind(candidate: string, query: string): SearchMatchKind | null {
