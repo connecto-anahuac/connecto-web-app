@@ -1,6 +1,6 @@
-import ColumnTitle from "@/components/diagram/ColumnTitle";
-import RowTitle from "@/components/diagram/RowTitle";
-import { FilterResult } from "@/features/search/shared/filterDefinition";
+import ColumnTitle from "@/shared/component/composite/diagram/ColumnTitle";
+import RowTitle from "@/shared/component/composite/diagram/RowTitle";
+import { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
 import type { StudentClassItem } from "@/features/student/types";
 import { cn } from "@/shared/lib/util";

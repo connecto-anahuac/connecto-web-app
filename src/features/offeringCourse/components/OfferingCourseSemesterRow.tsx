@@ -1,10 +1,10 @@
 import type { ComponentProps } from "react";
 
-import Arrow from "@/components/icon/Arrow";
-import PersonIcon from "@/components/icon/PersonIcon";
+import Arrow from "@/shared/component/primitive/icon/Arrow";
+import PersonIcon from "@/shared/component/primitive/icon/PersonIcon";
 import { cn } from "@/shared/lib/util";
-import TriangleArrowIcon from "@/components/icon/TriangleArrowIcon";
-import SemesterBadge, { SemesterValue } from "@/components/SemesterBadge";
+import TriangleArrowIcon from "@/shared/component/primitive/icon/TriangleArrowIcon";
+import SemesterBadge, { SemesterValue } from "@/shared/component/primitive/SemesterBadge";
 
 type Props = ComponentProps<"div"> & {
   semesterLabel: string;

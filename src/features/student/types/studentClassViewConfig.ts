@@ -1,4 +1,4 @@
-import type { DataViewConfig } from "@/components/table/dataView.types";
+import type { DataViewConfig } from "@/shared/component/composite/table/dataView.types";
 import type { StudentGradeItem } from "./studentGrade.type";
 import { generateAccentCombinations } from "@/shared/lib/util";
 

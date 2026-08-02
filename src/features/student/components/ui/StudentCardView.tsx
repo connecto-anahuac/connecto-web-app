@@ -1,9 +1,9 @@
-import StudyPlan from "@/components/StudyPlan";
+import StudyPlan from "@/shared/component/primitive/StudyPlan";
 import { cn } from "@/shared/lib/util";
 import Memo from "./Memo";
-import SchoolEmailIcon from "@/components/icon/contact/SchoolEmailIcon";
-import EmailIcon from "@/components/icon/contact/EmailIcon";
-import WhatsAppIcon from "@/components/icon/contact/WhatsAppIcon";
+import SchoolEmailIcon from "@/shared/component/primitive/icon/contact/SchoolEmailIcon";
+import EmailIcon from "@/shared/component/primitive/icon/contact/EmailIcon";
+import WhatsAppIcon from "@/shared/component/primitive/icon/contact/WhatsAppIcon";
 import Image from "next/image";
 import type { Contact } from "../../types";
 

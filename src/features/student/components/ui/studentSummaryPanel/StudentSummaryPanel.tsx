@@ -1,13 +1,13 @@
-import Avator from "@/components/Avator";
-import EmailIcon from "@/components/icon/contact/EmailIcon";
-import SchoolEmailIcon from "@/components/icon/contact/SchoolEmailIcon";
-import WhatsAppIcon from "@/components/icon/contact/WhatsAppIcon";
-import StudyPlan from "@/components/StudyPlan";
+import Avator from "@/shared/component/primitive/Avator";
+import EmailIcon from "@/shared/component/primitive/icon/contact/EmailIcon";
+import SchoolEmailIcon from "@/shared/component/primitive/icon/contact/SchoolEmailIcon";
+import WhatsAppIcon from "@/shared/component/primitive/icon/contact/WhatsAppIcon";
+import StudyPlan from "@/shared/component/primitive/StudyPlan";
 import Memo from "@/features/student/components/ui/Memo";
 import { cn } from "@/shared/lib/util";
 import type { StudentDetail } from "./studentSummary.type";
-import Alert from "@/components/Alert";
-import SemesterBadge from "@/components/SemesterBadge";
+import Alert from "@/shared/component/primitive/Alert";
+import SemesterBadge from "@/shared/component/primitive/SemesterBadge";
 
 type Props = {
   className?: string;

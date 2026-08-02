@@ -1,4 +1,4 @@
-import { IconName } from "@/components/icon";
+import { IconName } from "@/shared/component/primitive/icon";
 
 export type NavItem = {
   label: string;

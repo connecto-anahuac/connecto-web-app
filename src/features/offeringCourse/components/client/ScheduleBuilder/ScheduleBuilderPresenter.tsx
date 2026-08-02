@@ -3,12 +3,12 @@
 import Diagram from "@/features/offeringCourse/components/Diagram";
 import OfferingClassCardView from "@/features/offeringCourse/components/OfferingClassCardView";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import SearchBar from "@/features/search/components/SearchTool";
-import SearchTool from "@/features/search/components/search-tool/SearchTool";
+import SearchBar from "@/shared/component/composite/searchtool/SearchTool";
+import SearchTool from "@/shared/component/composite/searchtool/search-tool/SearchTool";
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/components/table/dataView.types";
+} from "@/shared/component/composite/table/dataView.types";
 import { useState } from "react";
 import OfferingCourseDetail from "../../OfferingCourseDetail";
 

@@ -3,18 +3,18 @@
 import {
   useDataSearchActions,
   useDataSearchQuery,
-} from "@/features/search/components/Provider/useFilterStore";
+} from "@/shared/store/filter/useFilterStore";
 import type {
   FilterCondition,
   GetItemId,
-} from "@/features/search/shared/filterDefinition";
-import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
+} from "@/shared/service/dataPipeline/filterDefinition";
+import type { FilterPreset } from "@/shared/service/dataPipeline/filterPreset.type";
 import type { StudentClassItem } from "@/features/student/types";
 import {
   STATUS_PRESETS,
   STUDENT_GRADE_VIEW_CONFIG,
 } from "@/features/student/types/studentClassViewConfig";
-import { useTable } from "@/features/table/useTable";
+import { useTable } from "@/shared/component/composite/table/hooks/useTable";
 
 const getStudentGradeRowId: GetItemId<StudentClassItem> = (row) => row.id;
 

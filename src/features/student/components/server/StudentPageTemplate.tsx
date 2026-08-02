@@ -1,6 +1,6 @@
-import ContentTitleSection from "@/components/ContentTitleSection";
+import ContentTitleSection from "@/shared/component/primitive/ContentTitleSection";
 import { StudentDetailContainer } from "../client/StudentDetail/StudentDetailContainer";
-import DataSection from "@/components/datasection/DataSection";
+import DataSection from "@/shared/component/composite/datasection/DataSection";
 
 type Props = {
   studentId: string;

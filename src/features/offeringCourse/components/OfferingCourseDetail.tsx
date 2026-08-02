@@ -1,6 +1,6 @@
-import CourseKey from "@/components/CourseKey";
-import CourseValues from "@/components/CourseValues";
-import PersonIcon from "@/components/icon/PersonIcon";
+import CourseKey from "@/shared/component/primitive/CourseKey";
+import CourseValues from "@/shared/component/primitive/CourseValues";
+import PersonIcon from "@/shared/component/primitive/icon/PersonIcon";
 import { OfferingCourse } from "../types/offering-course";
 import { getTotalEligibleStudents } from "../lib/get-total-eligible-students";
 import { cn } from "@/shared/lib/util";

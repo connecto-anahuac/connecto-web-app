@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import NavigationItem from "@/components/NavigationItem";
+import NavigationItem from "@/shared/component/primitive/NavigationItem";
 import type { NavItem } from "@/features/home/types";
 import { SidebarToggleIcon, SidebarUserIcon } from "@/features/home/components/server/icons";
 

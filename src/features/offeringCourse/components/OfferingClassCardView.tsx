@@ -1,7 +1,7 @@
 "use client";
 
-import CourseKey from "@/components/CourseKey";
-import PersonIcon from "@/components/icon/PersonIcon";
+import CourseKey from "@/shared/component/primitive/CourseKey";
+import PersonIcon from "@/shared/component/primitive/icon/PersonIcon";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import { getTotalEligibleStudents } from "@/features/offeringCourse/lib/get-total-eligible-students";
 import { cn } from "@/shared/lib/util";

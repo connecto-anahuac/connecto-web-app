@@ -1,5 +1,5 @@
-import ColumnTitle from "@/components/diagram/ColumnTitle";
-import RowTitle from "@/components/diagram/RowTitle";
+import ColumnTitle from "@/shared/component/composite/diagram/ColumnTitle";
+import RowTitle from "@/shared/component/composite/diagram/RowTitle";
 
 type Props = {
 	maxSemester: number;

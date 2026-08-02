@@ -1,0 +1,215 @@
+@import "tailwindcss";
+@import "./course_colors.css";
+@import "./color_scheme.css";
+@import "./palette.css";
+
+:root {
+  /* --background: #ffffff;
+  --foreground: #171717; */
+  --connecto-ink: #202020;
+  /* --connecto-sidebar: #231f20;
+  --connecto-surface: #f9f9f9; */
+  --connecto-muted-panel: #e3e3e3;
+  /* --connecto-divider: #d9d9d9;
+  --connecto-muted: #646464;
+  --connecto-muted-strong: #494949;
+  --connecto-success: #7edb87;
+  --connecto-select-fill: #f3f3f3;
+  --connecto-select-ink: #494949; */
+}
+
+@theme inline {
+  /* --color-foreground: var(--foreground); */
+  /* --color-background: var(--background);
+  --color-connecto-ink: var(--connecto-ink);
+  --color-connecto-sidebar: var(--connecto-sidebar);
+  --color-connecto-surface: var(--connecto-surface);
+  --color-connecto-muted-panel: var(--connecto-muted-panel);
+  --color-connecto-divider: var(--connecto-divider);
+  --color-connecto-muted: var(--connecto-muted);
+  --color-connecto-muted-strong: var(--connecto-muted-strong);
+  --color-connecto-success: var(--connecto-success);
+  --color-connecto-select-fill: var(--connecto-select-fill);
+  --color-connecto-select-ink: var(--connecto-select-ink); */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  /*  */
+
+  /* --color-border:#D5D5D5; */
+  --color-divider: #d5d5d5;
+  --color-header: #fafafa;
+  --color-header-foreground: #7f7f7f;
+  --color-header-container: #e3e3e3;
+  --color-header-on-container-variant: #a0a0a0;
+  --color-header-on-container: #646464;
+  --color-foreground: #2b2b2b;
+  --color-summer: #bd4b4b;
+  --color-ene-mayo: #bd954b;
+  --color-ago-dec: #4b88bd;
+
+  --spacing-body-frame: 0.625rem; /* 10px */
+  --spacing-header-height: 3rem; /* 48px */
+  /*  */
+  --spacing-header-logo: 1.25rem; /* 20px */
+  --spacing-navitem-icon: 1.125rem; /* 18px */
+  --spacing-body-x: 0.75rem; /* 12px */ /* header,sidebar */
+  --spacing-nav-left: 0.25rem; /* 4px */ /* header-logo,sidebar-navigationitem */
+  --spacing-header-logo-left: calc(
+    var(--spacing-nav-left) -
+      (var(--spacing-header-logo) - var(--spacing-navitem-icon)) / 2
+  ); /* 5px */ /* center of navitem.icon == center of header.logo */
+}
+
+@utility home-shell-max {
+  max-width: 1440px;
+}
+
+@utility home-sidebar-w {
+  width: 204px;
+}
+
+@utility home-avatar-size {
+  width: 161px;
+  height: 161px;
+}
+
+@utility rounded-home-avatar {
+  border-radius: 32px;
+}
+
+@utility home-progress-size {
+  width: 123px;
+  height: 123px;
+}
+
+@utility border-home-progress {
+  border-width: 11px;
+}
+
+@utility home-search-w {
+  width: 571px;
+}
+
+@utility rounded-home-panel {
+  border-radius: 5px;
+}
+
+@utility home-table-min {
+  min-width: 1480px;
+}
+
+@utility home-table-cell {
+  display: flex;
+  height: 44px;
+  align-items: center;
+  border: 1px solid var(--color-connecto-divider);
+  padding-inline: 10px;
+  font-size: 15px;
+  color: var(--color-connecto-ink);
+}
+
+@utility gap-1px {
+  gap: 1px;
+}
+
+@utility gap-3px {
+  gap: 3px;
+}
+
+@utility px-7px {
+  padding-inline: 7px;
+}
+
+@utility pl-4px {
+  padding-left: 4px;
+}
+
+@utility pr-7px {
+  padding-right: 7px;
+}
+
+@utility px-3px {
+  padding-inline: 3px;
+}
+
+@utility py-5px {
+  padding-block: 5px;
+}
+
+@utility rounded-select-fill-left {
+  border-radius: 4px 2px 2px 4px;
+}
+
+@utility rounded-select-fill-right {
+  border-radius: 2px 4px 4px 2px;
+}
+
+@utility h-17px {
+  height: 17px;
+}
+
+@utility rounded-select-box-unfill {
+  border-top-left-radius: 4px;
+  border-bottom-left-radius: 4px;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+}
+
+@utility size-search-filter-dismiss {
+  width: 22px;
+  height: 22px;
+}
+
+@layer utilities {
+  /* スクロールバー非表示のクラス */
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-none {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+/* 検索窓などのクリアボタンを非表示にする */
+input[type="search"]::-webkit-search-decoration,
+input[type="search"]::-webkit-search-cancel-button,
+input[type="search"]::-webkit-search-results-button,
+input[type="search"]::-webkit-search-results-decoration {
+  -webkit-appearance: none;
+}
+
+/* Edge / IE のパス表示やクリアボタンを消す場合 */
+input::-ms-clear,
+input::-ms-reveal {
+  visibility: hidden;
+  pointer-events: none;
+  display: none;
+}
+
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+body.cursor-col-resize-important,
+body.cursor-col-resize-important * {
+  cursor: col-resize !important;
+}

@@ -1,7 +1,7 @@
-import DbInicializer from "@/components/inicializer/DbInicializer";
-import Header from "@/features/menu/components/header/Header";
-import { RootNavigationSidebar } from "@/features/menu/components/sidebar";
-import { DataSearchRootProvider } from "@/features/search/components/Provider/FilterProvider";
+import DbInicializer from "@/shared/component/inicializer/DbInicializer";
+import Header from "@/shared/component/layout/menu/header/Header";
+import { RootNavigationSidebar } from "@/shared/component/layout/menu/sidebar";
+import { DataSearchRootProvider } from "@/shared/store/filter/FilterProvider";
 // import Header from "@/features/header/components/Header";
 
 export default function NeutralLayout({

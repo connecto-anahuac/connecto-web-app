@@ -1,14 +1,14 @@
 import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
-import CourseKey from "@/components/CourseKey";
-import CourseValues from "@/components/CourseValues";
-import SchoolHatIcon from "@/components/icon/SchoolHatIcon";
-import SemesterBadge, { SemesterValue } from "@/components/SemesterBadge";
+import CourseKey from "@/shared/component/primitive/CourseKey";
+import CourseValues from "@/shared/component/primitive/CourseValues";
+import SchoolHatIcon from "@/shared/component/primitive/icon/SchoolHatIcon";
+import SemesterBadge, { SemesterValue } from "@/shared/component/primitive/SemesterBadge";
 import { splitPeriod } from "@/shared/lib/tool";
 import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
 import { Period } from "@/shared/types/Period";
 import { GradeStatus } from "../../types/studentGrade.type";
-import LockIcon from "@/components/icon/LockIcon";
+import LockIcon from "@/shared/component/primitive/icon/LockIcon";
 
 type Props = ComponentProps<"div"> & {
   courseCode: string;

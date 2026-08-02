@@ -4,7 +4,7 @@ import type { OfferingCourse } from "@/features/offeringCourse/types/offering-co
 import {
   OFFERING_COURSE_VIEW_CONFIG,
 } from "@/features/offeringCourse/types/offering-course-filter-fields";
-import { useDataSearch } from "@/features/search/shared/useDataSearch";
+import { useDataSearch } from "@/shared/component/composite/searchtool/useDataSearch";
 
 export function useScheduleBuilderFilters(offeringCourses: OfferingCourse[]) {
   const {

@@ -1,5 +1,5 @@
 import { ScheduleBuilderContainer } from "../client/ScheduleBuilder/ScheduleBuilderContainer";
-import { DataSearchProvider } from "@/features/search/components/Provider/FilterProvider";
+import { DataSearchProvider } from "@/shared/store/filter/FilterProvider";
 
 type Props = {
   career: string;

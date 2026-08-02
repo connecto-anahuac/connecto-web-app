@@ -1,6 +1,6 @@
 "use client";
 
-import { DataSearchScopeProvider } from "@/features/search/components/Provider/FilterProvider";
+import { DataSearchScopeProvider } from "@/shared/store/filter/FilterProvider";
 import { StudentDetailPresenter } from "./StudentDetailPresenter";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
 import { useStudentClassTable } from "./useStudentClassTable";

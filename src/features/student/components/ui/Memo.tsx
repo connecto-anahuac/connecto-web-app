@@ -1,6 +1,6 @@
-import EditIcon from "@/components/icon/EditIcon";
-import UnvisibleIcon from "@/components/icon/UnvisibleIcon";
-import ZoomInIcon from "@/components/icon/ZoomInIcon";
+import EditIcon from "@/shared/component/primitive/icon/EditIcon";
+import UnvisibleIcon from "@/shared/component/primitive/icon/UnvisibleIcon";
+import ZoomInIcon from "@/shared/component/primitive/icon/ZoomInIcon";
 import { cn } from "@/shared/lib/util";
 
 type Props = {

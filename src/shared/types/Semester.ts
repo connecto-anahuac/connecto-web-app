@@ -1,4 +1,4 @@
-import { SemesterValue } from "@/components/SemesterBadge";
+import { SemesterValue } from "@/shared/component/primitive/SemesterBadge";
 
 export class Semester {
   private constructor(private readonly code: SemesterCode) {}

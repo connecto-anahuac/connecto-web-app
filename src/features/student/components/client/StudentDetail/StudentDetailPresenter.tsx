@@ -1,16 +1,16 @@
 import type { StudentClassItem } from "@/features/student/types";
 import type { StudentDetail } from "../../ui/studentSummaryPanel/studentSummary.type";
-import ContentTitleSection from "@/components/ContentTitleSection";
-import DataSection from "@/components/datasection/DataSection";
+import ContentTitleSection from "@/shared/component/primitive/ContentTitleSection";
+import DataSection from "@/shared/component/composite/datasection/DataSection";
 import { StudentDiagram } from "./StudentDiagram";
-import type { FilterPreset } from "@/features/search/shared/filterPreset.type";
+import type { FilterPreset } from "@/shared/service/dataPipeline/filterPreset.type";
 import type { Table } from "@tanstack/react-table";
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/components/table/dataView.types";
-import { DataTable } from "@/components/table/DataTable";
-import { FilterResult } from "@/features/search/shared/filterDefinition";
+} from "@/shared/component/composite/table/dataView.types";
+import { DataTable } from "@/shared/component/composite/table/DataTable";
+import { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 
 type Props = {
   loading: boolean;

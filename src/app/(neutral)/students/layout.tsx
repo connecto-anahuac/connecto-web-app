@@ -1,5 +1,5 @@
-import { DataSearchProvider } from "@/features/search/components/Provider/FilterProvider";
-import { StudentsPageTemplate } from "@/features/students/components/server/StudentsPageTemplate";
+import { DataSearchProvider } from "@/shared/store/filter/FilterProvider";
+import { StudentsPageTemplate } from "@/features/student/components/server/StudentsPageTemplate";
 
 export default function StudentsLayout({
   children,

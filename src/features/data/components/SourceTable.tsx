@@ -1,4 +1,4 @@
-import Avator from "@/components/Avator";
+import Avator from "@/shared/component/primitive/Avator";
 import { cn } from "@/shared/lib/util";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
