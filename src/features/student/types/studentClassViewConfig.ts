@@ -34,7 +34,8 @@ export const STUDENT_GRADE_VIEW_CONFIG: DataViewConfig<StudentGradeItem> = {
       fieldId: "keyCode",
       label: "Clave",
       icon: "hashmark",
-      valueType: "text",
+      valueType: "enum",
+      dynamicOption: true,
       accessor: (item) => item.keyCode + item.keyNumber,
       format: (item) => item.keyCode + item.keyNumber || "--",
       searchTexts: (item) => [
