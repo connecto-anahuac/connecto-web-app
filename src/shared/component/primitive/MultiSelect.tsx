@@ -6,7 +6,7 @@ type MultiSelectProps = Omit<
   "children"
 > & {
   label: string;
-  checked: boolean;
+  checked?: boolean;
   isHovered?: boolean;
   checkboxClassName?: string;
 };
@@ -27,7 +27,7 @@ function CheckMark() {
 
 export default function MultiSelect({
   label,
-  checked ,
+  checked = false,
   isHovered = false,
   className,
   checkboxClassName,

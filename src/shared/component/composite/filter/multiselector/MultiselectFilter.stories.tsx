@@ -25,7 +25,7 @@ const meta = {
       { label: "Derecho", value: "law", searchTexts: [] },
       { label: "Diseno", value: "design", searchTexts: [] },
     ],
-    value: [],
+    values: [],
     onClear: () => undefined,
     onOperatorChange: () => undefined,
     onValueChange: () => undefined,

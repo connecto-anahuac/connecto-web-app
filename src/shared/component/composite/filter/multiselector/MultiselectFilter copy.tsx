@@ -2,6 +2,7 @@
 
 import { useMemo, useState, type ComponentPropsWithRef } from "react";
 import CloseButton from "@/shared/component/primitive/button/CloseButton";
+import SelectMenu from "@/shared/component/primitive/selectMenu";
 import type {
   DataFieldConfig,
   DataFieldOption,
@@ -11,14 +12,12 @@ import type { Operator } from "../../../../service/dataPipeline/operatorPolicy";
 import { FilterCard } from "../FilterCard";
 import { FilterFieldHeader } from "../FilterFieldHeader";
 import { FilterSearchInput } from "../filterinput/FilterSearchInput";
-import SelectMenuNew from "@/shared/component/primitive/selectMenuNew";
-import MultiSelect from "@/shared/component/primitive/MultiSelect";
 
 type Props<TItem> = ComponentPropsWithRef<"section"> & {
   column: DataFieldConfig<TItem>;
   operator: Operator;
   options: readonly DataFieldOption[];
-  values: readonly string[];
+  value: readonly string[];
   onClear: () => void;
   onOperatorChange: (operator: Operator) => void;
   onValueChange: (value: string[]) => void;
@@ -28,7 +27,7 @@ export function MultiSelectFilter<TItem>({
   column,
   operator,
   options,
-  values: value,
+  value,
   onClear,
   onOperatorChange,
   onValueChange,
@@ -37,10 +36,11 @@ export function MultiSelectFilter<TItem>({
   const [query, setQuery] = useState("");
   const [hoveredIndex, setHoveredIndex] = useState(0);
   const filteredOptions = useMemo(() => {
-    return runFilterDataFieldOptions(options, query).map((option) => ({
-      label: option.label,
-      value: option.value,
-    }));
+    return runFilterDataFieldOptions(options, query)
+      .map((option) => ({
+        label: option.label,
+        value: option.value,
+      }));
   }, [options, query]);
 
   const toggleValue = (nextValue: string) => {
@@ -74,20 +74,16 @@ export function MultiSelectFilter<TItem>({
       />
 
       <div className="w-full max-h-96 h-fit overflow-y-auto">
-        <SelectMenuNew.Root
+        <SelectMenu
+          isMulti
           isOpen
           hoveredIndex={hoveredIndex}
-          selectedValues={value}
+          selectedValues={[...value]}
           onHoverItem={setHoveredIndex}
           onSelectItem={toggleValue}
           className="p-0 border-0 bg-transparent"
-        >
-          {filteredOptions.map((option) => (
-            <SelectMenuNew.Option key={option.value} value={option.value}>
-              <MultiSelect label={option.label} />
-            </SelectMenuNew.Option>
-          ))}
-        </SelectMenuNew.Root>
+          options={filteredOptions}
+        />
       </div>
     </FilterCard>
   );

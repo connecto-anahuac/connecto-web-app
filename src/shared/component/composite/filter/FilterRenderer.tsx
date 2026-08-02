@@ -108,7 +108,7 @@ export function FilterRenderer<TItem>({
       onClear={clear}
       onOperatorChange={setOperator}
       onValueChange={(value) => setValue(value, "in")}
-      value={Array.isArray(condition?.value) ? condition.value.map(String) : []}
+      values={Array.isArray(condition?.value) ? condition.value.map(String) : []}
       {...props}
     />
   );
