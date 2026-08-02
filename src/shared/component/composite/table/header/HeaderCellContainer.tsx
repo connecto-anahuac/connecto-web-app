@@ -3,6 +3,7 @@
 import { HeaderCellPresenter } from "./HeaderCellPresenter";
 import type { HeaderCellProps } from "./HeaderCell.types";
 import { useHeaderCell } from "./useHeaderCell";
+import { Column } from "@tanstack/react-table";
 
 export default function HeaderCellContainer<TItem>(
   props: HeaderCellProps<TItem>,
@@ -23,8 +24,7 @@ export default function HeaderCellContainer<TItem>(
   return (
     //TODO error
     <HeaderCellPresenter
-      {...props}
-
+       {...props}
       cellRef={cellRef}
       menuButtonRef={menuButtonRef}
       menuModalRef={menuModalRef}
@@ -35,6 +35,7 @@ export default function HeaderCellContainer<TItem>(
       menuItems={menuItems}
       isCompact={isCompact}
       measureHeaderTitle={measureHeaderTitle}
+     
     />
   );
 }

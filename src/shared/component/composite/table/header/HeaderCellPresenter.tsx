@@ -59,11 +59,19 @@ function ColumnToolMenu({
 
 export function HeaderCellPresenter<TItem>({
   //TODO compact, width中身調整。 label長さ、icon
+  //TODO イラン門整理
+  children: _children,
   className,
   actions,
   showDefaultActions = true,
+  label: _label,
   column,
   config,
+  menuOpen: _menuOpen,
+  filterOpen: _filterOpen,
+  onFilterClose: _onFilterClose,
+  onFilterToggle: _onFilterToggle,
+  onMenuOpenChange: _onMenuOpenChange,
   isCompact,
   onHide,
   onPin,
@@ -82,7 +90,7 @@ export function HeaderCellPresenter<TItem>({
   filterModalRef,
   cellRef,
   measureHeaderTitle,
-  ...props
+  ...divProps
 }: HeaderCellPresenterProps<TItem>) {
   const IconComponent = icon ? Icons[icon] : undefined;
   return (
@@ -99,7 +107,7 @@ export function HeaderCellPresenter<TItem>({
         isCompact && menuModalRef.current?.open(cellRef.current ?? undefined)
       }
       style={{ minWidth: contentMinWidth }}
-      {...props}
+      {...divProps}
     >
       <div className="flex gap-[3px] items-center flex-1 min-w-0">
         {IconComponent && <IconComponent className="size-4.5" />}
