@@ -3,7 +3,7 @@ import type {
   MouseEvent as ReactMouseEvent,
   TouchEvent as ReactTouchEvent,
 } from "react";
-import type { DataFieldConfig, DataViewConfig } from "../dataView.types";
+import type { DataFieldConfig, DataViewConfig } from "../../../../types/dataView.types";
 import { FilterCondition } from "@/shared/service/dataPipeline/filterDefinition";
 // import type { FilterCondition } from "@/features/table/type";
 

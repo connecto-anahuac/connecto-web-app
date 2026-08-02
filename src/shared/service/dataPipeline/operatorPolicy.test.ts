@@ -4,7 +4,7 @@ import {
   getOperatorsForValueType,
   OPERATORS_BY_VALUE_TYPE,
 } from "./operatorPolicy";
-import { dataFieldValueTypes } from "@/shared/component/composite/table/dataView.types";
+import { dataFieldValueTypes } from "@/shared/types/dataView.types";
 
 describe("operator-policy", () => {
   it("covers every valueType", () => {

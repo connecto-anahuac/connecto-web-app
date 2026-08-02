@@ -5,7 +5,7 @@ import { Icons } from "../icon";
 import type {
   DataFieldConfig,
   DataFieldOption,
-} from "../../composite/table/dataView.types";
+} from "../../../types/dataView.types";
 import { cn } from "@/shared/lib/util";
 import { FilterRenderer } from "@/shared/component/composite/filter/FilterRenderer";
 import { useDataSearchQuery } from "@/shared/store/filter/useFilterStore";

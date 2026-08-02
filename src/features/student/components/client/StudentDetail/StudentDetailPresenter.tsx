@@ -8,7 +8,7 @@ import type { Table } from "@tanstack/react-table";
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import { DataTable } from "@/shared/component/composite/table/DataTable";
 import { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 

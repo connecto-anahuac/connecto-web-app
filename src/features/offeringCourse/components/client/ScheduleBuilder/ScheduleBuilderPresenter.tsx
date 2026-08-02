@@ -8,7 +8,7 @@ import SearchTool from "@/shared/component/composite/searchtool/search-tool/Sear
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import { useState } from "react";
 import OfferingCourseDetail from "../../OfferingCourseDetail";
 

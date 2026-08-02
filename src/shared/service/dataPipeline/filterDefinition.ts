@@ -1,6 +1,6 @@
 import type { Operator } from "./operatorPolicy";
 
-export type { DataFieldValueType as ValueType } from "@/shared/component/composite/table/dataView.types";
+export type { DataFieldValueType as ValueType } from "@/shared/types/dataView.types";
 
 export type FilterPrimitive = string | number | boolean;
 

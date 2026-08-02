@@ -1,6 +1,6 @@
 import { Icons } from "@/shared/component/primitive/icon";
 import SelectBoxUnfill from "@/shared/component/primitive/select-box/SelectBoxUnfill";
-import type { DataFieldConfig } from "@/shared/component/composite/table/dataView.types";
+import type { DataFieldConfig } from "@/shared/types/dataView.types";
 import { cn } from "@/shared/lib/util";
 import {
   getOperatorLabel,

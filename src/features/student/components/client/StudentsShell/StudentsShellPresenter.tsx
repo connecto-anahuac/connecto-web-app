@@ -6,7 +6,7 @@ import SearchBar from "@/shared/component/composite/searchtool/SearchTool";
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import FilterPresetBadge from "@/shared/component/primitive/FilterPresetBadge";
 import { FilterIcon } from "@/features/home/components/server/icons";
 import SearchTool from "@/shared/component/composite/searchtool/search-tool/SearchTool";

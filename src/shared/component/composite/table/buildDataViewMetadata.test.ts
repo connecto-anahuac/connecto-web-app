@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { DataViewConfig } from "./dataView.types";
+import type { DataViewConfig } from "../../../types/dataView.types";
 import {
   buildDataViewMetadata,
   runFilterDataFieldOptions,

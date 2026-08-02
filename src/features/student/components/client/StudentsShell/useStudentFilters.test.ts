@@ -4,7 +4,7 @@ import {
   getStudentPresetNextConditions,
   isStudentPresetSelected,
 } from "./studentPresetSync";
-import { STUDENT_FILTER_KEYS, STUDENT_STATUS_OPTIONS } from "@/features/student/types/studentFilterConfigs";
+import { STUDENT_FILTER_KEYS, STUDENT_STATUS_OPTIONS } from "@/features/student/types/deprecated/studentFilterConfigs";
 
 describe("useStudentFilters preset sync helpers", () => {
   it("marks career preset selected when TIND is included in the career filter", () => {

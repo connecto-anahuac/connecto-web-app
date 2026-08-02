@@ -1,4 +1,4 @@
-import type { DataViewConfig } from "@/shared/component/composite/table/dataView.types";
+import type { DataViewConfig } from "@/shared/types/dataView.types";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 
 export const OFFERING_COURSE_FILTER_KEYS = {

@@ -6,7 +6,7 @@ import type {
   DataViewConfig,
   DataViewMetadata,
   DataFieldValueType,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import type {
   CanonicalValue,
   CompiledSearchField,

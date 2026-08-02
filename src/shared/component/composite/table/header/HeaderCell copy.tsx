@@ -2,7 +2,7 @@ import type { ComponentProps, ComponentPropsWithRef, ReactNode } from "react";
 import { cn } from "@/shared/lib/util";
 import { IconName, Icons } from "../../../primitive/icon";
 import IconButton from "../../../primitive/button/IconButton";
-import { DataFieldConfig, DataViewConfig } from "../dataView.types";
+import { DataFieldConfig, DataViewConfig } from "../../../../types/dataView.types";
 import { Column } from "@tanstack/react-table";
 import ButtonModal from "../../../primitive/ButtonModal";
 import { TableColumnFilterContainer } from "../DataTable/TableColumnFilterContainer";

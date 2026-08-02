@@ -4,7 +4,7 @@ import { useCallback, type ComponentPropsWithRef } from "react";
 import type {
   DataFieldConfig,
   DataFieldOption,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import {
   useDataSearchActions,
   useDataSearchQuery,

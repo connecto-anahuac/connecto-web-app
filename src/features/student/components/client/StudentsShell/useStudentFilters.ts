@@ -5,7 +5,7 @@ import type { StudentListItem } from "../../../types/student-list-item";
 import {
   STUDENT_FILTER_KEYS,
   STUDENT_VIEW_CONFIG,
-} from "@/features/student/types/studentFilterConfigs";
+} from "@/features/student/types/deprecated/studentFilterConfigs";
 import { useDataSearch } from "@/shared/component/composite/searchtool/useDataSearch";
 import type { FilterCondition } from "@/shared/service/dataPipeline/filterDefinition";
 import {

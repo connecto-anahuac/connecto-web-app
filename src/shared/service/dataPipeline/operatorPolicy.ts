@@ -1,4 +1,4 @@
-import type { DataFieldValueType } from "@/shared/component/composite/table/dataView.types";
+import type { DataFieldValueType } from "@/shared/types/dataView.types";
 
 export const operators = [
   "eq",

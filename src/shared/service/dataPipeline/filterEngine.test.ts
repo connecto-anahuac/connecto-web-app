@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { DataViewConfig } from "@/shared/component/composite/table/dataView.types";
+import type { DataViewConfig } from "@/shared/types/dataView.types";
 import {
   runFilter,
   runSearch,

@@ -1,4 +1,4 @@
-import type { DataViewConfig } from "@/shared/component/composite/table/dataView.types";
+import type { DataViewConfig } from "@/shared/types/dataView.types";
 import type { StudentListItem } from "@/features/student/types/student-list-item";
 
 export const STUDENT_FILTER_KEYS = {

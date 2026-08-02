@@ -14,7 +14,7 @@ import {
   type VisibilityState,
 } from "@tanstack/react-table";
 import { useEffect, useMemo, useState } from "react";
-import type { DataViewConfig } from "@/shared/component/composite/table/dataView.types";
+import type { DataViewConfig } from "@/shared/types/dataView.types";
 import { buildDataViewMetadata } from "@/shared/component/composite/table/buildDataViewMetadata";
 import {
   defineFilterCondition,

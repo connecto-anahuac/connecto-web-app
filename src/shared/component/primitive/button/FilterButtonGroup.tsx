@@ -4,7 +4,7 @@ import { useState, type ComponentProps } from "react";
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "../../composite/table/dataView.types";
+} from "../../../types/dataView.types";
 import { cn } from "@/shared/lib/util";
 import Button from "./Button";
 import FilterButton from "./FilterButton";

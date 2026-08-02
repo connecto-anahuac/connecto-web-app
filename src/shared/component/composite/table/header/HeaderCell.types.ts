@@ -10,7 +10,7 @@ import type {
 } from "react";
 import type { IconName } from "@/shared/component/primitive/icon";
 import type { ModalHandle } from "@/shared/component/composite/modal/Modal";
-import type { DataFieldConfig } from "../dataView.types";
+import type { DataFieldConfig } from "../../../../types/dataView.types";
 
 export type HeaderCellActionProps<TItem> = {
   column: Column<TItem>;

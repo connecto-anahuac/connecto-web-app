@@ -1,7 +1,7 @@
 "use client";
 
 import type { Column } from "@tanstack/react-table";
-import type { DataFieldConfig } from "../dataView.types";
+import type { DataFieldConfig } from "../../../../types/dataView.types";
 import { FilterCondition } from "@/shared/service/dataPipeline/filterDefinition";
 // import type { FilterCondition } from "@/features/table/type";
 

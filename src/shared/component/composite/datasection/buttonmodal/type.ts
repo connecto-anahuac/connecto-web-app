@@ -1,5 +1,5 @@
 import type { Table } from "@tanstack/react-table";
-import type { DataViewConfig } from "@/shared/component/composite/table/dataView.types";
+import type { DataViewConfig } from "@/shared/types/dataView.types";
 
 export type SearchTool = "sort" | "filter" | "pivot" | "hide";
 

@@ -2,7 +2,7 @@ import type { ComponentProps } from "react";
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import SearchToolToggleButton from "./SearchToolButton";
 import SearchToolModal from "./SearchToolModal";
 

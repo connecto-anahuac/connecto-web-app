@@ -1,7 +1,7 @@
 import { Column } from "@tanstack/react-table";
 import { ComponentPropsWithRef } from "react";
 import { IconName, Icons } from "../../primitive/icon";
-import { DataViewConfig } from "../table/dataView.types";
+import { DataViewConfig } from "../../../types/dataView.types";
 
 type ColumnToolMenuProps<TItem> = ComponentPropsWithRef<"div">&{
   

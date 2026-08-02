@@ -1,5 +1,5 @@
 import type { FilterCondition } from "../../../../../shared/service/dataPipeline/filterDefinition";
-import { STUDENT_FILTER_KEYS } from "../../../types/studentFilterConfigs";
+import { STUDENT_FILTER_KEYS } from "../../../types/deprecated/studentFilterConfigs";
 
 const ALERTA_RANGE: [number, number] = [1, 2];
 const ADVERTENCIA_THRESHOLD = 2;

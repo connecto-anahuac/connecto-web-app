@@ -3,7 +3,7 @@ import TabBadge from "@/shared/component/primitive/TabBadge";
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import {
   FilterIcon,
   SortIcon,

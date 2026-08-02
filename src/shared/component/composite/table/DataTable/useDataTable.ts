@@ -6,7 +6,7 @@ import {
   type MouseEvent as ReactMouseEvent,
   type TouchEvent as ReactTouchEvent,
 } from "react";
-import type { DataFieldConfig, DataViewConfig } from "../dataView.types";
+import type { DataFieldConfig, DataViewConfig } from "../../../../types/dataView.types";
 import { getSortIcon } from "@/shared/component/primitive/icon/sorts/util";
 import { IconName } from "@/shared/component/primitive/icon";
 

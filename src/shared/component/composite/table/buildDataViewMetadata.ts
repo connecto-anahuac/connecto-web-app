@@ -3,7 +3,7 @@ import type {
   DataViewConfig,
   DataViewMetadata,
   DataFieldOption,
-} from "./dataView.types";
+} from "../../../types/dataView.types";
 
 function addDynamicOption(
   options: Map<string, DataFieldOption>,

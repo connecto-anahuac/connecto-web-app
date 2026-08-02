@@ -6,7 +6,7 @@ import SelectMenu from "@/shared/component/primitive/selectMenu";
 import type {
   DataFieldConfig,
   DataFieldOption,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 import { runFilterDataFieldOptions } from "@/shared/component/composite/table/buildDataViewMetadata";
 import type { Operator } from "../../../../service/dataPipeline/operatorPolicy";
 import { FilterCard } from "../FilterCard";

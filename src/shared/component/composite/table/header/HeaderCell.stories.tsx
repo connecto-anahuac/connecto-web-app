@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import type { Column } from "@tanstack/react-table";
 import HeaderCell from ".";
 import { IconName, Icons } from "../../../primitive/icon";
-import type { DataFieldConfig } from "../dataView.types";
+import type { DataFieldConfig } from "../../../../types/dataView.types";
 
 const column = {
   id: "name",

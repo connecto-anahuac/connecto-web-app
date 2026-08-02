@@ -11,7 +11,7 @@ import type { FilterPreset } from "@/shared/service/dataPipeline/filterPreset.ty
 import type {
   DataViewConfig,
   DataViewMetadata,
-} from "@/shared/component/composite/table/dataView.types";
+} from "@/shared/types/dataView.types";
 // import { TableFilterButtonGroup } from "@/components/table/DataTable";
 import SortCard from "@/shared/component/primitive/SortCard";
 import ButtonModal from "../../primitive/ButtonModal";

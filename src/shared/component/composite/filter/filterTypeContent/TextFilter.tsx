@@ -2,7 +2,7 @@
 
 import type { ComponentPropsWithRef } from "react";
 import CloseButton from "@/shared/component/primitive/button/CloseButton";
-import type { DataFieldConfig } from "@/shared/component/composite/table/dataView.types";
+import type { DataFieldConfig } from "@/shared/types/dataView.types";
 import type { Operator } from "../../../../service/dataPipeline/operatorPolicy";
 import { FilterCard } from "../FilterCard";
 import { FilterFieldHeader } from "../FilterFieldHeader";
