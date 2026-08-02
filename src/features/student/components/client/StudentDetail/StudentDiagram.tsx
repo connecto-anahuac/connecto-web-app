@@ -1,4 +1,5 @@
 import ColumnTitle from "@/shared/component/composite/diagram/ColumnTitle";
+import { Diagram } from "@/shared/component/composite/diagram/Diagram";
 import RowTitle from "@/shared/component/composite/diagram/RowTitle";
 import { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
@@ -38,81 +39,41 @@ export function StudentDiagram({
       className={cn("h-full w-full   overflow-auto relative", className)}
       {...props}
     >
-      <div
-        className="w-fit"
-        style={{
-          display: "grid",
-          gridTemplateColumns: `auto repeat(${maxSemester}, minmax(13rem, 1fr))`,
-          gridAutoRows: "min-content",
-          gap: "1rem",
-        }}
-      >
-        {/* top-left-edge */}
-        <div
-          key="table-edge"
-          className="w-fit"
-          style={{
-            gridColumnStart: 1,
-            gridRowStart: 1,
-            position: "sticky",
-            top: 0,
-            left: 0,
-            zIndex: 30,
-            background: "transparent",
-          }}
-        >
-          <div className="w-4" />
-        </div>
+      <Diagram className="w-fit">
+        <Diagram.Rows>
+          {Array.from({ length: maxPosition }, (_, index) => {
+            const position = index + 1;
+            return (
+              <RowTitle
+                key={`position-${position}`}
+                text={String.fromCharCode(64 + position)}
+              />
+            );
+          })}
+        </Diagram.Rows>
 
-        {/* RowTitle A,B,C,D,... */}
-        {Array.from({ length: maxPosition }, (_, index) => {
-          const position = index + 1;
-          return (
-            <div
-              key={`position-${position}`}
-              style={{
-                gridColumnStart: 1,
-                gridRowStart: position + 1,
-                position: "sticky",
-                left: 0,
-                zIndex: 20,
-              }}
-            >
-              <RowTitle text={String.fromCharCode(64 + position)} />
-            </div>
-          );
-        })}
+        <Diagram.Columns>
+          {Array.from({ length: maxSemester }, (_, index) => {
+            const semester = index + 1;
+            return (
+              <ColumnTitle
+                key={`semester-${semester}`}
+                text={`Semestre ${semester}`}
+              />
+            );
+          })}
+        </Diagram.Columns>
 
-        {/* ColumnTitle Semestre 1,Semestre 2,... */}
-        {Array.from({ length: maxSemester }, (_, index) => {
-          const semester = index + 1;
-          return (
-            <div
-              key={`semester-${semester}`}
-              style={{
-                gridColumnStart: semester + 1,
-                gridRowStart: 1,
-                position: "sticky",
-                top: 0,
-                zIndex: 25,
-              }}
-            >
-              <ColumnTitle text={`Semestre ${semester}`} />
-            </div>
-          );
-        })}
-
-        {/* data */}
         {items.map((item) => (
-          <div
+          <Diagram.Content
             key={item.id}
-            className={cn("transition",
-              !filterResult.matches.get(item.id)?.matched && "opacity-10 pointer-events-none"
+            className={cn(
+              "transition",
+              !filterResult.matches.get(item.id)?.matched &&
+                "pointer-events-none opacity-10",
             )}
-            style={{
-              gridColumnStart: item.semester + 1 || 2,
-              gridRowStart: item.position + 2 || 2,
-            }}
+            x={item.semester}
+            y={item.position + 1}
           >
             <StudentClassCardView
               className="w-full"
@@ -125,9 +86,9 @@ export function StudentDiagram({
               hours={item.hours ? item.hours.toString() : undefined}
               status={item.status}
             />
-          </div>
+          </Diagram.Content>
         ))}
-      </div>
+      </Diagram>
     </div>
   );
 }
