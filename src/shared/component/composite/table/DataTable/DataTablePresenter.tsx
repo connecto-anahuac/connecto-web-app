@@ -216,10 +216,10 @@ export function DataTablePresenter<TItem>({
                   config={columnConfig}
                   // openMenuId={openMenuId}
                   // openFilterId={openFilterId}
-                  onFilterClose={onFilterClose}
-                  onFilterToggle={onFilterToggle}
+                  // onFilterClose={onFilterClose}
+                  // onFilterToggle={onFilterToggle}
                   onHide={onHide}
-                  onMenuOpenChange={onMenuOpenChange}
+                  // onMenuOpenChange={onMenuOpenChange}
                   onPin={onPin}
                   isResizing={column.getIsResizing()}
                   isResizeBoundaryHighlighted={isResizeBoundaryHighlighted}
@@ -245,8 +245,8 @@ export function DataTablePresenter<TItem>({
                   }}
                   key={header.id}
                   role="columnheader"
-                  menuOpen={open}
-                  filterOpen={openFilter}
+                  // menuOpen={open}
+                  // filterOpen={openFilter}
                 />
               );
             })}
