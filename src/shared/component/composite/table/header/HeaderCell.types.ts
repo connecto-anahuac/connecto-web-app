@@ -18,11 +18,6 @@ export type HeaderCellActionProps<TItem> = {
   onHide: (column: Column<TItem>) => void;
   onPin: (column: Column<TItem>) => void;
   onSort: (column: Column<TItem>) => void;
-  menuOpen?: boolean;
-  filterOpen?: boolean;
-  onFilterClose?: () => void;
-  onFilterToggle?: (columnId: string) => void;
-  onMenuOpenChange?: (columnId: string, open: boolean) => void;
   isResizing?: boolean;
   isResizeBoundaryHighlighted?: boolean;
   onResize?: (
@@ -62,10 +57,10 @@ export type HeaderCellPresenterProps<TItem> = HeaderCellProps<TItem> & {
   title: string;
   contentMinWidth: string;
   isCompact: boolean;
+  onFilterRequest: () => void;
   measureHeaderTitle: RefCallback<HTMLDivElement>;
   menuButtonRef: RefObject<HTMLButtonElement | null>;
   menuItems: HeaderMenuItem[];
   menuModalRef: RefObject<ModalHandle | null>;
-  filterModalRef: RefObject<ModalHandle | null>;
   cellRef: RefObject<HTMLDivElement | null>;
 };

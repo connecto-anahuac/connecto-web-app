@@ -1,9 +1,7 @@
 import { Icons } from "@/shared/component/primitive/icon";
 import ButtonModal from "@/shared/component/primitive/ButtonModal";
 import IconButton from "@/shared/component/primitive/button/IconButton";
-import Modal, { ModalProvider } from "@/shared/component/composite/modal/Modal";
 import { cn } from "@/shared/lib/util";
-import { TableColumnFilterContainer } from "../DataTable/TableColumnFilterContainer";
 import { getTableSortIcon } from "../DataTable/useDataTable";
 import type {
   ButtonItemProps,
@@ -67,11 +65,6 @@ export function HeaderCellPresenter<TItem>({
   label: _label,
   column,
   config,
-  menuOpen: _menuOpen,
-  filterOpen: _filterOpen,
-  onFilterClose: _onFilterClose,
-  onFilterToggle: _onFilterToggle,
-  onMenuOpenChange: _onMenuOpenChange,
   isCompact,
   onHide,
   onPin,
@@ -87,11 +80,14 @@ export function HeaderCellPresenter<TItem>({
   menuButtonRef,
   menuItems,
   menuModalRef,
-  filterModalRef,
+  onFilterRequest,
   cellRef,
   measureHeaderTitle,
   ...divProps
 }: HeaderCellPresenterProps<TItem>) {
+  void _children;
+  void _label;
+  void isResizeBoundaryHighlighted;
   const IconComponent = icon ? Icons[icon] : undefined;
   return (
     <div
@@ -163,14 +159,7 @@ export function HeaderCellPresenter<TItem>({
         </button>
       )}
 
-      <ModalProvider
-        // To share FILTER menu in filterModalRef
-        ref={filterModalRef}
-      >
-        <Modal.Content>
-          <TableColumnFilterContainer column={column} config={config} />
-        </Modal.Content>
-        {actions ??
+      {actions ??
           (showDefaultActions && (
             <div className="ml-auto flex shrink-0 items-center gap-3">
               {!isCompact && (
@@ -196,17 +185,16 @@ export function HeaderCellPresenter<TItem>({
                     }}
                   />
                   {config.filterable !== false && (
-                    <Modal.Trigger>
-                      <IconButton
-                        icon="filter"
-                        size="md"
-                        appearance="text"
-                        intent="lightInk"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                        }}
-                      />
-                    </Modal.Trigger>
+                    <IconButton
+                      icon="filter"
+                      size="md"
+                      appearance="text"
+                      intent="lightInk"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onFilterRequest();
+                      }}
+                    />
                   )}
                 </div>
               )}
@@ -256,7 +244,6 @@ export function HeaderCellPresenter<TItem>({
               </div>
             </div>
           ))}
-      </ModalProvider>
     </div>
   );
 }

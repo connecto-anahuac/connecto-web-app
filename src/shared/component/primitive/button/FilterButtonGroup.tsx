@@ -14,10 +14,13 @@ import { Icons } from "../icon";
 import ButtonModal from "../ButtonModal";
 import Button from "./Button";
 import FilterButton from "./FilterButton";
+import { useDataSearchQuery } from "@/shared/store/filter/useFilterStore";
 
 type Props<TItem> = ComponentProps<"div"> & {
   config: DataViewConfig<TItem>;
   metadata: DataViewMetadata;
+  requestedFieldId?: string | null;
+  onOpenFieldChange?: (fieldId: string | null) => void;
 };
 
 const ADD_FILTER_MENU_ID = "add-filter";
@@ -58,28 +61,43 @@ export default function FilterButtonGroup<TItem>({
   className,
   config,
   metadata,
+  requestedFieldId,
+  onOpenFieldChange,
   ...props
 }: Props<TItem>) {
+  const { conditions } = useDataSearchQuery();
   const [openedId, setOpenedId] = useState<string | null>(null);
   const [selectedFieldIds, setSelectedFieldIds] = useState<readonly string[]>(
     [],
   );
   const [hoveredIndex, setHoveredIndex] = useState(0);
+  const effectiveOpenedId =
+    requestedFieldId === undefined ? openedId : requestedFieldId;
   const filterableColumns = config.fields.filter(
     (column) => column.filterable !== false,
   );
+  const visibleFieldIds = new Set([
+    ...selectedFieldIds,
+    ...conditions.map((condition) => condition.fieldId),
+    ...(requestedFieldId ? [requestedFieldId] : []),
+  ]);
   const selectedColumns = filterableColumns.filter((column) =>
-    selectedFieldIds.includes(column.fieldId),
+    visibleFieldIds.has(column.fieldId),
   );
   const availableColumns = filterableColumns.filter(
-    (column) => !selectedFieldIds.includes(column.fieldId),
+    (column) => !visibleFieldIds.has(column.fieldId),
   );
+
+  const setOpenField = (fieldId: string | null) => {
+    setOpenedId(fieldId);
+    onOpenFieldChange?.(fieldId);
+  };
 
   const addFilter = (fieldId: string) => {
     setSelectedFieldIds((current) =>
       current.includes(fieldId) ? current : [...current, fieldId],
     );
-    setOpenedId(fieldId);
+    setOpenField(fieldId);
     setHoveredIndex(0);
   };
 
@@ -87,16 +105,16 @@ export default function FilterButtonGroup<TItem>({
     <div
       className={cn(
         "flex items-center min-w-0 gap-2 scrollbar-none",
-        openedId ? "overflow-x-hidden" : "overflow-x-auto",
+        effectiveOpenedId ? "overflow-x-hidden" : "overflow-x-auto",
         className,
       )}
       {...props}
     >
       {availableColumns.length > 0 && (
         <ButtonModal
-          open={openedId === ADD_FILTER_MENU_ID}
+          open={effectiveOpenedId === ADD_FILTER_MENU_ID}
           onOpenChange={(open) =>
-            setOpenedId(open ? ADD_FILTER_MENU_ID : null)
+            setOpenField(open ? ADD_FILTER_MENU_ID : null)
           }
         >
           <ButtonModal.Trigger>
@@ -133,8 +151,10 @@ export default function FilterButtonGroup<TItem>({
           key={column.fieldId}
           column={column}
           options={metadata.optionsByFieldId[column.fieldId] ?? []}
-          open={openedId === column.fieldId}
-          onOpenChange={(open) => setOpenedId(open ? column.fieldId : null)}
+          open={effectiveOpenedId === column.fieldId}
+          onOpenChange={(open) =>
+            setOpenField(open ? column.fieldId : null)
+          }
           onClose={() =>
             setSelectedFieldIds((current) =>
               current.filter((fieldId) => fieldId !== column.fieldId),

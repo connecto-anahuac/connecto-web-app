@@ -16,17 +16,20 @@ import type {
 import SortCard from "@/shared/component/primitive/SortCard";
 import ButtonModal from "../../primitive/ButtonModal";
 import { GraphSwitcher } from "./GraphSwitcher";
-import { SearchTool } from "./buttonmodal/type";
+import type {
+  SearchTool,
+} from "./buttonmodal/type";
 import HideButtonModal from "./buttonmodal/HideButtonModal";
 import PivotButtonModal from "./buttonmodal/PivotButtonModal";
 import FilterButtonGroup from "../../primitive/button/FilterButtonGroup";
+import { DataSectionFilterProvider } from "./DataSectionFilterContext";
 
 type Props<TItem> = ComponentProps<"div"> & {
   defaultView?: "list" | "card";
   listTools?: SearchTool[];
   cardviewTools?: SearchTool[];
   listDiagram?: React.ReactNode;
-  cardDiagram?: React.ReactNode;
+  cardDiagram?:React.ReactNode;
   onListClick?: () => void;
   onCardViewClick?: () => void;
   onViewChange?: (view: "list" | "card") => void;
@@ -58,6 +61,8 @@ export default function DataSection<TItem>({
     defaultView,
   );
   const [openedTool, setOpenedTool] = useState<SearchTool | null>(null);
+  const [openedFilterId, setOpenedFilterId] = useState<string | null>(null);
+  
   const [draggedSortId, setDraggedSortId] = useState<string | null>(null);
 
   const viewChangeHandler = (view: "list" | "card") => {
@@ -83,8 +88,12 @@ export default function DataSection<TItem>({
     table.setSorting(sorting);
   };
 
+
   return (
-    <div className={cn("flex flex-col gap-2", className)}>
+    <DataSectionFilterProvider
+      value={{ openFilter: (fieldId) => setOpenedFilterId(fieldId) }}
+    >
+      <div className={cn("flex flex-col gap-2", className)}>
       {/* 1st line */}
       <div className="flex gap-4 w-full items-center">
         <SearchBar
@@ -124,20 +133,22 @@ export default function DataSection<TItem>({
       {/* 2nd line */}
       <div className="flex gap-1.5 w-full min-w-0 h-fit">
         {/* //TODO filter button　追加tと機能 */}
-        <Button
+        {/* <Button
           icon="filter"
           label="Filter"
           intent="darkInk"
           appearance="text"
           size="md"
           className="shrink-0 hover:bg-transparent active:bg-transparent"
-        />
+        /> */}
 
         {tableConfig && metadata ? (
           <FilterButtonGroup
             className="flex-1 h-fit"
             config={tableConfig}
             metadata={metadata}
+            requestedFieldId={openedFilterId}
+            onOpenFieldChange={setOpenedFilterId}
           />
         ) : (
           <div>Filter button group. table couldn&apos;t have</div>
@@ -257,22 +268,24 @@ export default function DataSection<TItem>({
           </ButtonModal.Content>
         </ButtonModal>
 
-        <HideButtonModal
-          open={
-            openedTool === "hide" &&
-            table !== undefined &&
-            tableConfig !== undefined
-          }
-          onOpenChange={() =>
-            setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
-          }
-          disabled={!isToolEnable("hide")}
-          table={table}
-          tableConfig={tableConfig}
-          hasBadge={table
-            ?.getAllLeafColumns()
-            .some((column) => !column.getIsVisible())}
-        />
+      
+          <HideButtonModal
+            open={
+              openedTool === "hide" &&
+              table !== undefined &&
+              tableConfig !== undefined
+            }
+            onOpenChange={() =>
+              setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
+            }
+            disabled={!isToolEnable("hide")}
+            table={table}
+            tableConfig={tableConfig}
+            hasBadge={table
+              ?.getAllLeafColumns()
+              .some((column) => !column.getIsVisible())}
+          />
+       
 
         <PivotButtonModal
           open={
@@ -318,8 +331,11 @@ export default function DataSection<TItem>({
 
       {/* graph */}
       <div className="w-full flex-1 min-h-0">
-        {selectedView === "list" ? listDiagram : cardDiagram}
+        {selectedView === "list"
+          ? listDiagram
+          :  cardDiagram}
       </div>
-    </div>
+      </div>
+    </DataSectionFilterProvider>
   );
 }

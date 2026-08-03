@@ -3,7 +3,6 @@
 import { HeaderCellPresenter } from "./HeaderCellPresenter";
 import type { HeaderCellProps } from "./HeaderCell.types";
 import { useHeaderCell } from "./useHeaderCell";
-import { Column } from "@tanstack/react-table";
 
 export default function HeaderCellContainer<TItem>(
   props: HeaderCellProps<TItem>,
@@ -12,7 +11,7 @@ export default function HeaderCellContainer<TItem>(
     cellRef,
     menuButtonRef,
     menuModalRef,
-    filterModalRef,
+    onFilterRequest,
     title: content,
     contentMinWidth,
     icon,
@@ -28,7 +27,7 @@ export default function HeaderCellContainer<TItem>(
       cellRef={cellRef}
       menuButtonRef={menuButtonRef}
       menuModalRef={menuModalRef}
-      filterModalRef={filterModalRef}
+      onFilterRequest={onFilterRequest}
       title={content}
       contentMinWidth={contentMinWidth}
       icon={icon}

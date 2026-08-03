@@ -2,6 +2,7 @@
 
 import { useCallback, useLayoutEffect, useRef, useState } from "react";
 import type { ModalHandle } from "@/shared/component/composite/modal/Modal";
+import { useDataSectionFilter } from "@/shared/component/composite/datasection/DataSectionFilterContext";
 import type { HeaderCellProps, HeaderMenuItem } from "./HeaderCell.types";
 
 export function useHeaderCell<TItem>({
@@ -26,7 +27,7 @@ export function useHeaderCell<TItem>({
   const headerTitleRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const menuModalRef = useRef<ModalHandle>(null);
-  const filterModalRef = useRef<ModalHandle>(null);
+  const dataSectionFilter = useDataSectionFilter();
   const [isCompact, setIsCompact] = useState(false);
   const isCompactRef = useRef(isCompact);
   const title = label; // children ?? label;
@@ -110,6 +111,7 @@ export function useHeaderCell<TItem>({
     return () => observer.disconnect();
   }, [measureHeaderTitle]);
 
+  const onFilterRequest = () => dataSectionFilter?.openFilter(column.id);
   const menuItems: HeaderMenuItem[] = [
     {
       icon: "pin",
@@ -121,19 +123,22 @@ export function useHeaderCell<TItem>({
       label: "ocultar",
       onClick: () => onHide(column),
     },
-    {
-      icon: "filter",
-      label: "filtro",
-      onClick: () =>
-        filterModalRef.current?.open(menuButtonRef.current ?? undefined),
-    },
+    ...(config.filterable === false
+      ? []
+      : [
+          {
+            icon: "filter" as const,
+            label: "filtro",
+            onClick: onFilterRequest,
+          },
+        ]),
   ];
 
   return {
     cellRef,
     menuButtonRef,
     menuModalRef,
-    filterModalRef,
+    onFilterRequest,
     title,
     contentMinWidth,
     icon,
