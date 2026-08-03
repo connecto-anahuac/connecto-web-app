@@ -42,6 +42,16 @@ export function MultiSelectFilter<TItem>({
       value: option.value,
     }));
   }, [options, query]);
+  const selectedOptions = useMemo(() => {
+    const labelsByValue = new Map(
+      options.map((option) => [option.value, option.label]),
+    );
+
+    return value.map((selectedValue) => ({
+      label: labelsByValue.get(selectedValue) ?? selectedValue,
+      value: selectedValue,
+    }));
+  }, [options, value]);
 
   const toggleValue = (nextValue: string) => {
     onValueChange(
@@ -49,11 +59,19 @@ export function MultiSelectFilter<TItem>({
         ? value.filter((current) => current !== nextValue)
         : [...value, nextValue],
     );
+    setQuery("");
+  };
+
+  const removeValue = (removedValue: string) => {
+    onValueChange(
+      value.filter((currentValue) => currentValue !== removedValue),
+    );
   };
 
   return (
     <FilterCard
       {...props}
+      className="max-w-72"
       aria-label={`${column.label} filter`}
       header={
         <FilterFieldHeader
@@ -66,10 +84,12 @@ export function MultiSelectFilter<TItem>({
     >
       <FilterSearchInput
         aria-label={column.label}
+        chips={selectedOptions}
         placeholder="Buscar opciones"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
-        onClear={() => setQuery("")}
+        onChipRemove={removeValue}
+        onClear={() => { setQuery(""); onValueChange([]);}}
         isFocusedInitially
       />
 

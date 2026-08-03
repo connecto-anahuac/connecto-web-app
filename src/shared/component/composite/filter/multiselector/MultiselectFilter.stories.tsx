@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { MultiSelectFilter } from "./MultiselectFilter";
 
 const column = {
@@ -28,7 +29,7 @@ const meta = {
     values: [],
     onClose: () => undefined,
     onOperatorChange: () => undefined,
-    onValueChange: () => undefined,
+    onValueChange: fn(),
   },
   tags: ["autodocs"],
 } satisfies Meta<typeof MultiSelectFilter<unknown>>;
@@ -52,6 +53,20 @@ export const LongOptions: Story = {
         searchTexts: [],
       },
     ],
+  },
+};
+
+export const SelectedValues: Story = {
+  args: {
+    values: ["engineering", "law"],
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Remove Ingenieria" }),
+    );
+    await expect(args.onValueChange).toHaveBeenCalledWith(["law"]);
   },
 };
 

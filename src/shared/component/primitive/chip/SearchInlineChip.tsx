@@ -19,7 +19,7 @@ export default function SearchInlineChip({
   return (
     <span
       className={cn(
-        "inline-flex h-5 max-w-full items-center gap-1 rounded-full bg-InverseSurface/60 pl-2.5 pr-2 text-sm font-medium text-DividerLowest",
+        "inline-flex h-5 max-w-full shrink-0 items-center gap-1 rounded-full bg-InverseSurface/60 pl-2.5 pr-2 text-sm font-medium text-DividerLowest",
         className,
       )}
       {...props}

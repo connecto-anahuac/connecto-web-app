@@ -18,7 +18,7 @@ export function FilterCard({
   return (
     <section
       className={cn(
-        "inline-flex min-w-64 w-fit flex-col gap-2 rounded-lg border-2 border-OutlineVariant bg-Surface px-3 pb-3 pt-2",
+        "inline-flex max-w-72 min-w-64 w-fit flex-col gap-2 rounded-lg border-2 border-OutlineVariant bg-Surface px-3 pb-3 pt-2",
         className,
       )}
       {...props}

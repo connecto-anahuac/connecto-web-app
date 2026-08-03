@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/nextjs-vite'
-import { expect, userEvent, within } from 'storybook/test'
+import { expect, fn, userEvent, within } from 'storybook/test'
 
 import { FilterSearchInput } from './FilterSearchInput'
 
@@ -16,11 +16,13 @@ const meta = {
     disabled: { control: 'boolean' },
     className: { table: { disable: true } },
     onChange: { action: 'changed' },
+    onChipRemove: { action: 'chipRemoved' },
   },
   args: {
     placeholder: 'Search filters',
     defaultValue: 'Ing',
     'aria-label': 'Search filters',
+    onChipRemove: fn(),
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof FilterSearchInput>
@@ -40,6 +42,38 @@ export const Empty: Story = {
 export const Disabled: Story = {
   args: {
     disabled: true,
+  },
+}
+
+export const WrappedChips: Story = {
+  args: {
+    chips: [
+      { label: 'Ingenieria', value: 'engineering' },
+      { label: 'Derecho', value: 'law' },
+      {
+        label: 'Administracion y Direccion Estrategica',
+        value: 'business',
+      },
+    ],
+    defaultValue: '',
+    placeholder: 'Buscar opciones',
+  },
+  render: (args) => (
+    <div className="w-64">
+      <FilterSearchInput {...args} />
+    </div>
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement)
+
+    await userEvent.click(
+      canvas.getByRole('button', { name: 'Remove Ingenieria' }),
+    )
+    await expect(args.onChipRemove).toHaveBeenCalledWith('engineering')
+
+    const input = canvas.getByRole('textbox', { name: 'Search filters' })
+    await userEvent.type(input, 'Math')
+    await expect(input).toHaveValue('Math')
   },
 }
 
