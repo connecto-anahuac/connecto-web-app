@@ -13,6 +13,7 @@ type Props<TItem> = ComponentPropsWithRef<"section"> & {
   operator: Operator;
   value: string;
   onClear: () => void;
+  onClose: () => void;
   onOperatorChange: (operator: Operator) => void;
   onValueChange: (value: string) => void;
 };
@@ -22,6 +23,7 @@ export function TextFilter<TItem>({
   operator,
   value,
   onClear,
+  onClose,
   onOperatorChange,
   onValueChange,
   ...props
@@ -37,7 +39,7 @@ export function TextFilter<TItem>({
           onOperatorChange={onOperatorChange}
         />
       }
-      trailingAction={<CloseButton onClick={onClear} />}
+      trailingAction={<CloseButton onClick={onClose} />}
     >
       <FilterSearchInput
         aria-label={column.label}

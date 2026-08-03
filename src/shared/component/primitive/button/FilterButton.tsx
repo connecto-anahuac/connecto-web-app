@@ -17,6 +17,7 @@ type Props<TItem> = ComponentProps<"button"> & {
   options: readonly DataFieldOption[];
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  onClose?: () => void;
 };
 
 export default function FilterButton<TItem>({
@@ -24,6 +25,7 @@ export default function FilterButton<TItem>({
   options,
   open,
   onOpenChange,
+  onClose,
   className,
   ...props
 }: Props<TItem>) {
@@ -74,7 +76,14 @@ export default function FilterButton<TItem>({
         </button>
       </ButtonModal.Trigger>
       <ButtonModal.Content>
-        <FilterRenderer column={column} options={options} />
+        <FilterRenderer
+          column={column}
+          options={options}
+          onClose={() => {
+            onOpenChange(false);
+            onClose?.();
+          }}
+        />
       </ButtonModal.Content>
     </ButtonModal>
   );

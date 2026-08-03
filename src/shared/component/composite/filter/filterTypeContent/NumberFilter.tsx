@@ -12,7 +12,7 @@ type Props<TItem> = ComponentPropsWithRef<"section"> & {
   column: DataFieldConfig<TItem>;
   operator: Operator;
   value: number | null;
-  onClear: () => void;
+  onClose: () => void;
   onOperatorChange: (operator: Operator) => void;
   onValueChange: (value: number | null) => void;
 };
@@ -21,7 +21,7 @@ export function NumberFilter<TItem>({
   column,
   operator,
   value,
-  onClear,
+  onClose,
   onOperatorChange,
   onValueChange,
   ...props
@@ -37,7 +37,7 @@ export function NumberFilter<TItem>({
           onOperatorChange={onOperatorChange}
         />
       }
-      trailingAction={<CloseButton onClick={onClear} />}
+      trailingAction={<CloseButton onClick={onClose} />}
     >
       <input
         aria-label={column.label}

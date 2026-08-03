@@ -21,6 +21,7 @@ import { TextFilter } from "./filterTypeContent/TextFilter";
 type Props<TItem> = ComponentPropsWithRef<"section"> & {
   column: DataFieldConfig<TItem>;
   options: readonly DataFieldOption[];
+  onClose?: () => void;
 };
 
 function isEmptyValue(value: FilterConditionValue): boolean {
@@ -34,6 +35,7 @@ function isEmptyValue(value: FilterConditionValue): boolean {
 export function FilterRenderer<TItem>({
   column,
   options,
+  onClose,
   ...props
 }: Props<TItem>) {
   const query = useDataSearchQuery();
@@ -78,6 +80,7 @@ export function FilterRenderer<TItem>({
         column={column}
         operator={operator}
         onClear={clear}
+        onClose={onClose ?? clear}
         onOperatorChange={setOperator}
         onValueChange={(value) => setValue(value)}
         value={typeof condition?.value === "string" ? condition.value : ""}
@@ -91,7 +94,7 @@ export function FilterRenderer<TItem>({
       <NumberFilter
         column={column}
         operator={operator}
-        onClear={clear}
+        onClose={onClose ?? clear}
         onOperatorChange={setOperator}
         onValueChange={(value) => setValue(value)}
         value={typeof condition?.value === "number" ? condition.value : null}
@@ -105,7 +108,7 @@ export function FilterRenderer<TItem>({
       column={column}
       operator={operator}
       options={options}
-      onClear={clear}
+      onClose={onClose ?? clear}
       onOperatorChange={setOperator}
       onValueChange={(value) => setValue(value, "in")}
       values={Array.isArray(condition?.value) ? condition.value.map(String) : []}

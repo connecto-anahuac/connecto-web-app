@@ -13,6 +13,7 @@ import {
   type CSSProperties,
   type HTMLProps,
   type MouseEvent as ReactMouseEvent,
+  type Ref,
   type ReactElement,
   type ReactNode,
 } from "react";
@@ -207,8 +208,26 @@ type TriggerProps = {
   reference?: string;
 };
 
+function assignRef<T>(ref: Ref<T> | undefined, value: T | null) {
+  if (typeof ref === "function") {
+    ref(value);
+  } else if (ref) {
+    ref.current = value;
+  }
+}
+
 function Trigger({ children, reference }: TriggerProps) {
   const { getReferenceProps, open, setReferenceForTrigger } = useModalContext();
+  const setTriggerReference = useCallback(
+    (node: HTMLElement | null) => {
+      assignRef(children.props.ref, node);
+
+      if (node) {
+        setReferenceForTrigger(reference, node);
+      }
+    },
+    [children.props.ref, reference, setReferenceForTrigger],
+  );
   const triggerProps = getReferenceProps(
     children.props,
   ) as HTMLProps<HTMLElement>;
@@ -216,6 +235,7 @@ function Trigger({ children, reference }: TriggerProps) {
   return cloneElement(children, {
     "aria-expanded": open,
     ...triggerProps,
+    ref: setTriggerReference,
     onClick: (event: ReactMouseEvent<HTMLElement>) => {
       setReferenceForTrigger(reference, event.currentTarget);
       triggerProps.onClick?.(event);

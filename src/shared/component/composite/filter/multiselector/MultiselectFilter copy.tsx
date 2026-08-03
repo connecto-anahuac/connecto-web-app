@@ -18,7 +18,7 @@ type Props<TItem> = ComponentPropsWithRef<"section"> & {
   operator: Operator;
   options: readonly DataFieldOption[];
   value: readonly string[];
-  onClear: () => void;
+  onClose: () => void;
   onOperatorChange: (operator: Operator) => void;
   onValueChange: (value: string[]) => void;
 };
@@ -28,7 +28,7 @@ export function MultiSelectFilter<TItem>({
   operator,
   options,
   value,
-  onClear,
+  onClose,
   onOperatorChange,
   onValueChange,
   ...props
@@ -62,7 +62,7 @@ export function MultiSelectFilter<TItem>({
           onOperatorChange={onOperatorChange}
         />
       }
-      trailingAction={<CloseButton onClick={onClear} />}
+      trailingAction={<CloseButton onClick={onClose} />}
     >
       <FilterSearchInput
         aria-label={column.label}

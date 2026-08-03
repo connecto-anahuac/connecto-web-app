@@ -26,7 +26,7 @@ const meta = {
       { label: "Diseno", value: "design", searchTexts: [] },
     ],
     values: [],
-    onClear: () => undefined,
+    onClose: () => undefined,
     onOperatorChange: () => undefined,
     onValueChange: () => undefined,
   },
