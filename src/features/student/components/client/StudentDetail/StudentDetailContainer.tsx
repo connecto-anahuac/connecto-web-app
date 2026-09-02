@@ -1,9 +1,11 @@
 "use client";
 
 import { DataSearchScopeProvider } from "@/shared/store/filter/FilterProvider";
-import { StudentDetailPresenter } from "./StudentDetailPresenter";
+import StudentGeneralPage, {
+  bildProfileInformationa,
+  buildStudentDetailInformationCards,
+} from "./StudentSinglePageTemplate";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
-import { useStudentClassTable } from "./useStudentClassTable";
 
 type Props = {
   studentId: string;
@@ -18,26 +20,29 @@ export function StudentDetailContainer({ studentId }: Props) {
 }
 
 function StudentDetailContent({ studentId }: Props) {
-  const { loading: staticLoading, studentDetail, studentGrades } =
+  const { loading, studentDetail, studentGrades, totalSemesters } =
     useStaticStudentDetail(studentId);
 
-  const { config, globalFilter, presets, setGlobalFilter, table, filterResult, metadata } =
-    useStudentClassTable(studentGrades);
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (!studentDetail) {
+    return <div>Student not found</div>;
+  }
 
   return (
-    <StudentDetailPresenter
-      loading={staticLoading}
-      studentGrades={studentGrades}
-      studentDetail={studentDetail}
-      table={table}
-      tableConfig={config}
-      searchText={globalFilter}
-      onSearchTextChange={setGlobalFilter}
-      presets={presets}
-      // isFilterOpen={isFilterOpen}
-      // onFilterToggle={() => setIsFilterOpen((open) => !open)}
-      filterResult={filterResult}
-      metadata={metadata}
+    <StudentGeneralPage
+      infomations={bildProfileInformationa(studentDetail)}
+      imgSrc={studentDetail.imgSrc ?? "/data/avator.png"}
+      status={studentDetail.profile.status}
+      planTotalSemesters={totalSemesters}
+      {...buildStudentDetailInformationCards(
+        studentDetail,
+        studentGrades,
+        totalSemesters,
+      )}
+      studentId={studentId}
     />
   );
 }

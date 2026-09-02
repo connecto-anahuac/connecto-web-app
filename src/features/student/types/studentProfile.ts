@@ -1,9 +1,10 @@
 import type { StudentDto } from "@/external/dto/student/student.dto";
+import { StudentStatus } from "@/shared/types/consts";
 
 export type StudentProfile = {
   id: string;
   name: string;
-  status: string;
+  status: StudentStatus;
   enrolledPeriod: string;
   enrolledYear: number;
   enrolledSemester: "ene-mayo" | "verano" | "ago-dec" | "semester";
@@ -18,7 +19,7 @@ export function toStudentProfileUI(student: StudentDto): StudentProfile {
   return {
     id: student.id,
     name: student.name,
-    status: student.status,
+    status: toStudentStatus(student.status),
     enrolledPeriod: student.enrolledPeriod.year + student.enrolledPeriod.semester.getCode().toString(),
     enrolledYear: student.enrolledPeriod.year,
     enrolledSemester:
@@ -33,4 +34,25 @@ export function toStudentProfileUI(student: StudentDto): StudentProfile {
     regularSemestersCount: student.semesterCount.regular,
     avatarColorRef: student.avatarColorRef,
   };
+}
+
+export function toStudentStatus(status: string): StudentStatus {
+  const normalized = status
+    .trim()
+    .toLocaleLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "");
+
+  switch (normalized) {
+    case StudentStatus.ACTIVE:
+      return StudentStatus.ACTIVE;
+    case StudentStatus.INACTIVE:
+      return StudentStatus.INACTIVE;
+    case StudentStatus.BAJA_ACADEMICA:
+      return StudentStatus.BAJA_ACADEMICA;
+    case StudentStatus.BAJA_VOLUNTARIA:
+      return StudentStatus.BAJA_VOLUNTARIA;
+    default:
+      return StudentStatus.INACTIVE;
+  }
 }

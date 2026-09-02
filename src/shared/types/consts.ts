@@ -19,3 +19,6 @@ export enum StudentStatus {
 }
 
 export type DATA_CACHE_ID = "studentGrade" | "student" | "professor" | "class";
+
+
+export type AlertLevel="high"|"medium"|"low";

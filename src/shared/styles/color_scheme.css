@@ -57,11 +57,33 @@
   --DividerMiddle: #e0e0e0;
   --OnSurface-60: rgba(35, 26, 22, 0.6);
   --OnSurface-40: rgba(35, 26, 22, 0.4);
-  --onPrimaryContainer-low: #bc5f2f;
+  --OnPrimaryContainer-low: #bc5f2f;
   --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
   --DividerLowest: #f4f4f4;
   --GrayLow: #b5b5b5;
   --PrimaryContainerLowest: #fcf9f7;
+
+  /*  */
+  --StatusExcelent: #D9F0CD;
+  --StatusGood: #D9F0CD;
+  --StatusRegular: #D9F0CD;
+  --StatusBad: #F0CDCD;
+  --StatusWorst: #F0CDCD;
+
+  --OnStatusExcelent: #4D7A42;
+  --OnStatusGood: #4D7A42;
+  --OnStatusRegular: #4D7A42;
+  --OnStatusBad: #7A4242;
+  --OnStatusWorst: #7A4242;
+
+  /*  */
+  --AlertLow: #D9F0CD;
+  --AlertMedium: #FAF4BD;
+  --AlertHigh: #F0CDCD;
+
+  --OnAlertLow: #4D7A42;
+  --OnAlertMedium: #7A6842;
+  --OnAlertHigh: #7A4242;
 }
 
 
@@ -131,7 +153,7 @@
   --DividerMiddle: #e0e0e0;
   --OnSurface-60: rgba(35, 26, 22, 0.6);
   --OnSurface-40: rgba(35, 26, 22, 0.4);
-  --onPrimaryContainer-low: #bc5f2f;
+  --OnPrimaryContainer-low: #bc5f2f;
   --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
   --DividerLowest: #f4f4f4;
   --GrayLow: #b5b5b5;
@@ -144,7 +166,7 @@
   --color-DividerMiddle: var(--DividerMiddle);
   --color-OnSurface-60: var(--OnSurface-60);
   --color-OnSurface-40: var(--OnSurface-40);
-  --color-onPrimaryContainerLow: var(--onPrimaryContainer-low);
+  --color-OnPrimaryContainerLow: var(--OnPrimaryContainer-low);
   --color-PrimaryContainerLow: var(--PrimaryContainer-low);
   --color-DividerLowest: var(--DividerLowest);
   --color-GrayLow: var(--GrayLow);
@@ -199,4 +221,25 @@
   --color-SurfaceContainer: var(--SurfaceContainer);
   --color-SurfaceContainerHigh: var(--SurfaceContainerHigh);
   --color-SurfaceContainerHighest: var(--SurfaceContainerHighest);
+
+  /*  */
+
+  --color-StatusExcelent: var(--StatusExcelent);
+  --color-StatusGood: var(--StatusGood);
+  --color-StatusRegular: var(--StatusRegular);
+  --color-StatusBad: var(--StatusBad);
+  --color-StatusWorst: var(--StatusWorst);
+  --color-OnStatusExcelent: var(--OnStatusExcelent);
+  --color-OnStatusGood: var(--OnStatusGood);
+  --color-OnStatusRegular: var(--OnStatusRegular);
+  --color-OnStatusBad: var(--OnStatusBad);
+  --color-OnStatusWorst: var(--OnStatusWorst);
+
+  /*  */
+  --color-AlertLow: var(--AlertLow);
+  --color-AlertMedium: var(--AlertMedium);
+  --color-AlertHigh: var(--AlertHigh);
+  --color-OnAlertLow: var(--OnAlertLow);
+  --color-OnAlertMedium: var(--OnAlertMedium);
+  --color-OnAlertHigh: var(--OnAlertHigh);
 }

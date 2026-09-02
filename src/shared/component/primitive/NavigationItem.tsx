@@ -36,7 +36,7 @@ export function NavigationItem({
         showLabel && " pr-1.5",
         selected &&
           isRoot &&
-          "bg-PrimaryContainerLow text-onPrimaryContainerLow",
+          "bg-PrimaryContainerLow text-OnPrimaryContainerLow",
         selected && !isRoot && "bg-DividerLow text-OnSurfaceVariant",
         // /!selected && "opacity-[0.84]",
         className,

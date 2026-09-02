@@ -22,6 +22,7 @@ import {
 } from "../../ui/studentSummaryPanel/studentSummary.type";
 
 type UseStudentPlanResult = {
+  totalSemesters: number;
   loading: boolean;
   studentDetail: StudentDetail | null;
   studentGrades: StudentClassItem[];
@@ -58,6 +59,17 @@ export function useStaticStudentDetail(
       snapshot?.plan.map(toStudentClassItemUI) ?? EMPTY_STUDENT_GRADES,
     [snapshot],
   );
+
+  const totalSemesters=useMemo(
+    () => {
+      const set= new Set<number>();
+      snapshot?.plan.forEach((p)=>{if(p.semester)set.add(p.semester)});
+      return set.size;
+    },
+    [snapshot],
+  );
+
+
   const studentDetail = useMemo(() => {
     if (!snapshot?.student) return null;
 
@@ -76,5 +88,6 @@ export function useStaticStudentDetail(
     loading: snapshot === undefined,
     studentDetail,
     studentGrades,
+    totalSemesters
   };
 }

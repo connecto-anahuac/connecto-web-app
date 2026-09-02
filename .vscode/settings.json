@@ -2,5 +2,5 @@
   "js/ts.tsserver.experimental.enableProjectDiagnostics": true,//always watch all docs
   "js/ts.tsdk.path": "node_modules\\typescript\\lib",
   "tailwindCSS.classFunctions": ["cva", "cx"],
-  "tailwindCSS.experimental.configFile": "src/app/globals.css"
+  "tailwindCSS.experimental.configFile": "src/shared/styles/globals.css"
 }

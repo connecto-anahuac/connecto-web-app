@@ -38,7 +38,7 @@ export default function TimeSlotRowHeader({
 					  ? "h-10 bg-DividerMiddle text-OnSurfaceVariant"
 					  : "min-h-25.5 px-1 py-2.5",
 				isHighlighted
-					? "border border-Primary bg-PrimaryContainerLow text-onPrimaryContainerLow"
+					? "border border-Primary bg-PrimaryContainerLow text-OnPrimaryContainerLow"
 					: "border border-DividerMiddle bg-DividerMiddle text-OnSurfaceVariant",
 				className,
 			)}
@@ -57,12 +57,12 @@ export default function TimeSlotRowHeader({
 				<>
 					<span className="mt-1 leading-none">{label}</span>
 					<div className="mt-1.5 flex w-full flex-col items-center gap-0.5">
-						<span className={cn("leading-none", isHighlighted ? "text-onPrimaryContainerLow" : "text-OnSurface/40")}>
+						<span className={cn("leading-none", isHighlighted ? "text-OnPrimaryContainerLow" : "text-OnSurface/40")}>
 							{startTime}
 						</span>
-						{/* <div className={cn("h-px w-full", isHighlighted ?  "text-onPrimaryContainerLow" : "text-OnSurface-40")} /> */}
-						<TildeIcon  className={cn("h-2", isHighlighted ?  "text-onPrimaryContainerLow" : "text-OnSurface/60")} />
-                        <span className={cn("leading-none", isHighlighted ? "text-onPrimaryContainerLow" : "text-OnSurface/40")}>
+						{/* <div className={cn("h-px w-full", isHighlighted ?  "text-OnPrimaryContainerLow" : "text-OnSurface-40")} /> */}
+						<TildeIcon  className={cn("h-2", isHighlighted ?  "text-OnPrimaryContainerLow" : "text-OnSurface/60")} />
+                        <span className={cn("leading-none", isHighlighted ? "text-OnPrimaryContainerLow" : "text-OnSurface/40")}>
 							{endTime}
 						</span>
 					</div>
