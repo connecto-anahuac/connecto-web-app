@@ -28,8 +28,8 @@ export default function TabBadge({
         "h-fit px-2 py-1 text-xs font-medium leading-none",
         hasIcon &&
           "h-fit gap-1 pl-1 pr-2 py-1 text-sm font-medium leading-none",
-        "bg-transparent text-connecto-muted",
-        selected && "bg-connecto-muted-panel text-connecto-ink",
+        "bg-transparent text-OnSurface/60",
+        selected && "bg-DividerLow text-OnSurface",
         className,
       )}
       {...props}

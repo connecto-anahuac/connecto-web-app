@@ -8,13 +8,13 @@ import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
 
 type Props = ComponentProps<"div"> & {
-  loading: boolean;
+  loading?: boolean;
   items: readonly StudentClassItem[];
   filterResult: FilterResult;
 };
 
 export function StudentDiagram({
-  loading,
+  loading = false,
   items,
   className,
   filterResult,

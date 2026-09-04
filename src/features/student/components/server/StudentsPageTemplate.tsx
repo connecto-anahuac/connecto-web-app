@@ -5,6 +5,7 @@ type Props = {
   children: ReactNode;
 };
 
+// コレクション表示
 export function StudentsPageTemplate({ children }: Props) {
   return <StudentsShellContainer>{children}</StudentsShellContainer>;
 }

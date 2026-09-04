@@ -6,6 +6,7 @@ type Props = {
   studentId: string;
 };
 
+// シングル表示
 export function StudentPageTemplate({ studentId }: Props) {
   return <StudentDetailContainer studentId={studentId} />;
 

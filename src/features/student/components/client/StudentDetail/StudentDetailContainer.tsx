@@ -1,11 +1,14 @@
 "use client";
 
 import { DataSearchScopeProvider } from "@/shared/store/filter/FilterProvider";
-import StudentGeneralPage, {
-  bildProfileInformationa,
-  buildStudentDetailInformationCards,
-} from "./StudentSinglePageTemplate";
+import { StudentDetailPresenter } from "./StudentDetailPresenter";
+import {
+  buildProfileInformations,
+  buildStudentDetailOverviewCards,
+} from "./studentDetailViewModel";
 import { useStaticStudentDetail } from "./useStaticStudentDetail";
+import { useStudentClassTable } from "./useStudentClassTable";
+import { useStudentDetailTabs } from "./useStudentDetailTabs";
 
 type Props = {
   studentId: string;
@@ -20,8 +23,18 @@ export function StudentDetailContainer({ studentId }: Props) {
 }
 
 function StudentDetailContent({ studentId }: Props) {
+  const { selectedTab, onTabChange } = useStudentDetailTabs();
   const { loading, studentDetail, studentGrades, totalSemesters } =
     useStaticStudentDetail(studentId);
+  const {
+    config,
+    filterResult,
+    globalFilter,
+    metadata,
+    presets,
+    setGlobalFilter,
+    table,
+  } = useStudentClassTable(studentGrades);
 
   if (loading) {
     return <div>Loading...</div>;
@@ -32,17 +45,26 @@ function StudentDetailContent({ studentId }: Props) {
   }
 
   return (
-    <StudentGeneralPage
-      infomations={bildProfileInformationa(studentDetail)}
+    <StudentDetailPresenter
+      profileInformations={buildProfileInformations(studentDetail)}
       imgSrc={studentDetail.imgSrc ?? "/data/avator.png"}
       status={studentDetail.profile.status}
       planTotalSemesters={totalSemesters}
-      {...buildStudentDetailInformationCards(
+      {...buildStudentDetailOverviewCards(
         studentDetail,
         studentGrades,
         totalSemesters,
       )}
-      studentId={studentId}
+      studentGrades={studentGrades}
+      table={table}
+      tableConfig={config}
+      searchText={globalFilter}
+      onSearchTextChange={setGlobalFilter}
+      presets={presets}
+      filterResult={filterResult}
+      metadata={metadata}
+      selectedTab={selectedTab}
+      onTabChange={onTabChange}
     />
   );
 }
