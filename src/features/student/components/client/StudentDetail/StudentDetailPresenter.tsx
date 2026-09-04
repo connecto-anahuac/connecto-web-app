@@ -67,7 +67,7 @@ export function StudentDetailPresenter({
       <ContentTitleSection title={"Alumnos"} />
       <div className="flex gap-3 w-full flex-1 min-h-0">
         <ProfileSummary
-          className="w-70"
+          className="w-48"
           infomations={profileInformations}
           imgSrc={imgSrc}
           status={status}

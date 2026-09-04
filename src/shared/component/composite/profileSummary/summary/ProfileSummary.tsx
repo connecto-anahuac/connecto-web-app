@@ -1,8 +1,10 @@
 import Image from "next/image";
 import {
+  EnrolledPeriodInformationLine,
   InformationLine,
   InformationLineProps,
   SemesterInformationLine,
+  TotalSemesterInformationLine,
 } from "../infoline/InformationLine";
 import { cn } from "@/shared/lib/util";
 import { StudentStatus } from "@/shared/types/consts";
@@ -37,7 +39,7 @@ export default function ProfileSummary({
   ...props
 }: Props) {
   return (
-    <div className={cn("flex flex-col gap-5", className)} {...props}>
+    <div className={cn("flex flex-col gap-5 w-40", className)} {...props}>
       {/* photo & name */}
       <div className="flex items-center gap-3">
         <div className="size-fit relative">
@@ -50,9 +52,9 @@ export default function ProfileSummary({
           />
           <div
             className={cn(
-              "absolute rounded-full bottom-0 right-0 size-5 border-[3px] border-PrimaryContainerLowest",
+              "absolute rounded-full bottom-0 right-0 size-3.5 border-[3px] border-PrimaryContainerLowest",
               "bg-gray-500",
-              status === StudentStatus.ACTIVE && "bg-green-300",
+              status === StudentStatus.ACTIVE && "bg-lime-500",
             )}
           />
         </div>
@@ -67,13 +69,24 @@ export default function ProfileSummary({
           if (key === "schoolMail" || key === "personalMail" || key === "phone")
             return null;
           if (key === "name") return null;
-          if (key === "enrolledPeriod") return null;
+          // if (key === "enrolledPeriod") return null;
 
           const info = infomations[key as keyof Informations];
 
           if (key === "semester")
             return (
-              <SemesterInformationLine
+              <TotalSemesterInformationLine
+                semester={{
+                  current: info.value,
+                  total: planTotalSemesters.toString(),
+                }}
+                period={new Period(infomations.enrolledPeriod.value)}
+                iconName={info.iconName}
+              />
+            );
+          if (key === "enrolledPeriod")
+            return (
+              <EnrolledPeriodInformationLine
                 semester={{
                   current: info.value,
                   total: planTotalSemesters.toString(),
