@@ -1,9 +1,11 @@
+import { StudentStatus } from "@/shared/types/consts";
 import { Period } from "@/shared/types/Period";
 
 export type StudentCollectionItem = {
     studentId: string;
     name: string;
-    status: string;
+    avatarColorRef: number;
+    status: StudentStatus;
     career: string;
     currentSemester: number;
     enrolledPeriod: Period;

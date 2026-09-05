@@ -4,6 +4,7 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  type CellContext,
   type ColumnDef,
   type ColumnFiltersState,
   type ColumnPinningState,
@@ -13,7 +14,7 @@ import {
   type Updater,
   type VisibilityState,
 } from "@tanstack/react-table";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
 import type { DataViewConfig } from "@/shared/types/dataView.types";
 import { buildDataViewMetadata } from "@/shared/component/composite/table/buildDataViewMetadata";
 import {
@@ -28,13 +29,26 @@ import {
 } from "@/shared/service/dataPipeline/filterEngine";
 import { compileDataViewSchema } from "@/shared/service/dataPipeline/filterFactory";
 
-type UseTableOptions<TItem extends RowData> = {
-  config: DataViewConfig<TItem>;
+export type DataTableCellRenderer<TItem extends RowData> = (
+  context: CellContext<TItem, unknown>,
+) => ReactNode;
+
+export type DataTableCellRenderers<
+  TItem extends RowData,
+  TFieldId extends string = string,
+> = Readonly<Partial<Record<TFieldId, DataTableCellRenderer<TItem>>>>;
+
+export type UseTableOptions<
+  TItem extends RowData,
+  TFieldId extends string = string,
+> = {
+  config: DataViewConfig<TItem, TFieldId>;
   data: readonly TItem[];
   getRowId: GetItemId<TItem>;
   query: SearchQuery;
   setSearchText: (text: string) => void;
   setConditions: (conditions: FilterCondition[]) => void;
+  cellRenderers?: DataTableCellRenderers<TItem, TFieldId>;
 };
 
 const DEFAULT_COLUMN_MIN_WIDTH = 140;
@@ -107,14 +121,55 @@ export function resolveFilterConditionsUpdate(//TODO header-> menu complete->rem
   );
 }
 
-export function useTable<TItem extends RowData>({
+export function createTableColumnDefs<
+  TItem extends RowData,
+  TFieldId extends string = string,
+>(
+  config: DataViewConfig<TItem, TFieldId>,
+  cellRenderers?: DataTableCellRenderers<TItem, TFieldId>,
+): ColumnDef<TItem>[] {
+  return config.fields.map((column) => {
+    const minWidth = column.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH;
+    const maxWidth = column.maxWidth ?? DEFAULT_COLUMN_MAX_WIDTH;
+    const estimatedWidth = clampWidth(
+      estimateColumnWidth(column.label),
+      minWidth,
+      maxWidth,
+    );
+    const cellRenderer = cellRenderers?.[column.fieldId];
+
+    return {
+      id: column.fieldId,
+      accessorFn: column.accessor,
+      cell: (context) =>
+        cellRenderer ? (
+          cellRenderer(context)
+        ) : (
+          <span className="block w-full truncate">
+            {column.format(context.row.original)}
+          </span>
+        ),
+      header: column.label,
+      minSize: minWidth,
+      maxSize: maxWidth,
+      size: estimatedWidth,
+      sortDescFirst: false,
+    };
+  });
+}
+
+export function useTable<
+  TItem extends RowData,
+  TFieldId extends string = string,
+>({
   config,
   data,
   getRowId,
   query,
   setSearchText,
   setConditions,
-}: UseTableOptions<TItem>) {
+  cellRenderers,
+}: UseTableOptions<TItem, TFieldId>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
   const [columnPinning, setColumnPinning] = useState<ColumnPinningState>({});
@@ -142,28 +197,8 @@ export function useTable<TItem extends RowData>({
   );
 
   const columnDefs = useMemo<ColumnDef<TItem>[]>(
-    () =>
-      config.fields.map((column) => {
-        const minWidth = column.minWidth ?? DEFAULT_COLUMN_MIN_WIDTH;
-        const maxWidth = column.maxWidth ?? DEFAULT_COLUMN_MAX_WIDTH;
-        const estimatedWidth = clampWidth(
-          estimateColumnWidth(column.label),
-          minWidth,
-          maxWidth,
-        );
-
-        return {
-          id: column.fieldId,
-          accessorFn: column.accessor,
-          cell: (context) => column.format(context.row.original),
-          header: column.label,
-          minSize: minWidth,
-          maxSize: maxWidth,
-          size: estimatedWidth,
-          sortDescFirst: false,
-        };
-      }),
-    [config.fields],
+    () => createTableColumnDefs(config, cellRenderers),
+    [cellRenderers, config],
   );
 
   // TanStack intentionally returns a mutable table instance for event handlers.

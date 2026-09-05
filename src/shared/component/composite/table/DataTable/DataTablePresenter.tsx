@@ -13,6 +13,14 @@ import type {
 import { getColumnConfig, getTableSortIcon } from "./useDataTable";
 import type { DataFieldConfig } from "../../../../types/dataView.types";
 
+export function getFormattedCellTitle<TItem>(
+  config: DataTablePresenterProps<TItem>["config"],
+  columnId: string,
+  row: TItem,
+) {
+  return getColumnConfig(config, columnId)?.format(row) ?? "";
+}
+
 // type ColumnActionsProps<TItem> = {
 //   column: Column<TItem>;
 //   config: DataViewColumn<TItem>;
@@ -266,7 +274,7 @@ export function DataTablePresenter<TItem>({
               return (
                 <Cell
                   className={cn(
-                    "relative truncate",
+                    "relative",
                     // isResizeBoundaryHighlighted &&
                     //   "after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:translate-x-1/2  after:z-20 after:w-0.5 after:bg-Primary",
                     pinned && "sticky z-10",
@@ -278,7 +286,7 @@ export function DataTablePresenter<TItem>({
                     minWidth: column.getSize(),
                     left: pinned ? column.getStart("left") : undefined,
                   }}
-                  title={String(cell.getValue() ?? "")}
+                  title={getFormattedCellTitle(config, column.id, row.original)}
                 >
                   {flexRender(column.columnDef.cell, cell.getContext())}
                 </Cell>

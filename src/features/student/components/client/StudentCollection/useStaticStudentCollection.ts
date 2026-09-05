@@ -4,6 +4,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import type { StudentCollectionSummaryDto } from "@/external/dto/student/student-collection.dto";
 import { fetchStudentCollectionSummaries } from "@/external/handler/students/query.client";
 import type { StudentCollectionItem } from "./studentCollection.type";
+import { toStudentStatus } from "@/features/student/types/studentProfile";
 
 type UseStaticStudentCollectionResult = {
   loading: boolean;
@@ -50,7 +51,8 @@ function toStudentCollectionItem(
   return {
     studentId: student.id,
     name: student.name,
-    status: student.status,
+    avatarColorRef: student.avatarColorRef,
+    status: toStudentStatus(student.status),
     career: student.career,
     currentSemester: student.currentSemester,
     enrolledPeriod: student.enrolledPeriod,

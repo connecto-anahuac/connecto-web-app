@@ -5,6 +5,7 @@ import { Period } from "@/shared/types/Period";
 import type { StudentCollectionSummaryDto } from "@/external/dto/student/student-collection.dto";
 import type { StudentCollectionItem } from "./studentCollection.type";
 import { useStaticStudentCollection } from "./useStaticStudentCollection";
+import { StudentStatus } from "@/shared/types/consts";
 
 const mocks = vi.hoisted(() => ({
   fetchStudentCollectionSummaries: vi.fn(),
@@ -63,7 +64,7 @@ describe("useStaticStudentCollection", () => {
 
     await expect(query?.()).resolves.toEqual({
       status: "success",
-      studentCollection: [studentCollectionItem("1", "Ada")],
+      studentCollection: [studentCollectionItem("1", "Ada", 6)],
     });
   });
 
@@ -106,11 +107,16 @@ function renderHook() {
   return value;
 }
 
-function studentCollectionItem(id: string, name: string): StudentCollectionItem {
+function studentCollectionItem(
+  id: string,
+  name: string,
+  avatarColorRef = 0,
+): StudentCollectionItem {
   return {
     studentId: id,
     name,
-    status: "activo",
+    avatarColorRef,
+    status: StudentStatus.ACTIVE,
     career: "Industrial",
     enrolledPeriod: new Period("202460"),
     currentSemester: 3,
@@ -123,6 +129,7 @@ function studentCollectionItem(id: string, name: string): StudentCollectionItem 
 function studentCollectionSummary(
   id: string,
   name: string,
+  avatarColorRef = 6,
 ): StudentCollectionSummaryDto {
   return {
     id,
@@ -132,7 +139,7 @@ function studentCollectionSummary(
     enrolledPeriod: new Period("202460"),
     semesterCount: { regular: 3, summer: 0 },
     currentSemester: 3,
-    avatarColorRef: 0,
+    avatarColorRef,
     failCount: 0,
     classProgress: 50,
     failedClassCount: 1,

@@ -3,6 +3,16 @@ import { generateAccentCombinations } from "@/shared/lib/util";
 import { StudentCollectionItem } from "./studentCollection.type";
 import { CARRERAS, StudentStatus } from "@/shared/types/consts";
 
+export type StudentCollectionFieldId =
+  | "studentId"
+  | "name"
+  | "status"
+  | "career"
+  | "currentSemester"
+  | "enrolledPeriod"
+  | "classProgress"
+  | "failedClassCount";
+
 const STATUS_OPTIONS = [
   { label: StudentStatus.ACTIVE, value: StudentStatus.ACTIVE },
   { label: StudentStatus.INACTIVE, value: StudentStatus.INACTIVE },
@@ -36,7 +46,7 @@ const displayNumber = (value: number | null) =>
 
 
 
-export const STUDENT_COLLECTION_VIEW_CONFIG: DataViewConfig<StudentCollectionItem> = {
+export const STUDENT_COLLECTION_VIEW_CONFIG = {
   fields: [
     {
       fieldId: "studentId",
@@ -50,7 +60,7 @@ export const STUDENT_COLLECTION_VIEW_CONFIG: DataViewConfig<StudentCollectionIte
     },
     {
       fieldId: "name",
-      label: "Nombre de materia",
+      label: "Nombre",
       icon: "class",
       valueType: "text",
       accessor: (item) => item.name,
@@ -140,4 +150,4 @@ export const STUDENT_COLLECTION_VIEW_CONFIG: DataViewConfig<StudentCollectionIte
       
     },
   ],
-};
+} satisfies DataViewConfig<StudentCollectionItem, StudentCollectionFieldId>;

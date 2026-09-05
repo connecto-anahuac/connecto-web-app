@@ -17,6 +17,14 @@ export enum StudentStatus {
   BAJA_ACADEMICA = "baja academica",
   BAJA_VOLUNTARIA = "baja voluntaria",
 }
+export function toStudentStatus(value: string): StudentStatus | undefined {
+  const values = Object.values(StudentStatus) as string[];
+  value=value.toLowerCase();
+  if (values.includes(value)) {
+    return value as StudentStatus;
+  }
+  return undefined; // 不明な文字列の場合は undefined を返す
+}
 
 export type DATA_CACHE_ID = "studentGrade" | "student" | "professor" | "class";
 

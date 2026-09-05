@@ -18,8 +18,8 @@ export type DataViewMetadata = {
  * One declarative description shared by tabular and card/grid consumers.
  * `accessor` stays data-oriented; view-specific components decide their layout.
  */
-export type DataFieldConfig<TItem> = {
-  fieldId: string; //
+export type DataFieldConfig<TItem, TFieldId extends string = string> = {
+  fieldId: TFieldId; //
   label: string;
   icon: IconName;
   valueType: DataFieldValueType;
@@ -37,7 +37,7 @@ export type DataFieldConfig<TItem> = {
 export type DefaultConfig = {
   viewMode: "table" | "diagram";
 }
-export type DataViewConfig<TItem> = {
-  fields: readonly DataFieldConfig<TItem>[];
+export type DataViewConfig<TItem, TFieldId extends string = string> = {
+  fields: readonly DataFieldConfig<TItem, TFieldId>[];
   default?: DefaultConfig;
 };
