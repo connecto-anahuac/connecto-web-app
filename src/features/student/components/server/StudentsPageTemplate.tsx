@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { StudentsShellContainer } from "../client/StudentsShell/StudentsShellContainer";
+import { StudentCollectionContainer } from "../client/StudentCollection/StudentCollectionContainer";
 
 type Props = {
   children: ReactNode;
@@ -7,5 +8,7 @@ type Props = {
 
 // コレクション表示
 export function StudentsPageTemplate({ children }: Props) {
-  return <StudentsShellContainer>{children}</StudentsShellContainer>;
+  return <StudentCollectionContainer />;
+  
+  // <StudentsShellContainer>{children}</StudentsShellContainer>;
 }

@@ -8,7 +8,7 @@ export const CARRERAS = [
   "Ambiental",
   "TIND",
   "Civil",
-];
+] as const;
 
 
 export enum StudentStatus {

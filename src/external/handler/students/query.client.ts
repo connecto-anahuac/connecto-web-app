@@ -1,6 +1,11 @@
 import { GradeRepository } from "@/external/repository/grade.repository";
+import { initializeUniversityDataClient } from "@/external/handler/data/initialize.client";
+import type { StudentCollectionSummaryDto } from "@/external/dto/student/student-collection.dto";
 import { toStudentDto, type StudentDto } from "@/external/dto/student/student.dto";
-import { getStudentsService } from "@/external/service/di";
+import {
+  getStudentCollectionSummariesService,
+  getStudentsService,
+} from "@/external/service/di";
 
 const gradeRepository = new GradeRepository();
 
@@ -23,4 +28,11 @@ export async function fetchStudents(): Promise<StudentDto[]> {
     ...toStudentDto(student),
     reprobado: reprobadoByStudentId[student.id] ?? 0,
   }));
+}
+
+export async function fetchStudentCollectionSummaries(): Promise<
+  StudentCollectionSummaryDto[]
+> {
+  await initializeUniversityDataClient();
+  return getStudentCollectionSummariesService.execute();
 }
