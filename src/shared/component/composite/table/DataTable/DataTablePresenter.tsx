@@ -1,4 +1,8 @@
-import { flexRender, type Column } from "@tanstack/react-table";
+import {
+  flexRender,
+  type Column,
+} from "@tanstack/react-table";
+import type { MouseEvent as ReactMouseEvent } from "react";
 // import { TanstackFilterButtonGroup } from "@/components/button/TanstackFilterButtonGroup";
 import Cell from "../Cell";
 import HeaderCell from "../header";
@@ -19,6 +23,17 @@ export function getFormattedCellTitle<TItem>(
   row: TItem,
 ) {
   return getColumnConfig(config, columnId)?.format(row) ?? "";
+}
+
+const rowInteractionIgnoreSelector =
+  'a, button, input, select, textarea, [role="button"], [role="link"], [data-row-interaction="ignore"]';
+
+export function isRowInteractionIgnored(target: EventTarget | null) {
+  return (
+    target !== null &&
+    typeof (target as Element).closest === "function" &&
+    (target as Element).closest(rowInteractionIgnoreSelector) !== null
+  );
 }
 
 // type ColumnActionsProps<TItem> = {
@@ -167,6 +182,10 @@ export function DataTablePresenter<TItem>({
   table,
   config,
   className,
+  onRowClick,
+  onRowDoubleClick,
+  isRowActive,
+  isRowHoverable,
   resized,
   hoveredResizeColumnId,
   focusedResizeColumnId,
@@ -262,38 +281,76 @@ export function DataTablePresenter<TItem>({
         ))}
 
         {/* Table body */}
-        {table.getRowModel().rows.map((row) => (
-          <div className="flex" key={row.id} role="row">
-            {row.getVisibleCells().map((cell) => {
-              const column = cell.column;
-              const pinned = column.getIsPinned() === "left";
-              const isResizeBoundaryHighlighted =
-                hoveredResizeColumnId === column.id ||
-                focusedResizeColumnId === column.id ||
-                column.getIsResizing();
-              return (
-                <Cell
-                  className={cn(
-                    "relative",
-                    // isResizeBoundaryHighlighted &&
-                    //   "after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:translate-x-1/2  after:z-20 after:w-0.5 after:bg-Primary",
-                    pinned && "sticky z-10",
-                  )}
-                  key={cell.id}
-                  role="cell"
-                  style={{
-                    width: column.getSize(),
-                    minWidth: column.getSize(),
-                    left: pinned ? column.getStart("left") : undefined,
-                  }}
-                  title={getFormattedCellTitle(config, column.id, row.original)}
-                >
-                  {flexRender(column.columnDef.cell, cell.getContext())}
-                </Cell>
-              );
-            })}
-          </div>
-        ))}
+        {table.getRowModel().rows.map((row) => {
+          const rowIsInteractive = Boolean(onRowClick || onRowDoubleClick);
+          const rowIsActive = isRowActive?.(row.original) ?? false;
+
+          return (
+            <div
+              aria-selected={rowIsActive}
+              className={cn(
+                "flex",
+                rowIsInteractive && "cursor-pointer",
+                isRowHoverable && "hover:bg-DividerLow","hover:bg-red-600",
+                rowIsActive && "bg-Primary/10",
+              )}
+              key={row.id}
+              onClick={(event) => {
+                if (!isRowInteractionIgnored(event.target)) {
+                  onRowClick?.(row.original, event);
+                }
+              }}
+              onDoubleClick={(event) => {
+                if (!isRowInteractionIgnored(event.target)) {
+                  onRowDoubleClick?.(row.original, event);
+                }
+              }}
+              onKeyDown={(event) => {
+                if (
+                  (event.key === "Enter" || event.key === " ") &&
+                  !isRowInteractionIgnored(event.target)
+                ) {
+                  event.preventDefault();
+                  onRowClick?.(
+                    row.original,
+                    event as unknown as ReactMouseEvent<HTMLDivElement>,
+                  );
+                }
+              }}
+              role="row"
+              tabIndex={rowIsInteractive ? 0 : undefined}
+            >
+              {row.getVisibleCells().map((cell) => {
+                const column = cell.column;
+                const pinned = column.getIsPinned() === "left";
+                const isResizeBoundaryHighlighted =
+                  hoveredResizeColumnId === column.id ||
+                  focusedResizeColumnId === column.id ||
+                  column.getIsResizing();
+                return (
+                  <Cell
+                    className={cn(
+                      "relative",
+                      // isResizeBoundaryHighlighted &&
+                      //   "after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:translate-x-1/2  after:z-20 after:w-0.5 after:bg-Primary",
+                      pinned && "sticky z-10",
+                    )}
+                    key={cell.id}
+                    role="cell"
+                    style={{
+                      width: column.getSize(),
+                      minWidth: column.getSize(),
+                      left: pinned ? column.getStart("left") : undefined,
+                    }}
+                    title={getFormattedCellTitle(config, column.id, row.original)}
+                  >
+                    {flexRender(column.columnDef.cell, cell.getContext())}
+                  </Cell>
+                );
+              })}
+            </div>
+          );
+        })}
 
         {/* table no exists */}
         {!table.getRowModel().rows.length && (

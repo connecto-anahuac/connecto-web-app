@@ -11,6 +11,16 @@ export type DataTableProps<TItem> = {
   table: Table<TItem>;
   config: DataViewConfig<TItem>;
   className?: string;
+  onRowClick?: (
+    item: TItem,
+    event: ReactMouseEvent<HTMLDivElement>,
+  ) => void;
+  onRowDoubleClick?: (
+    item: TItem,
+    event: ReactMouseEvent<HTMLDivElement>,
+  ) => void;
+  isRowActive?: (item: TItem) => boolean;
+  isRowHoverable?: boolean;
 };
 
 export type DataTablePresenterProps<TItem> = DataTableProps<TItem> & {

@@ -12,17 +12,18 @@ import { useStudentDetailTabs } from "./useStudentDetailTabs";
 
 type Props = {
   studentId: string;
+  className?: string;
 };
 
-export function StudentDetailContainer({ studentId }: Props) {
+export function StudentDetailContainer({ studentId, className }: Props) {
   return (
     <DataSearchScopeProvider scopeId={`student:grades:${studentId}`}>
-      <StudentDetailContent studentId={studentId} />
+      <StudentDetailContent studentId={studentId} className={className} />
     </DataSearchScopeProvider>
   );
 }
 
-function StudentDetailContent({ studentId }: Props) {
+function StudentDetailContent({ studentId, className }: Props) {
   const { selectedTab, onTabChange } = useStudentDetailTabs();
   const { loading, studentDetail, studentGrades, totalSemesters } =
     useStaticStudentDetail(studentId);
@@ -65,6 +66,7 @@ function StudentDetailContent({ studentId }: Props) {
       metadata={metadata}
       selectedTab={selectedTab}
       onTabChange={onTabChange}
+      className={className}
     />
   );
 }

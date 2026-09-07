@@ -120,12 +120,14 @@ describe("StudentDetailPresenter", () => {
         metadata: { optionsByFieldId: {} },
         selectedTab: "overview" satisfies StudentDetailTab,
         onTabChange: () => undefined,
+        className: "p-2",
       }),
     );
 
     expect(markup).toContain("Ada");
     expect(markup).toContain("Generales");
     expect(markup).toContain("Plan de estudios");
+    expect(markup).toContain("p-2");
     expect(markup).toContain('data-state="inactive"');
     expect(markup).toContain("Requisitos de graduación");
   });

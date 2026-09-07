@@ -1,14 +1,9 @@
-import type { ReactNode } from "react";
-import { StudentsShellContainer } from "../client/StudentsShell/StudentsShellContainer";
-import { StudentCollectionContainer } from "../client/StudentCollection/StudentCollectionContainer";
+import { StudentsPageContent } from "../client/StudentsPage/StudentsPageContent";
 
 type Props = {
-  children: ReactNode;
+  studentId?: string;
 };
 
-// コレクション表示
-export function StudentsPageTemplate({ children }: Props) {
-  return <StudentCollectionContainer />;
-  
-  // <StudentsShellContainer>{children}</StudentsShellContainer>;
+export function StudentsPageTemplate({ studentId }: Props) {
+  return <StudentsPageContent studentId={studentId} />;
 }

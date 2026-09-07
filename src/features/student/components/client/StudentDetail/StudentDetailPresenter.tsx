@@ -20,8 +20,10 @@ import TabBadge from "@/shared/component/primitive/TabBadge";
 import { Icons } from "@/shared/component/primitive/icon";
 import { StudentOverview } from "./StudentOverview";
 import type { StudentDetailTab } from "./useStudentDetailTabs";
+import { cn } from "@/shared/lib/util";
 
 export type StudentDetailPresenterProps = {
+  className?: string;
   studentGrades: readonly StudentClassItem[];
   table: Table<StudentClassItem>;
   tableConfig: DataViewConfig<StudentClassItem>;
@@ -61,11 +63,12 @@ export function StudentDetailPresenter({
   failedClassInformations,
   selectedTab,
   onTabChange,
+  className,
 }: StudentDetailPresenterProps) {
   return (
-    <div className="flex flex-col gap-3 pb-0 w-full h-full">
-      <ContentTitleSection title={"Alumnos"} />
-      <div className="flex gap-3 w-full flex-1 min-h-0">
+    <div className={cn("flex flex-col gap-3 pb-0 w-full h-full @container", className)}>
+      <ContentTitleSection title={"Alumno"} />
+      <div className="flex @max-4xl:flex-col @min-4xl:flex-row gap-3 w-full flex-1 min-h-0">
         <ProfileSummary
           className="w-48"
           infomations={profileInformations}

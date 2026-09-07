@@ -13,6 +13,10 @@ export function DataTableContainer<TItem>({
   table,
   config,
   className,
+  onRowClick,
+  onRowDoubleClick,
+  isRowActive,
+  isRowHoverable=true,
 }: DataTableProps<TItem>) {
   const {
       resized,
@@ -37,6 +41,10 @@ export function DataTableContainer<TItem>({
       className={className}
       config={config}
       table={table}
+      onRowClick={onRowClick}
+      onRowDoubleClick={onRowDoubleClick}
+      isRowActive={isRowActive}
+      isRowHoverable={isRowHoverable}
       resized={resized}
       hoveredResizeColumnId={hoveredResizeColumnId}
       focusedResizeColumnId={focusedResizeColumnId}
