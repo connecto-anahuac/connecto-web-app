@@ -15,8 +15,8 @@ export default function NeutralLayout({
         <DbInicializer />
         <Header className="w-full" />
         <div className="min-h-0 h-full w-full flex-1 flex gap-0">
-          <RootNavigationSidebar className="flex-shrink-0" />
-          <div className="min-w-0 flex-1 h-full">{children}</div>
+          <RootNavigationSidebar className="shrink-0" />
+          <div className="min-w-0 flex-1 h-full bg-white">{children}</div>
         </div>
       </div>
     </DataSearchRootProvider>

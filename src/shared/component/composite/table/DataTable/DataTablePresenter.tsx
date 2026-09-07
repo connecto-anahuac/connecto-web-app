@@ -291,7 +291,7 @@ export function DataTablePresenter<TItem>({
               className={cn(
                 "flex",
                 rowIsInteractive && "cursor-pointer",
-                isRowHoverable && "hover:bg-DividerLow","hover:bg-red-600",
+                isRowHoverable && "hover:bg-DividerLow",
                 rowIsActive && "bg-Primary/10",
               )}
               key={row.id}
