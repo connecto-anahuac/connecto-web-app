@@ -62,6 +62,8 @@
   --DividerLowest: #f4f4f4;
   --GrayLow: #b5b5b5;
   --PrimaryContainerLowest: #fcf9f7;
+  --StudentNumberContainer: #f3f3f3;
+  --OnStudentNumber: #494949;
 
   /*  */
   --StatusExcelent: #D9F0CD;
@@ -158,6 +160,8 @@
   --DividerLowest: #f4f4f4;
   --GrayLow: #b5b5b5;
   --PrimaryContainerLowest: #fcf9f7;
+  --StudentNumberContainer: #f3f3f3;
+  --OnStudentNumber: #494949;
 }
 
 @theme inline {
@@ -171,6 +175,8 @@
   --color-DividerLowest: var(--DividerLowest);
   --color-GrayLow: var(--GrayLow);
   --color-PrimaryContainerLowest: var(--PrimaryContainerLowest);
+  --color-StudentNumberContainer: var(--StudentNumberContainer);
+  --color-OnStudentNumber: var(--OnStudentNumber);
   /*  */
   --color-Primary: var(--Primary);
   --color-SurfaceTint: var(--SurfaceTint);

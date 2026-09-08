@@ -4,6 +4,14 @@ import { OfferingCourseRepository } from "@/external/repository/offering-course.
 import { PlanRepository } from "@/external/repository/plan.repository";
 import { PreRequisitoRepository } from "@/external/repository/prerequisito.repository";
 import { StudentRepository } from "@/external/repository/student.repository";
+import { ClassroomRepository } from "@/external/repository/classroom.repository";
+import { ProfessorRepository } from "@/external/repository/professor.repository";
+import { StudyPlanRepository } from "@/external/repository/study-plan.repository";
+import { TimeSlotRepository } from "@/external/repository/time-slot.repository";
+import { GetCoursesService } from "@/external/service/course/get-courses.service";
+import { GetClassroomsService } from "@/external/service/classroom/get-classrooms.service";
+import { GetProfessorsService } from "@/external/service/professor/get-professors.service";
+import { GetStudyPlansService } from "@/external/service/study-plan/get-study-plans.service";
 
 import { GetOfferingCoursesByCareerService } from "@/external/service/offering-course/get-offering-courses-by-career.service";
 import { GetSelectedOfferingCoursesService } from "@/external/service/offering-course/get-selected-offering-courses.service";
@@ -18,6 +26,15 @@ const courseRepository = new CourseRepository();
 const gradeRepository = new GradeRepository();
 const preRequisitoRepository = new PreRequisitoRepository();
 const offeringCourseRepository = new OfferingCourseRepository();
+const classroomRepository = new ClassroomRepository();
+const professorRepository = new ProfessorRepository();
+const studyPlanRepository = new StudyPlanRepository();
+const timeSlotRepository = new TimeSlotRepository();
+
+export const getCoursesService = new GetCoursesService(courseRepository, preRequisitoRepository);
+export const getClassroomsService = new GetClassroomsService(classroomRepository);
+export const getProfessorsService = new GetProfessorsService(professorRepository, courseRepository, classroomRepository, timeSlotRepository);
+export const getStudyPlansService = new GetStudyPlansService(studyPlanRepository, planRepository, courseRepository);
 
 export const getStudentsService = new GetStudentsService(studentRepository);
 

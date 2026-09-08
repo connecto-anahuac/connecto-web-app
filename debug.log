@@ -1,3 +1,4 @@
 [0730/204912.234:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: アクセスが拒否されました。 (0x5)
 [0803/141140.707:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: アクセスが拒否されました。 (0x5)
 [0803/141154.606:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: アクセスが拒否されました。 (0x5)
+[0907/205833.340:ERROR:third_party\crashpad\crashpad\util\win\registration_protocol_win.cc:108] CreateFile: アクセスが拒否されました。 (0x5)
