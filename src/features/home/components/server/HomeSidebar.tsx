@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import NavigationItem from "@/shared/component/primitive/NavigationItem";
 import type { NavItem } from "@/features/home/types";
 import { SidebarToggleIcon, SidebarUserIcon } from "@/features/home/components/server/icons";
 
@@ -28,13 +29,14 @@ export function HomeSidebar({ items }: HomeSidebarProps) {
           <Link
             key={item.label}
             href="/"
-            className={item.active
-              ? "flex items-center gap-2 text-lg font-semibold text-white"
-              : "flex items-center gap-2 text-base text-white/80 transition hover:text-white"
-            }
+            className="transition hover:opacity-90"
           >
-            <SidebarUserIcon active={item.active} />
-            <span>{item.label}</span>
+            <NavigationItem
+              icon={item.iconName}
+              label={item.label}
+              selected={item.active}
+              className={item.active ? "text-white" : "text-white/80"}
+            />
           </Link>
         ))}
       </nav>

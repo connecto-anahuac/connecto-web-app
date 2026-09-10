@@ -1,7 +1,13 @@
-export default function StudentsIndexPage() {
-  return (
-    <div className="flex h-full items-center justify-center p-6 text-sm text-OnSurface">
-      Selecciona un estudiante para ver su plan academico.
-    </div>
-  );
+import { StudentsPageTemplate } from "@/features/student/components/server/StudentsPageTemplate";
+
+export default async function StudentsIndexPage({
+  searchParams,
+}: PageProps<"/students">) {
+  const { studentId } = await searchParams;
+  const selectedStudentId =
+    typeof studentId === "string" && studentId.trim().length > 0
+      ? studentId
+      : undefined;
+
+  return <StudentsPageTemplate studentId={selectedStudentId} />;
 }

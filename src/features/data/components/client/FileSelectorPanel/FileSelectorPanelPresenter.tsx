@@ -83,15 +83,16 @@ export function FileSelectorPanelPresenter({
           </div>
         )}
 
-        <input
-          ref={inputRef}
-          type="file"
-          accept=".csv"
-          multiple
-          hidden
-          onChange={onInputChange}
-        />
       </div>
+
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".csv"
+        multiple
+        hidden
+        onChange={onInputChange}
+      />
 
       {errorMessage ? (
         <div className="rounded border border-red-200 bg-red-50 p-3 text-sm text-red-700">

@@ -1,12 +1,14 @@
 export const NULL_DATA_STRING = "--";
 export const GRADE_NOT_FOUND_VALUE = -1;
+export const PERIOD_NOT_FOUND_VALUE = "500060";
+export const PASS_GRADE = 6;
 
 export const CARRERAS = [
   "Industrial",
   "Ambiental",
   "TIND",
   "Civil",
-];
+] as const;
 
 
 export enum StudentStatus {
@@ -15,4 +17,16 @@ export enum StudentStatus {
   BAJA_ACADEMICA = "baja academica",
   BAJA_VOLUNTARIA = "baja voluntaria",
 }
+export function toStudentStatus(value: string): StudentStatus | undefined {
+  const values = Object.values(StudentStatus) as string[];
+  value=value.toLowerCase();
+  if (values.includes(value)) {
+    return value as StudentStatus;
+  }
+  return undefined; // 不明な文字列の場合は undefined を返す
+}
 
+export type DATA_CACHE_ID = "studentGrade" | "student" | "professor" | "class";
+
+
+export type AlertLevel="high"|"medium"|"low";

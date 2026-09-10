@@ -1,4 +1,4 @@
-import Avator from "@/components/Avator";
+import Avator from "@/shared/component/primitive/Avator";
 import { cn } from "@/shared/lib/util";
 
 type Props = React.ComponentPropsWithoutRef<"div"> & {
@@ -93,7 +93,7 @@ function RecordRow({
         <TimeBadge dateTime={updatedAt} />
       </Cell>
       <Cell className="gap-2 flex">
-        <Avator fullName={updatedBy} className="h-5 w-5 text-xs font-medium" />
+        <Avator fullName={updatedBy} className="h-5 w-5 text-xs font-medium" size="small"/>
         <span className="flex-1 line-clamp-1">{updatedBy}</span>
       </Cell>
     </div>

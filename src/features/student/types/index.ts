@@ -1,6 +1,6 @@
 export type { Contact } from "./contact";
-export type { CurriculumItem } from "./curriculum-item";
-export type { StudentProfile } from "./student-profile";
-export { toStudentProfileUI } from "./student-profile";
-export type { StudentClassItem } from "./student-plan";
-export { toStudentClassItemUI } from "./student-plan";
+export type { CurriculumItem } from "./curriculumItem.type";
+export type { StudentProfile } from "./studentProfile";
+export { toStudentProfileUI } from "./studentProfile";
+export type { StudentGradeItem as StudentClassItem } from "./studentGrade.type";
+export { toStudentClassItemUI } from "./studentGrade.type";

@@ -29,7 +29,7 @@
 //     "**/*.tsx",         // "src/**/*.ts" のようにsrcを指定するのが安全です
 //     ".next/types/**/*.ts",
 //     // 開発中の型ファイルをVS Codeが追いかけすぎて重くなるのを防ぐため、一旦コメントアウト推奨
-//     // ".next/dev/types/**/*.ts", 
+//     // ".next/dev/types/**/*.ts",
 //     "**/*.mts"
 //   ],
 //   "exclude": [
@@ -38,6 +38,7 @@
 //     "out"               // 👈 【追加】エクスポートフォルダがあれば除外する
 //   ]
 // }
+
 {
   "compilerOptions": {
     "target": "ES2017",
@@ -64,11 +65,14 @@
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
+    "src/**/*.ts",
+    "src/**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    ".next" // 👈 【追加】Next.jsのビルド生成物を明示的に除外する
+  ]
 }

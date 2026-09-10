@@ -1,9 +1,11 @@
-import { StudentsPageTemplate } from "@/features/students/components/server/StudentsPageTemplate";
+import { DataSearchProvider } from "@/shared/store/filter/FilterProvider";
 
 export default function StudentsLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
-  return <StudentsPageTemplate>{children}</StudentsPageTemplate>;
+}: LayoutProps<"/students">) {
+  return (
+    <DataSearchProvider scopeId="students:list">
+      {children}
+    </DataSearchProvider>
+  );
 }

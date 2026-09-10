@@ -1,6 +1,6 @@
 [
     {
-        "materia":"Matemáticas Básicas",
+        "materia":"Matemáticas básicas",
         "clave":{
             "raw":"MAT0403",
             "code":"MAT",
@@ -11,44 +11,12 @@
         "pre_requisito":[
 
         ],
-        "bloque":"Remedial",
-        "semester":"1",
-        "position":0
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":"1",
-        "position":0
-    },
-    {
-        "materia":"Matemáticas para computación",
-        "clave":{
-            "raw":"MAT1415",
-            "code":"MAT",
-            "number":"1415"
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
         "bloque":"Profesional",
         "semester":"1",
-        "position":2
+        "position":0
     },
     {
-        "materia":"Álgebra lineal",
+        "materia":"Álgebra lineal ",
         "clave":{
             "raw":"MAT1404",
             "code":"MAT",
@@ -61,7 +29,55 @@
         ],
         "bloque":"Profesional",
         "semester":"1",
+        "position":1
+    },
+    {
+        "materia":"Fundamentos de matemáticas",
+        "clave":{
+            "raw":"MAT1401",
+            "code":"MAT",
+            "number":"1401"
+        },
+        "horas":4.5,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"1",
+        "position":2
+    },
+    {
+        "materia":"Diseño por computadora",
+        "clave":{
+            "raw":"IMEC1401",
+            "code":"IMEC",
+            "number":"1401"
+        },
+        "horas":3.0,
+        "creditos":3.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"1",
         "position":3
+    },
+    {
+        "materia":"Química",
+        "clave":{
+            "raw":"QUI1401",
+            "code":"QUI",
+            "number":"1401"
+        },
+        "horas":4.5,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"1",
+        "position":4
     },
     {
         "materia":"Formación universitaria A",
@@ -77,10 +93,10 @@
         ],
         "bloque":"Profesional",
         "semester":"1",
-        "position":4
+        "position":5
     },
     {
-        "materia":"Taller o actividad electiva ",
+        "materia":"Taller o actividad electiva",
         "clave":{
             "raw":null,
             "code":null,
@@ -91,9 +107,9 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Anáhuac",
         "semester":"1",
-        "position":5
+        "position":6
     },
     {
         "materia":"Liderazgo y desarrollo personal",
@@ -109,7 +125,7 @@
         ],
         "bloque":"Anáhuac",
         "semester":"1",
-        "position":6
+        "position":7
     },
     {
         "materia":"Ser universitario",
@@ -125,23 +141,7 @@
         ],
         "bloque":"Anáhuac",
         "semester":"1",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "position":8
     },
     {
         "materia":"Cálculo diferencial",
@@ -160,14 +160,14 @@
         "position":0
     },
     {
-        "materia":"Éstatica",
+        "materia":"Algoritmos y programación",
         "clave":{
-            "raw":"FIS1402",
-            "code":"FIS",
-            "number":"1402"
+            "raw":"SIS1401",
+            "code":"SIS",
+            "number":"1401"
         },
-        "horas":6.0,
-        "creditos":9.0,
+        "horas":4.5,
+        "creditos":6.0,
         "pre_requisito":[
 
         ],
@@ -192,14 +192,14 @@
         "position":2
     },
     {
-        "materia":"Algoritmos y programación",
+        "materia":"Éstatica",
         "clave":{
-            "raw":"SIS1401",
-            "code":"SIS",
-            "number":"1401"
+            "raw":"FIS1402",
+            "code":"FIS",
+            "number":"1402"
         },
-        "horas":4.5,
-        "creditos":6.0,
+        "horas":6.0,
+        "creditos":9.0,
         "pre_requisito":[
 
         ],
@@ -208,10 +208,10 @@
         "position":3
     },
     {
-        "materia":"Introducción a la empresa",
+        "materia":"Ingeniería ambiental ",
         "clave":{
-            "raw":"ADM1401",
-            "code":"ADM",
+            "raw":"IAMB1401",
+            "code":"IAMB",
             "number":"1401"
         },
         "horas":3.0,
@@ -224,11 +224,11 @@
         "position":4
     },
     {
-        "materia":"Formación universitaria B",
+        "materia":"Introducción a la ingeniería",
         "clave":{
-            "raw":"CUL1412",
-            "code":"CUL",
-            "number":"1412"
+            "raw":"ING1401",
+            "code":"ING",
+            "number":"1401"
         },
         "horas":1.5,
         "creditos":3.0,
@@ -238,6 +238,22 @@
         "bloque":"Profesional",
         "semester":"2",
         "position":5
+    },
+    {
+        "materia":null,
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":null,
+        "creditos":null,
+        "pre_requisito":[
+
+        ],
+        "bloque":null,
+        "semester":"2",
+        "position":6
     },
     {
         "materia":"Habilidades para el emprendimiento",
@@ -257,7 +273,7 @@
         ],
         "bloque":"Anáhuac",
         "semester":"2",
-        "position":6
+        "position":7
     },
     {
         "materia":"Antropología fundamental",
@@ -277,23 +293,7 @@
         ],
         "bloque":"Anáhuac",
         "semester":"2",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "position":8
     },
     {
         "materia":"Cálculo integral",
@@ -316,22 +316,18 @@
         "position":0
     },
     {
-        "materia":"Dinámica",
+        "materia":null,
         "clave":{
-            "raw":"FIS2401",
-            "code":"FIS",
-            "number":"2401"
+            "raw":null,
+            "code":null,
+            "number":null
         },
-        "horas":6.0,
-        "creditos":9.0,
+        "horas":null,
+        "creditos":null,
         "pre_requisito":[
-            {
-                "raw":"FIS1402",
-                "code":"FIS",
-                "number":"1402"
-            }
+
         ],
-        "bloque":"Profesional",
+        "bloque":null,
         "semester":"3",
         "position":1
     },
@@ -356,19 +352,19 @@
         "position":2
     },
     {
-        "materia":"Lenguajes orientados a objetos",
+        "materia":"Dinámica",
         "clave":{
-            "raw":"SIS1402",
-            "code":"SIS",
-            "number":"1402"
+            "raw":"FIS2401",
+            "code":"FIS",
+            "number":"2401"
         },
-        "horas":4.5,
-        "creditos":6.0,
+        "horas":6.0,
+        "creditos":9.0,
         "pre_requisito":[
             {
-                "raw":"SIS1401",
-                "code":"SIS",
-                "number":"1401"
+                "raw":"FIS1402",
+                "code":"FIS",
+                "number":"1402"
             }
         ],
         "bloque":"Profesional",
@@ -376,14 +372,14 @@
         "position":3
     },
     {
-        "materia":"Circuitos eléctricos",
+        "materia":"Termodinámica",
         "clave":{
-            "raw":"IELC1401",
-            "code":"IELC",
-            "number":"1401"
+            "raw":"QUI2401",
+            "code":"QUI",
+            "number":"2401"
         },
         "horas":6.0,
-        "creditos":9.0,
+        "creditos":7.5,
         "pre_requisito":[
 
         ],
@@ -392,7 +388,23 @@
         "position":4
     },
     {
-        "materia":"Teller o actividad electiva ",
+        "materia":"Formación universitaria B",
+        "clave":{
+            "raw":"CUL1412",
+            "code":"CUL",
+            "number":"1412"
+        },
+        "horas":1.5,
+        "creditos":3.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"3",
+        "position":5
+    },
+    {
+        "materia":"Taller o actividad electiva",
         "clave":{
             "raw":null,
             "code":null,
@@ -403,9 +415,9 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Anáhuac",
         "semester":"3",
-        "position":5
+        "position":6
     },
     {
         "materia":"Liderazgo y equipos de alto desempeño",
@@ -425,17 +437,17 @@
         ],
         "bloque":"Profesional",
         "semester":"3",
-        "position":6
+        "position":7
     },
     {
-        "materia":"Persona y trascendencia",
+        "materia":"Ética",
         "clave":{
-            "raw":"HUM1403",
+            "raw":"HUM1404",
             "code":"HUM",
-            "number":"1403"
+            "number":"1404"
         },
-        "horas":3.0,
-        "creditos":6.0,
+        "horas":4.5,
+        "creditos":9.0,
         "pre_requisito":[
             {
                 "raw":"HUM1402",
@@ -443,25 +455,9 @@
                 "number":"1402"
             }
         ],
-        "bloque":"Profesional",
+        "bloque":"Anáhuac",
         "semester":"3",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "position":8
     },
     {
         "materia":"Cálculo multivariado",
@@ -484,70 +480,70 @@
         "position":0
     },
     {
-        "materia":"Arquitectura de computadoras",
+        "materia":null,
         "clave":{
-            "raw":"CMP2405",
-            "code":"CMP",
-            "number":"2405"
+            "raw":null,
+            "code":null,
+            "number":null
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":null,
+        "creditos":null,
         "pre_requisito":[
 
         ],
-        "bloque":"Profesional",
+        "bloque":null,
         "semester":"4",
         "position":1
     },
     {
-        "materia":"Sistemas operativos",
+        "materia":"Diseño de experimentos",
         "clave":{
-            "raw":"SIS3401",
-            "code":"SIS",
-            "number":"3401"
+            "raw":"IND3402",
+            "code":"IND",
+            "number":"3402"
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":3.0,
+        "creditos":6.0,
         "pre_requisito":[
-
+            {
+                "raw":"MAT2404",
+                "code":"MAT",
+                "number":"2404"
+            }
         ],
         "bloque":"Profesional",
         "semester":"4",
         "position":2
     },
     {
-        "materia":"Estructuras de datos y algoritmos",
+        "materia":"Ingeniería de métodos ",
         "clave":{
-            "raw":"SIS2406",
-            "code":"SIS",
-            "number":"2406"
+            "raw":"IIND2402",
+            "code":"IIND",
+            "number":"2402"
         },
         "horas":4.5,
-        "creditos":6.0,
+        "creditos":7.0,
         "pre_requisito":[
-            {
-                "raw":"SIS1402",
-                "code":"SIS",
-                "number":"1402"
-            }
+
         ],
         "bloque":"Profesional",
         "semester":"4",
         "position":3
     },
     {
-        "materia":"Electrónica digital",
+        "materia":"Ingeniería de materiales ",
         "clave":{
-            "raw":"SIS2405",
-            "code":"SIS",
-            "number":"2405"
+            "raw":"IMEC1402",
+            "code":"IMEC",
+            "number":"1402"
         },
         "horas":4.5,
         "creditos":7.0,
         "pre_requisito":[
             {
-                "raw":"IELC1401",
-                "code":"IELC",
+                "raw":"QUI1401",
+                "code":"QUI",
                 "number":"1401"
             }
         ],
@@ -567,9 +563,25 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Anáhuac",
         "semester":"4",
         "position":5
+    },
+    {
+        "materia":"Electiva Anáhuac",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Anáhuac",
+        "semester":"4",
+        "position":6
     },
     {
         "materia":"Emprendimiento e innovación",
@@ -589,39 +601,27 @@
         ],
         "bloque":"Anáhuac",
         "semester":"4",
-        "position":6
+        "position":7
     },
     {
-        "materia":"Electiva Anáhuac",
+        "materia":"Persona y trascendencia",
         "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
+            "raw":"HUM1403",
+            "code":"HUM",
+            "number":"1403"
         },
         "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
-
+            {
+                "raw":"HUM1402",
+                "code":"HUM",
+                "number":"1402"
+            }
         ],
-        "bloque":null,
+        "bloque":"Profesional",
         "semester":"4",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "position":8
     },
     {
         "materia":"Ecuaciones diferenciales",
@@ -665,54 +665,6 @@
         "position":1
     },
     {
-        "materia":"Bases de datos",
-        "clave":{
-            "raw":"SIS2403",
-            "code":"SIS",
-            "number":"2403"
-        },
-        "horas":4.5,
-        "creditos":7.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"5",
-        "position":2
-    },
-    {
-        "materia":"Redes de computadoras",
-        "clave":{
-            "raw":"SIS2401",
-            "code":"SIS",
-            "number":"2401"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"5",
-        "position":3
-    },
-    {
-        "materia":"Ingeniería de software I",
-        "clave":{
-            "raw":"SIS3407",
-            "code":"SIS",
-            "number":"3407"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"5",
-        "position":4
-    },
-    {
         "materia":"Electricidad y magnetismo",
         "clave":{
             "raw":"FIS2403",
@@ -730,43 +682,63 @@
         ],
         "bloque":"Profesional",
         "semester":"5",
-        "position":5
+        "position":2
     },
     {
-        "materia":"Electiva Anáhuac",
+        "materia":"Investigación de operaciones: Modelos matemáticos",
         "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
+            "raw":"IIND3401",
+            "code":"IIND",
+            "number":"3401"
         },
-        "horas":3.0,
-        "creditos":6.0,
+        "horas":4.5,
+        "creditos":7.0,
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Profesional",
         "semester":"5",
-        "position":6
+        "position":3
     },
     {
-        "materia":"Ética",
+        "materia":"Análisis multivariado para ingeniería",
         "clave":{
-            "raw":"HUM1404",
-            "code":"HUM",
-            "number":"1404"
+            "raw":"IIND3403",
+            "code":"IIND",
+            "number":"3403"
         },
-        "horas":4.5,
-        "creditos":9.0,
+        "horas":3.0,
+        "creditos":4.5,
         "pre_requisito":[
             {
-                "raw":"HUM1402",
-                "code":"HUM",
+                "raw":"MAT2404",
+                "code":"MAT",
+                "number":"2404"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"5",
+        "position":4
+    },
+    {
+        "materia":"Procesos de manufactura",
+        "clave":{
+            "raw":"IMEC2403",
+            "code":"IMEC",
+            "number":"2403"
+        },
+        "horas":4.5,
+        "creditos":7.0,
+        "pre_requisito":[
+            {
+                "raw":"IMEC1402",
+                "code":"IMEC",
                 "number":"1402"
             }
         ],
-        "bloque":"Anáhuac",
+        "bloque":"Profesional",
         "semester":"5",
-        "position":7
+        "position":5
     },
     {
         "materia":null,
@@ -781,23 +753,59 @@
 
         ],
         "bloque":null,
-        "semester":null,
-        "position":null
+        "semester":"5",
+        "position":6
     },
     {
-        "materia":"Programación para internet",
+        "materia":"Electiva profesional (MINOR)",
         "clave":{
-            "raw":"SIS3410",
-            "code":"SIS",
-            "number":"3410"
+            "raw":null,
+            "code":null,
+            "number":null
         },
-        "horas":4.5,
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"5",
+        "position":7
+    },
+    {
+        "materia":"Humanismo clásico y contemporáneo",
+        "clave":{
+            "raw":"HUM1405",
+            "code":"HUM",
+            "number":"1405"
+        },
+        "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS2401",
-                "code":"SIS",
-                "number":"2401"
+                "raw":"HUM1404",
+                "code":"HUM",
+                "number":"1404"
+            }
+        ],
+        "bloque":"Anáhuac",
+        "semester":"5",
+        "position":8
+    },
+    {
+        "materia":"Sistemas dinámicos",
+        "clave":{
+            "raw":"IIND4415",
+            "code":"IIND",
+            "number":"4415"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"MAT2402",
+                "code":"MAT",
+                "number":"2402"
             }
         ],
         "bloque":"Profesional",
@@ -805,55 +813,51 @@
         "position":0
     },
     {
-        "materia":"Informática en la cuarta revolución industrial",
+        "materia":null,
         "clave":{
-            "raw":"SIS4415",
-            "code":"SIS",
-            "number":"4415"
+            "raw":null,
+            "code":null,
+            "number":null
         },
-        "horas":3.0,
-        "creditos":4.5,
+        "horas":null,
+        "creditos":null,
         "pre_requisito":[
 
         ],
-        "bloque":"Profesional",
+        "bloque":null,
         "semester":"6",
         "position":1
     },
     {
-        "materia":"Bases de datos avanzadas",
+        "materia":"Ingeniería de la energía ",
         "clave":{
-            "raw":"SIS2404",
-            "code":"SIS",
-            "number":"2404"
+            "raw":"ING3401",
+            "code":"ING",
+            "number":"3401"
         },
         "horas":3.0,
-        "creditos":4.5,
+        "creditos":6.0,
         "pre_requisito":[
-            {
-                "raw":"SIS2403",
-                "code":"SIS",
-                "number":"2403"
-            }
+
         ],
         "bloque":"Profesional",
         "semester":"6",
         "position":2
     },
     {
-        "materia":"Redes avanzadas",
+        "materia":"Investigación de operaciones: Modelos estocásticos",
         "clave":{
-            "raw":"SIS3402",
-            "code":"SIS",
-            "number":"3402"
+            "raw":"IIND3405",
+            "code":"IIND",
+            "number":"3405"
         },
-        "horas":4.5,
-        "creditos":6.0,
+        "horas":3.0,
+        "creditos":4.5,
         "pre_requisito":[
             {
-                "raw":"SIS2401",
-                "code":"SIS",
-                "number":"2401"
+                "raw":"MAT2403",
+                "code":"MAT",
+                "number":"2403"
             }
         ],
         "bloque":"Profesional",
@@ -861,24 +865,72 @@
         "position":3
     },
     {
-        "materia":"Ingeniería de software II",
+        "materia":"Electiva interdisciplinaria ",
         "clave":{
-            "raw":"SIS3408",
-            "code":"SIS",
-            "number":"3408"
+            "raw":null,
+            "code":null,
+            "number":null
         },
         "horas":3.0,
-        "creditos":4.5,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Anáhuac",
+        "semester":"6",
+        "position":4
+    },
+    {
+        "materia":"Sistemas integrados de manufactura",
+        "clave":{
+            "raw":"IMEC3409",
+            "code":"IMEC",
+            "number":"3409"
+        },
+        "horas":4.5,
+        "creditos":7.0,
         "pre_requisito":[
             {
-                "raw":"SIS3407",
-                "code":"SIS",
-                "number":"3407"
+                "raw":"IMEC2403",
+                "code":"IMEC",
+                "number":"2403"
             }
         ],
         "bloque":"Profesional",
         "semester":"6",
-        "position":4
+        "position":5
+    },
+    {
+        "materia":"Electiva interdisciplinaria ",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Anáhuac",
+        "semester":"6",
+        "position":6
+    },
+    {
+        "materia":"Electiva profesional (MINOR)",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"6",
+        "position":7
     },
     {
         "materia":"Responsabilidad social y sustentabilidad",
@@ -898,86 +950,30 @@
         ],
         "bloque":"Anáhuac",
         "semester":"6",
-        "position":5
+        "position":8
     },
     {
-        "materia":"Electiva profesional (MINOR) ",
+        "materia":"Ingeniería del producto",
         "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
+            "raw":"IIND4401",
+            "code":"IIND",
+            "number":"4401"
         },
         "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
 
-        ],
-        "bloque":null,
-        "semester":"6",
-        "position":6
-    },
-    {
-        "materia":"Humanismo clásico y contemporáneo",
-        "clave":{
-            "raw":"HUM1405",
-            "code":"HUM",
-            "number":"1405"
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"HUM1404",
-                "code":"HUM",
-                "number":"1404"
-            }
-        ],
-        "bloque":"Anáhuac",
-        "semester":"6",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
-    },
-    {
-        "materia":"Programación de dispositivos móviles",
-        "clave":{
-            "raw":"SIS3403",
-            "code":"SIS",
-            "number":"3403"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"SIS1402",
-                "code":"SIS",
-                "number":"1402"
-            }
         ],
         "bloque":"Profesional",
         "semester":"7",
         "position":0
     },
     {
-        "materia":"Nuevas tecnologías en informática",
+        "materia":"Localización y diseño de \ninstalaciones",
         "clave":{
-            "raw":"SIS4409",
-            "code":"SIS",
-            "number":"4409"
+            "raw":"IIND4402",
+            "code":"IIND",
+            "number":"4402"
         },
         "horas":3.0,
         "creditos":6.0,
@@ -989,19 +985,19 @@
         "position":1
     },
     {
-        "materia":"Inteligencia artificial",
+        "materia":"Control estadístico de calidad",
         "clave":{
-            "raw":"SIS4401",
-            "code":"SIS",
-            "number":"4401"
+            "raw":"IIND4405",
+            "code":"IIND",
+            "number":"4405"
         },
-        "horas":4.5,
+        "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS1402",
-                "code":"SIS",
-                "number":"1402"
+                "raw":"MAT2404",
+                "code":"MAT",
+                "number":"2404"
             }
         ],
         "bloque":"Profesional",
@@ -1009,40 +1005,60 @@
         "position":2
     },
     {
-        "materia":"Infraestructura y cómputo en la nube",
+        "materia":"Ergonomía y seguridad industria",
         "clave":{
-            "raw":"SIS4404",
-            "code":"SIS",
-            "number":"4404"
+            "raw":"IIND2401",
+            "code":"IIND",
+            "number":"2401"
         },
-        "horas":3.0,
-        "creditos":4.5,
+        "horas":4.5,
+        "creditos":7.0,
         "pre_requisito":[
-            {
-                "raw":"SIS3401",
-                "code":"SIS",
-                "number":"3401"
-            }
+
         ],
         "bloque":"Profesional",
         "semester":"7",
         "position":3
     },
     {
-        "materia":"Calidad de software",
+        "materia":"Minería de datos",
         "clave":{
-            "raw":"SIS4402",
-            "code":"SIS",
-            "number":"4402"
+            "raw":"IIND4417",
+            "code":"IIND",
+            "number":"4417"
         },
         "horas":3.0,
-        "creditos":4.5,
+        "creditos":6.0,
         "pre_requisito":[
-
+            {
+                "raw":"IIND3403",
+                "code":"IIND",
+                "number":"3403"
+            }
         ],
         "bloque":"Profesional",
         "semester":"7",
         "position":4
+    },
+    {
+        "materia":"Simulación",
+        "clave":{
+            "raw":"IIND4403",
+            "code":"IIND",
+            "number":"4403"
+        },
+        "horas":3.0,
+        "creditos":4.5,
+        "pre_requisito":[
+            {
+                "raw":"MAT2404",
+                "code":"MAT",
+                "number":"2404"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":5
     },
     {
         "materia":"Contabilidad y costos para ingeniería",
@@ -1058,22 +1074,6 @@
         ],
         "bloque":"Profesional",
         "semester":"7",
-        "position":5
-    },
-    {
-        "materia":"Electiva interdisciplinaria ",
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":"7",
         "position":6
     },
     {
@@ -1088,7 +1088,7 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Profesional",
         "semester":"7",
         "position":7
     },
@@ -1105,23 +1105,23 @@
 
         ],
         "bloque":null,
-        "semester":null,
-        "position":null
+        "semester":"7",
+        "position":8
     },
     {
-        "materia":"Practicum de tecnologías de la información I",
+        "materia":"Practicum de ingeniería industrial I",
         "clave":{
-            "raw":"INT4405",
+            "raw":"INT4407",
             "code":"INT",
-            "number":"4405"
+            "number":"4407"
         },
         "horas":4.5,
         "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS3408",
-                "code":"SIS",
-                "number":"3408"
+                "raw":"300 créditos",
+                "code":null,
+                "number":null
             }
         ],
         "bloque":"Profesional",
@@ -1129,24 +1129,36 @@
         "position":0
     },
     {
-        "materia":"Inteligencia de negocios",
+        "materia":"Planeación y control de la producción e inventarios",
         "clave":{
-            "raw":"SIS3409",
-            "code":"SIS",
-            "number":"3409"
+            "raw":"IIND4410",
+            "code":"IIND",
+            "number":"4410"
         },
         "horas":4.5,
         "creditos":7.0,
         "pre_requisito":[
-            {
-                "raw":"SIS2404",
-                "code":"SIS",
-                "number":"2404"
-            }
+
         ],
         "bloque":"Profesional",
         "semester":"8",
         "position":1
+    },
+    {
+        "materia":"Procesos esbeltos en empresas de servicios",
+        "clave":{
+            "raw":"IIND4408",
+            "code":"IIND",
+            "number":"4408"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"8",
+        "position":2
     },
     {
         "materia":null,
@@ -1162,47 +1174,7 @@
         ],
         "bloque":null,
         "semester":"8",
-        "position":2
-    },
-    {
-        "materia":"Seguridad informática y análisis forense",
-        "clave":{
-            "raw":"SIS4403",
-            "code":"SIS",
-            "number":"4403"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"SIS3402",
-                "code":"SIS",
-                "number":"3402"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"8",
         "position":3
-    },
-    {
-        "materia":"Implementación de sistemas integrados",
-        "clave":{
-            "raw":"SIS3404",
-            "code":"SIS",
-            "number":"3404"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-            {
-                "raw":"SIS2403",
-                "code":"SIS",
-                "number":"2403"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"8",
-        "position":4
     },
     {
         "materia":"Ingeniería financiera",
@@ -1218,7 +1190,7 @@
         ],
         "bloque":"Profesional",
         "semester":"8",
-        "position":5
+        "position":4
     },
     {
         "materia":"Planeación estratégica",
@@ -1226,6 +1198,22 @@
             "raw":"IIND4409",
             "code":"IIND",
             "number":"4409"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"8",
+        "position":5
+    },
+    {
+        "materia":"Administración y evaluación de proyectos",
+        "clave":{
+            "raw":"IIND4411",
+            "code":"IIND",
+            "number":"4411"
         },
         "horas":3.0,
         "creditos":6.0,
@@ -1248,7 +1236,7 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Profesional",
         "semester":"8",
         "position":7
     },
@@ -1265,23 +1253,23 @@
 
         ],
         "bloque":null,
-        "semester":null,
-        "position":null
+        "semester":"8",
+        "position":8
     },
     {
-        "materia":"Practicum de tecnologías de la información II",
+        "materia":"Practicum de ingeniería industrial II",
         "clave":{
-            "raw":"INT4406",
+            "raw":"INT4408",
             "code":"INT",
-            "number":"4406"
+            "number":"4408"
         },
         "horas":4.5,
         "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"INT4405",
+                "raw":"INT4407",
                 "code":"INT",
-                "number":"4405"
+                "number":"4407"
             }
         ],
         "bloque":"Profesional",
@@ -1289,19 +1277,24 @@
         "position":0
     },
     {
-        "materia":"Procesamiento inteligente de datos",
+        "materia":"Sistemas integrados de empresa",
         "clave":{
-            "raw":"SIS4410",
-            "code":"SIS",
-            "number":"4410"
+            "raw":"IIND4418",
+            "code":"IIND",
+            "number":"4418"
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":3.0,
+        "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS2403",
-                "code":"SIS",
-                "number":"2403"
+                "raw":"IIND4402",
+                "code":"IIND",
+                "number":"4402"
+            },
+            {
+                "raw":"IIND4410",
+                "code":"IIND",
+                "number":"4410"
             }
         ],
         "bloque":"Profesional",
@@ -1309,14 +1302,14 @@
         "position":1
     },
     {
-        "materia":"Realidad virtual y aumentada",
+        "materia":"Sistemas integrales de gestión",
         "clave":{
-            "raw":"SIS4411",
-            "code":"SIS",
-            "number":"4411"
+            "raw":"IIND3406",
+            "code":"IIND",
+            "number":"3406"
         },
         "horas":3.0,
-        "creditos":4.5,
+        "creditos":6.0,
         "pre_requisito":[
 
         ],
@@ -1325,7 +1318,7 @@
         "position":2
     },
     {
-        "materia":"Electiva interdisciplinaria ",
+        "materia":"Electiva Anáhuac",
         "clave":{
             "raw":null,
             "code":null,
@@ -1336,7 +1329,7 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Anáhuac",
         "semester":"9",
         "position":3
     },
@@ -1352,9 +1345,41 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Anáhuac",
         "semester":"9",
         "position":4
+    },
+    {
+        "materia":"Desarrollo de capital humano",
+        "clave":{
+            "raw":"ADM2402",
+            "code":"ADM",
+            "number":"2402"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"9",
+        "position":5
+    },
+    {
+        "materia":"Derecho empresarial",
+        "clave":{
+            "raw":"DER4414",
+            "code":"DER",
+            "number":"4414"
+        },
+        "horas":3.0,
+        "creditos":3.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"9",
+        "position":6
     },
     {
         "materia":null,
@@ -1370,38 +1395,22 @@
         ],
         "bloque":null,
         "semester":"9",
-        "position":5
+        "position":7
     },
     {
-        "materia":"Legislación informática",
-        "clave":{
-            "raw":"SIS4407",
-            "code":"SIS",
-            "number":"4407"
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"9",
-        "position":6
-    },
-    {
-        "materia":"Eletctiva profesional (MINOR)",
+        "materia":null,
         "clave":{
             "raw":null,
             "code":null,
             "number":null
         },
-        "horas":3.0,
-        "creditos":6.0,
+        "horas":null,
+        "creditos":null,
         "pre_requisito":[
 
         ],
         "bloque":null,
         "semester":"9",
-        "position":7
+        "position":8
     }
 ]

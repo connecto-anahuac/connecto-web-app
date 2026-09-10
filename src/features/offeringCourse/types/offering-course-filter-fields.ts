@@ -1,5 +1,5 @@
+import type { DataViewConfig } from "@/shared/types/dataView.types";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import { defineFilterField, type FilterField } from "../../search/shared/filter-field";
 
 export const OFFERING_COURSE_FILTER_KEYS = {
   className: "offeringCourse.className",
@@ -8,12 +8,15 @@ export const OFFERING_COURSE_FILTER_KEYS = {
 export type OfferingCourseFilterKey =
   (typeof OFFERING_COURSE_FILTER_KEYS)[keyof typeof OFFERING_COURSE_FILTER_KEYS];
 
-export const OFFERING_COURSE_FILTER_FIELDS: FilterField<OfferingCourse>[] = [
-  defineFilterField<OfferingCourse>({
-    key: OFFERING_COURSE_FILTER_KEYS.className,
-    label: "Nombre de clase",
-    valueType: "text",
-    inputType: "free",
-    getValue: (item) => item.name,
-  }),
-];
+export const OFFERING_COURSE_VIEW_CONFIG: DataViewConfig<OfferingCourse> = {
+  fields: [
+    {
+      fieldId: OFFERING_COURSE_FILTER_KEYS.className,
+      label: "Nombre de clase",
+      icon: "class",
+      valueType: "text",
+      accessor: (item) => item.name,
+      format: (item) => item.name,
+    },
+  ],
+};

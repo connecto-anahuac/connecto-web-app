@@ -1,0 +1,251 @@
+@import "tailwindcss";
+
+:root {
+  --Primary: #fe5900;
+  --SurfaceTint: #8f4c33;
+  --OnPrimary: #ffffff;
+  --PrimaryContainer: #ffdbcf;
+  --OnPrimaryContainer: #d24800;
+  --Secondary: #745086;
+  --OnSecondary: #ffffff;
+  --SecondaryContainer: #f6d9ff;
+  --OnSecondaryContainer: #5b396d;
+  --Tertiary: #00687a;
+  --OnTertiary: #ffffff;
+  --TertiaryContainer: #acedff;
+  --OnTertiaryContainer: #004e5c;
+  --Error: #ba1a1a;
+  --OnError: #ffffff;
+  --ErrorContainer: #ffdad6;
+  --OnErrorContainer: #93000a;
+  --Background: #fff8f6;
+  --OnBackground: #231a16;
+  --Surface: #fff8f6;
+  --OnSurface: #231a16;
+  --SurfaceVariant: #f5ded6;
+  --OnSurfaceVariant: #53433e;
+  --Outline: #85736d;
+  --OutlineVariant: #d8c2bb;
+  --Shadow: #000000;
+  --Scrim: #000000;
+  --InverseSurface: #392e2b;
+  --InverseOnSurface: #ffede7;
+  --InversePrimary: #ffb59b;
+  --PrimaryFixed: #ffdbcf;
+  --OnPrimaryFixed: #a93800;
+  --PrimaryFixedDim: #ffb59b;
+  --OnPrimaryFixedVariant: #d24800;
+  --SecondaryFixed: #f6d9ff;
+  --OnSecondaryFixed: #2c0b3e;
+  --SecondaryFixedDim: #e2b7f4;
+  --OnSecondaryFixedVariant: #5b396d;
+  --TertiaryFixed: #acedff;
+  --OnTertiaryFixed: #001f26;
+  --TertiaryFixedDim: #85d2e7;
+  --OnTertiaryFixedVariant: #004e5c;
+  --SurfaceDim: #e8d6d1;
+  --SurfaceBright: #fff8f6;
+  --SurfaceContainerLowest: #ffffff;
+  --SurfaceContainerLow: #fff1ec;
+  --SurfaceContainer: #fceae4;
+  --SurfaceContainerHigh: #f7e4df;
+  --SurfaceContainerHighest: #f1dfd9;
+  
+  /* custom color */
+  --Warning: #fff151;
+  --DividerLow: #ededed;
+  --DividerMiddle: #e0e0e0;
+  --OnSurface-60: rgba(35, 26, 22, 0.6);
+  --OnSurface-40: rgba(35, 26, 22, 0.4);
+  --OnPrimaryContainer-low: #bc5f2f;
+  --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
+  --DividerLowest: #f4f4f4;
+  --GrayLow: #b5b5b5;
+  --PrimaryContainerLowest: #fcf9f7;
+  --StudentNumberContainer: #f3f3f3;
+  --OnStudentNumber: #494949;
+
+  /*  */
+  --StatusExcelent: #D9F0CD;
+  --StatusGood: #D9F0CD;
+  --StatusRegular: #D9F0CD;
+  --StatusBad: #F0CDCD;
+  --StatusWorst: #F0CDCD;
+
+  --OnStatusExcelent: #4D7A42;
+  --OnStatusGood: #4D7A42;
+  --OnStatusRegular: #4D7A42;
+  --OnStatusBad: #7A4242;
+  --OnStatusWorst: #7A4242;
+
+  /*  */
+  --AlertLow: #D9F0CD;
+  --AlertMedium: #FAF4BD;
+  --AlertHigh: #F0CDCD;
+
+  --OnAlertLow: #4D7A42;
+  --OnAlertMedium: #7A6842;
+  --OnAlertHigh: #7A4242;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.lightTheme {
+  --Primary: #fe5900;
+  --SurfaceTint: #8f4c33;
+  --OnPrimary: #ffffff;
+  --PrimaryContainer: #ffdbcf;
+  --OnPrimaryContainer: #d24800;
+  --Secondary: #745086;
+  --OnSecondary: #ffffff;
+  --SecondaryContainer: #f6d9ff;
+  --OnSecondaryContainer: #5b396d;
+  --Tertiary: #00687a;
+  --OnTertiary: #ffffff;
+  --TertiaryContainer: #acedff;
+  --OnTertiaryContainer: #004e5c;
+  --Error: #ba1a1a;
+  --OnError: #ffffff;
+  --ErrorContainer: #ffdad6;
+  --OnErrorContainer: #93000a;
+  --Background: #fff8f6;
+  --OnBackground: #231a16;
+  --Surface: #fff8f6;
+  --OnSurface: #231a16;
+  --SurfaceVariant: #f5ded6;
+  --OnSurfaceVariant: #53433e;
+  --Outline: #85736d;
+  --OutlineVariant: #d8c2bb;
+  --Shadow: #000000;
+  --Scrim: #000000;
+  --InverseSurface: #392e2b;
+  --InverseOnSurface: #ffede7;
+  --InversePrimary: #ffb59b;
+  --PrimaryFixed: #ffdbcf;
+  --OnPrimaryFixed: #a93800;
+  --PrimaryFixedDim: #ffb59b;
+  --OnPrimaryFixedVariant: #d24800;
+  --SecondaryFixed: #f6d9ff;
+  --OnSecondaryFixed: #2c0b3e;
+  --SecondaryFixedDim: #e2b7f4;
+  --OnSecondaryFixedVariant: #5b396d;
+  --TertiaryFixed: #acedff;
+  --OnTertiaryFixed: #001f26;
+  --TertiaryFixedDim: #85d2e7;
+  --OnTertiaryFixedVariant: #004e5c;
+  --SurfaceDim: #e8d6d1;
+  --SurfaceBright: #fff8f6;
+  --SurfaceContainerLowest: #ffffff;
+  --SurfaceContainerLow: #fff1ec;
+  --SurfaceContainer: #fceae4;
+  --SurfaceContainerHigh: #f7e4df;
+  --SurfaceContainerHighest: #f1dfd9;
+  /*  */
+  --Warning: #fff151;
+  --DividerLow: #ededed;
+  --DividerMiddle: #e0e0e0;
+  --OnSurface-60: rgba(35, 26, 22, 0.6);
+  --OnSurface-40: rgba(35, 26, 22, 0.4);
+  --OnPrimaryContainer-low: #bc5f2f;
+  --PrimaryContainer-low: rgba(255, 219, 207, 0.4);
+  --DividerLowest: #f4f4f4;
+  --GrayLow: #b5b5b5;
+  --PrimaryContainerLowest: #fcf9f7;
+  --StudentNumberContainer: #f3f3f3;
+  --OnStudentNumber: #494949;
+}
+
+@theme inline {
+  --color-Warning: var(--Warning);
+  --color-DividerLow: var(--DividerLow);
+  --color-DividerMiddle: var(--DividerMiddle);
+  --color-OnSurface-60: var(--OnSurface-60);
+  --color-OnSurface-40: var(--OnSurface-40);
+  --color-OnPrimaryContainerLow: var(--OnPrimaryContainer-low);
+  --color-PrimaryContainerLow: var(--PrimaryContainer-low);
+  --color-DividerLowest: var(--DividerLowest);
+  --color-GrayLow: var(--GrayLow);
+  --color-PrimaryContainerLowest: var(--PrimaryContainerLowest);
+  --color-StudentNumberContainer: var(--StudentNumberContainer);
+  --color-OnStudentNumber: var(--OnStudentNumber);
+  /*  */
+  --color-Primary: var(--Primary);
+  --color-SurfaceTint: var(--SurfaceTint);
+  --color-OnPrimary: var(--OnPrimary);
+  --color-PrimaryContainer: var(--PrimaryContainer);
+  --color-OnPrimaryContainer: var(--OnPrimaryContainer);
+  --color-Secondary: var(--Secondary);
+  --color-OnSecondary: var(--OnSecondary);
+  --color-SecondaryContainer: var(--SecondaryContainer);
+  --color-OnSecondaryContainer: var(--OnSecondaryContainer);
+  --color-Tertiary: var(--Tertiary);
+  --color-OnTertiary: var(--OnTertiary);
+  --color-TertiaryContainer: var(--TertiaryContainer);
+  --color-OnTertiaryContainer: var(--OnTertiaryContainer);
+  --color-Error: var(--Error);
+  --color-OnError: var(--OnError);
+  --color-ErrorContainer: var(--ErrorContainer);
+  --color-OnErrorContainer: var(--OnErrorContainer);
+  --color-Background: var(--Background);
+  --color-OnBackground: var(--OnBackground);
+  --color-Surface: var(--Surface);
+  --color-OnSurface: var(--OnSurface);
+  --color-SurfaceVariant: var(--SurfaceVariant);
+  --color-OnSurfaceVariant: var(--OnSurfaceVariant);
+  --color-Outline: var(--Outline);
+  --color-OutlineVariant: var(--OutlineVariant);
+  --color-Shadow: var(--Shadow);
+  --color-Scrim: var(--Scrim);
+  --color-InverseSurface: var(--InverseSurface);
+  --color-InverseOnSurface: var(--InverseOnSurface);
+  --color-InversePrimary: var(--InversePrimary);
+  --color-PrimaryFixed: var(--PrimaryFixed);
+  --color-OnPrimaryFixed: var(--OnPrimaryFixed);
+  --color-PrimaryFixedDim: var(--PrimaryFixedDim);
+  --color-OnPrimaryFixedVariant: var(--OnPrimaryFixedVariant);
+  --color-SecondaryFixed: var(--SecondaryFixed);
+  --color-OnSecondaryFixed: var(--OnSecondaryFixed);
+  --color-SecondaryFixedDim: var(--SecondaryFixedDim);
+  --color-OnSecondaryFixedVariant: var(--OnSecondaryFixedVariant);
+  --color-TertiaryFixed: var(--TertiaryFixed);
+  --color-OnTertiaryFixed: var(--OnTertiaryFixed);
+  --color-TertiaryFixedDim: var(--TertiaryFixedDim);
+  --color-OnTertiaryFixedVariant: var(--OnTertiaryFixedVariant);
+  --color-SurfaceDim: var(--SurfaceDim);
+  --color-SurfaceBright: var(--SurfaceBright);
+  --color-SurfaceContainerLowest: var(--SurfaceContainerLowest);
+  --color-SurfaceContainerLow: var(--SurfaceContainerLow);
+  --color-SurfaceContainer: var(--SurfaceContainer);
+  --color-SurfaceContainerHigh: var(--SurfaceContainerHigh);
+  --color-SurfaceContainerHighest: var(--SurfaceContainerHighest);
+
+  /*  */
+
+  --color-StatusExcelent: var(--StatusExcelent);
+  --color-StatusGood: var(--StatusGood);
+  --color-StatusRegular: var(--StatusRegular);
+  --color-StatusBad: var(--StatusBad);
+  --color-StatusWorst: var(--StatusWorst);
+  --color-OnStatusExcelent: var(--OnStatusExcelent);
+  --color-OnStatusGood: var(--OnStatusGood);
+  --color-OnStatusRegular: var(--OnStatusRegular);
+  --color-OnStatusBad: var(--OnStatusBad);
+  --color-OnStatusWorst: var(--OnStatusWorst);
+
+  /*  */
+  --color-AlertLow: var(--AlertLow);
+  --color-AlertMedium: var(--AlertMedium);
+  --color-AlertHigh: var(--AlertHigh);
+  --color-OnAlertLow: var(--OnAlertLow);
+  --color-OnAlertMedium: var(--OnAlertMedium);
+  --color-OnAlertHigh: var(--OnAlertHigh);
+}

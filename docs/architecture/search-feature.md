@@ -51,6 +51,7 @@ Feature 側が宣言する軽い入力です。プレゼンテーション非依
 defineFilterField<StudentListItem>({
   key: "name",
   label: "Nombre",
+  icon:"person",
   valueType: "text",
   inputType: "free",
   getValue: (student) => student.name,

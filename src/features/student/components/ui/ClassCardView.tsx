@@ -1,11 +1,14 @@
 import { cn } from "@/shared/lib/util";
 import { ComponentProps } from "react";
-import CourseKey from "@/components/CourseKey";
-import CourseValues from "@/components/CourseValues";
-import SchoolHatIcon from "@/components/icon/SchoolHatIcon";
-import SemesterBadge, { Semester } from "@/components/SemesterBadge";
+import CourseKey from "@/shared/component/primitive/CourseKey";
+import CourseValues from "@/shared/component/primitive/CourseValues";
+import SchoolHatIcon from "@/shared/component/primitive/icon/SchoolHatIcon";
+import SemesterBadge, { SemesterValue } from "@/shared/component/primitive/SemesterBadge";
 import { splitPeriod } from "@/shared/lib/tool";
 import { GRADE_NOT_FOUND_VALUE } from "@/shared/types/consts";
+import { Period } from "@/shared/types/Period";
+import { GradeStatus } from "../../types/studentGrade.type";
+import LockIcon from "@/shared/component/primitive/icon/LockIcon";
 
 type Props = ComponentProps<"div"> & {
   courseCode: string;
@@ -14,7 +17,8 @@ type Props = ComponentProps<"div"> & {
   hours?: string;
   grade: number | null;
   title: string;
-  period?: string;
+  period?: Period | null;
+  status: GradeStatus;
 };
 
 export default function StudentClassCardView({
@@ -24,22 +28,19 @@ export default function StudentClassCardView({
   hours = "--",
   grade,
   title,
-  period = "-- --",
+  period,
   className,
+  status,
   ...props
 }: Props) {
-  const { year, semesterNumber: semeNum } = splitPeriod(period);
-  const semester =
-    semeNum === 10
-      ? "ene-mayo"
-      : semeNum === 40
-        ? "verano"
-        : semeNum === 60
-          ? "ago-dec"
-          : ("semester" as Semester);
-  const isCurrentCourse =
-    period &&
-    (grade === GRADE_NOT_FOUND_VALUE || grade === null || grade === undefined);
+  // const { year, semesterNumber: semeNum } = splitPeriod(period);
+  const year = period?.year;
+  const semester = period?.semester.value;
+  // const isTaking = status === "isTaking";
+
+  // const isCurrentCourse =
+  //   period &&
+  //   (grade === GRADE_NOT_FOUND_VALUE || grade === null || grade === undefined);
   // const gradeColor =
   //   grade === null
   //     ? "#202020"
@@ -89,13 +90,20 @@ export default function StudentClassCardView({
           // style={{ color: gradeColor }}
           style={{ color: `var(--${gradeColorBg}-strong)` }}
         >
-          <SchoolHatIcon className="w-4.5 h-4.5 " />
+          {status === "lockedByPreRequisites" || status === "lockedByOthers" ? (
+            <LockIcon className="w-4.5 h-4.5" />
+          ) : (
+            <SchoolHatIcon className="w-4.5 h-4.5 " />
+          )}
+
           {grade !== null &&
           grade !== undefined &&
           grade !== GRADE_NOT_FOUND_VALUE ? (
             grade
-          ) : isCurrentCourse ? (
+          ) : status === "isTaking" ? (
             <span className="text-[0.7rem] uppercase">cruzado</span>
+          ) : status === "lockedByPreRequisites" ? (
+            <span className="text-[0.7rem] uppercase mt-0.5">prereq X</span>
           ) : (
             "--"
           )}

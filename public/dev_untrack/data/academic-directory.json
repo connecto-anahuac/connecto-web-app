@@ -1,0 +1,29 @@
+{
+  "professors": [
+    { "id": "P001", "name": "Ana Torres", "status": "active", "career": "TIND", "job": "Profesora", "email1": "ana@university.test", "email2": "", "phone": "555-0101" },
+    { "id": "P002", "name": "Luis Vega", "status": "inactive", "career": "Civil", "job": "Profesor", "email1": "luis@university.test", "email2": "", "phone": "555-0102" }
+  ],
+  "classrooms": [
+    { "id": "A101", "name": "Aula 101", "place": "Edificio A", "note": "", "equipments": ["Proyector"], "admin": "María Ruiz" },
+    { "id": "LAB1", "name": "Laboratorio 1", "place": "Edificio B", "note": "Acceso controlado", "equipments": ["Computadoras", "Proyector"], "admin": "Carlos Díaz" }
+  ],
+  "studyPlans": [
+    { "id": "TIND", "name": "TIND", "career": "TIND", "firstPeriod": "202010", "admin": "Coordinación TIND" },
+    { "id": "Civil", "name": "Civil", "career": "Civil", "firstPeriod": "202010", "admin": "Coordinación Civil" },
+    { "id": "Ambiental", "name": "Ambiental", "career": "Ambiental", "firstPeriod": "202010", "admin": "Coordinación Ambiental" },
+    { "id": "Industrial", "name": "Industrial", "career": "Industrial", "firstPeriod": "202010", "admin": "Coordinación Industrial" }
+  ],
+  "capabilities": [
+    { "id": "CAP1", "professorId": "P001", "period": "202510", "courseId": "ACF0901" },
+    { "id": "CAP2", "professorId": "P001", "period": "202520", "courseId": "ACF0901" },
+    { "id": "CAP3", "professorId": "P001", "period": "202520", "courseId": "ACF0902" }
+  ],
+  "assignments": [
+    { "id": "ASG1", "professorId": "P001", "period": "202510", "courseId": "ACF0901", "timeSlotId": "T1", "classroomId": "A101" },
+    { "id": "ASG2", "professorId": "P001", "period": "202520", "courseId": "ACF0901", "timeSlotId": "T2", "classroomId": "LAB1" }
+  ],
+  "availabilities": [
+    { "id": "AVL1", "professorId": "P001", "period": "202520", "day": "monday", "timeSlotId": "T1", "isAvailable": true },
+    { "id": "AVL2", "professorId": "P001", "period": "202520", "day": "monday", "timeSlotId": "T2", "isAvailable": false }
+  ]
+}

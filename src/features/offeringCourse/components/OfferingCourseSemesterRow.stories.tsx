@@ -16,7 +16,7 @@ const meta = {
     // yearLabel: { control: 'text' },
     studentCount: { control: 'number' },
     showLeadingArrow: { control: 'boolean' },
-    onAdd: { action: 'clicked' },
+    onSelectionChange: { action: 'selection changed' },
     className: { table: { disable: true } },
     children: { table: { disable: true } },
   },
@@ -26,7 +26,7 @@ const meta = {
     // yearLabel: '2026',
     studentCount: 24,
     showLeadingArrow: true,
-    onAdd: fn(),
+    onSelectionChange: fn(),
   },
   tags: ['autodocs'],
 } satisfies Meta<typeof OfferingCourseSemesterRow>
@@ -51,12 +51,12 @@ export const LongLabels: Story = {
   },
 }
 
-export const InteractiveAdd: Story = {
+export const InteractiveSelection: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement)
-    const button = canvas.getByRole('button', { name: 'Add 2026-1' })
+    const button = canvas.getByRole('switch', { name: 'Select 2026-1' })
 
     await userEvent.click(button)
-    await expect(args.onAdd).toHaveBeenCalled()
+    await expect(args.onSelectionChange).toHaveBeenCalledWith(true)
   },
 }

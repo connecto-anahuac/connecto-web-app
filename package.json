@@ -8,10 +8,17 @@
     "start": "next start",
     "lint": "eslint",
     "typegen": "next typegen",
-    "story": "storybook dev -p 6006",
+    "story": "storybook dev -p 6006 --no-open",
     "build-storybook": "storybook build"
   },
   "dependencies": {
+    "@dnd-kit/core": "^6.3.1",
+    "@dnd-kit/sortable": "^10.0.0",
+    "@dnd-kit/utilities": "^3.2.2",
+    "@floating-ui/react": "^0.27.20",
+    "@radix-ui/react-tabs": "^1.1.21",
+    "@tanstack/react-table": "^8.21.3",
+    "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dexie": "^4.4.4",
     "dexie-react-hooks": "^4.4.0",

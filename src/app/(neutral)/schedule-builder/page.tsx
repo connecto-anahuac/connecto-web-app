@@ -9,8 +9,7 @@ type Props = {
 
 export default async function ScheduleBuilderPage({ searchParams }: Props) {
   const { career } = await searchParams;
-  const selectedCareer =
-    career && CARRERAS.includes(career) ? career : CARRERAS[2];
+  const selectedCareer = CARRERAS.find((candidate) => candidate === career) ?? CARRERAS[2];
 
   return <ScheduleBuilderPageTemplate career={selectedCareer} />;
 }
