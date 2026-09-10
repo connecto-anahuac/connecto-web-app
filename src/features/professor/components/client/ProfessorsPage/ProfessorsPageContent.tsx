@@ -11,7 +11,7 @@ export function ProfessorsPageContent({ professorId, period }: Props) {
   const navigation = useProfessorNavigation();
   return (
     <div className="relative flex h-full w-full flex-col">
-      <PeriodControl period={period} onChange={navigation.setPeriod} />
+      {/* <PeriodControl period={period} onChange={navigation.setPeriod} /> */}
       <div className="min-h-0 flex-1">
         <ProfessorCollection
           activeProfessorId={professorId}

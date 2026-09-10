@@ -11,7 +11,7 @@ export const navigationItems: NavItem[] = [
 
 export const studentProfile: StudentProfile = {
   program: "Ingenieria en informatica y negocios digitales",
-  planLabel: "plan 2020",
+  planLabel: "TIND",
   name: "Ryan Rafael Garcia",
   status: "activo",
   progressValue: "74",

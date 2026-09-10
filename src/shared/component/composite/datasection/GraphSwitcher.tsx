@@ -7,7 +7,9 @@ function GraphSwitcher({
   onListClick,
   onCardViewClick,
   onViewChange,
+  isEnabled=["list", "card"],
 }: {
+  isEnabled?: ( "list" | "card")[];
   onListClick?: () => void;
   onCardViewClick?: () => void;
   onViewChange?: (view: "list" | "card") => void;
@@ -48,11 +50,13 @@ function GraphSwitcher({
           onClick={() => handleClick("card")}
         /> */}
 
+      
       <IconButtonOLD
         icon="list"
         className={cn(
           "rounded-md size-6",
           selectedView === "list" ? selectedStyle : unselectedStyle,
+          !isEnabled?.includes("list") && "opacity-50 cursor-not-allowed" ,
         )}
         onClick={() => handleClick("list")}
       />
@@ -61,6 +65,7 @@ function GraphSwitcher({
         className={cn(
           "rounded-md size-6",
           selectedView === "card" ? selectedStyle : unselectedStyle,
+          !isEnabled?.includes("card") && "opacity-50 cursor-not-allowed" ,
         )}
         onClick={() => handleClick("card")}
       />

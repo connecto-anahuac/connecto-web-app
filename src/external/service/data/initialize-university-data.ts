@@ -15,9 +15,13 @@ import type {
   TimeSlotRecord,
 } from "@/external/domain/university";
 
-const MATERIAS_URL = "/dev_untrack/data/materias/Materias_ingenierias.json";
-const PLANS_URL = "/dev_untrack/data/materias/Materias_TIND.json";
 const DIRECTORY_URL = "/dev_untrack/data/academic-directory.json";
+const PLAN_SOURCES = [
+  { career: "TIND", url: "/dev_untrack/data/materias/Materias_TIND.json" },
+  { career: "Civil", url: "/dev_untrack/data/materias/Materias_INCI.json" },
+  { career: "Ambiental", url: "/dev_untrack/data/materias/Materias_IAMB.json" },
+  { career: "Industrial", url: "/dev_untrack/data/materias/Materias_INIE.json" },
+] as const;
 
 type MateriaSource = {
   clave?: {
@@ -32,14 +36,8 @@ type MateriaSource = {
   pre_requisito?: Array<{
     raw?: string;
   }>;
-};
-
-type PlanSource = {
-  clave?: {
-    raw?: string;
-  };
-  semester?: number;
-  position?: number;
+  semester?: number | string;
+  position?: number | string;
 };
 type DirectorySource = {
   professors: ProfessorRecord[]; classrooms: ClassroomRecord[]; studyPlans: StudyPlanRecord[];
@@ -65,8 +63,9 @@ async function fetchJson<T>(url: string): Promise<T> {
   return response.json() as Promise<T>;
 }
 
-function toCourses(materias: MateriaSource[]): CourseRecord[] {
-  return materias
+function toCourses(sources: MateriaSource[][]): CourseRecord[] {
+  const courses = sources
+    .flat()
     .filter((materia) => materia?.clave?.raw)
     .map((materia) => ({
       key: String(materia.clave?.raw),
@@ -77,12 +76,14 @@ function toCourses(materias: MateriaSource[]): CourseRecord[] {
       block: materia.bloque ?? "",
       name: materia.materia ?? "",
     }));
+
+  return [...new Map(courses.map((course) => [course.key, course])).values()];
 }
 
-function toPreRequisitos(materias: MateriaSource[]): PreRequisitoRecord[] {
-  const prerequisitos: PreRequisitoRecord[] = [];
+function toPreRequisitos(sources: MateriaSource[][]): PreRequisitoRecord[] {
+  const prerequisitos = new Map<string, PreRequisitoRecord>();
 
-  materias.forEach((materia) => {
+  sources.flat().forEach((materia) => {
     const currentCourseKey = materia.clave?.raw;
     if (!currentCourseKey) return;
 
@@ -90,51 +91,60 @@ function toPreRequisitos(materias: MateriaSource[]): PreRequisitoRecord[] {
       ? materia.pre_requisito
       : [];
 
-    requirements.forEach((prerequisito, index) => {
+    requirements.forEach((prerequisito) => {
       if (!prerequisito.raw) return;
 
-      prerequisitos.push({
-        id: `${currentCourseKey}_${prerequisito.raw}_${index}`,
+      const id = `${currentCourseKey}:${prerequisito.raw}`;
+      prerequisitos.set(id, {
+        id,
         currentCourseKey: String(currentCourseKey),
         preCourseKey: String(prerequisito.raw),
       });
     });
   });
 
-  return prerequisitos;
+  return [...prerequisitos.values()];
 }
 
-function toPlans(plans: PlanSource[]): PlanRecord[] {
+function toPlans(plans: MateriaSource[], career: string): PlanRecord[] {
   return plans
     .filter((plan) => plan?.clave?.raw)
-    .map((plan, index) => ({
-      id: `${String(plan.clave?.raw)}_${index}`,
-      name: "plan 2020",
-      career: "TIND",
+    .map((plan) => ({
+      id: `${career}:${String(plan.clave?.raw)}`,
+      name: career,
+      career,
       courseKey: String(plan.clave?.raw),
       semester: plan.semester != null ? Number(plan.semester) : 0,
       position: plan.position != null ? Number(plan.position) : 0,
-      planId: "seed-plan-tind",
+      planId: career,
     }));
 }
 
 async function seedUniversityData(): Promise<InitializeUniversityDataDto> {
   await universityDb.open();
 
-  const [coursesCount, plansCount, preRequisitosCount, professorsCount, capabilitiesCount, assignmentsCount, availabilitiesCount, timeSlotsCount, classroomsCount, studyPlansCount] = await Promise.all([
+  const [coursesCount, preRequisitosCount, professorsCount, capabilitiesCount, assignmentsCount, availabilitiesCount, timeSlotsCount, classroomsCount, studyPlansCount] = await Promise.all([
     universityDb.courses.count(),
-    universityDb.plans.count(),
     universityDb.preRequisitos.count(),
     universityDb.professors.count(), universityDb.professorCourseCapabilities.count(), universityDb.courseAssignments.count(), universityDb.professorAvailabilities.count(), universityDb.timeSlots.count(), universityDb.classrooms.count(), universityDb.studyPlans.count(),
   ]);
 
   const coursesMissing = coursesCount === 0;
-  const plansMissing = plansCount === 0;
+  const missingPlanSources = (
+    await Promise.all(
+      PLAN_SOURCES.map(async (source) => ({
+        source,
+        count: await universityDb.plans.where("career").equals(source.career).count(),
+      })),
+    )
+  ).filter(({ count }) => count === 0).map(({ source }) => source);
+  const plansMissing = missingPlanSources.length > 0;
   const preRequisitosMissing = preRequisitosCount === 0;
 
   const directoryMissing = [professorsCount, capabilitiesCount, assignmentsCount, availabilitiesCount, classroomsCount, studyPlansCount].some((count) => count === 0);
   const timeSlotsMissing = timeSlotsCount === 0;
-  if (!coursesMissing && !plansMissing && !preRequisitosMissing && !directoryMissing && !timeSlotsMissing) {
+  const shouldLoadDirectory = directoryMissing || plansMissing;
+  if (!coursesMissing && !plansMissing && !preRequisitosMissing && !shouldLoadDirectory && !timeSlotsMissing) {
     return {
       coursesSeeded: false,
       plansSeeded: false,
@@ -142,38 +152,72 @@ async function seedUniversityData(): Promise<InitializeUniversityDataDto> {
     };
   }
 
-  const materias = coursesMissing || preRequisitosMissing
-    ? await fetchJson<MateriaSource[]>(MATERIAS_URL)
-    : undefined;
-  const plans = plansMissing
-    ? await fetchJson<PlanSource[]>(PLANS_URL)
-    : undefined;
-  const directory = directoryMissing ? await fetchJson<DirectorySource>(DIRECTORY_URL) : undefined;
+  const sourcesToLoad = coursesMissing || preRequisitosMissing
+    ? [...PLAN_SOURCES]
+    : missingPlanSources;
+  const sourceData = await Promise.all(
+    sourcesToLoad.map(async (source) => ({
+      career: source.career,
+      records: await fetchJson<MateriaSource[]>(source.url),
+    })),
+  );
+  const missingCareers = new Set(missingPlanSources.map(({ career }) => career));
+  const plansToSeed = sourceData
+    .filter(({ career }) => missingCareers.has(career))
+    .flatMap(({ career, records }) => toPlans(records, career));
+
+  const courseCandidates = toCourses(sourceData.map(({ records }) => records));
+  const existingCourses = coursesMissing
+    ? []
+    : await universityDb.courses.bulkGet(courseCandidates.map(({ key }) => key));
+  const coursesToSeed = courseCandidates.filter(
+    (_course, index) => coursesMissing || !existingCourses[index],
+  );
+
+  const preRequisitoCandidates = toPreRequisitos(
+    sourceData.map(({ records }) => records),
+  );
+  const existingPreRequisitos = preRequisitosMissing
+    ? []
+    : await universityDb.preRequisitos.bulkGet(
+      preRequisitoCandidates.map(({ id }) => id),
+    );
+  const preRequisitosToSeed = preRequisitoCandidates.filter(
+    (_preRequisito, index) => preRequisitosMissing || !existingPreRequisitos[index],
+  );
+
+  const directory = shouldLoadDirectory ? await fetchJson<DirectorySource>(DIRECTORY_URL) : undefined;
+  const existingStudyPlans = directory
+    ? await universityDb.studyPlans.bulkGet(directory.studyPlans.map((studyPlan) => studyPlan.id))
+    : [];
+  const studyPlansToSeed = directory?.studyPlans.filter(
+    (_studyPlan, index) => !existingStudyPlans[index],
+  ) ?? [];
 
   const tables = [
-    ...(coursesMissing ? [universityDb.courses] : []),
-    ...(plansMissing ? [universityDb.plans] : []),
-    ...(preRequisitosMissing ? [universityDb.preRequisitos] : []),
+    ...(coursesToSeed.length > 0 ? [universityDb.courses] : []),
+    ...(plansToSeed.length > 0 ? [universityDb.plans] : []),
+    ...(preRequisitosToSeed.length > 0 ? [universityDb.preRequisitos] : []),
     ...(professorsCount === 0 ? [universityDb.professors] : []),
     ...(capabilitiesCount === 0 ? [universityDb.professorCourseCapabilities] : []),
     ...(assignmentsCount === 0 ? [universityDb.courseAssignments] : []),
     ...(availabilitiesCount === 0 ? [universityDb.professorAvailabilities] : []),
     ...(timeSlotsMissing ? [universityDb.timeSlots] : []),
     ...(classroomsCount === 0 ? [universityDb.classrooms] : []),
-    ...(studyPlansCount === 0 ? [universityDb.studyPlans] : []),
+    ...(studyPlansToSeed.length > 0 ? [universityDb.studyPlans] : []),
   ];
 
   await universityDb.transaction("rw", tables, async () => {
-    if (coursesMissing) {
-      await universityDb.courses.bulkPut(toCourses(materias ?? []));
+    if (coursesToSeed.length > 0) {
+      await universityDb.courses.bulkPut(coursesToSeed);
     }
 
-    if (plansMissing) {
-      await universityDb.plans.bulkPut(toPlans(plans ?? []));
+    if (plansToSeed.length > 0) {
+      await universityDb.plans.bulkPut(plansToSeed);
     }
 
-    if (preRequisitosMissing) {
-      await universityDb.preRequisitos.bulkPut(toPreRequisitos(materias ?? []));
+    if (preRequisitosToSeed.length > 0) {
+      await universityDb.preRequisitos.bulkPut(preRequisitosToSeed);
     }
     if (professorsCount === 0) await universityDb.professors.bulkPut(directory?.professors ?? []);
     if (capabilitiesCount === 0) await universityDb.professorCourseCapabilities.bulkPut(directory?.capabilities ?? []);
@@ -181,13 +225,13 @@ async function seedUniversityData(): Promise<InitializeUniversityDataDto> {
     if (availabilitiesCount === 0) await universityDb.professorAvailabilities.bulkPut(directory?.availabilities ?? []);
     if (timeSlotsMissing) await universityDb.timeSlots.bulkPut(TIME_SLOTS);
     if (classroomsCount === 0) await universityDb.classrooms.bulkPut(directory?.classrooms ?? []);
-    if (studyPlansCount === 0) await universityDb.studyPlans.bulkPut(directory?.studyPlans ?? []);
+    if (studyPlansToSeed.length > 0) await universityDb.studyPlans.bulkPut(studyPlansToSeed);
   });
 
   return {
-    coursesSeeded: coursesMissing,
-    plansSeeded: plansMissing,
-    preRequisitosSeeded: preRequisitosMissing,
+    coursesSeeded: coursesToSeed.length > 0,
+    plansSeeded: plansToSeed.length > 0,
+    preRequisitosSeeded: preRequisitosToSeed.length > 0,
   };
 }
 

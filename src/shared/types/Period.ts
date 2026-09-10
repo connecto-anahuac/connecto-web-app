@@ -13,7 +13,7 @@ export class Period {
     const {year: y, semesterNumber: s} = this.splitPeriod(rawPeriod.toString());
     this.year = y;
     // console.log("semesterNumber", s, SEMESTER_INDX[s]);
-    this.semester = Semester.create(s);
+    this.semester = Semester.createFromPeriod(s);
     this.rawPeriod = Number(rawPeriod);
 
   }

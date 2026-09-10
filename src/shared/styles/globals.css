@@ -213,3 +213,21 @@ body.cursor-col-resize-important,
 body.cursor-col-resize-important * {
   cursor: col-resize !important;
 }
+
+.custom-scroll-bar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.3) transparent;
+}
+
+.custom-scroll-bar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scroll-bar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scroll-bar::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 999px;
+}

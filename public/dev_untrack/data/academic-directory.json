@@ -1,14 +1,17 @@
 {
   "professors": [
     { "id": "P001", "name": "Ana Torres", "status": "active", "career": "TIND", "job": "Profesora", "email1": "ana@university.test", "email2": "", "phone": "555-0101" },
-    { "id": "P002", "name": "Luis Vega", "status": "inactive", "career": "INCI", "job": "Profesor", "email1": "luis@university.test", "email2": "", "phone": "555-0102" }
+    { "id": "P002", "name": "Luis Vega", "status": "inactive", "career": "Civil", "job": "Profesor", "email1": "luis@university.test", "email2": "", "phone": "555-0102" }
   ],
   "classrooms": [
     { "id": "A101", "name": "Aula 101", "place": "Edificio A", "note": "", "equipments": ["Proyector"], "admin": "María Ruiz" },
     { "id": "LAB1", "name": "Laboratorio 1", "place": "Edificio B", "note": "Acceso controlado", "equipments": ["Computadoras", "Proyector"], "admin": "Carlos Díaz" }
   ],
   "studyPlans": [
-    { "id": "seed-plan-tind", "name": "plan 2020", "career": "TIND", "firstPeriod": "202010", "admin": "Coordinación TIND" }
+    { "id": "TIND", "name": "TIND", "career": "TIND", "firstPeriod": "202010", "admin": "Coordinación TIND" },
+    { "id": "Civil", "name": "Civil", "career": "Civil", "firstPeriod": "202010", "admin": "Coordinación Civil" },
+    { "id": "Ambiental", "name": "Ambiental", "career": "Ambiental", "firstPeriod": "202010", "admin": "Coordinación Ambiental" },
+    { "id": "Industrial", "name": "Industrial", "career": "Industrial", "firstPeriod": "202010", "admin": "Coordinación Industrial" }
   ],
   "capabilities": [
     { "id": "CAP1", "professorId": "P001", "period": "202510", "courseId": "ACF0901" },

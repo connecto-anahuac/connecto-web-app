@@ -8,6 +8,7 @@ import { cn } from "@/shared/lib/util";
 type Props = ComponentProps<"div"> & {
   semesterLabel: string;
   studentCount: number;
+  isMulti?: boolean;
   isSelected?: boolean;
   onSelectionChange?: (isSelected: boolean) => void;
   showLeadingArrow?: boolean;
@@ -19,6 +20,7 @@ export default function OfferingCourseSemesterRow({
   semesterLabel,
   studentCount,
   isSelected = false,
+  isMulti = false,
   onSelectionChange,
   showLeadingArrow = true,
   isOpen = true,
@@ -55,6 +57,7 @@ export default function OfferingCourseSemesterRow({
           className="ml-auto"
           aria-label={`Select ${semesterLabel}`}
           isSelected={isSelected}
+          isMulti={isMulti}
           onClick={() => onSelectionChange?.(!isSelected)}
         />
       </div>

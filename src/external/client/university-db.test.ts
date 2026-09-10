@@ -1,57 +1,29 @@
 import { describe, expect, it, vi } from "vitest";
 import {
   clearLegacyProfessorAvailabilities,
-  migrateLegacyStudyPlanIds,
-  migratedStudyPlanId,
-  normalizeLegacyPlans,
+  normalizePlansByCareer,
   UniversityDB,
 } from "./university-db";
 
-describe("v2 to v3 plan normalization", () => {
-  it("preserves every relation and groups equal career/name rows", () => {
-    const input = [
-      { id: "1", name: "Plan 2020", career: "TIND", courseKey: "A", semester: 1, position: 1 },
-      { id: "2", name: "Plan 2020", career: "TIND", courseKey: "B", semester: 1, position: 2 },
-      { id: "3", name: "Plan 2020", career: "INCI", courseKey: "C", semester: 1, position: 1 },
-    ];
-    const result = normalizeLegacyPlans(input);
-    expect(result.plans).toHaveLength(3);
-    expect(result.studyPlans).toHaveLength(2);
-    expect(result.plans[0].planId).toBe(result.plans[1].planId);
-    expect(result.plans[2].planId).not.toBe(result.plans[0].planId);
-    expect(result.studyPlans[0]).toMatchObject({ firstPeriod: "", admin: "" });
-    expect(result.studyPlans[0].id).toBe("migrated:TIND:Plan 2020");
-  });
-});
-
-describe("v3 to v4 migrated study-plan IDs", () => {
-  it("rekeys legacy IDs and preserves every plan relation", () => {
-    const legacyId = "migrated:TIND:plan%202020";
-    const result = migrateLegacyStudyPlanIds(
-      [{ id: legacyId, name: "plan 2020", career: "TIND", firstPeriod: "", admin: "" }],
+describe("plan IDs", () => {
+  it("uses career as the study-plan and relation ID", () => {
+    const result = normalizePlansByCareer(
+      [{ id: "seed-plan-tind", name: "plan 2020", career: "TIND", firstPeriod: "202010", admin: "Admin" }],
       [
-        { id: "1", name: "plan 2020", career: "TIND", courseKey: "A", semester: 1, position: 1, planId: legacyId },
-        { id: "2", name: "other", career: "TIND", courseKey: "B", semester: 1, position: 2, planId: "seed-plan-tind" },
+        { id: "1", name: "plan 2020", career: "TIND", courseKey: "A", semester: 1, position: 1, planId: "seed-plan-tind" },
+        { id: "2", name: "old", career: "INCI", courseKey: "B", semester: 1, position: 2 },
       ],
     );
 
-    const expectedId = migratedStudyPlanId("TIND", "plan 2020");
-    expect(result.legacyIds).toEqual([legacyId]);
-    expect(result.studyPlans[0].id).toBe(expectedId);
-    expect(result.plans[0].planId).toBe(expectedId);
-    expect(result.plans[1].planId).toBe("seed-plan-tind");
-  });
-
-  it("does not delete IDs that already need no encoding", () => {
-    const id = migratedStudyPlanId("TIND", "Plan");
-    const result = migrateLegacyStudyPlanIds(
-      [{ id, name: "Plan", career: "TIND", firstPeriod: "", admin: "" }],
-      [{ id: "1", name: "Plan", career: "TIND", courseKey: "A", semester: 1, position: 1, planId: id }],
-    );
-
-    expect(result.legacyIds).toEqual([]);
-    expect(result.studyPlans[0].id).toBe(id);
-    expect(result.plans[0].planId).toBe(id);
+    expect(result.studyPlans).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: "TIND", name: "TIND", career: "TIND" }),
+      expect.objectContaining({ id: "INCI", name: "INCI", career: "INCI" }),
+    ]));
+    expect(result.plans).toEqual(expect.arrayContaining([
+      expect.objectContaining({ id: "1", name: "TIND", planId: "TIND" }),
+      expect.objectContaining({ id: "2", name: "INCI", planId: "INCI" }),
+    ]));
+    expect(result.obsoleteStudyPlanIds).toEqual(["seed-plan-tind"]);
   });
 });
 
@@ -60,7 +32,7 @@ describe("v5 professor availability schema", () => {
     const db = new UniversityDB();
     const indexes = db._dbSchema.professorAvailabilities.indexes.map((index) => index.name);
 
-    expect(db.verno).toBe(5);
+    expect(db.verno).toBe(7);
     expect(indexes).toContain("day");
     expect(indexes).toContain("[professorId+period+day]");
     db.close();

@@ -1,6 +1,6 @@
 [
     {
-        "materia":"Matemáticas Básicas",
+        "materia":"Matemáticas básicas",
         "clave":{
             "raw":"MAT0403",
             "code":"MAT",
@@ -11,32 +11,16 @@
         "pre_requisito":[
 
         ],
-        "bloque":"Remedial",
+        "bloque":"Profesional",
         "semester":"1",
         "position":0
     },
     {
-        "materia":null,
+        "materia":"Álgebra lineal ",
         "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":"1",
-        "position":0
-    },
-    {
-        "materia":"Matemáticas para computación",
-        "clave":{
-            "raw":"MAT1415",
+            "raw":"MAT1404",
             "code":"MAT",
-            "number":"1415"
+            "number":"1404"
         },
         "horas":3.0,
         "creditos":6.0,
@@ -45,16 +29,32 @@
         ],
         "bloque":"Profesional",
         "semester":"1",
+        "position":1
+    },
+    {
+        "materia":"Diseño por computadora para ingeniería civil",
+        "clave":{
+            "raw":"ICIV1403",
+            "code":"ICIV",
+            "number":"1403"
+        },
+        "horas":3.0,
+        "creditos":3.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"1",
         "position":2
     },
     {
-        "materia":"Álgebra lineal",
+        "materia":"Química",
         "clave":{
-            "raw":"MAT1404",
-            "code":"MAT",
-            "number":"1404"
+            "raw":"QUI1401",
+            "code":"QUI",
+            "number":"1401"
         },
-        "horas":3.0,
+        "horas":4.5,
         "creditos":6.0,
         "pre_requisito":[
 
@@ -80,7 +80,23 @@
         "position":4
     },
     {
-        "materia":"Taller o actividad electiva ",
+        "materia":null,
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":null,
+        "creditos":null,
+        "pre_requisito":[
+
+        ],
+        "bloque":null,
+        "semester":"1",
+        "position":5
+    },
+    {
+        "materia":"Taller o actividad electiva",
         "clave":{
             "raw":null,
             "code":null,
@@ -91,9 +107,9 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Interdisciplinaria",
         "semester":"1",
-        "position":5
+        "position":6
     },
     {
         "materia":"Liderazgo y desarrollo personal",
@@ -109,7 +125,7 @@
         ],
         "bloque":"Anáhuac",
         "semester":"1",
-        "position":6
+        "position":7
     },
     {
         "materia":"Ser universitario",
@@ -125,23 +141,7 @@
         ],
         "bloque":"Anáhuac",
         "semester":"1",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "position":8
     },
     {
         "materia":"Cálculo diferencial",
@@ -192,13 +192,13 @@
         "position":2
     },
     {
-        "materia":"Algoritmos y programación",
+        "materia":"Ingeniería ambiental ",
         "clave":{
-            "raw":"SIS1401",
-            "code":"SIS",
+            "raw":"IAMB1401",
+            "code":"IAMB",
             "number":"1401"
         },
-        "horas":4.5,
+        "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
 
@@ -208,10 +208,10 @@
         "position":3
     },
     {
-        "materia":"Introducción a la empresa",
+        "materia":"Iniciación a la ingeniería civil",
         "clave":{
-            "raw":"ADM1401",
-            "code":"ADM",
+            "raw":"ICIV1401",
+            "code":"ICIV",
             "number":"1401"
         },
         "horas":3.0,
@@ -240,6 +240,22 @@
         "position":5
     },
     {
+        "materia":"Taller o actividad electiva",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":null,
+        "creditos":3.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Interdisciplinaria",
+        "semester":"2",
+        "position":6
+    },
+    {
         "materia":"Habilidades para el emprendimiento",
         "clave":{
             "raw":"EMP1401",
@@ -255,9 +271,9 @@
                 "number":"1401"
             }
         ],
-        "bloque":"Anáhuac",
+        "bloque":"Interdisciplinaria",
         "semester":"2",
-        "position":6
+        "position":7
     },
     {
         "materia":"Antropología fundamental",
@@ -277,23 +293,7 @@
         ],
         "bloque":"Anáhuac",
         "semester":"2",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "position":8
     },
     {
         "materia":"Cálculo integral",
@@ -336,19 +336,19 @@
         "position":1
     },
     {
-        "materia":"Estadística inferencial",
+        "materia":"Topografía",
         "clave":{
-            "raw":"MAT2404",
-            "code":"MAT",
-            "number":"2404"
+            "raw":"ICIV1404",
+            "code":"ICIV",
+            "number":"1404"
         },
-        "horas":4.5,
-        "creditos":6.0,
+        "horas":6.0,
+        "creditos":7.5,
         "pre_requisito":[
             {
-                "raw":"MAT2403",
-                "code":"MAT",
-                "number":"2403"
+                "raw":"ICIV1403",
+                "code":"ICIV",
+                "number":"1403"
             }
         ],
         "bloque":"Profesional",
@@ -356,34 +356,30 @@
         "position":2
     },
     {
-        "materia":"Lenguajes orientados a objetos",
+        "materia":"Computación aplicada a la ingeniería civil",
         "clave":{
-            "raw":"SIS1402",
-            "code":"SIS",
-            "number":"1402"
+            "raw":"ICIV2401",
+            "code":"ICIV",
+            "number":"2401"
         },
         "horas":4.5,
         "creditos":6.0,
         "pre_requisito":[
-            {
-                "raw":"SIS1401",
-                "code":"SIS",
-                "number":"1401"
-            }
+
         ],
         "bloque":"Profesional",
         "semester":"3",
         "position":3
     },
     {
-        "materia":"Circuitos eléctricos",
+        "materia":"Geología aplicada",
         "clave":{
-            "raw":"IELC1401",
-            "code":"IELC",
-            "number":"1401"
+            "raw":"ICIV1402",
+            "code":"ICIV",
+            "number":"1402"
         },
-        "horas":6.0,
-        "creditos":9.0,
+        "horas":3.0,
+        "creditos":6.0,
         "pre_requisito":[
 
         ],
@@ -392,7 +388,23 @@
         "position":4
     },
     {
-        "materia":"Teller o actividad electiva ",
+        "materia":null,
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":null,
+        "creditos":null,
+        "pre_requisito":[
+
+        ],
+        "bloque":null,
+        "semester":"3",
+        "position":5
+    },
+    {
+        "materia":"Taller o actividad electiva",
         "clave":{
             "raw":null,
             "code":null,
@@ -403,9 +415,9 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Interdisciplinaria",
         "semester":"3",
-        "position":5
+        "position":6
     },
     {
         "materia":"Liderazgo y equipos de alto desempeño",
@@ -423,9 +435,9 @@
                 "number":"1401"
             }
         ],
-        "bloque":"Profesional",
+        "bloque":"Anáhuac",
         "semester":"3",
-        "position":6
+        "position":7
     },
     {
         "materia":"Persona y trascendencia",
@@ -443,25 +455,9 @@
                 "number":"1402"
             }
         ],
-        "bloque":"Profesional",
+        "bloque":"Anáhuac",
         "semester":"3",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "position":8
     },
     {
         "materia":"Cálculo multivariado",
@@ -484,71 +480,71 @@
         "position":0
     },
     {
-        "materia":"Arquitectura de computadoras",
+        "materia":"Estructuras isostáticas",
         "clave":{
-            "raw":"CMP2405",
-            "code":"CMP",
-            "number":"2405"
+            "raw":"ICIV2404",
+            "code":"ICIV",
+            "number":"2404"
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":3.0,
+        "creditos":6.0,
         "pre_requisito":[
-
+            {
+                "raw":"FIS1402",
+                "code":"FIS",
+                "number":"1402"
+            }
         ],
         "bloque":"Profesional",
         "semester":"4",
         "position":1
     },
     {
-        "materia":"Sistemas operativos",
+        "materia":"Electiva Anáhuac",
         "clave":{
-            "raw":"SIS3401",
-            "code":"SIS",
-            "number":"3401"
+            "raw":null,
+            "code":null,
+            "number":null
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":3.0,
+        "creditos":6.0,
         "pre_requisito":[
 
         ],
-        "bloque":"Profesional",
+        "bloque":"Anáhuac",
         "semester":"4",
         "position":2
     },
     {
-        "materia":"Estructuras de datos y algoritmos",
+        "materia":"Electiva Anáhuac",
         "clave":{
-            "raw":"SIS2406",
-            "code":"SIS",
-            "number":"2406"
+            "raw":null,
+            "code":null,
+            "number":null
         },
-        "horas":4.5,
+        "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
-            {
-                "raw":"SIS1402",
-                "code":"SIS",
-                "number":"1402"
-            }
+
         ],
-        "bloque":"Profesional",
+        "bloque":"Anáhuac",
         "semester":"4",
         "position":3
     },
     {
-        "materia":"Electrónica digital",
+        "materia":"Laboratorio de materiales I",
         "clave":{
-            "raw":"SIS2405",
-            "code":"SIS",
-            "number":"2405"
+            "raw":"ICIV2402",
+            "code":"ICIV",
+            "number":"2402"
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":3.0,
+        "creditos":3.0,
         "pre_requisito":[
             {
-                "raw":"IELC1401",
-                "code":"IELC",
-                "number":"1401"
+                "raw":"ICIV1402",
+                "code":"ICIV",
+                "number":"1402"
             }
         ],
         "bloque":"Profesional",
@@ -556,20 +552,36 @@
         "position":4
     },
     {
-        "materia":"Taller o actividad electiva",
+        "materia":"Construcción I",
+        "clave":{
+            "raw":"ICIV2403",
+            "code":"ICIV",
+            "number":"2403"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"4",
+        "position":5
+    },
+    {
+        "materia":null,
         "clave":{
             "raw":null,
             "code":null,
             "number":null
         },
         "horas":null,
-        "creditos":3.0,
+        "creditos":null,
         "pre_requisito":[
 
         ],
         "bloque":null,
         "semester":"4",
-        "position":5
+        "position":6
     },
     {
         "materia":"Emprendimiento e innovación",
@@ -587,41 +599,29 @@
                 "number":"1401"
             }
         ],
-        "bloque":"Anáhuac",
-        "semester":"4",
-        "position":6
-    },
-    {
-        "materia":"Electiva Anáhuac",
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
+        "bloque":"Interdisciplinaria",
         "semester":"4",
         "position":7
     },
     {
-        "materia":null,
+        "materia":"Ética",
         "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
+            "raw":"HUM1404",
+            "code":"HUM",
+            "number":"1404"
         },
-        "horas":null,
-        "creditos":null,
+        "horas":4.5,
+        "creditos":9.0,
         "pre_requisito":[
-
+            {
+                "raw":"HUM1402",
+                "code":"HUM",
+                "number":"1402"
+            }
         ],
-        "bloque":null,
-        "semester":null,
-        "position":null
+        "bloque":"Anáhuac",
+        "semester":"4",
+        "position":8
     },
     {
         "materia":"Ecuaciones diferenciales",
@@ -638,79 +638,6 @@
         "bloque":"Profesional",
         "semester":"5",
         "position":0
-    },
-    {
-        "materia":"Métodos numéricos",
-        "clave":{
-            "raw":"MAT3402",
-            "code":"MAT",
-            "number":"3402"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-            {
-                "raw":"MAT1403",
-                "code":"MAT",
-                "number":"1403"
-            },
-            {
-                "raw":"SIS1401",
-                "code":"SIS",
-                "number":"1401"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"5",
-        "position":1
-    },
-    {
-        "materia":"Bases de datos",
-        "clave":{
-            "raw":"SIS2403",
-            "code":"SIS",
-            "number":"2403"
-        },
-        "horas":4.5,
-        "creditos":7.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"5",
-        "position":2
-    },
-    {
-        "materia":"Redes de computadoras",
-        "clave":{
-            "raw":"SIS2401",
-            "code":"SIS",
-            "number":"2401"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"5",
-        "position":3
-    },
-    {
-        "materia":"Ingeniería de software I",
-        "clave":{
-            "raw":"SIS3407",
-            "code":"SIS",
-            "number":"3407"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"5",
-        "position":4
     },
     {
         "materia":"Electricidad y magnetismo",
@@ -730,155 +657,87 @@
         ],
         "bloque":"Profesional",
         "semester":"5",
-        "position":5
-    },
-    {
-        "materia":"Electiva Anáhuac",
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":"5",
-        "position":6
-    },
-    {
-        "materia":"Ética",
-        "clave":{
-            "raw":"HUM1404",
-            "code":"HUM",
-            "number":"1404"
-        },
-        "horas":4.5,
-        "creditos":9.0,
-        "pre_requisito":[
-            {
-                "raw":"HUM1402",
-                "code":"HUM",
-                "number":"1402"
-            }
-        ],
-        "bloque":"Anáhuac",
-        "semester":"5",
-        "position":7
-    },
-    {
-        "materia":null,
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
-    },
-    {
-        "materia":"Programación para internet",
-        "clave":{
-            "raw":"SIS3410",
-            "code":"SIS",
-            "number":"3410"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"SIS2401",
-                "code":"SIS",
-                "number":"2401"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"6",
-        "position":0
-    },
-    {
-        "materia":"Informática en la cuarta revolución industrial",
-        "clave":{
-            "raw":"SIS4415",
-            "code":"SIS",
-            "number":"4415"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"6",
         "position":1
     },
     {
-        "materia":"Bases de datos avanzadas",
+        "materia":"Mecánica de materiales para ingeniería civil",
         "clave":{
-            "raw":"SIS2404",
-            "code":"SIS",
-            "number":"2404"
+            "raw":"ICIV3405",
+            "code":"ICIV",
+            "number":"3405"
         },
         "horas":3.0,
         "creditos":4.5,
         "pre_requisito":[
             {
-                "raw":"SIS2403",
-                "code":"SIS",
+                "raw":"ICIV2404",
+                "code":"ICIV",
+                "number":"2404"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"5",
+        "position":2
+    },
+    {
+        "materia":"Análisis estructural",
+        "clave":{
+            "raw":"ICIV3401",
+            "code":"ICIV",
+            "number":"3401"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"MAT1403",
+                "code":"MAT",
+                "number":"1403"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"5",
+        "position":3
+    },
+    {
+        "materia":"Geotecnia",
+        "clave":{
+            "raw":"ICIV2405",
+            "code":"ICIV",
+            "number":"2405"
+        },
+        "horas":4.5,
+        "creditos":7.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV2402",
+                "code":"ICIV",
+                "number":"2402"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"5",
+        "position":4
+    },
+    {
+        "materia":"Construcción II",
+        "clave":{
+            "raw":"ICIV3403",
+            "code":"ICIV",
+            "number":"3403"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV2403",
+                "code":"ICIV",
                 "number":"2403"
             }
         ],
         "bloque":"Profesional",
-        "semester":"6",
-        "position":2
-    },
-    {
-        "materia":"Redes avanzadas",
-        "clave":{
-            "raw":"SIS3402",
-            "code":"SIS",
-            "number":"3402"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"SIS2401",
-                "code":"SIS",
-                "number":"2401"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"6",
-        "position":3
-    },
-    {
-        "materia":"Ingeniería de software II",
-        "clave":{
-            "raw":"SIS3408",
-            "code":"SIS",
-            "number":"3408"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-            {
-                "raw":"SIS3407",
-                "code":"SIS",
-                "number":"3407"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"6",
-        "position":4
+        "semester":"5",
+        "position":5
     },
     {
         "materia":"Responsabilidad social y sustentabilidad",
@@ -896,25 +755,25 @@
                 "number":"1404"
             }
         ],
-        "bloque":"Anáhuac",
-        "semester":"6",
-        "position":5
+        "bloque":"Interdisciplinaria",
+        "semester":"5",
+        "position":6
     },
     {
-        "materia":"Electiva profesional (MINOR) ",
+        "materia":null,
         "clave":{
             "raw":null,
             "code":null,
             "number":null
         },
-        "horas":3.0,
-        "creditos":6.0,
+        "horas":null,
+        "creditos":null,
         "pre_requisito":[
 
         ],
         "bloque":null,
-        "semester":"6",
-        "position":6
+        "semester":"5",
+        "position":7
     },
     {
         "materia":"Humanismo clásico y contemporáneo",
@@ -933,8 +792,149 @@
             }
         ],
         "bloque":"Anáhuac",
+        "semester":"5",
+        "position":8
+    },
+    {
+        "materia":"Hidrología",
+        "clave":{
+            "raw":"ICIV3409",
+            "code":"ICIV",
+            "number":"3409"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
         "semester":"6",
-        "position":7
+        "position":0
+    },
+    {
+        "materia":"Mecánica de fluidos",
+        "clave":{
+            "raw":"ICIV3404",
+            "code":"ICIV",
+            "number":"3404"
+        },
+        "horas":4.5,
+        "creditos":7.0,
+        "pre_requisito":[
+            {
+                "raw":"MAT2402",
+                "code":"MAT",
+                "number":"2402"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"6",
+        "position":1
+    },
+    {
+        "materia":"Diseño estructural",
+        "clave":{
+            "raw":"ICIV3407",
+            "code":"ICIV",
+            "number":"3407"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3401",
+                "code":"ICIV",
+                "number":"3401"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"6",
+        "position":2
+    },
+    {
+        "materia":"Ingeniería de sistemas",
+        "clave":{
+            "raw":"ICIV4403",
+            "code":"ICIV",
+            "number":"4403"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV2401",
+                "code":"ICIV",
+                "number":"2401"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"6",
+        "position":3
+    },
+    {
+        "materia":"Laboratorio de materiales II",
+        "clave":{
+            "raw":"ICIV3402",
+            "code":"ICIV",
+            "number":"3402"
+        },
+        "horas":3.0,
+        "creditos":3.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV2402",
+                "code":"ICIV",
+                "number":"2402"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"6",
+        "position":4
+    },
+    {
+        "materia":"Construcción y desarrollo sustentable",
+        "clave":{
+            "raw":"ICIV3406",
+            "code":"ICIV",
+            "number":"3406"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3403",
+                "code":"ICIV",
+                "number":"3403"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"6",
+        "position":5
+    },
+    {
+        "materia":"Métodos numéricos",
+        "clave":{
+            "raw":"MAT3402",
+            "code":"MAT",
+            "number":"3402"
+        },
+        "horas":3.0,
+        "creditos":4.5,
+        "pre_requisito":[
+            {
+                "raw":"MAT1403",
+                "code":"MAT",
+                "number":"1403"
+            },
+            {
+                "raw":"ICIV1403",
+                "code":"ICIV",
+                "number":"1403"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"6",
+        "position":6
     },
     {
         "materia":null,
@@ -949,132 +949,8 @@
 
         ],
         "bloque":null,
-        "semester":null,
-        "position":null
-    },
-    {
-        "materia":"Programación de dispositivos móviles",
-        "clave":{
-            "raw":"SIS3403",
-            "code":"SIS",
-            "number":"3403"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"SIS1402",
-                "code":"SIS",
-                "number":"1402"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"7",
-        "position":0
-    },
-    {
-        "materia":"Nuevas tecnologías en informática",
-        "clave":{
-            "raw":"SIS4409",
-            "code":"SIS",
-            "number":"4409"
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"7",
-        "position":1
-    },
-    {
-        "materia":"Inteligencia artificial",
-        "clave":{
-            "raw":"SIS4401",
-            "code":"SIS",
-            "number":"4401"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"SIS1402",
-                "code":"SIS",
-                "number":"1402"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"7",
-        "position":2
-    },
-    {
-        "materia":"Infraestructura y cómputo en la nube",
-        "clave":{
-            "raw":"SIS4404",
-            "code":"SIS",
-            "number":"4404"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-            {
-                "raw":"SIS3401",
-                "code":"SIS",
-                "number":"3401"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"7",
-        "position":3
-    },
-    {
-        "materia":"Calidad de software",
-        "clave":{
-            "raw":"SIS4402",
-            "code":"SIS",
-            "number":"4402"
-        },
-        "horas":3.0,
-        "creditos":4.5,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"7",
-        "position":4
-    },
-    {
-        "materia":"Contabilidad y costos para ingeniería",
-        "clave":{
-            "raw":"CON2402",
-            "code":"CON",
-            "number":"2402"
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"7",
-        "position":5
-    },
-    {
-        "materia":"Electiva interdisciplinaria ",
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":"7",
-        "position":6
+        "semester":"6",
+        "position":7
     },
     {
         "materia":"Electiva profesional (MINOR)",
@@ -1089,8 +965,128 @@
 
         ],
         "bloque":null,
+        "semester":"6",
+        "position":8
+    },
+    {
+        "materia":"Practicum: Administración de la construcción",
+        "clave":{
+            "raw":"INT4455",
+            "code":"INT",
+            "number":"4455"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3403",
+                "code":"ICIV",
+                "number":"3403"
+            }
+        ],
+        "bloque":"Profesional",
         "semester":"7",
-        "position":7
+        "position":0
+    },
+    {
+        "materia":"Hidráulica de canales y tuberías",
+        "clave":{
+            "raw":"ICIV3408",
+            "code":"ICIV",
+            "number":"3408"
+        },
+        "horas":4.5,
+        "creditos":7.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3404",
+                "code":"ICIV",
+                "number":"3404"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":1
+    },
+    {
+        "materia":"Estructuras de concreto",
+        "clave":{
+            "raw":"ICIV4402",
+            "code":"ICIV",
+            "number":"4402"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3407",
+                "code":"ICIV",
+                "number":"3407"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":2
+    },
+    {
+        "materia":"Estructuras de acero",
+        "clave":{
+            "raw":"ICIV4410",
+            "code":"ICIV",
+            "number":"4410"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3407",
+                "code":"ICIV",
+                "number":"3407"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":3
+    },
+    {
+        "materia":"Vías de comunicación",
+        "clave":{
+            "raw":"ICIV4416",
+            "code":"ICIV",
+            "number":"4416"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV4403",
+                "code":"ICIV",
+                "number":"4403"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":4
+    },
+    {
+        "materia":"Instalaciones eléctricas y especiales",
+        "clave":{
+            "raw":"ICIV3410",
+            "code":"ICIV",
+            "number":"3410"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3403",
+                "code":"ICIV",
+                "number":"3403"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":5
     },
     {
         "materia":null,
@@ -1105,23 +1101,59 @@
 
         ],
         "bloque":null,
-        "semester":null,
-        "position":null
+        "semester":"7",
+        "position":6
     },
     {
-        "materia":"Practicum de tecnologías de la información I",
+        "materia":"Contabilidad, costos y licitaciones",
         "clave":{
-            "raw":"INT4405",
-            "code":"INT",
-            "number":"4405"
+            "raw":"ICIV4408",
+            "code":"ICIV",
+            "number":"4408"
         },
-        "horas":4.5,
+        "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS3408",
-                "code":"SIS",
-                "number":"3408"
+                "raw":"ICIV3403",
+                "code":"ICIV",
+                "number":"3403"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":7
+    },
+    {
+        "materia":"Electiva profesional (MINOR)",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"7",
+        "position":8
+    },
+    {
+        "materia":"Practicum: Proyectos de ingeniería civil básico",
+        "clave":{
+            "raw":"INT4456",
+            "code":"INT",
+            "number":"4456"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV4410",
+                "code":"ICIV",
+                "number":"4410"
             }
         ],
         "bloque":"Profesional",
@@ -1129,24 +1161,44 @@
         "position":0
     },
     {
-        "materia":"Inteligencia de negocios",
+        "materia":"Agua potable y alcantarillado",
         "clave":{
-            "raw":"SIS3409",
-            "code":"SIS",
-            "number":"3409"
+            "raw":"ICIV4401",
+            "code":"ICIV",
+            "number":"4401"
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":3.0,
+        "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS2404",
-                "code":"SIS",
-                "number":"2404"
+                "raw":"ICIV3408",
+                "code":"ICIV",
+                "number":"3408"
             }
         ],
         "bloque":"Profesional",
         "semester":"8",
         "position":1
+    },
+    {
+        "materia":"Cimentaciones",
+        "clave":{
+            "raw":"ICIV4405",
+            "code":"ICIV",
+            "number":"4405"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV4402",
+                "code":"ICIV",
+                "number":"4402"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"8",
+        "position":2
     },
     {
         "materia":null,
@@ -1162,47 +1214,63 @@
         ],
         "bloque":null,
         "semester":"8",
-        "position":2
-    },
-    {
-        "materia":"Seguridad informática y análisis forense",
-        "clave":{
-            "raw":"SIS4403",
-            "code":"SIS",
-            "number":"4403"
-        },
-        "horas":4.5,
-        "creditos":6.0,
-        "pre_requisito":[
-            {
-                "raw":"SIS3402",
-                "code":"SIS",
-                "number":"3402"
-            }
-        ],
-        "bloque":"Profesional",
-        "semester":"8",
         "position":3
     },
     {
-        "materia":"Implementación de sistemas integrados",
+        "materia":"Carreteras",
         "clave":{
-            "raw":"SIS3404",
-            "code":"SIS",
-            "number":"3404"
+            "raw":"ICIV4404",
+            "code":"ICIV",
+            "number":"4404"
         },
         "horas":3.0,
-        "creditos":4.5,
+        "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS2403",
-                "code":"SIS",
-                "number":"2403"
+                "raw":"ICIV2405",
+                "code":"ICIV",
+                "number":"2405"
             }
         ],
         "bloque":"Profesional",
         "semester":"8",
         "position":4
+    },
+    {
+        "materia":"Gerencia de proyectos",
+        "clave":{
+            "raw":"ICIV4412",
+            "code":"ICIV",
+            "number":"4412"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+            {
+                "raw":"ICIV3403",
+                "code":"ICIV",
+                "number":"3403"
+            }
+        ],
+        "bloque":"Profesional",
+        "semester":"8",
+        "position":5
+    },
+    {
+        "materia":"Electiva interdisciplinaria ",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Interdisciplinaria",
+        "semester":"8",
+        "position":6
     },
     {
         "materia":"Ingeniería financiera",
@@ -1218,23 +1286,7 @@
         ],
         "bloque":"Profesional",
         "semester":"8",
-        "position":5
-    },
-    {
-        "materia":"Planeación estratégica",
-        "clave":{
-            "raw":"IIND4409",
-            "code":"IIND",
-            "number":"4409"
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":"Profesional",
-        "semester":"8",
-        "position":6
+        "position":7
     },
     {
         "materia":"Electiva profesional (MINOR)",
@@ -1248,40 +1300,24 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Profesional",
         "semester":"8",
-        "position":7
+        "position":8
     },
     {
-        "materia":null,
+        "materia":"Practicum: Proyectos de ingeniería civil avanzado",
         "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":null,
-        "creditos":null,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":null,
-        "position":null
-    },
-    {
-        "materia":"Practicum de tecnologías de la información II",
-        "clave":{
-            "raw":"INT4406",
+            "raw":"INT4457",
             "code":"INT",
-            "number":"4406"
+            "number":"4457"
         },
-        "horas":4.5,
+        "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"INT4405",
+                "raw":"INT4456",
                 "code":"INT",
-                "number":"4405"
+                "number":"4456"
             }
         ],
         "bloque":"Profesional",
@@ -1289,19 +1325,19 @@
         "position":0
     },
     {
-        "materia":"Procesamiento inteligente de datos",
+        "materia":"Obras hidráulicas",
         "clave":{
-            "raw":"SIS4410",
-            "code":"SIS",
-            "number":"4410"
+            "raw":"ICIV4406",
+            "code":"ICIV",
+            "number":"4406"
         },
-        "horas":4.5,
-        "creditos":7.0,
+        "horas":3.0,
+        "creditos":6.0,
         "pre_requisito":[
             {
-                "raw":"SIS2403",
-                "code":"SIS",
-                "number":"2403"
+                "raw":"ICIV3408",
+                "code":"ICIV",
+                "number":"3408"
             }
         ],
         "bloque":"Profesional",
@@ -1309,14 +1345,14 @@
         "position":1
     },
     {
-        "materia":"Realidad virtual y aumentada",
+        "materia":"Impacto y riesgo ambiental",
         "clave":{
-            "raw":"SIS4411",
-            "code":"SIS",
-            "number":"4411"
+            "raw":"IAMB3407",
+            "code":"IAMB",
+            "number":"3407"
         },
         "horas":3.0,
-        "creditos":4.5,
+        "creditos":6.0,
         "pre_requisito":[
 
         ],
@@ -1325,38 +1361,6 @@
         "position":2
     },
     {
-        "materia":"Electiva interdisciplinaria ",
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":"9",
-        "position":3
-    },
-    {
-        "materia":"Electiva interdisciplinaria ",
-        "clave":{
-            "raw":null,
-            "code":null,
-            "number":null
-        },
-        "horas":3.0,
-        "creditos":6.0,
-        "pre_requisito":[
-
-        ],
-        "bloque":null,
-        "semester":"9",
-        "position":4
-    },
-    {
         "materia":null,
         "clave":{
             "raw":null,
@@ -1370,26 +1374,30 @@
         ],
         "bloque":null,
         "semester":"9",
-        "position":5
+        "position":3
     },
     {
-        "materia":"Legislación informática",
+        "materia":"Sistemas de transporte",
         "clave":{
-            "raw":"SIS4407",
-            "code":"SIS",
+            "raw":"ICIV4407",
+            "code":"ICIV",
             "number":"4407"
         },
         "horas":3.0,
         "creditos":6.0,
         "pre_requisito":[
-
+            {
+                "raw":"ICIV4403",
+                "code":"ICIV",
+                "number":"4403"
+            }
         ],
         "bloque":"Profesional",
         "semester":"9",
-        "position":6
+        "position":4
     },
     {
-        "materia":"Eletctiva profesional (MINOR)",
+        "materia":"Electiva interdisciplinaria ",
         "clave":{
             "raw":null,
             "code":null,
@@ -1400,8 +1408,56 @@
         "pre_requisito":[
 
         ],
-        "bloque":null,
+        "bloque":"Interdisciplinaria",
+        "semester":"9",
+        "position":5
+    },
+    {
+        "materia":"Electiva interdisciplinaria ",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Interdisciplinaria",
+        "semester":"9",
+        "position":6
+    },
+    {
+        "materia":"Dirección estratégica de la empresa",
+        "clave":{
+            "raw":"ADM4404",
+            "code":"ADM",
+            "number":"4404"
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
         "semester":"9",
         "position":7
+    },
+    {
+        "materia":"Electiva profesional (MINOR)",
+        "clave":{
+            "raw":null,
+            "code":null,
+            "number":null
+        },
+        "horas":3.0,
+        "creditos":6.0,
+        "pre_requisito":[
+
+        ],
+        "bloque":"Profesional",
+        "semester":"9",
+        "position":8
     }
 ]

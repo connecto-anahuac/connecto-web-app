@@ -1,5 +1,4 @@
 import { renderToStaticMarkup } from "react-dom/server";
-import type { ReactNode } from "react";
 import { describe, expect, it, vi } from "vitest";
 import { StudentsPageContent } from "./StudentsPageContent";
 
@@ -29,27 +28,26 @@ vi.mock("./useStudentPreviewNavigation", () => ({
 }));
 
 describe("StudentsPageContent", () => {
-  it("connects the selected student and URL navigation callbacks to the collection preview", () => {
-    renderToStaticMarkup(<StudentsPageContent studentId="A/B 1" />);
+  it("connects the selected student and URL navigation callbacks to SidePanel", () => {
+    const markup = renderToStaticMarkup(<StudentsPageContent studentId="A/B 1" />);
 
     const props = collectionProps as {
       activeStudentId: string;
       onStudentOpen: (studentId: string) => void;
-      onStudentPreviewClose: () => void;
       onStudentSelect: (studentId: string) => void;
-      renderStudentPreview: (studentId: string) => ReactNode;
     };
 
     props.onStudentSelect("1111");
     props.onStudentOpen("A/B 1");
-    props.onStudentPreviewClose();
 
     expect(props.activeStudentId).toBe("A/B 1");
     expect(navigation.selectStudent).toHaveBeenCalledWith("1111");
     expect(navigation.openStudentDetail).toHaveBeenCalledWith("A/B 1");
-    expect(navigation.closeStudentPreview).toHaveBeenCalledOnce();
-    expect(renderToStaticMarkup(props.renderStudentPreview("A/B 1"))).toContain(
-      'data-student-id="A/B 1"',
-    );
+    expect(props).not.toHaveProperty("renderStudentPreview");
+    expect(props).not.toHaveProperty("onStudentPreviewClose");
+    expect(markup).toContain('aria-label="Student preview"');
+    expect(markup).toContain('aria-label="Open student detail page"');
+    expect(markup).toContain('aria-label="Close student preview"');
+    expect(markup).toContain('data-student-id="A/B 1"');
   });
 });

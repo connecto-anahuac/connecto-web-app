@@ -14,6 +14,7 @@ import { GetProfessorsService } from "@/external/service/professor/get-professor
 import { GetStudyPlansService } from "@/external/service/study-plan/get-study-plans.service";
 
 import { GetOfferingCoursesByCareerService } from "@/external/service/offering-course/get-offering-courses-by-career.service";
+import { GetOfferingCourseDetailService } from "@/external/service/offering-course/get-offering-course-detail.service";
 import { GetSelectedOfferingCoursesService } from "@/external/service/offering-course/get-selected-offering-courses.service";
 import { SetOfferingCourseSelectionService } from "@/external/service/offering-course/set-offering-course-selection.service";
 import { GetStudentGradeService } from "@/external/service/student/get-student-plan.service";
@@ -56,9 +57,19 @@ export const getStudentPlanService = new GetStudentGradeService(
 export const getOfferingCoursesByCareerService = new GetOfferingCoursesByCareerService(
   planRepository,
   courseRepository,
-  studentRepository,
   preRequisitoRepository,
+  studentRepository,
   gradeRepository,
+);
+
+export const getOfferingCourseDetailService = new GetOfferingCourseDetailService(
+  planRepository,
+  studyPlanRepository,
+  courseRepository,
+  studentRepository,
+  gradeRepository,
+  preRequisitoRepository,
+  offeringCourseRepository,
 );
 
 export const getSelectedOfferingCoursesService = new GetSelectedOfferingCoursesService(

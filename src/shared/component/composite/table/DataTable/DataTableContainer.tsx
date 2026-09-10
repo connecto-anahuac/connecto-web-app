@@ -16,7 +16,8 @@ export function DataTableContainer<TItem>({
   onRowClick,
   onRowDoubleClick,
   isRowActive,
-  isRowHoverable=true,
+  isRowHoverable = true,
+  bgColor = "bg-white",
 }: DataTableProps<TItem>) {
   const {
       resized,
@@ -60,6 +61,7 @@ export function DataTableContainer<TItem>({
       onResizeHoverChange={onResizeHoverChange}
       onResizeFocusChange={onResizeFocusChange}
       onSort={onSort}
+      bgColor={bgColor}
     />
   );
 }

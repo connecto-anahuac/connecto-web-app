@@ -1,16 +1,25 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 const mocks = vi.hoisted(() => {
-  const courses = { count: vi.fn(), bulkPut: vi.fn() };
-  const plans = { count: vi.fn(), bulkPut: vi.fn() };
-  const preRequisitos = { count: vi.fn(), bulkPut: vi.fn() };
+  const courses = { count: vi.fn(), bulkPut: vi.fn(), bulkGet: vi.fn() };
+  const planCareerCount = vi.fn();
+  const plans = {
+    count: vi.fn(),
+    bulkPut: vi.fn(),
+    where: vi.fn(() => ({
+      equals: vi.fn((career: string) => ({
+        count: () => planCareerCount(career),
+      })),
+    })),
+  };
+  const preRequisitos = { count: vi.fn(), bulkPut: vi.fn(), bulkGet: vi.fn() };
   const professors = { count: vi.fn(), bulkPut: vi.fn() };
   const professorCourseCapabilities = { count: vi.fn(), bulkPut: vi.fn() };
   const courseAssignments = { count: vi.fn(), bulkPut: vi.fn() };
   const professorAvailabilities = { count: vi.fn(), bulkPut: vi.fn() };
   const timeSlots = { count: vi.fn(), bulkPut: vi.fn() };
   const classrooms = { count: vi.fn(), bulkPut: vi.fn() };
-  const studyPlans = { count: vi.fn(), bulkPut: vi.fn() };
+  const studyPlans = { count: vi.fn(), bulkPut: vi.fn(), bulkGet: vi.fn() };
 
   return {
     courses,
@@ -23,6 +32,7 @@ const mocks = vi.hoisted(() => {
     timeSlots,
     classrooms,
     studyPlans,
+    planCareerCount,
     universityDb: {
       open: vi.fn(),
       transaction: vi.fn(async (_mode, _tables, callback) => callback()),
@@ -49,8 +59,15 @@ describe("initializeUniversityData", () => {
     vi.clearAllMocks();
     mocks.universityDb.open.mockResolvedValue(undefined);
     mocks.courses.count.mockResolvedValue(1);
+    mocks.courses.bulkGet.mockImplementation((ids: string[]) =>
+      Promise.resolve(ids.map(() => undefined)),
+    );
     mocks.plans.count.mockResolvedValue(1);
+    mocks.planCareerCount.mockResolvedValue(1);
     mocks.preRequisitos.count.mockResolvedValue(1);
+    mocks.preRequisitos.bulkGet.mockImplementation((ids: string[]) =>
+      Promise.resolve(ids.map(() => undefined)),
+    );
     mocks.professors.count.mockResolvedValue(1);
     mocks.professorCourseCapabilities.count.mockResolvedValue(1);
     mocks.courseAssignments.count.mockResolvedValue(1);
@@ -102,11 +119,53 @@ describe("initializeUniversityData", () => {
       preRequisitosSeeded: true,
     });
     expect(second).toEqual(first);
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(4);
     expect(mocks.universityDb.transaction).toHaveBeenCalledTimes(1);
     expect(mocks.courses.bulkPut).toHaveBeenCalledTimes(1);
+    expect(mocks.courses.bulkPut).toHaveBeenCalledWith([
+      expect.objectContaining({ key: "MAT101" }),
+    ]);
     expect(mocks.preRequisitos.bulkPut).toHaveBeenCalledTimes(1);
     expect(mocks.plans.bulkPut).not.toHaveBeenCalled();
+  });
+
+  it("stores a materias file as a study plan and de-duplicates its courses", async () => {
+    mocks.planCareerCount.mockImplementation((career: string) =>
+      Promise.resolve(career === "Ambiental" ? 0 : 1),
+    );
+    mocks.studyPlans.bulkGet.mockResolvedValue([{}, undefined]);
+    vi.stubGlobal("fetch", vi.fn(async (url: string) => ({
+      ok: true,
+      json: vi.fn().mockResolvedValue(
+        url.includes("Materias_IAMB")
+          ? [{ clave: { raw: "IAMB101" }, semester: 1, position: 1 }]
+          : {
+            professors: [], capabilities: [], assignments: [], availabilities: [], classrooms: [],
+            studyPlans: [
+              { id: "TIND", name: "TIND", career: "TIND", firstPeriod: "", admin: "" },
+              { id: "Ambiental", name: "Ambiental", career: "Ambiental", firstPeriod: "", admin: "" },
+            ],
+          },
+      ),
+    })));
+    const { initializeUniversityData } = await import("./initialize-university-data");
+
+    await initializeUniversityData();
+
+    expect(mocks.plans.bulkPut).toHaveBeenCalledWith([
+      expect.objectContaining({
+        id: "Ambiental:IAMB101",
+        name: "Ambiental",
+        career: "Ambiental",
+        planId: "Ambiental",
+      }),
+    ]);
+    expect(mocks.courses.bulkPut).toHaveBeenCalledWith([
+      expect.objectContaining({ key: "IAMB101" }),
+    ]);
+    expect(mocks.studyPlans.bulkPut).toHaveBeenCalledWith([
+      expect.objectContaining({ id: "Ambiental", career: "Ambiental" }),
+    ]);
   });
 
   it("seeds only an empty directory table without overwriting populated peers", async () => {

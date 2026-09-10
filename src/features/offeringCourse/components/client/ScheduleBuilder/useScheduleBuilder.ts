@@ -1,121 +1,314 @@
 "use client";
 
+import type { OfferingCourseDetailDto } from "@/external/dto/offering-course/offering-course.dto";
 import {
+  fetchOfferingCourseDetail,
   fetchOfferingCoursesByCareer,
   fetchSelectedOfferingCourses,
   updateOfferingCourseselection,
 } from "@/external/handler/offering-course/query.client";
-import {
-  toOfferingCourseUI,
-  toUpdateOfferingCourseSelectionInput,
-} from "@/features/offeringCourse/types/offering-course";
-import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import { getTotalEligibleStudents } from "@/features/offeringCourse/lib/get-total-eligible-students";
-import { useEffect, useState } from "react";
+import { toOfferingCourseUI, type OfferingCourse } from "@/features/offeringCourse/types/offering-course";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { useShallow } from "zustand/shallow";
+import { type OfferingCourseDraft, type ScheduleBuilderStore } from "./scheduleBuilderStore";
+import { useScheduleBuilderStore } from "./ScheduleBuilderStateProvider";
 
-type UseScheduleBuilderResult = {
+export type { OfferingCourseDraft } from "./scheduleBuilderStore";
+
+type Result = {
+  closePanel: () => void;
+  detailError: string | null;
+  detailLoading: boolean;
+  drafts: Record<string, OfferingCourseDraft>;
   error: string | null;
+  isPanelOpen: boolean;
   loading: boolean;
   offeringCourses: OfferingCourse[];
+  offerCourse: (course: OfferingCourse) => Promise<void>;
+  openCourse: (course: OfferingCourse) => void;
   pendingCourseKeys: string[];
+  selectedCourseDetail: OfferingCourseDetailDto | null;
+  selectedDraft: OfferingCourseDraft | null;
   selectedCourseKeys: string[];
-  toggleOfferingCourse: (offeringCourse: OfferingCourse) => Promise<void>;
+  setSelectedStudentIds: (planId: string, studentId: string, isSelected: boolean) => Promise<void>;
+  setSessionNumber: (sessionNumber: number) => Promise<void>;
+  setCourseSessionNumber: (course: OfferingCourse, sessionNumber: number) => Promise<void>;
+  unofferCourse: (course: OfferingCourse) => Promise<void>;
 };
 
-export function useScheduleBuilder(career: string): UseScheduleBuilderResult {
+const copyIds = (value: Record<string, string[]>) =>
+  Object.fromEntries(Object.entries(value).map(([planId, ids]) => [planId, [...new Set(ids)]]));
+
+const defaultDraft = (detail: OfferingCourseDetailDto): OfferingCourseDraft => ({
+  sessionNumber: detail.sessionNumber,
+  enabledStudentIdsByStudyPlan: Object.fromEntries(
+    detail.studyPlans.map((plan) => [
+      plan.studyPlanId,
+      plan.semesters
+        .filter((semester) => semester.semester >= plan.recommendedSemester)
+        .flatMap((semester) => semester.eligibleStudents.map((student) => student.id)),
+    ]),
+  ),
+});
+
+const selectStore = (state: ScheduleBuilderStore) => ({
+  closePanel: state.closePanel,
+  detailError: state.detailError,
+  detailLoading: state.detailLoading,
+  drafts: state.drafts,
+  finishPending: state.finishPending,
+  hydrate: state.hydrate,
+  isPanelOpen: state.isPanelOpen,
+  markOffered: state.markOffered,
+  markUnoffered: state.markUnoffered,
+  openPanel: state.openCourse,
+  pendingCourseKeys: state.pendingCourseKeys,
+  resetForCareer: state.resetForCareer,
+  selectedCourseDetail: state.selectedCourseDetail,
+  selectedCourseKey: state.selectedCourseKey,
+  selectedCourseKeys: state.selectedCourseKeys,
+  setDetailError: state.setDetailError,
+  setDetailLoading: state.setDetailLoading,
+  setDraft: state.setDraft,
+  setDraftChangeHandler: state.setDraftChangeHandler,
+  setSelectedCourseDetail: state.setSelectedCourseDetail,
+  startPending: state.startPending,
+});
+
+/** Fetches course data and persists selection updates; interaction state lives in Zustand. */
+export function useScheduleBuilder(career: string): Result {
+  const store = useScheduleBuilderStore(useShallow(selectStore));
+  const { hydrate, resetForCareer } = store;
   const [offeringCourses, setOfferingCourses] = useState<OfferingCourse[]>([]);
-  const [selectedCourseKeys, setSelectedCourseKeys] = useState<string[]>([]);
-  const [pendingCourseKeys, setPendingCourseKeys] = useState<string[]>([]);
+  const [details, setDetails] = useState<Record<string, OfferingCourseDetailDto>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const currentCourseKeyRef = useRef<string | null>(null);
 
   useEffect(() => {
     let mounted = true;
-
-    async function loadOfferingCourses() {
-      setLoading(true);
-      setError(null);
-      setPendingCourseKeys([]);
-
+    resetForCareer(career);
+    const load = async () => {
+      if (mounted) {
+        setDetails({});
+        setLoading(true);
+        setError(null);
+      }
       try {
-        const [items, selectedOfferingCourses] = await Promise.all([
+        const [items, selected] = await Promise.all([
           fetchOfferingCoursesByCareer(career),
           fetchSelectedOfferingCourses(career),
         ]);
-
-        if (!mounted) {
-          return;
-        }
-
+        if (!mounted) return;
         setOfferingCourses(items.map(toOfferingCourseUI));
-        setSelectedCourseKeys([
-          ...new Set(selectedOfferingCourses.map((item) => item.courseKey)),
-        ]);
-      } catch (loadError) {
-        if (!mounted) {
-          return;
-        }
-
-        console.error("Failed loading offering Courses", loadError);
-        setError("Failed loading offering Courses");
-      } finally {
+        hydrate(career, selected.map((item) => ({
+          courseKey: item.courseKey,
+          draft: item.enabledStudentIdsByStudyPlan === undefined
+            ? undefined
+            : {
+                enabledStudentIdsByStudyPlan: copyIds(item.enabledStudentIdsByStudyPlan),
+                sessionNumber: item.sessionNumber,
+              },
+        })));
+      } catch (cause) {
         if (mounted) {
-          setLoading(false);
+          console.error("Failed loading offering courses", cause);
+          setError("Failed loading offering courses");
         }
+      } finally {
+        if (mounted) setLoading(false);
       }
-    }
-
-    void loadOfferingCourses();
-
-    return () => {
-      mounted = false;
     };
-  }, [career]);
+    void load();
+    return () => { mounted = false; };
+  }, [career, hydrate, resetForCareer]);
 
-  async function toggleOfferingCourse(offeringCourse: OfferingCourse) {
-    if (pendingCourseKeys.includes(offeringCourse.key)) {
-      return;
-    }
-
-    const isCurrentlySelected = selectedCourseKeys.includes(offeringCourse.key);
-    const nextIsSelected = !isCurrentlySelected;
-
-    setPendingCourseKeys((currentKeys) => [...currentKeys, offeringCourse.key]);
-    setSelectedCourseKeys((currentKeys) =>
-      nextIsSelected
-        ? [...currentKeys, offeringCourse.key]
-        : currentKeys.filter((currentKey) => currentKey !== offeringCourse.key),
-    );
-
+  const ensureDetail = useCallback(async (course: OfferingCourse) => {
+    const cached = details[course.key];
+    if (cached) return cached;
+    store.setDetailLoading(true);
+    store.setDetailError(null);
     try {
-      await updateOfferingCourseselection(
-        toUpdateOfferingCourseSelectionInput(
-          offeringCourse,
-          career,
-          getTotalEligibleStudents(offeringCourse),
-          nextIsSelected,
-        ),
-      );
-    } catch (toggleError) {
-      console.error("Failed toggling offering Course selection", toggleError);
-      setSelectedCourseKeys((currentKeys) =>
-        isCurrentlySelected
-          ? [...currentKeys, offeringCourse.key]
-          : currentKeys.filter((currentKey) => currentKey !== offeringCourse.key),
-      );
+      const detail = await fetchOfferingCourseDetail(career, course.key);
+      if (!detail) throw new Error("Course detail was not found");
+      setDetails((current) => ({ ...current, [course.key]: detail }));
+      if (!store.drafts[course.key]) {
+        store.setDraft(course.key, detail.enabledStudentIdsByStudyPlan === undefined
+          ? defaultDraft(detail)
+          : {
+              enabledStudentIdsByStudyPlan: copyIds(detail.enabledStudentIdsByStudyPlan),
+              sessionNumber: detail.sessionNumber,
+            });
+      }
+      if (currentCourseKeyRef.current === course.key) store.setSelectedCourseDetail(detail);
+      return detail;
+    } catch (cause) {
+      console.error("Failed loading offering course detail", cause);
+      if (currentCourseKeyRef.current === course.key)
+        store.setDetailError("Failed loading offering course detail");
+      return null;
     } finally {
-      setPendingCourseKeys((currentKeys) =>
-        currentKeys.filter((currentKey) => currentKey !== offeringCourse.key),
-      );
+      if (currentCourseKeyRef.current === course.key) store.setDetailLoading(false);
     }
-  }
+  }, [career, details, store]);
+
+  const persistOffer = useCallback(async (courseKey: string, draft: OfferingCourseDraft) => {
+    store.startPending(courseKey);
+    try {
+      await updateOfferingCourseselection({
+        career,
+        courseKey,
+        enabledStudentIdsByStudyPlan: copyIds(draft.enabledStudentIdsByStudyPlan),
+        isSelected: true,
+        sessionNumber: draft.sessionNumber,
+      });
+      store.markOffered(courseKey);
+    } finally {
+      store.finishPending(courseKey);
+    }
+  }, [career, store]);
+
+  const openCourse = useCallback((course: OfferingCourse) => {
+    currentCourseKeyRef.current = course.key;
+    store.openPanel(course.key);
+    const cached = details[course.key];
+    if (cached) {
+      store.setSelectedCourseDetail(cached);
+      store.setDetailLoading(false);
+    } else {
+      void ensureDetail(course);
+    }
+  }, [details, ensureDetail, store]);
+
+  const offerCourse = useCallback(async (course: OfferingCourse) => {
+    if (store.pendingCourseKeys.includes(course.key)) return;
+    openCourse(course);
+    const detail = await ensureDetail(course);
+    if (!detail) return;
+    const draft = store.drafts[course.key] ?? defaultDraft(detail);
+    store.setDraft(course.key, draft);
+    try {
+      await persistOffer(course.key, draft);
+    } catch (cause) {
+      console.error("Failed offering course", cause);
+      store.setDetailError("Failed saving offering course");
+    }
+  }, [ensureDetail, openCourse, persistOffer, store]);
+
+  const unofferCourse = useCallback(async (course: OfferingCourse) => {
+    if (store.pendingCourseKeys.includes(course.key)) return;
+    const wasSelected = store.selectedCourseKeys.includes(course.key);
+    store.startPending(course.key);
+    store.markUnoffered(course.key);
+    try {
+      await updateOfferingCourseselection({ career, courseKey: course.key, isSelected: false });
+    } catch (cause) {
+      console.error("Failed removing offered course", cause);
+      if (wasSelected) store.markOffered(course.key);
+      store.setDetailError("Failed removing offered course");
+    } finally {
+      store.finishPending(course.key);
+    }
+  }, [career, store]);
+
+  const updateDraft = useCallback(async (next: OfferingCourseDraft) => {
+    const courseKey = store.selectedCourseKey;
+    if (!courseKey || !store.selectedCourseKeys.includes(courseKey) || store.pendingCourseKeys.includes(courseKey))
+      return;
+    const previous = store.drafts[courseKey];
+    store.setDraft(courseKey, next);
+    try {
+      await persistOffer(courseKey, next);
+    } catch (cause) {
+      console.error("Failed saving offering course", cause);
+      if (previous) store.setDraft(courseKey, previous);
+      store.setDetailError("Failed saving offering course");
+    }
+  }, [persistOffer, store]);
+
+  const setCourseSessionNumber = useCallback(async (course: OfferingCourse, sessionNumber: number) => {
+    if (!store.selectedCourseKeys.includes(course.key) || store.pendingCourseKeys.includes(course.key)) return;
+    const previous = store.drafts[course.key];
+    if (!previous) return;
+    const next = { ...previous, sessionNumber: Math.max(0, sessionNumber) };
+    store.setDraft(course.key, next);
+    try {
+      await persistOffer(course.key, next);
+    } catch (cause) {
+      console.error("Failed saving offering course", cause);
+      store.setDraft(course.key, previous);
+      store.setDetailError("Failed saving offering course");
+    }
+  }, [persistOffer, store]);
+
+  const setSelectedStudentIds = useCallback(async (planId: string, studentId: string, isSelected: boolean) => {
+    const courseKey = store.selectedCourseKey;
+    if (!courseKey) return;
+    const current = store.drafts[courseKey];
+    if (!current) return;
+    const ids = current.enabledStudentIdsByStudyPlan[planId] ?? [];
+    await updateDraft({
+      ...current,
+      enabledStudentIdsByStudyPlan: {
+        ...current.enabledStudentIdsByStudyPlan,
+        [planId]: isSelected ? [...new Set([...ids, studentId])] : ids.filter((id) => id !== studentId),
+      },
+    });
+  }, [store, updateDraft]);
+
+  const setSessionNumber = useCallback(async (value: number) => {
+    const courseKey = store.selectedCourseKey;
+    const current = courseKey ? store.drafts[courseKey] : undefined;
+    if (current) await updateDraft({ ...current, sessionNumber: Math.max(0, value) });
+  }, [store, updateDraft]);
+
+  useEffect(() => {
+    store.setDraftChangeHandler((courseKey, next, previous) => {
+      if (!store.selectedCourseKeys.includes(courseKey)) return;
+      if (next.sessionNumber === 0) {
+        store.startPending(courseKey);
+        store.markUnoffered(courseKey);
+        void updateOfferingCourseselection({
+          career,
+          courseKey,
+          isSelected: false,
+        })
+          .catch((cause) => {
+            console.error("Failed removing offered course", cause);
+            store.setDraft(courseKey, previous);
+            store.markOffered(courseKey);
+            store.setDetailError("Failed removing offered course");
+          })
+          .finally(() => store.finishPending(courseKey));
+        return;
+      }
+      void persistOffer(courseKey, next).catch((cause) => {
+        console.error("Failed saving offering course", cause);
+        store.setDraft(courseKey, previous);
+        store.setDetailError("Failed saving offering course");
+      });
+    });
+    return () => store.setDraftChangeHandler(null);
+  }, [career, persistOffer, store]);
 
   return {
+    closePanel: () => { currentCourseKeyRef.current = null; store.closePanel(); },
+    detailError: store.detailError,
+    detailLoading: store.detailLoading,
+    drafts: store.drafts,
     error,
+    isPanelOpen: store.isPanelOpen,
     loading,
     offeringCourses,
-    pendingCourseKeys,
-    selectedCourseKeys,
-    toggleOfferingCourse,
+    offerCourse,
+    openCourse,
+    pendingCourseKeys: store.pendingCourseKeys,
+    selectedCourseDetail: store.selectedCourseDetail,
+    selectedDraft: store.selectedCourseKey ? (store.drafts[store.selectedCourseKey] ?? null) : null,
+    selectedCourseKeys: store.selectedCourseKeys,
+    setSelectedStudentIds,
+    setCourseSessionNumber,
+    setSessionNumber,
+    unofferCourse,
   };
 }

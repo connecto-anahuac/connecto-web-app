@@ -74,7 +74,7 @@ export const Interactive: Story = {
       <ToggleButton
         {...args}
         isSelected={isSelected}
-        onClick={() => setIsSelected((current) => !current)}
+        onSelectedChange={setIsSelected}
       />
     );
   },

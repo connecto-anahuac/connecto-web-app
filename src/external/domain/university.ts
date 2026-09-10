@@ -121,4 +121,10 @@ export type OfferingCourseRecord = {
   courseKey: string;
   sessionNumber: number;
   estimatedNumber: number;
+  /**
+   * The selected students grouped by study plan.  This remains optional so
+   * records written before per-student selection was introduced can be read
+   * and hydrated from their eligible students.
+   */
+  enabledStudentIdsByStudyPlan?: Record<string, string[]>;
 };

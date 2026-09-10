@@ -17,7 +17,7 @@ export default function OfferingCourseDetail({
   ...props
 }: Props) {
   const totalEligibleStudents = getTotalEligibleStudents(offeringClass);
-  const semesterEntries = Object.entries(offeringClass.possibleStudentIds)
+  const semesterEntries = Object.entries(offeringClass.possibleStudentIds ?? {})
     .map(([semester, studentIds]) => [Number(semester), studentIds] as const)
     .sort((left, right) => right[0] - left[0]);
 

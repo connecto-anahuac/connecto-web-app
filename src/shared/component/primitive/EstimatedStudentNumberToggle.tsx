@@ -24,7 +24,7 @@ type Props = ComponentProps<"div"> & {
  */
 export default function EstimatedStudentNumberToggle({
   className,
-  value = "12",
+  value = "--",
   isSelected = false,
   isEnabled = true,
   onToggle,

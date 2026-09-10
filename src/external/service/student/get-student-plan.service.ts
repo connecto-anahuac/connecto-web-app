@@ -22,7 +22,7 @@ export class GetStudentGradeService {
       throw new Error("Student not found");
     }
 
-    const plans = await this.planRepository.findAll();
+    const plans = await this.planRepository.findByCareer(student.career);
     const result: StudentClassItem[] = [];
 
     const buildPreRequisite = async (

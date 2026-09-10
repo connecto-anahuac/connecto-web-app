@@ -201,7 +201,9 @@ export function DataTablePresenter<TItem>({
   onResizeHoverChange,
   onResizeFocusChange,
   onSort,
+  bgColor="bg-white",
 }: DataTablePresenterProps<TItem>) {
+  const cellBgColor = bgColor;
   return (
     <div className={cn("h-full w-full overflow-auto rounded-md",
     // isResizing&&"cursor-col-resize",
@@ -334,6 +336,7 @@ export function DataTablePresenter<TItem>({
                       // isResizeBoundaryHighlighted &&
                       //   "after:pointer-events-none after:absolute after:inset-y-0 after:right-0 after:translate-x-1/2  after:z-20 after:w-0.5 after:bg-Primary",
                       pinned && "sticky z-10",
+                      cellBgColor,
                     )}
                     key={cell.id}
                     role="cell"

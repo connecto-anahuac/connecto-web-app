@@ -21,6 +21,7 @@ export type DataTableProps<TItem> = {
   ) => void;
   isRowActive?: (item: TItem) => boolean;
   isRowHoverable?: boolean;
+  bgColor?: string;
 };
 
 export type DataTablePresenterProps<TItem> = DataTableProps<TItem> & {
@@ -44,6 +45,7 @@ export type DataTablePresenterProps<TItem> = DataTableProps<TItem> & {
   onResizeHoverChange: (columnId: string, hovered: boolean) => void;
   onResizeFocusChange: (columnId: string, focused: boolean) => void;
   onSort: (column: Column<TItem>) => void;
+  bgColor: string;
 };
 
 export type TableFilterButtonGroupPresenterProps<TItem> =

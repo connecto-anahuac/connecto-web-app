@@ -32,10 +32,10 @@ export function StudentOverview({
 }: StudentOverviewProps) {
   return (
     <div className={cn("overflow-y-scroll w-full h-full @container", className)}>
-      <div className="mt-4 grid w-full self-start grid-cols-4 gap-4 @max-[500px]:grid-cols-2">
+      <div className="mt-4 grid w-full self-start grid-cols-4 gap-4 @max-[600px]:grid-cols-2">
        
         <ProfileDataCard
-          className="col-span-2 row-span-3 col-start-3 row-start-1 h-full @max-[500px]:col-start-1 @max-[500px]:row-start-auto "
+          className="col-span-2 row-span-3 col-start-3 row-start-1 h-full @max-[600px]:col-start-1 @max-[600px]:row-start-auto "
           {...warningInformations}
         />
         {topLeftInformations.map((props) => (
@@ -46,11 +46,11 @@ export function StudentOverview({
           />
         ))}
         <ProfileDataCard
-          className="h-fit col-span-2 col-start-3 row-start-4 @max-[500px]:col-start-1 @max-[500px]:row-start-auto"
+          className="h-fit col-span-2 col-start-3 row-start-4 @max-[600px]:col-start-1 @max-[600px]:row-start-auto"
           {...requirementInformations}
         />
         <ProfileDataCard
-          className="h-fit col-span-2 col-start-1 row-start-4 @max-[500px]:col-start-1 @max-[500px]:row-start-auto"
+          className="h-fit col-span-2 col-start-1 row-start-4 @max-[600px]:col-start-1 @max-[600px]:row-start-auto"
           {...failedClassInformations}
         />
       </div>

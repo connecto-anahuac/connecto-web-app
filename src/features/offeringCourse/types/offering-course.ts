@@ -14,7 +14,10 @@ export type OfferingCourse = {
 	semester: number;
 	position: number;
 	preRequisites: string[];
-	possibleStudentIds: Record<number, string[]>;
+	/** Unique eligible students across the active career's study plans. */
+	estimatedNumber: number;
+	/** Detail-only data is loaded on demand; the grid intentionally has no student IDs. */
+	possibleStudentIds?: Record<number, string[]>;
 };
 
 export function toOfferingCourseUI(offeringCourse: OfferingCourseDto): OfferingCourse {
@@ -29,42 +32,19 @@ export function toOfferingCourseUI(offeringCourse: OfferingCourseDto): OfferingC
 		semester: offeringCourse.semester,
 		position: offeringCourse.position,
 		preRequisites: [...offeringCourse.preRequisites],
-		possibleStudentIds: Object.fromEntries(
-			Object.entries(offeringCourse.possibleStudentIds).map(([semester, studentIds]) => [
-				Number(semester),
-				[...studentIds],
-			]),
-		) as Record<number, string[]>,
+		estimatedNumber: offeringCourse.estimatedNumber,
 	};
 }
 
 export function toUpdateOfferingCourseSelectionInput(
 	offeringCourse: OfferingCourse,
 	career: string,
-	estimatedNumber: number,
+	_sessionNumber: number,
 	isSelected: boolean,
 ): UpdateOfferingCourseSelectionInput {
 	return {
 		career,
-		estimatedNumber,
+		courseKey: offeringCourse.key,
 		isSelected,
-		offeringCourse: {
-			key: offeringCourse.key,
-			keyCode: offeringCourse.keyCode,
-			keyNumber: offeringCourse.keyNumber,
-			hours: offeringCourse.hours,
-			credits: offeringCourse.credits,
-			block: offeringCourse.block,
-			name: offeringCourse.name,
-			semester: offeringCourse.semester,
-			position: offeringCourse.position,
-			preRequisites: [...offeringCourse.preRequisites],
-			possibleStudentIds: Object.fromEntries(
-				Object.entries(offeringCourse.possibleStudentIds).map(([semester, studentIds]) => [
-					Number(semester),
-					[...studentIds],
-				]),
-			) as Record<number, string[]>,
-		},
 	};
 }

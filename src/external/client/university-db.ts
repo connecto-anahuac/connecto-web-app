@@ -16,52 +16,46 @@ import {
   TimeSlotRecord,
 } from "@/external/domain/university";
 
-export function normalizeLegacyPlans(rows: PlanRecord[]): { plans: PlanRecord[]; studyPlans: StudyPlanRecord[] } {
-  const byIdentity = new Map<string, StudyPlanRecord>();
-  const plans = rows.map((source) => {
-    const row = { ...source };
-    const identity = `${row.career}\u0000${row.name}`;
-    let studyPlan = byIdentity.get(identity);
-    if (!studyPlan) {
-      studyPlan = { id: migratedStudyPlanId(row.career, row.name), name: row.name, career: row.career, firstPeriod: "", admin: "" };
-      byIdentity.set(identity, studyPlan);
-    }
-    row.planId = studyPlan.id;
-    return row;
-  });
-  return { plans, studyPlans: [...byIdentity.values()] };
-}
-
-export function migratedStudyPlanId(career: string, name: string): string {
-  return `migrated:${career}:${name}`;
-}
-
-function legacyMigratedStudyPlanId(career: string, name: string): string {
-  return `migrated:${encodeURIComponent(career)}:${encodeURIComponent(name)}`;
-}
-
-export function migrateLegacyStudyPlanIds(
+export function normalizePlansByCareer(
   studyPlans: StudyPlanRecord[],
   plans: PlanRecord[],
-): { studyPlans: StudyPlanRecord[]; plans: PlanRecord[]; legacyIds: string[] } {
-  const replacements = new Map<string, string>();
-  const migratedStudyPlans = studyPlans.map((studyPlan) => {
-    const legacyId = legacyMigratedStudyPlanId(studyPlan.career, studyPlan.name);
-    const id = migratedStudyPlanId(studyPlan.career, studyPlan.name);
-    if (legacyId === id || studyPlan.id !== legacyId) return studyPlan;
+): { studyPlans: StudyPlanRecord[]; plans: PlanRecord[]; obsoleteStudyPlanIds: string[] } {
+  const byCareer = new Map<string, StudyPlanRecord>();
+  const obsoleteStudyPlanIds: string[] = [];
 
-    replacements.set(legacyId, id);
-    return { ...studyPlan, id };
+  for (const studyPlan of studyPlans) {
+    if (!byCareer.has(studyPlan.career)) {
+      byCareer.set(studyPlan.career, {
+        ...studyPlan,
+        id: studyPlan.career,
+        name: studyPlan.career,
+      });
+    }
+    if (studyPlan.id !== studyPlan.career) obsoleteStudyPlanIds.push(studyPlan.id);
+  }
+
+  const normalizedPlans = plans.map((plan) => {
+    if (!byCareer.has(plan.career)) {
+      byCareer.set(plan.career, {
+        id: plan.career,
+        name: plan.career,
+        career: plan.career,
+        firstPeriod: "",
+        admin: "",
+      });
+    }
+
+    return { ...plan, name: plan.career, planId: plan.career };
   });
+  const normalizedStudyPlans = [...byCareer.values()];
+  const normalizedIds = new Set(normalizedStudyPlans.map((studyPlan) => studyPlan.id));
 
   return {
-    studyPlans: migratedStudyPlans,
-    plans: plans.map((plan) =>
-      plan.planId && replacements.has(plan.planId)
-        ? { ...plan, planId: replacements.get(plan.planId) }
-        : plan,
+    studyPlans: normalizedStudyPlans,
+    plans: normalizedPlans,
+    obsoleteStudyPlanIds: [...new Set(obsoleteStudyPlanIds)].filter(
+      (id) => !normalizedIds.has(id),
     ),
-    legacyIds: [...replacements.keys()],
   };
 }
 
@@ -123,7 +117,7 @@ export class UniversityDB extends Dexie {
     }).upgrade(async (transaction) => {
       const plans = transaction.table<PlanRecord, string>("plans");
       const studyPlans = transaction.table<StudyPlanRecord, string>("studyPlans");
-      const normalized = normalizeLegacyPlans(await plans.toArray());
+      const normalized = normalizePlansByCareer([], await plans.toArray());
       if (normalized.studyPlans.length) await studyPlans.bulkPut(normalized.studyPlans);
       if (normalized.plans.length) await plans.bulkPut(normalized.plans);
     });
@@ -142,18 +136,6 @@ export class UniversityDB extends Dexie {
       timeSlots: "id,position",
       classrooms: "id,name,place,admin",
       studyPlans: "id,name,career,firstPeriod,admin",
-    }).upgrade(async (transaction) => {
-      const plans = transaction.table<PlanRecord, string>("plans");
-      const studyPlans = transaction.table<StudyPlanRecord, string>("studyPlans");
-      const migrated = migrateLegacyStudyPlanIds(
-        await studyPlans.toArray(),
-        await plans.toArray(),
-      );
-
-      if (!migrated.legacyIds.length) return;
-      await studyPlans.bulkPut(migrated.studyPlans);
-      await plans.bulkPut(migrated.plans);
-      await studyPlans.bulkDelete(migrated.legacyIds);
     });
 
     this.version(5).stores({
@@ -174,6 +156,51 @@ export class UniversityDB extends Dexie {
       await clearLegacyProfessorAvailabilities(
         transaction.table<ProfessorAvailabilityRecord, string>("professorAvailabilities"),
       );
+    });
+
+    this.version(6).stores({
+      courses: "key,keyCode,keyNumber,name,block",
+      plans: "id,name,planId,courseKey,career,semester,position,[career+semester]",
+      students: "id,name,status,enrolledPeriod,currentSemester,regularSemestersCount,summerSemestersCount,career,failCount,period",
+      grades: "++id,studentId,courseKey,period,grade",
+      preRequisitos: "++id,currentCourseKey,preCourseKey",
+      offeringCourses: "id,period,career,courseKey,sessionNumber,estimatedNumber,[career+period]",
+      professors: "id,name,status,career,job",
+      professorCourseCapabilities: "id,professorId,period,courseId,[professorId+period]",
+      courseAssignments: "id,professorId,period,courseId,timeSlotId,classroomId,[professorId+period]",
+      professorAvailabilities: "id,professorId,period,day,timeSlotId,[professorId+period],[professorId+period+day]",
+      timeSlots: "id,position",
+      classrooms: "id,name,place,admin",
+      studyPlans: "id,name,career,firstPeriod,admin",
+    });
+
+    this.version(7).stores({
+      courses: "key,keyCode,keyNumber,name,block",
+      plans: "id,name,planId,courseKey,career,semester,position,[career+semester]",
+      students: "id,name,status,enrolledPeriod,currentSemester,regularSemestersCount,summerSemestersCount,career,failCount,period",
+      grades: "++id,studentId,courseKey,period,grade",
+      preRequisitos: "++id,currentCourseKey,preCourseKey",
+      offeringCourses: "id,period,career,courseKey,sessionNumber,estimatedNumber,[career+period]",
+      professors: "id,name,status,career,job",
+      professorCourseCapabilities: "id,professorId,period,courseId,[professorId+period]",
+      courseAssignments: "id,professorId,period,courseId,timeSlotId,classroomId,[professorId+period]",
+      professorAvailabilities: "id,professorId,period,day,timeSlotId,[professorId+period],[professorId+period+day]",
+      timeSlots: "id,position",
+      classrooms: "id,name,place,admin",
+      studyPlans: "id,name,career,firstPeriod,admin",
+    }).upgrade(async (transaction) => {
+      const plans = transaction.table<PlanRecord, string>("plans");
+      const studyPlans = transaction.table<StudyPlanRecord, string>("studyPlans");
+      const normalized = normalizePlansByCareer(
+        await studyPlans.toArray(),
+        await plans.toArray(),
+      );
+
+      await studyPlans.bulkPut(normalized.studyPlans);
+      await plans.bulkPut(normalized.plans);
+      if (normalized.obsoleteStudyPlanIds.length) {
+        await studyPlans.bulkDelete(normalized.obsoleteStudyPlanIds);
+      }
     });
   }
 }

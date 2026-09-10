@@ -145,6 +145,7 @@ function studentDetail(overrides: Partial<StudentDetail> = {}): StudentDetail {
       currentSemester: 3,
       regularSemestersCount: 3,
       avatarColorRef: 0,
+      career: "TIND"
     },
     avatarColorCssVar: "",
     career: "TIND",

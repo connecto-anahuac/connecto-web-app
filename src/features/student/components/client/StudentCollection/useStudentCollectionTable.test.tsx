@@ -32,7 +32,7 @@ describe("STUDENT_COLLECTION_CELL_RENDERERS", () => {
       })),
     );
 
-    expect(activeMarkup).toContain("bg-[#d9f0cd]");
+    expect(activeMarkup).toContain("bg-StatusGood");
     expect(inactiveMarkup).toContain("text-OnSurfaceVariant");
   });
 });

@@ -5,36 +5,53 @@ import PersonIcon from "@/shared/component/primitive/icon/PersonIcon";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import { getTotalEligibleStudents } from "@/features/offeringCourse/lib/get-total-eligible-students";
 import { cn } from "@/shared/lib/util";
-import { ComponentProps, KeyboardEvent, MouseEvent, useState } from "react";
+import { ComponentProps, KeyboardEvent, MouseEvent } from "react";
 
 type Props = ComponentProps<"div"> & {
 	offeringClass: OfferingCourse;
+	/** Store-derived total. Falls back to the lightweight-list estimate. */
+	estimatedNumber?: number;
+	sessionNumber?: number;
 	isSelected: boolean;
 	isPending?: boolean;
-	onToggle: () => void;
+	onOffer: () => void;
+	onOpen: () => void;
+	/** Persists a changed session count for an already offered course. */
+	onSessionCountChange?: (sessionNumber: number) => void;
+	onUnoffer: () => void;
 };
 
 export default function OfferingClassCardView({
 	offeringClass,
+	estimatedNumber,
+	sessionNumber: sessionNumberProp,
 	isSelected,
 	isPending = false,
-	onToggle,
+	onOffer,
+	onOpen,
+	onSessionCountChange,
+	onUnoffer,
 	className,
 	onClick,
 	onKeyDown,
 	style,
 	...props
 }: Props) {
-	const totalEligibleStudents = getTotalEligibleStudents(offeringClass);
+	const totalEligibleStudents = estimatedNumber ?? (
+		"estimatedNumber" in offeringClass && typeof offeringClass.estimatedNumber === "number"
+			? offeringClass.estimatedNumber
+			: getTotalEligibleStudents(offeringClass)
+	);
+	const sessionNumber = sessionNumberProp ?? ("sessionNumber" in offeringClass && typeof offeringClass.sessionNumber === "number"
+		? offeringClass.sessionNumber
+		: 1);
 
 	const handleClick = (event: MouseEvent<HTMLDivElement>) => {
 		onClick?.(event);
 
-		if (event.defaultPrevented || isPending) {
-			return;
+		if (!event.defaultPrevented && !isPending) {
+			onOpen();
 		}
-
-		onToggle();
 	};
 
 	const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
@@ -46,8 +63,28 @@ export default function OfferingClassCardView({
 
 		if (event.key === "Enter" || event.key === " ") {
 			event.preventDefault();
-			onToggle();
+			onOpen();
 		}
+	};
+
+	const handleOffer = (event: MouseEvent<HTMLButtonElement>) => {
+		event.stopPropagation();
+		if (!isPending) {
+			onOffer();
+		}
+	};
+
+	const handleSessionChange = (
+		event: MouseEvent<HTMLButtonElement>,
+		nextSessionNumber: number,
+	) => {
+		event.stopPropagation();
+		if (isPending) return;
+		if (nextSessionNumber === 0) {
+			onUnoffer();
+			return;
+		}
+		onSessionCountChange?.(nextSessionNumber);
 	};
 
 	return (
@@ -81,62 +118,40 @@ export default function OfferingClassCardView({
 			</div>
 
 			{isSelected ? (
-				<SessionCounter initialValue={1} disabled={isPending} />
+				<div
+					aria-label="Course sessions"
+					className="flex h-7 w-full items-center justify-between gap-1 rounded-sm bg-InverseSurface p-1 text-xs font-medium text-InverseOnSurface"
+				>
+					<button
+						aria-label="Decrease course sessions"
+						className="grid size-5 place-items-center rounded hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-Primary"
+						disabled={isPending}
+						onClick={(event) => handleSessionChange(event, Math.max(0, sessionNumber - 1))}
+						type="button"
+					>
+						−
+					</button>
+					<output aria-label={`${sessionNumber} sessions`}>{sessionNumber}</output>
+					<button
+						aria-label="Increase course sessions"
+						className="grid size-5 place-items-center rounded hover:bg-white/15 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-Primary"
+						disabled={isPending}
+						onClick={(event) => handleSessionChange(event, sessionNumber + 1)}
+						type="button"
+					>
+						+
+					</button>
+				</div>
 			) : (
 				<button
 					type="button"
-					className="h-fit w-full rounded-sm bg-InverseSurface p-1.5 text-xs font-medium text-InverseOnSurface"
+					className="h-fit w-full rounded-sm bg-InverseSurface p-1.5 text-xs font-medium text-InverseOnSurface disabled:opacity-70"
+					disabled={isPending}
+					onClick={handleOffer}
 				>
 					ofertar
 				</button>
 			)}
-		</div>
-	);
-}
-
-type SessionCounterProps = {
-	initialValue?: number;
-	disabled?: boolean;
-};
-
-function SessionCounter({ initialValue = 1, disabled = false }: SessionCounterProps) {
-	const [value, setValue] = useState(initialValue);
-
-	const handleDecrease = (event: MouseEvent<HTMLButtonElement>) => {
-		event.stopPropagation();
-		setValue((currentValue) => Math.max(0, currentValue - 1));
-	};
-
-	const handleIncrease = (event: MouseEvent<HTMLButtonElement>) => {
-		event.stopPropagation();
-		setValue((currentValue) => currentValue + 1);
-	};
-
-	return (
-		<div className="mt-auto flex items-center gap-1">
-			<button
-				type="button"
-				aria-label="Decrease sessions"
-				disabled={disabled}
-				className="h-[23px] w-8 rounded-sm bg-InverseSurface text-base leading-none font-medium text-InverseOnSurface"
-				onClick={handleDecrease}
-			>
-				-
-			</button>
-
-			<div className="h-[23px] flex flex-1 items-center justify-center rounded-sm border border-InverseSurface px-2 text-center text-xs font-medium text-OnSurface">
-				{value}
-			</div>
-
-			<button
-				type="button"
-				aria-label="Increase sessions"
-				disabled={disabled}
-				className="h-[23px] w-8 rounded-sm bg-InverseSurface text-base leading-none font-medium text-InverseOnSurface"
-				onClick={handleIncrease}
-			>
-				+
-			</button>
 		</div>
 	);
 }

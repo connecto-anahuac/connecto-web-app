@@ -13,8 +13,6 @@ import {
 } from "@/features/student/types";
 import {
   STUDENT_AVATAR_COLOR_PALETTE,
-  STUDENT_DETAIL_CAREER,
-  STUDENT_DETAIL_PLAN,
 } from "../../ui/studentSummaryPanel/studentSummary.constant";
 import {
   buildStudentDetail,
@@ -79,8 +77,8 @@ export function useStaticStudentDetail(
         STUDENT_AVATAR_COLOR_PALETTE[
           student.avatarColorRef % STUDENT_AVATAR_COLOR_PALETTE.length
         ] ?? STUDENT_AVATAR_COLOR_PALETTE[0],
-      career: STUDENT_DETAIL_CAREER,
-      planLabel: STUDENT_DETAIL_PLAN,
+      career: student.career,
+      planLabel: student.career,
     });
   }, [snapshot, studentGrades]);
 

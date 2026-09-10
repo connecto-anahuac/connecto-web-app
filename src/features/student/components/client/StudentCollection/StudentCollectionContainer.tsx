@@ -1,6 +1,5 @@
 "use client";
 
-import type { ReactNode } from "react";
 import { StudentCollectionPresenter } from "./StudentCollectionPresenter";
 import { useStaticStudentCollection } from "./useStaticStudentCollection";
 import { useStudentCollectionTable } from "./useStudentCollectionTable";
@@ -9,19 +8,23 @@ type StudentCollectionContainerProps = {
   activeStudentId?: string;
   onStudentSelect: (studentId: string) => void;
   onStudentOpen: (studentId: string) => void;
-  onStudentPreviewClose: () => void;
-  renderStudentPreview: (studentId: string) => ReactNode;
 };
 
 export function StudentCollectionContainer({
   activeStudentId,
   onStudentSelect,
   onStudentOpen,
-  onStudentPreviewClose,
-  renderStudentPreview,
 }: StudentCollectionContainerProps) {
-  const { errorMessage, loading, studentCollection } = useStaticStudentCollection();
-  const { config, table } = useStudentCollectionTable(studentCollection);
+  const { errorMessage, loading, studentCollection } =
+    useStaticStudentCollection();
+  const {
+    config,
+    table,
+    globalFilter,
+    presets,
+    setGlobalFilter,
+    metadata,
+  } = useStudentCollectionTable(studentCollection);
 
   return (
     <StudentCollectionPresenter
@@ -29,11 +32,13 @@ export function StudentCollectionContainer({
       errorMessage={errorMessage}
       loading={loading}
       onStudentOpen={onStudentOpen}
-      onStudentPreviewClose={onStudentPreviewClose}
       onStudentSelect={onStudentSelect}
-      renderStudentPreview={renderStudentPreview}
       table={table}
       tableConfig={config}
+      searchText={globalFilter}
+      onSearchTextChange={setGlobalFilter}
+      presets={presets}
+      metadata={metadata}
     />
   );
 }

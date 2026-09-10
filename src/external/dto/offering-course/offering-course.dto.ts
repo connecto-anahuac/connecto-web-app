@@ -1,19 +1,18 @@
-import type { OfferingCourse } from "@/external/domain/offering-course";
+import type {
+  OfferingCourse,
+  OfferingCourseDetail,
+  OfferingCourseSemester,
+  OfferingCourseStudent,
+  OfferingCourseStudyPlan,
+} from "@/external/domain/offering-course";
 import type { OfferingCourseRecord } from "@/external/domain/university";
 
-export type OfferingCourseDto = {
-  key: string;
-  keyCode: string;
-  keyNumber: string;
-  hours: number;
-  credits: number;
-  block: string;
-  name: string;
-  semester: number;
-  position: number;
-  preRequisites: string[];
-  possibleStudentIds: Record<number, string[]>;
-};
+/** Lightweight grid data. Student identifiers intentionally remain in detail. */
+export type OfferingCourseDto = OfferingCourse;
+export type OfferingCourseStudentDto = OfferingCourseStudent;
+export type OfferingCourseSemesterDto = OfferingCourseSemester;
+export type OfferingCourseStudyPlanDto = OfferingCourseStudyPlan;
+export type OfferingCourseDetailDto = OfferingCourseDetail;
 
 export type SelectedOfferingCourseDto = {
   id: string;
@@ -22,14 +21,26 @@ export type SelectedOfferingCourseDto = {
   courseKey: string;
   sessionNumber: number;
   estimatedNumber: number;
+  enabledStudentIdsByStudyPlan?: Record<string, string[]>;
 };
 
 export type UpdateOfferingCourseSelectionInput = {
   career: string;
-  estimatedNumber: number;
+  courseKey: string;
   isSelected: boolean;
-  offeringCourse: OfferingCourseDto;
+  enabledStudentIdsByStudyPlan?: Record<string, string[]>;
+  sessionNumber?: number;
+  /** Compatibility-only; selection total is calculated from unique student IDs. */
+  estimatedNumber?: number;
 };
+
+const copyStudentIds = (byStudyPlan: Record<string, string[]>) =>
+  Object.fromEntries(
+    Object.entries(byStudyPlan).map(([studyPlanId, studentIds]) => [
+      studyPlanId,
+      [...new Set(studentIds)],
+    ]),
+  );
 
 export function toOfferingCourseDto(offeringCourse: OfferingCourse): OfferingCourseDto {
   return {
@@ -42,13 +53,24 @@ export function toOfferingCourseDto(offeringCourse: OfferingCourse): OfferingCou
     name: offeringCourse.name,
     semester: offeringCourse.semester,
     position: offeringCourse.position,
+    estimatedNumber: offeringCourse.estimatedNumber,
     preRequisites: [...offeringCourse.preRequisites],
-    possibleStudentIds: Object.fromEntries(
-      Object.entries(offeringCourse.possibleStudentIds).map(([semester, studentIds]) => [
-        Number(semester),
-        [...studentIds],
-      ]),
-    ) as Record<number, string[]>,
+  };
+}
+
+export function toOfferingCourseDetailDto(detail: OfferingCourseDetail): OfferingCourseDetailDto {
+  return {
+    ...detail,
+    preRequisites: [...detail.preRequisites],
+    enabledStudentIdsByStudyPlan: detail.enabledStudentIdsByStudyPlan && copyStudentIds(detail.enabledStudentIdsByStudyPlan),
+    studyPlans: detail.studyPlans.map((studyPlan) => ({
+      ...studyPlan,
+      semesters: studyPlan.semesters.map((semester) => ({
+        ...semester,
+        eligibleStudents: semester.eligibleStudents.map((student) => ({ ...student })),
+        studentsWithoutPrerequisites: semester.studentsWithoutPrerequisites.map((student) => ({ ...student })),
+      })),
+    })),
   };
 }
 
@@ -62,5 +84,8 @@ export function toSelectedOfferingCourseDto(
     courseKey: offeringCourse.courseKey,
     sessionNumber: offeringCourse.sessionNumber,
     estimatedNumber: offeringCourse.estimatedNumber,
+    enabledStudentIdsByStudyPlan: offeringCourse.enabledStudentIdsByStudyPlan
+      ? copyStudentIds(offeringCourse.enabledStudentIdsByStudyPlan)
+      : undefined,
   };
 }
