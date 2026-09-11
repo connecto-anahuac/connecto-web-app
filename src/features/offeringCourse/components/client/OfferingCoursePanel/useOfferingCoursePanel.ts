@@ -15,6 +15,11 @@ type Options = {
   sessionCount?: number;
 };
 
+export type SemesterEnabledByStudyPlan = Record<
+  string,
+  Record<string, boolean>
+>;
+
 export function useOfferingCoursePanel({
   initialSessionCount,
   plans,
@@ -29,6 +34,8 @@ export function useOfferingCoursePanel({
     useState(initialSessionCount);
   const [uncontrolledSelectedStudentIds, setUncontrolledSelectedStudentIds] =
     useState<EnabledStudentIdsByStudyPlan>({});
+  const [uncontrolledSemesterEnabledByStudyPlan, setSemesterEnabledByStudyPlan] =
+    useState<SemesterEnabledByStudyPlan>({});
   const requestedPlanId = selectedPlanIdProp ?? uncontrolledPlanId;
   const selectedPlanId = plans.some((plan) => plan.id === requestedPlanId)
     ? requestedPlanId
@@ -59,6 +66,8 @@ export function useOfferingCoursePanel({
     setSelectedPlanId: setUncontrolledPlanId,
     setSessionCount: setUncontrolledSessionCount,
     setSelectedStudentIdsByStudyPlan: setUncontrolledSelectedStudentIds,
+    semesterEnabledByStudyPlan: uncontrolledSemesterEnabledByStudyPlan,
+    setSemesterEnabledByStudyPlan,
     totalSelectedStudents,
   };
 }

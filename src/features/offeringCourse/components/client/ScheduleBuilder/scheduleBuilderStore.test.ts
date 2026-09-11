@@ -51,6 +51,7 @@ describe("Schedule Builder state", () => {
     store.getState().markOffered("C");
     store.getState().startPending("C");
     store.getState().finishPending("C");
+    store.getState().setSemesterEnabled("A", "planA", "8", false);
     store.getState().resetForCareer("TICS");
 
     expect(store.getState()).toMatchObject({
@@ -60,6 +61,25 @@ describe("Schedule Builder state", () => {
       pendingCourseKeys: [],
       selectedCourseKeys: [],
       selectedStudyPlanId: null,
+      semesterEnabledByCourse: {},
+    });
+  });
+
+  it("keeps semester enabled state across panel, course, and plan changes", () => {
+    const store = createScheduleBuilderStore();
+    store.getState().resetForCareer("ISC");
+    store.getState().setSemesterEnabled("A", "planA", "8", false);
+    store.getState().setSemesterEnabled("A", "planB", "6", true);
+    store.getState().openCourse("A");
+    store.getState().closePanel();
+    store.getState().openCourse("B");
+    store.getState().setSelectedStudyPlanId("planB");
+
+    expect(store.getState().semesterEnabledByCourse).toEqual({
+      A: {
+        planA: { "8": false },
+        planB: { "6": true },
+      },
     });
   });
 

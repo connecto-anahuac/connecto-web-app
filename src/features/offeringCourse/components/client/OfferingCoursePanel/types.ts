@@ -9,15 +9,15 @@ export type OfferingCoursePanelStudent = {
 export type OfferingCoursePanelSemester = {
   expectedStudents: OfferingCoursePanelStudent[];
   id: string;
-  /** Uses the compact, display-only semester selection indicator. */
-  isMulti?: boolean;
   label: string;
+  semester?: number;
   studentsWithoutPrerequisites?: OfferingCoursePanelStudent[];
 };
 
 export type OfferingCoursePanelPlan = {
   id: string;
   label: string;
+  recommendedSemester?: number;
   semesters: OfferingCoursePanelSemester[];
 };
 

@@ -66,6 +66,12 @@ export default function OfferingCoursePanel({
   const selectedCourseDetail = useScheduleBuilderStore(
     (state) => state.selectedCourseDetail,
   );
+  const selectedCourseKey = useScheduleBuilderStore(
+    (state) => state.selectedCourseKey,
+  );
+  const semesterEnabledByCourse = useScheduleBuilderStore(
+    (state) => state.semesterEnabledByCourse,
+  );
   const selectedStudyPlanId = useScheduleBuilderStore(
     (state) => state.selectedStudyPlanId,
   );
@@ -81,6 +87,9 @@ export default function OfferingCoursePanel({
   const setSessionNumber = useScheduleBuilderStore(
     (state) => state.setSessionNumber,
   );
+  const setSemesterEnabled = useScheduleBuilderStore(
+    (state) => state.setSemesterEnabled,
+  );
   const closePanel = useScheduleBuilderStore((state) => state.closePanel);
   const detailError = useScheduleBuilderStore((state) => state.detailError);
   const detailLoading = useScheduleBuilderStore((state) => state.detailLoading);
@@ -88,6 +97,7 @@ export default function OfferingCoursePanel({
     ? selectedCourseDetail.studyPlans.map((studyPlan) => ({
         id: studyPlan.studyPlanId,
         label: studyPlan.studyPlanName,
+        recommendedSemester: studyPlan.recommendedSemester,
         semesters: studyPlan.semesters.map((semester) => ({
           expectedStudents: semester.eligibleStudents.map((student) => ({
             fullName: student.name,
@@ -95,6 +105,7 @@ export default function OfferingCoursePanel({
           })),
           id: String(semester.semester),
           label: `Semestre ${semester.semester}`,
+          semester: semester.semester,
           studentsWithoutPrerequisites: semester.studentsWithoutPrerequisites.map(
             (student) => ({ fullName: student.name, id: student.id }),
           ),
@@ -132,6 +143,25 @@ export default function OfferingCoursePanel({
         setSessionNumber(count);
         onSessionCountChange?.(count);
       }}
+      onSemesterEnabledChange={(semesterId, isEnabled) => {
+        const planId = panel.selectedPlanId;
+        if (selectedCourseKey) {
+          setSemesterEnabled(
+            selectedCourseKey,
+            planId,
+            semesterId,
+            isEnabled,
+          );
+        } else {
+          panel.setSemesterEnabledByStudyPlan((current) => ({
+            ...current,
+            [planId]: {
+              ...current[planId],
+              [semesterId]: isEnabled,
+            },
+          }));
+        }
+      }}
       onStudentSelectionChange={(semesterId, studentId, isSelected) => {
         const planId = panel.selectedPlanId;
         if (!storeDraft && !enabledStudentIdsByStudyPlanProp && !selectedStudentIdsByStudyPlanProp)
@@ -151,6 +181,11 @@ export default function OfferingCoursePanel({
       selectedPlanId={panel.selectedPlanId}
       enabledStudentIdsByStudyPlan={panel.enabledStudentIdsByStudyPlan}
       sessionCount={panel.sessionCount}
+      semesterEnabledByStudyPlan={
+        selectedCourseKey
+          ? (semesterEnabledByCourse[selectedCourseKey] ?? {})
+          : panel.semesterEnabledByStudyPlan
+      }
       totalSelectedStudents={panel.totalSelectedStudents}
     />
   );

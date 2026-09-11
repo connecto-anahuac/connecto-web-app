@@ -28,6 +28,10 @@ export type ScheduleBuilderState = {
   selectedCourseDetail: OfferingCourseDetailDto | null;
   selectedCourseKeys: string[];
   selectedStudyPlanId: string | null;
+  semesterEnabledByCourse: Record<
+    string,
+    Record<string, Record<string, boolean>>
+  >;
 };
 
 export type ScheduleBuilderCommands = {
@@ -44,6 +48,12 @@ export type ScheduleBuilderCommands = {
   setDetailLoading: (loading: boolean) => void;
   setSelectedCourseDetail: (detail: OfferingCourseDetailDto | null) => void;
   setSelectedStudyPlanId: (studyPlanId: string | null) => void;
+  setSemesterEnabled: (
+    courseKey: string,
+    studyPlanId: string,
+    semesterId: string,
+    enabled: boolean,
+  ) => void;
   setSelectedStudentIds: (
     studyPlanId: string,
     studentId: string,
@@ -74,6 +84,7 @@ const emptyState = (career: string | null): ScheduleBuilderState => ({
   selectedCourseDetail: null,
   selectedCourseKeys: [],
   selectedStudyPlanId: null,
+  semesterEnabledByCourse: {},
 });
 
 const copyDraft = (draft: OfferingCourseDraft): OfferingCourseDraft => ({
@@ -156,6 +167,19 @@ export function createScheduleBuilderStore() {
     setSelectedCourseDetail: (selectedCourseDetail) =>
       set({ selectedCourseDetail }),
     setSelectedStudyPlanId: (selectedStudyPlanId) => set({ selectedStudyPlanId }),
+    setSemesterEnabled: (courseKey, studyPlanId, semesterId, enabled) =>
+      set((state) => ({
+        semesterEnabledByCourse: {
+          ...state.semesterEnabledByCourse,
+          [courseKey]: {
+            ...state.semesterEnabledByCourse[courseKey],
+            [studyPlanId]: {
+              ...state.semesterEnabledByCourse[courseKey]?.[studyPlanId],
+              [semesterId]: enabled,
+            },
+          },
+        },
+      })),
     setSelectedStudentIds: (studyPlanId, studentId, enabled) =>
       set((state) => {
         if (!state.selectedCourseKey) return state;

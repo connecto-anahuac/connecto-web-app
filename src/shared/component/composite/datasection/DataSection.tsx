@@ -140,7 +140,7 @@ export default function DataSection<TItem>({
     <DataSectionFilterProvider
       value={{ openFilter: (fieldId) => setOpenedFilterId(fieldId) }}
     >
-      <div className={cn("relative flex flex-col gap-2", className)}>
+      <div className={cn("relative flex flex-col gap-2 min-h-0 flex-1", className)}>
         {/* 1st line */}
         <div className="flex gap-4 w-full items-center">
           <SearchBar

@@ -28,11 +28,12 @@ export default function OfferingClassStudentRow({
 }: Props) {
   return (
     <div
-      className={cn("flex h-[26px] w-[218px] items-center justify-between", className)}
+      className={cn("flex h-[26px] w-[218px] items-center justify-between max-w-full", className)}
       {...props}
     >
-      <OfferingClassStudentNameRow fullName={fullName} avatarColor={avatarColor} />
+      <OfferingClassStudentNameRow fullName={fullName} avatarColor={avatarColor} className="flex-1 min-w-0" />
       <ToggleButton
+        className="shrink-0 ml-2"
         aria-label={`Select ${fullName}`}
         isEnabled={isEnabled}
         isSelected={isSelected}

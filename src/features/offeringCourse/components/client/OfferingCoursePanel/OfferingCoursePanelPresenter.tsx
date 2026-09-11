@@ -10,6 +10,7 @@ import type {
   OfferingCoursePanelPlan,
   EnabledStudentIdsByStudyPlan,
 } from "./types";
+import type { SemesterEnabledByStudyPlan } from "./useOfferingCoursePanel";
 
 export type OfferingCoursePanelPresenterProps = ComponentProps<"aside"> & {
   courseName: string;
@@ -18,6 +19,10 @@ export type OfferingCoursePanelPresenterProps = ComponentProps<"aside"> & {
   onClose?: () => void;
   onPlanChange: (planId: string) => void;
   onSessionCountChange: (count: number) => void;
+  onSemesterEnabledChange: (
+    semesterId: string,
+    isEnabled: boolean,
+  ) => void;
   onStudentSelectionChange: (
     semesterId: string,
     studentId: string,
@@ -29,6 +34,7 @@ export type OfferingCoursePanelPresenterProps = ComponentProps<"aside"> & {
   selectedPlanId: string;
   enabledStudentIdsByStudyPlan: EnabledStudentIdsByStudyPlan;
   sessionCount: number;
+  semesterEnabledByStudyPlan: SemesterEnabledByStudyPlan;
   totalSelectedStudents: number;
 };
 
@@ -41,6 +47,7 @@ export function OfferingCoursePanelPresenter({
   onClose,
   onPlanChange,
   onSessionCountChange,
+  onSemesterEnabledChange,
   onStudentSelectionChange,
   planTotal,
   plans,
@@ -48,6 +55,7 @@ export function OfferingCoursePanelPresenter({
   selectedPlanId,
   enabledStudentIdsByStudyPlan,
   sessionCount,
+  semesterEnabledByStudyPlan,
   totalSelectedStudents,
   ...props
 }: OfferingCoursePanelPresenterProps) {
@@ -142,7 +150,16 @@ export function OfferingCoursePanelPresenter({
                   <div key={semester.id}>
                     <GenerationAcordion
                       expectedStudents={semester.expectedStudents}
-                      isMulti={semester.isMulti}
+                      isSemesterEnabled={
+                        semesterEnabledByStudyPlan[selectedPlan.id]?.[
+                          semester.id
+                        ] ??
+                        (semester.semester ?? 0) >=
+                          (selectedPlan.recommendedSemester ?? 0)
+                      }
+                      onSemesterEnabledChange={(isEnabled) =>
+                        onSemesterEnabledChange(semester.id, isEnabled)
+                      }
                       onStudentSelectionChange={(studentId, isSelected) =>
                         onStudentSelectionChange(
                           semester.id,

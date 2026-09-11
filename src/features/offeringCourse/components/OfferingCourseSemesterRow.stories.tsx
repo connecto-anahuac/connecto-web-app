@@ -15,6 +15,7 @@ const meta = {
     // periodLabel: { control: 'text' },
     // yearLabel: { control: 'text' },
     studentCount: { control: 'number' },
+    isMulti: { control: 'boolean' },
     showLeadingArrow: { control: 'boolean' },
     onSelectionChange: { action: 'selection changed' },
     className: { table: { disable: true } },
@@ -58,5 +59,12 @@ export const InteractiveSelection: Story = {
 
     await userEvent.click(button)
     await expect(args.onSelectionChange).toHaveBeenCalledWith(true)
+  },
+}
+
+export const MixedSelection: Story = {
+  args: {
+    isMulti: true,
+    isSelected: true,
   },
 }
