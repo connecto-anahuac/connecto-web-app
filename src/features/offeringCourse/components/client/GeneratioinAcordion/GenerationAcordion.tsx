@@ -100,14 +100,14 @@ export function GenerationAcordionPresenter({
               ))}
             </StudentSection>
           ) : null}
-          <StudentSection label="Aprobados">
+          {/* <StudentSection label="Aprobados">
             <button
               className="ml-1 flex w-full items-center justify-center rounded bg-DividerMiddle px-2.5 py-1 text-xs text-Outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-Primary"
               type="button"
             >
               Mostrar todos los aprobados
             </button>
-          </StudentSection>
+          </StudentSection> */}
         </div>
       ) : null}
     </section>

@@ -36,6 +36,7 @@ export type OfferingCoursePanelProps = ComponentProps<"aside"> & {
     studentId: string,
     isEnabled: boolean,
   ) => void;
+  /** Initial selection fallback for isolated use without a store draft. */
   enabledStudentIdsByStudyPlan?: EnabledStudentIdsByStudyPlan;
   /** @deprecated Use enabledStudentIdsByStudyPlan. */
   selectedStudentIdsByStudyPlan?: SelectedStudentIdsByStudyPlan;
@@ -112,15 +113,16 @@ export default function OfferingCoursePanel({
         })),
       }))
     : (plansProp ?? []);
-  const enabledStudentIdsByStudyPlan =
-    storeDraft?.enabledStudentIdsByStudyPlan ??
-    enabledStudentIdsByStudyPlanProp ??
-    selectedStudentIdsByStudyPlanProp;
   const panel = useOfferingCoursePanel({
     initialSessionCount,
+    initialEnabledStudentIdsByStudyPlan:
+      enabledStudentIdsByStudyPlanProp ?? selectedStudentIdsByStudyPlanProp,
     plans,
     selectedPlanId: selectedStudyPlanId ?? selectedPlanIdProp,
-    enabledStudentIdsByStudyPlan,
+    enabledStudentIdsByStudyPlan: storeDraft?.enabledStudentIdsByStudyPlan,
+    semesterEnabledByStudyPlan: selectedCourseKey
+      ? (semesterEnabledByCourse[selectedCourseKey] ?? {})
+      : undefined,
     sessionCount: storeDraft?.sessionNumber ?? sessionCountProp,
   });
   return (
@@ -164,7 +166,7 @@ export default function OfferingCoursePanel({
       }}
       onStudentSelectionChange={(semesterId, studentId, isSelected) => {
         const planId = panel.selectedPlanId;
-        if (!storeDraft && !enabledStudentIdsByStudyPlanProp && !selectedStudentIdsByStudyPlanProp)
+        if (!storeDraft)
           panel.setSelectedStudentIdsByStudyPlan((current) => ({
             ...current,
             [planId]: isSelected
@@ -181,11 +183,7 @@ export default function OfferingCoursePanel({
       selectedPlanId={panel.selectedPlanId}
       enabledStudentIdsByStudyPlan={panel.enabledStudentIdsByStudyPlan}
       sessionCount={panel.sessionCount}
-      semesterEnabledByStudyPlan={
-        selectedCourseKey
-          ? (semesterEnabledByCourse[selectedCourseKey] ?? {})
-          : panel.semesterEnabledByStudyPlan
-      }
+      semesterEnabledByStudyPlan={panel.semesterEnabledByStudyPlan}
       totalSelectedStudents={panel.totalSelectedStudents}
     />
   );

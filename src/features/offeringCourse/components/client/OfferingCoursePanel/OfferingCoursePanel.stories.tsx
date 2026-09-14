@@ -23,24 +23,78 @@ export const Interactive: Story = {
     const semesterToggle = canvas.getByRole("switch", {
       name: "Select Semestre 8",
     });
+    const semesterTotal = semesterToggle.parentElement;
 
     await expect(semesterToggle).toHaveAttribute("aria-checked", "true");
     await expect(within(planTotal!).getByText("1")).toBeVisible();
+    await expect(within(allCareersTotal!).getByText("1")).toBeVisible();
+    await expect(within(semesterTotal!).getByText("1")).toBeVisible();
+
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Expand semester Semestre 8" }),
+    );
+    const unselectedStudentToggle = canvas.getByRole("switch", {
+      name: "Select Ana Sofía Martínez",
+    });
+    await userEvent.click(unselectedStudentToggle);
+    await expect(args.onStudentEnabledChange).toHaveBeenCalledWith(
+      "tind",
+      "semester-8",
+      "student-2",
+      true,
+    );
+    await expect(within(semesterTotal!).getByText("2")).toBeVisible();
+    await expect(within(planTotal!).getByText("2")).toBeVisible();
     await expect(within(allCareersTotal!).getByText("2")).toBeVisible();
+
+    await userEvent.click(
+      canvas.getByRole("switch", { name: "Select Rayan Garcia Reyes" }),
+    );
+    await expect(args.onStudentEnabledChange).toHaveBeenCalledWith(
+      "tind",
+      "semester-8",
+      "student-1",
+      false,
+    );
+    await expect(within(semesterTotal!).getByText("1")).toBeVisible();
+    await expect(within(planTotal!).getByText("1")).toBeVisible();
+    await expect(within(allCareersTotal!).getByText("1")).toBeVisible();
+
     await userEvent.click(semesterToggle);
     await expect(semesterToggle).toHaveAttribute("aria-checked", "false");
-    await expect(within(planTotal!).getByText("1")).toBeVisible();
-    await expect(within(allCareersTotal!).getByText("2")).toBeVisible();
+    await expect(within(semesterTotal!).getByText("1")).toBeVisible();
+    await expect(within(planTotal!).getByText("0")).toBeVisible();
+    await expect(within(allCareersTotal!).getByText("0")).toBeVisible();
 
     await userEvent.click(canvas.getByRole("tab", { name: "Industrial" }));
     await expect(args.onSelectedPlanChange).toHaveBeenCalledWith("industrial");
-    await expect(
-      canvas.getByRole("switch", { name: "Select Semestre 6" }),
-    ).toHaveAttribute("aria-checked", "false");
+    const industrialSemesterToggle = canvas.getByRole("switch", {
+      name: "Select Semestre 6",
+    });
+    const industrialPlanTotal = canvas.getByText("Industrial total").parentElement;
+    await expect(industrialSemesterToggle).toHaveAttribute(
+      "aria-checked",
+      "false",
+    );
+    await expect(within(industrialPlanTotal!).getByText("0")).toBeVisible();
+    await userEvent.click(industrialSemesterToggle);
+    await expect(within(industrialPlanTotal!).getByText("1")).toBeVisible();
+    await expect(within(allCareersTotal!).getByText("1")).toBeVisible();
+
     await userEvent.click(canvas.getByRole("tab", { name: "TIND" }));
-    await expect(
-      canvas.getByRole("switch", { name: "Select Semestre 8" }),
-    ).toHaveAttribute("aria-checked", "false");
+    const restoredSemesterToggle = canvas.getByRole("switch", {
+      name: "Select Semestre 8",
+    });
+    const restoredPlanTotal = canvas.getByText("TIND total").parentElement;
+    await expect(restoredSemesterToggle).toHaveAttribute(
+      "aria-checked",
+      "false",
+    );
+    await expect(within(restoredPlanTotal!).getByText("0")).toBeVisible();
+    await expect(within(allCareersTotal!).getByText("1")).toBeVisible();
+    await userEvent.click(restoredSemesterToggle);
+    await expect(within(restoredPlanTotal!).getByText("1")).toBeVisible();
+    await expect(within(allCareersTotal!).getByText("2")).toBeVisible();
 
     await userEvent.click(
       canvas.getByRole("button", { name: "Increase sessions" }),

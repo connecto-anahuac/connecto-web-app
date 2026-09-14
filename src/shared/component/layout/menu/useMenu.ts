@@ -14,3 +14,10 @@ export const useMenu = create<MenuState>((set) => ({
   toggleSidebar: () =>
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
 }));
+
+export const useSubMenu = create<MenuState>((set) => ({
+  isSidebarOpen: true,
+  setSidebarOpen: (isSidebarOpen) => set({ isSidebarOpen }),
+  toggleSidebar: () =>
+    set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+}));

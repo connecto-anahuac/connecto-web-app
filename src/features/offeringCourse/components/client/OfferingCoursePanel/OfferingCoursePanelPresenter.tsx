@@ -10,7 +10,10 @@ import type {
   OfferingCoursePanelPlan,
   EnabledStudentIdsByStudyPlan,
 } from "./types";
-import type { SemesterEnabledByStudyPlan } from "./useOfferingCoursePanel";
+import {
+  resolveSemesterEnabled,
+  type SemesterEnabledByStudyPlan,
+} from "./useOfferingCoursePanel";
 
 export type OfferingCoursePanelPresenterProps = ComponentProps<"aside"> & {
   courseName: string;
@@ -19,10 +22,7 @@ export type OfferingCoursePanelPresenterProps = ComponentProps<"aside"> & {
   onClose?: () => void;
   onPlanChange: (planId: string) => void;
   onSessionCountChange: (count: number) => void;
-  onSemesterEnabledChange: (
-    semesterId: string,
-    isEnabled: boolean,
-  ) => void;
+  onSemesterEnabledChange: (semesterId: string, isEnabled: boolean) => void;
   onStudentSelectionChange: (
     semesterId: string,
     studentId: string,
@@ -115,7 +115,7 @@ export function OfferingCoursePanelPresenter({
           </div>
         </div>
       ) : null}
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-5">
+      <div className="flex min-h-0 flex-1 flex-col  px-5">
         {isLoading ? (
           <p className="py-6 text-sm text-Outline" role="status">
             Loading eligible students…
@@ -133,7 +133,7 @@ export function OfferingCoursePanelPresenter({
         ) : null}
         {!isLoading && !errorMessage && selectedPlan ? (
           <>
-            <div className="flex items-center justify-end gap-2 py-2 text-Outline">
+            <div className="flex items-center justify-end gap-2 py-1 text-Outline">
               <span className="text-xs font-medium">
                 {selectedPlan.label} total
               </span>
@@ -145,18 +145,16 @@ export function OfferingCoursePanelPresenter({
                 No eligible semesters are available in this study plan.
               </p>
             ) : (
-              <div className="flex flex-col gap-0">
+              <div className="flex flex-col gap-0 flex-1 overflow-y-auto">
                 {selectedPlan.semesters.map((semester) => (
                   <div key={semester.id}>
                     <GenerationAcordion
                       expectedStudents={semester.expectedStudents}
-                      isSemesterEnabled={
-                        semesterEnabledByStudyPlan[selectedPlan.id]?.[
-                          semester.id
-                        ] ??
-                        (semester.semester ?? 0) >=
-                          (selectedPlan.recommendedSemester ?? 0)
-                      }
+                      isSemesterEnabled={resolveSemesterEnabled(
+                        selectedPlan,
+                        semester,
+                        semesterEnabledByStudyPlan,
+                      )}
                       onSemesterEnabledChange={(isEnabled) =>
                         onSemesterEnabledChange(semester.id, isEnabled)
                       }
@@ -175,9 +173,10 @@ export function OfferingCoursePanelPresenter({
                         semester.studentsWithoutPrerequisites
                       }
                     />
+                    {/* divider */}
                     <div
                       aria-hidden="true"
-                      className="h-px w-full bg-DividerLow"
+                      className="h-px w-full bg-DividerMiddle"
                     />
                   </div>
                 ))}
@@ -186,11 +185,38 @@ export function OfferingCoursePanelPresenter({
           </>
         ) : null}
       </div>
-      <footer className="border-t border-DividerMiddle px-5 pt-2 pb-5">
+      <footer className="border-t border-DividerMiddle px-5 pt-2 pb-5 flex flex-col gap-2">
+       
+       {/* 各プラン毎のトータル表示 */}
+        {/* <div
+          className="flex items-center gap-2  w-full overflow-y-auto scrollbar-none"
+          // role="tablist"
+        >
+          {plans.map((plan) => {
+            return (
+              <div
+                className={cn(
+                  "flex items-center justify-end  py-0.5 px-2 text-Outline",
+                  " border-2 border-DividerMiddle rounded-full",
+                  selectedPlan &&
+                    selectedPlan.id === plan.id &&
+                    "border-Primary/20 bg-Primary/20 text-Primary",
+                  selectedPlan &&
+                    selectedPlan.id === plan.id &&
+                    "border-Primary/20 bg-PrimaryContainer text-OnPrimaryContainer",
+                )}
+              >
+                <span className="text-xs font-medium">{plan.label}:</span>
+                <PersonIcon className="size-3.5 ml-0.5" />
+                <span className="text-xs font-medium ml-0.5">{planTotal}</span>
+              </div>
+            );
+          })}
+        </div> */}
         <div className="flex items-end justify-between gap-4">
           <div className="flex flex-col gap-0.5">
             <span className="text-xs font-medium text-Outline">
-              all careers total
+              Total general
             </span>
             <div className="flex items-center gap-1.5">
               <PersonIcon className="size-5" />
@@ -201,7 +227,7 @@ export function OfferingCoursePanelPresenter({
           </div>
           <div className="flex flex-col gap-0.5">
             <span className="text-xs font-medium text-Outline">session</span>
-            <div className="flex h-5 w-38.75 items-center gap-1">
+            <div className="flex h-5  items-center gap-1">
               <button
                 aria-label="Decrease sessions"
                 className="grid h-full w-7.75 place-items-center rounded bg-Primary text-OnPrimary"
@@ -212,7 +238,7 @@ export function OfferingCoursePanelPresenter({
               >
                 −
               </button>
-              <output className="grid h-full min-w-0 flex-1 place-items-center rounded border border-OnSurface text-xs font-medium">
+              <output className="grid h-full w-14 place-items-center rounded border border-OnSurface text-xs font-medium">
                 {sessionCount}
               </output>
               <button
