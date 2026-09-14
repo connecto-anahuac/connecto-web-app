@@ -25,6 +25,7 @@ const ROOT_NAVIGATION_ITEMS: RootNavigationEntry[] = [
   { label: "Aulas", icon: "door", href: "/classrooms" },
   { label: "Plan de estudios", icon: "curriculum", href: "/plans" },
   { label: "Schedule builder", icon: "schedule", href: "/schedule-builder" },
+  { label: "Data Import", icon: "filter", href: "/data" },
 ];
 
 export function RootNavigationSidebar({
