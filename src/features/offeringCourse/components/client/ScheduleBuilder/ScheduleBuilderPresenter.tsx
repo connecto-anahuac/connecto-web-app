@@ -3,13 +3,15 @@
 import Diagram from "@/features/offeringCourse/components/Diagram";
 import OfferingClassCardView from "@/features/offeringCourse/components/OfferingClassCardView";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import SearchBar from "@/shared/component/composite/searchtool/SearchTool";
-import SearchTool from "@/shared/component/composite/searchtool/search-tool/SearchTool";
+import DataSection from "@/shared/component/composite/datasection/DataSection";
+import { DataTable } from "@/shared/component/composite/table/DataTable";
+import type { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 import type {
   DataViewConfig,
   DataViewMetadata,
 } from "@/shared/types/dataView.types";
 import type { ReactNode } from "react";
+import type { Table } from "@tanstack/react-table";
 import type { OfferingCourseDraft } from "./scheduleBuilderStore";
 
 type Props = {
@@ -17,17 +19,15 @@ type Props = {
   config: DataViewConfig<OfferingCourse>;
   metadata: DataViewMetadata;
   error: string | null;
-  hasActiveFilters: boolean;
-  isFilterOpen: boolean;
+  filterResult: FilterResult;
   loading: boolean;
-  matchingCourseKeys: Set<string>;
-  onFilterToggle: () => void;
   onSearchTextChange: (value: string) => void;
   offeringCourses: OfferingCourse[];
   pendingCourseKeys: string[];
   drafts: Record<string, OfferingCourseDraft>;
   searchText: string;
   selectedCourseKeys: string[];
+  table: Table<OfferingCourse>;
   onOffer: (offeringCourse: OfferingCourse) => void;
   onOpen: (offeringCourse: OfferingCourse) => void;
   onUnoffer: (offeringCourse: OfferingCourse) => void;
@@ -50,17 +50,15 @@ export function ScheduleBuilderPresenter({
   config,
   metadata,
   error,
-  hasActiveFilters,
-  isFilterOpen,
+  filterResult,
   loading,
-  matchingCourseKeys,
-  onFilterToggle,
   onSearchTextChange,
   offeringCourses,
   pendingCourseKeys,
   drafts,
   searchText,
   selectedCourseKeys,
+  table,
   onOffer,
   onOpen,
   onUnoffer,
@@ -88,34 +86,26 @@ export function ScheduleBuilderPresenter({
 
   return (
     <div className="flex flex-col gap-2 w-full h-full">
-      <div className="flex items-center gap-3 pt-3 pl-6 z-50">
-        <SearchBar
-          value={searchText}
-          onChange={(event) => onSearchTextChange(event.target.value)}
-          onFilterClick={onFilterToggle}
-          placeholder="buscar por nombre de clase"
-        />
-        <SearchTool
-          config={config}
-          metadata={metadata}
-          onClick={onFilterToggle}
-          isSelected={isFilterOpen}
-        />
-      </div>
       <div className="flex gap-3 w-full flex-1 min-h-0">
-        <div className="h-full w-full overflow-auto p-2.5">
-          <Diagram maxSemester={maxSemester} maxPosition={maxPosition}>
-            {offeringCourses.map((offeringCourse) => {
-              const draft = drafts[offeringCourse.key];
-              const estimatedNumber = draft
-                ? getEnabledStudentTotal(draft.enabledStudentIdsByStudyPlan)
-                : offeringCourse.estimatedNumber;
-              return (
+        <DataSection
+          className="w-full h-full"
+          defaultView="card"
+          searchText={searchText}
+          onSearchTextChange={onSearchTextChange}
+          table={table}
+          tableConfig={config}
+          metadata={metadata}
+          listDiagram={<DataTable config={config} table={table} />}
+          cardDiagram={
+            <div className="h-full w-full overflow-auto p-2.5">
+              <Diagram maxSemester={maxSemester} maxPosition={maxPosition}>
+                {offeringCourses.map((offeringCourse) => {
+                  const draft = drafts[offeringCourse.key];
+                  return (
               <div
                 key={`${offeringCourse.key}-${offeringCourse.semester}-${offeringCourse.position}`}
                 className={
-                  hasActiveFilters &&
-                  !matchingCourseKeys.has(offeringCourse.key)
+                  filterResult.matches.get(offeringCourse.key)?.matched !== true
                     ? "grayscale opacity-45 transition"
                     : "transition"
                 }
@@ -127,7 +117,7 @@ export function ScheduleBuilderPresenter({
                 <OfferingClassCardView
                   offeringClass={offeringCourse}
                   className="w-full"
-                  estimatedNumber={estimatedNumber}
+                  estimatedNumber={offeringCourse.estimatedNumber}
                   isSelected={selectedCourseKeys.includes(offeringCourse.key)}
                   isPending={pendingCourseKeys.includes(offeringCourse.key)}
                   onOffer={() => onOffer(offeringCourse)}
@@ -139,10 +129,12 @@ export function ScheduleBuilderPresenter({
                   sessionNumber={draft?.sessionNumber}
                 />
               </div>
-              );
-            })}
-          </Diagram>
-        </div>
+                  );
+                })}
+              </Diagram>
+            </div>
+          }
+        />
         {sidePanel}
       </div>
     </div>

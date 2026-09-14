@@ -1,8 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo } from "react";
 import OfferingCoursePanel from "../OfferingCoursePanel/OfferingCoursePanel";
-import { ScheduleBuilderPresenter } from "./ScheduleBuilderPresenter";
+import {
+  getEnabledStudentTotal,
+  ScheduleBuilderPresenter,
+} from "./ScheduleBuilderPresenter";
 import { ScheduleBuilderStateProvider } from "./ScheduleBuilderStateProvider";
 import { useScheduleBuilder } from "./useScheduleBuilder";
 import { useScheduleBuilderFilters } from "./useScheduleBuilderFilters";
@@ -33,15 +36,29 @@ function ScheduleBuilderContainerContent({ career }: Props) {
     unofferCourse,
     setCourseSessionNumber,
   } = useScheduleBuilder(career);
+  const displayOfferingCourses = useMemo(
+    () =>
+      offeringCourses.map((offeringCourse) => {
+        const draft = drafts[offeringCourse.key];
+        if (!draft) return offeringCourse;
+
+        return {
+          ...offeringCourse,
+          estimatedNumber: getEnabledStudentTotal(
+            draft.enabledStudentIdsByStudyPlan,
+          ),
+        };
+      }),
+    [drafts, offeringCourses],
+  );
   const {
     config,
     metadata,
-    searchText,
-    setSearchText,
-    matchingCourseKeys,
-    hasActiveFilters,
-  } = useScheduleBuilderFilters(offeringCourses);
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+    table,
+    filterResult,
+    globalFilter,
+    setGlobalFilter,
+  } = useScheduleBuilderFilters(displayOfferingCourses);
 
   const sidePanel = isPanelOpen ? (
     <OfferingCoursePanel className="h-full w-72 shrink-0" />
@@ -53,17 +70,15 @@ function ScheduleBuilderContainerContent({ career }: Props) {
       config={config}
       metadata={metadata}
       error={error}
-      hasActiveFilters={hasActiveFilters}
-      isFilterOpen={isFilterOpen}
       loading={loading}
-      matchingCourseKeys={matchingCourseKeys}
-      onFilterToggle={() => setIsFilterOpen((open) => !open)}
-      onSearchTextChange={setSearchText}
-      offeringCourses={offeringCourses}
+      filterResult={filterResult}
+      onSearchTextChange={setGlobalFilter}
+      offeringCourses={displayOfferingCourses}
       pendingCourseKeys={pendingCourseKeys}
       drafts={drafts}
-      searchText={searchText}
+      searchText={globalFilter}
       selectedCourseKeys={selectedCourseKeys}
+      table={table}
 	  onOffer={(course) => void offerCourse(course)}
 	  onOpen={openCourse}
 	  onUnoffer={(course) => void unofferCourse(course)}

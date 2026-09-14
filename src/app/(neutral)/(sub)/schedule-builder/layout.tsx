@@ -1,7 +1,4 @@
-import DbInicializer from "@/shared/component/inicializer/DbInicializer";
-import Header from "@/shared/component/layout/menu/header/Header";
-import { RootNavigationSidebar } from "@/shared/component/layout/menu/sidebar";
-import { ScheduleBuilderSubNavigationSidebar } from "@/shared/component/layout/menu/sidebar/ScheduleBuilderSubNavigationSidebar";
+
 import SubNavigationSidebar, {
   NavigationEntry,
 } from "@/shared/component/layout/menu/sidebar/SubNavigationSidebar";

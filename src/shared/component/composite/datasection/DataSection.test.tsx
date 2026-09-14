@@ -92,6 +92,8 @@ describe("DataSection", () => {
     expect(markup).toContain("Card view");
     expect(markup).not.toContain("default-table");
     expect(markup).not.toContain("<aside");
+    expect(markup).toMatch(/aria-label="Card view"[^>]*aria-pressed="true"/);
+    expect(markup).toMatch(/aria-label="List view"[^>]*aria-pressed="false"/);
   });
 
   it("does not render an aside for a supplied custom list diagram", () => {

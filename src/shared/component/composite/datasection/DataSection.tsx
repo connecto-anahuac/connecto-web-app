@@ -218,6 +218,7 @@ export default function DataSection<TItem>({
 
         <div className="flex gap-4 items-end">
           <GraphSwitcher
+            selectedView={selectedView}
             onListClick={onListClick}
             onCardViewClick={onCardViewClick}
             onViewChange={viewChangeHandler}
