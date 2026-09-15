@@ -45,8 +45,10 @@ export type OfferingCourseDetail = OfferingCourse & {
 
 export const passGrade = 6;
 
-export const OFFERING_SELECTION_PERIOD = "202660";
-
-export function createOfferingCourseselectionId(career: string, courseKey: string): string {
-  return `${career}:${OFFERING_SELECTION_PERIOD}:${courseKey}`;
+export function createOfferingCourseSelectionId(
+  career: string,
+  period: string,
+  courseKey: string,
+): string {
+  return `${career}:${period}:${courseKey}`;
 }

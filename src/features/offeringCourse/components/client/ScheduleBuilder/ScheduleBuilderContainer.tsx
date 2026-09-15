@@ -12,17 +12,18 @@ import { useScheduleBuilderFilters } from "./useScheduleBuilderFilters";
 
 type Props = {
   career: string;
+  period: string;
 };
 
-export function ScheduleBuilderContainer({ career }: Props) {
+export function ScheduleBuilderContainer({ career, period }: Props) {
   return (
-    <ScheduleBuilderStateProvider>
-      <ScheduleBuilderContainerContent career={career} />
+    <ScheduleBuilderStateProvider key={`${career}:${period}`}>
+      <ScheduleBuilderContainerContent career={career} period={period} />
     </ScheduleBuilderStateProvider>
   );
 }
 
-function ScheduleBuilderContainerContent({ career }: Props) {
+function ScheduleBuilderContainerContent({ career, period }: Props) {
   const {
     error,
     loading,
@@ -35,7 +36,7 @@ function ScheduleBuilderContainerContent({ career }: Props) {
     offerCourse,
     unofferCourse,
     setCourseSessionNumber,
-  } = useScheduleBuilder(career);
+  } = useScheduleBuilder(career, period);
   const displayOfferingCourses = useMemo(
     () =>
       offeringCourses.map((offeringCourse) => {

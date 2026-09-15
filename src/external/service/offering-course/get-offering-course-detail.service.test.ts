@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import { GetOfferingCourseDetailService } from "./get-offering-course-detail.service";
 
 describe("GetOfferingCourseDetailService", () => {
@@ -20,10 +20,10 @@ describe("GetOfferingCourseDetailService", () => {
         old: [{ courseKey: "prerequisite", grade: 7 }],
       })[studentId] ?? [] } as never,
       { findRequiredFor: async (courseKey: string) => ({ target: ["prerequisite"], prerequisite: ["foundation"], foundation: [] })[courseKey] ?? [] } as never,
-      { findById: async () => ({ enabledStudentIdsByStudyPlan: { p1: ["ready", "ready"] }, sessionNumber: 2 }) } as never,
+      { findById: vi.fn(async () => ({ enabledStudentIdsByStudyPlan: { p1: ["ready", "ready"] }, sessionNumber: 2 })) } as never,
     );
 
-    const detail = await service.execute("C", "target");
+    const detail = await service.execute("C", "target", "202710");
 
     expect(detail?.enabledStudentIdsByStudyPlan).toEqual({ p1: ["ready"] });
     expect(detail?.estimatedNumber).toBe(1);
@@ -36,6 +36,7 @@ describe("GetOfferingCourseDetailService", () => {
   });
 
   it("restores enabled IDs for legacy selections and totals unique students across study plans", async () => {
+    const offerings = { findById: vi.fn(async () => ({ estimatedNumber: 99, sessionNumber: 2 })) };
     const service = new GetOfferingCourseDetailService(
       { findByCourseKey: async () => [
         { id: "a", name: "Plan A", career: "C", planId: "p1", courseKey: "target", semester: 2, position: 1 },
@@ -53,11 +54,12 @@ describe("GetOfferingCourseDetailService", () => {
       { findStudentGrades: async () => [] } as never,
       { findRequiredFor: async () => [] } as never,
       // No enabled ID field: this is a record written by the aggregate-only implementation.
-      { findById: async () => ({ estimatedNumber: 99, sessionNumber: 2 }) } as never,
+      offerings as never,
     );
 
-    const detail = await service.execute("C", "target");
+    const detail = await service.execute("C", "target", "202740");
 
+    expect(offerings.findById).toHaveBeenCalledWith("C:202740:target");
     expect(detail?.enabledStudentIdsByStudyPlan).toEqual({
       p1: ["one", "two"],
       p2: ["one"],

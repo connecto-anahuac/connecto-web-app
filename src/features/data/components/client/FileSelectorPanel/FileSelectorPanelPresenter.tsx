@@ -57,7 +57,7 @@ export function FileSelectorPanelPresenter({
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         className={cn(
-          "flex w-full flex-1 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed transition",
+          "flex w-full flex-1 min-h-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed transition",
           "border-gray-300",
           isDragging && "border-blue-500 bg-blue-50",
         )}

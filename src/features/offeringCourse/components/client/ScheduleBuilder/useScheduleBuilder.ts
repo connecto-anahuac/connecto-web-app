@@ -1,14 +1,14 @@
 "use client";
 
 import type { OfferingCourseDetailDto } from "@/external/dto/offering-course/offering-course.dto";
+import { updateOfferingCourseSelection } from "@/external/handler/offering-course/command.client";
 import {
   fetchOfferingCourseDetail,
   fetchOfferingCoursesByCareer,
   fetchSelectedOfferingCourses,
-  updateOfferingCourseselection,
 } from "@/external/handler/offering-course/query.client";
 import { toOfferingCourseUI, type OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useShallow } from "zustand/shallow";
 import { type OfferingCourseDraft, type ScheduleBuilderStore } from "./scheduleBuilderStore";
 import { useScheduleBuilderStore } from "./ScheduleBuilderStateProvider";
@@ -63,7 +63,7 @@ const selectStore = (state: ScheduleBuilderStore) => ({
   markUnoffered: state.markUnoffered,
   openPanel: state.openCourse,
   pendingCourseKeys: state.pendingCourseKeys,
-  resetForCareer: state.resetForCareer,
+  resetForScope: state.resetForScope,
   selectedCourseDetail: state.selectedCourseDetail,
   selectedCourseKey: state.selectedCourseKey,
   selectedCourseKeys: state.selectedCourseKeys,
@@ -76,18 +76,26 @@ const selectStore = (state: ScheduleBuilderStore) => ({
 });
 
 /** Fetches course data and persists selection updates; interaction state lives in Zustand. */
-export function useScheduleBuilder(career: string): Result {
+export function useScheduleBuilder(career: string, period: string): Result {
   const store = useScheduleBuilderStore(useShallow(selectStore));
-  const { hydrate, resetForCareer } = store;
+  const { hydrate, resetForScope } = store;
   const [offeringCourses, setOfferingCourses] = useState<OfferingCourse[]>([]);
   const [details, setDetails] = useState<Record<string, OfferingCourseDetailDto>>({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const currentCourseKeyRef = useRef<string | null>(null);
+  const scope = useMemo(() => ({ career, period }), [career, period]);
+  const activeScopeRef = useRef(scope);
+  const isActiveScope = useCallback(
+    () => activeScopeRef.current === scope,
+    [scope],
+  );
 
   useEffect(() => {
     let mounted = true;
-    resetForCareer(career);
+    activeScopeRef.current = scope;
+    currentCourseKeyRef.current = null;
+    resetForScope(career, period);
     const load = async () => {
       if (mounted) {
         setDetails({});
@@ -97,11 +105,11 @@ export function useScheduleBuilder(career: string): Result {
       try {
         const [items, selected] = await Promise.all([
           fetchOfferingCoursesByCareer(career),
-          fetchSelectedOfferingCourses(career),
+          fetchSelectedOfferingCourses(career, period),
         ]);
         if (!mounted) return;
         setOfferingCourses(items.map(toOfferingCourseUI));
-        hydrate(career, selected.map((item) => ({
+        hydrate(career, period, selected.map((item) => ({
           courseKey: item.courseKey,
           draft: item.enabledStudentIdsByStudyPlan === undefined
             ? undefined
@@ -121,7 +129,7 @@ export function useScheduleBuilder(career: string): Result {
     };
     void load();
     return () => { mounted = false; };
-  }, [career, hydrate, resetForCareer]);
+  }, [career, hydrate, period, resetForScope, scope]);
 
   const ensureDetail = useCallback(async (course: OfferingCourse) => {
     const cached = details[course.key];
@@ -129,7 +137,8 @@ export function useScheduleBuilder(career: string): Result {
     store.setDetailLoading(true);
     store.setDetailError(null);
     try {
-      const detail = await fetchOfferingCourseDetail(career, course.key);
+      const detail = await fetchOfferingCourseDetail(career, course.key, period);
+      if (!isActiveScope()) return null;
       if (!detail) throw new Error("Course detail was not found");
       setDetails((current) => ({ ...current, [course.key]: detail }));
       if (!store.drafts[course.key]) {
@@ -144,29 +153,31 @@ export function useScheduleBuilder(career: string): Result {
       return detail;
     } catch (cause) {
       console.error("Failed loading offering course detail", cause);
-      if (currentCourseKeyRef.current === course.key)
+      if (isActiveScope() && currentCourseKeyRef.current === course.key)
         store.setDetailError("Failed loading offering course detail");
       return null;
     } finally {
-      if (currentCourseKeyRef.current === course.key) store.setDetailLoading(false);
+      if (isActiveScope() && currentCourseKeyRef.current === course.key)
+        store.setDetailLoading(false);
     }
-  }, [career, details, store]);
+  }, [career, details, isActiveScope, period, store]);
 
   const persistOffer = useCallback(async (courseKey: string, draft: OfferingCourseDraft) => {
     store.startPending(courseKey);
     try {
-      await updateOfferingCourseselection({
+      await updateOfferingCourseSelection({
         career,
         courseKey,
         enabledStudentIdsByStudyPlan: copyIds(draft.enabledStudentIdsByStudyPlan),
         isSelected: true,
+        period,
         sessionNumber: draft.sessionNumber,
       });
-      store.markOffered(courseKey);
+      if (isActiveScope()) store.markOffered(courseKey);
     } finally {
-      store.finishPending(courseKey);
+      if (isActiveScope()) store.finishPending(courseKey);
     }
-  }, [career, store]);
+  }, [career, isActiveScope, period, store]);
 
   const openCourse = useCallback((course: OfferingCourse) => {
     currentCourseKeyRef.current = course.key;
@@ -191,9 +202,9 @@ export function useScheduleBuilder(career: string): Result {
       await persistOffer(course.key, draft);
     } catch (cause) {
       console.error("Failed offering course", cause);
-      store.setDetailError("Failed saving offering course");
+      if (isActiveScope()) store.setDetailError("Failed saving offering course");
     }
-  }, [ensureDetail, openCourse, persistOffer, store]);
+  }, [ensureDetail, isActiveScope, openCourse, persistOffer, store]);
 
   const unofferCourse = useCallback(async (course: OfferingCourse) => {
     if (store.pendingCourseKeys.includes(course.key)) return;
@@ -201,15 +212,22 @@ export function useScheduleBuilder(career: string): Result {
     store.startPending(course.key);
     store.markUnoffered(course.key);
     try {
-      await updateOfferingCourseselection({ career, courseKey: course.key, isSelected: false });
+      await updateOfferingCourseSelection({
+        career,
+        courseKey: course.key,
+        isSelected: false,
+        period,
+      });
     } catch (cause) {
       console.error("Failed removing offered course", cause);
-      if (wasSelected) store.markOffered(course.key);
-      store.setDetailError("Failed removing offered course");
+      if (isActiveScope()) {
+        if (wasSelected) store.markOffered(course.key);
+        store.setDetailError("Failed removing offered course");
+      }
     } finally {
-      store.finishPending(course.key);
+      if (isActiveScope()) store.finishPending(course.key);
     }
-  }, [career, store]);
+  }, [career, isActiveScope, period, store]);
 
   const updateDraft = useCallback(async (next: OfferingCourseDraft) => {
     const courseKey = store.selectedCourseKey;
@@ -221,10 +239,12 @@ export function useScheduleBuilder(career: string): Result {
       await persistOffer(courseKey, next);
     } catch (cause) {
       console.error("Failed saving offering course", cause);
-      if (previous) store.setDraft(courseKey, previous);
-      store.setDetailError("Failed saving offering course");
+      if (isActiveScope()) {
+        if (previous) store.setDraft(courseKey, previous);
+        store.setDetailError("Failed saving offering course");
+      }
     }
-  }, [persistOffer, store]);
+  }, [isActiveScope, persistOffer, store]);
 
   const setCourseSessionNumber = useCallback(async (course: OfferingCourse, sessionNumber: number) => {
     if (!store.selectedCourseKeys.includes(course.key) || store.pendingCourseKeys.includes(course.key)) return;
@@ -236,10 +256,12 @@ export function useScheduleBuilder(career: string): Result {
       await persistOffer(course.key, next);
     } catch (cause) {
       console.error("Failed saving offering course", cause);
-      store.setDraft(course.key, previous);
-      store.setDetailError("Failed saving offering course");
+      if (isActiveScope()) {
+        store.setDraft(course.key, previous);
+        store.setDetailError("Failed saving offering course");
+      }
     }
-  }, [persistOffer, store]);
+  }, [isActiveScope, persistOffer, store]);
 
   const setSelectedStudentIds = useCallback(async (planId: string, studentId: string, isSelected: boolean) => {
     const courseKey = store.selectedCourseKey;
@@ -268,28 +290,35 @@ export function useScheduleBuilder(career: string): Result {
       if (next.sessionNumber === 0) {
         store.startPending(courseKey);
         store.markUnoffered(courseKey);
-        void updateOfferingCourseselection({
+        void updateOfferingCourseSelection({
           career,
           courseKey,
           isSelected: false,
+          period,
         })
           .catch((cause) => {
             console.error("Failed removing offered course", cause);
-            store.setDraft(courseKey, previous);
-            store.markOffered(courseKey);
-            store.setDetailError("Failed removing offered course");
+            if (isActiveScope()) {
+              store.setDraft(courseKey, previous);
+              store.markOffered(courseKey);
+              store.setDetailError("Failed removing offered course");
+            }
           })
-          .finally(() => store.finishPending(courseKey));
+          .finally(() => {
+            if (isActiveScope()) store.finishPending(courseKey);
+          });
         return;
       }
       void persistOffer(courseKey, next).catch((cause) => {
         console.error("Failed saving offering course", cause);
-        store.setDraft(courseKey, previous);
-        store.setDetailError("Failed saving offering course");
+        if (isActiveScope()) {
+          store.setDraft(courseKey, previous);
+          store.setDetailError("Failed saving offering course");
+        }
       });
     });
     return () => store.setDraftChangeHandler(null);
-  }, [career, persistOffer, store]);
+  }, [career, isActiveScope, period, persistOffer, store]);
 
   return {
     closePanel: () => { currentCourseKeyRef.current = null; store.closePanel(); },

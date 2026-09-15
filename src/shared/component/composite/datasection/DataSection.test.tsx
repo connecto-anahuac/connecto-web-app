@@ -113,6 +113,58 @@ describe("DataSection", () => {
     expect(markup).toContain("Custom list");
     expect(markup).not.toContain("<aside");
   });
+
+  it("renders only the tools enabled for a single list view", () => {
+    const markup = renderToStaticMarkup(
+      <DataSection<Item>
+        enableView={["list"]}
+        listDiagram={<div>Custom list</div>}
+        listTools={["sort", "filter"]}
+        showZoom={false}
+        table={createTable()}
+        tableConfig={config}
+      />,
+    );
+
+    expect(markup).toContain("Sort");
+    expect(markup).toContain("Filter button group");
+    expect(markup).not.toContain("Ocultar");
+    expect(markup).not.toContain("Pivot");
+    expect(markup).not.toContain('aria-label="List view"');
+    expect(markup).not.toContain('aria-label="Card view"');
+    expect(markup).not.toContain('aria-label="Zoom in"');
+  });
+
+  it("hides the filter row when filter is omitted for the selected view", () => {
+    const markup = renderToStaticMarkup(
+      <DataSection<Item>
+        listDiagram={<div>Custom list</div>}
+        listTools={["sort"]}
+        table={createTable()}
+        tableConfig={config}
+      />,
+    );
+
+    expect(markup).not.toContain("Filter button group");
+  });
+
+  it("preserves the existing views, tools, filter row, and zoom defaults", () => {
+    const markup = renderToStaticMarkup(
+      <DataSection<Item>
+        listDiagram={<div>Custom list</div>}
+        table={createTable()}
+        tableConfig={config}
+      />,
+    );
+
+    expect(markup).toContain('aria-label="List view"');
+    expect(markup).toContain('aria-label="Card view"');
+    expect(markup).toContain("Sort");
+    expect(markup).toContain("Ocultar");
+    expect(markup).toContain("Pivot");
+    expect(markup).toContain("Filter button group");
+    expect(markup).toContain('aria-label="Zoom in"');
+  });
 });
 
 function createTable() {

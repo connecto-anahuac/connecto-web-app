@@ -11,9 +11,9 @@ const SUB_NAVIGATION_ITEMS: NavigationEntry[] = [
     icon: "class",
     href: "/schedule-builder/offering-course",
   },
-  { label: "profesores", icon: "professor", href: "/professors" },
-  { label: "Materias", icon: "class", href: "/classes" },
-  { label: "Aulas", icon: "door", href: "/classrooms" },
+  // { label: "profesores", icon: "professor", href: "/professors" },
+  // { label: "Materias", icon: "class", href: "/classes" },
+  // { label: "Aulas", icon: "door", href: "/classrooms" },
   {
     label: "Schedule builder",
     icon: "schedule",

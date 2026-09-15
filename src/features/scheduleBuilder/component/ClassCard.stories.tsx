@@ -32,3 +32,13 @@ export const LongCourseTitle: Story = {
     title: "Diseño y análisis de algoritmos para sistemas distribuidos",
   },
 };
+
+export const UnscheduledOfferingCourse: Story = {
+  args: {
+    sessionNumber: undefined,
+    classCount: undefined,
+    sessionStudents: undefined,
+    professorName: undefined,
+    classroom: undefined,
+  },
+};

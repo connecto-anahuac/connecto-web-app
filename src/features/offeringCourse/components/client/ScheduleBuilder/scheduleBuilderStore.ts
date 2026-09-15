@@ -13,6 +13,7 @@ export type HydratedOfferingCourseSelection = {
 
 export type ScheduleBuilderState = {
   career: string | null;
+  period: string | null;
   drafts: Record<string, OfferingCourseDraft>;
   detailError: string | null;
   detailLoading: boolean;
@@ -39,10 +40,11 @@ export type ScheduleBuilderCommands = {
   finishPending: (courseKey: string) => void;
   hydrate: (
     career: string,
+    period: string,
     selections: HydratedOfferingCourseSelection[],
   ) => void;
   openCourse: (courseKey: string) => void;
-  resetForCareer: (career: string) => void;
+  resetForScope: (career: string, period: string) => void;
   setDraft: (courseKey: string, draft: OfferingCourseDraft) => void;
   setDetailError: (error: string | null) => void;
   setDetailLoading: (loading: boolean) => void;
@@ -71,8 +73,12 @@ export type ScheduleBuilderCommands = {
 export type ScheduleBuilderStore = ScheduleBuilderState &
   ScheduleBuilderCommands;
 
-const emptyState = (career: string | null): ScheduleBuilderState => ({
+const emptyState = (
+  career: string | null,
+  period: string | null,
+): ScheduleBuilderState => ({
   career,
+  period,
   drafts: {},
   detailError: null,
   detailLoading: false,
@@ -104,7 +110,7 @@ const copyDraft = (draft: OfferingCourseDraft): OfferingCourseDraft => ({
  */
 export function createScheduleBuilderStore() {
   return createStore<ScheduleBuilderStore>((set, get) => ({
-    ...emptyState(null),
+    ...emptyState(null, null),
     closePanel: () =>
       set({
         detailError: null,
@@ -119,10 +125,10 @@ export function createScheduleBuilderStore() {
           (key) => key !== courseKey,
         ),
       })),
-    hydrate: (career, selections) =>
+    hydrate: (career, period, selections) =>
       set((state) => {
-        // A delayed response for the previous career must not replace new state.
-        if (state.career !== career) return state;
+        // A delayed response for the previous scope must not replace new state.
+        if (state.career !== career || state.period !== period) return state;
 
         const drafts = Object.fromEntries(
           selections.flatMap(({ courseKey, draft }) =>
@@ -156,7 +162,7 @@ export function createScheduleBuilderStore() {
         selectedCourseDetail: null,
         selectedCourseKey: courseKey,
       }),
-    resetForCareer: (career) => set(emptyState(career)),
+    resetForScope: (career, period) => set(emptyState(career, period)),
     setDraft: (courseKey, draft) =>
       set((state) => ({
         drafts: { ...state.drafts, [courseKey]: copyDraft(draft) },
@@ -198,10 +204,12 @@ export function createScheduleBuilderStore() {
         };
         const courseKey = state.selectedCourseKey;
         const career = state.career;
+        const period = state.period;
         queueMicrotask(() => {
           const current = get();
           if (
             current.career === career &&
+            current.period === period &&
             current.selectedCourseKeys.includes(courseKey) &&
             current.drafts[courseKey] === next
           ) {
@@ -224,10 +232,12 @@ export function createScheduleBuilderStore() {
         const next = { ...draft, sessionNumber: Math.max(0, sessionNumber) };
         const courseKey = state.selectedCourseKey;
         const career = state.career;
+        const period = state.period;
         queueMicrotask(() => {
           const current = get();
           if (
             current.career === career &&
+            current.period === period &&
             current.selectedCourseKeys.includes(courseKey) &&
             current.drafts[courseKey] === next
           ) {

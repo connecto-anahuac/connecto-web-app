@@ -46,6 +46,7 @@ describe("offering course DTOs", () => {
       estimatedNumber: 1,
       enabledStudentIdsByStudyPlan: { plan: ["student", "student"] },
     })).toMatchObject({
+      period: "202660",
       estimatedNumber: 1,
       enabledStudentIdsByStudyPlan: { plan: ["student"] },
     });

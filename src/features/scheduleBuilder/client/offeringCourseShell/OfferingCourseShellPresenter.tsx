@@ -1,28 +1,140 @@
-"use client";
-
-import { useState } from "react";
-import type { ComponentProps, ReactNode } from "react";
 import type { Table } from "@tanstack/react-table";
-import SearchPresetChip from "../../primitive/chip/SearchPresetChip";
-import SearchBar from "../../primitive/searchbar/SearchBar";
+import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
+import ScheduleClassCard from "@/features/scheduleBuilder/component/ClassCard";
 import { cn } from "@/shared/lib/util";
-import IconButton from "../../primitive/button/IconButton";
-import Button from "../../primitive/button/Button";
 import type { FilterPreset } from "@/shared/service/dataPipeline/filterPreset.type";
 import type {
   DataViewConfig,
   DataViewMetadata,
 } from "@/shared/types/dataView.types";
-// import { TableFilterButtonGroup } from "@/components/table/DataTable";
+import HideButtonModal from "@/shared/component/composite/datasection/buttonmodal/HideButtonModal";
+import PivotButtonModal from "@/shared/component/composite/datasection/buttonmodal/PivotButtonModal";
+import { SearchTool } from "@/shared/component/composite/datasection/buttonmodal/type";
+import { DataSectionFilterProvider } from "@/shared/component/composite/datasection/DataSectionFilterContext";
+import { GraphSwitcher } from "@/shared/component/composite/datasection/GraphSwitcher";
+import { DataTable } from "@/shared/component/composite/table/DataTable";
+import Button from "@/shared/component/primitive/button/Button";
+import FilterButtonGroup from "@/shared/component/primitive/button/FilterButtonGroup";
+import IconButton from "@/shared/component/primitive/button/IconButton";
+import ButtonModal from "@/shared/component/primitive/ButtonModal";
+import SearchPresetChip from "@/shared/component/primitive/chip/SearchPresetChip";
+import SearchBar from "@/shared/component/primitive/searchbar/SearchBar";
 import SortCard from "@/shared/component/primitive/SortCard";
-import ButtonModal from "../../primitive/ButtonModal";
-import { GraphSwitcher } from "./GraphSwitcher";
-import type { SearchTool } from "./buttonmodal/type";
-import HideButtonModal from "./buttonmodal/HideButtonModal";
-import PivotButtonModal from "./buttonmodal/PivotButtonModal";
-import FilterButtonGroup from "../../primitive/button/FilterButtonGroup";
-import { DataSectionFilterProvider } from "./DataSectionFilterContext";
-import { DataTable } from "../table/DataTable";
+import { ComponentProps, ReactNode, useState } from "react";
+
+export type OfferingCourseShellPresenterProps = {
+  className?: string;
+  config: DataViewConfig<OfferingCourse>;
+  error: string | null;
+  globalFilter: string;
+  loading: boolean;
+  metadata: DataViewMetadata;
+  onGlobalFilterChange: (value: string) => void;
+  presets: readonly FilterPreset[];
+  table: Table<OfferingCourse>;
+};
+
+export function OfferingCourseShellPresenter({
+  className,
+  config,
+  error,
+  globalFilter,
+  loading,
+  metadata,
+  onGlobalFilterChange,
+  presets,
+  table,
+}: OfferingCourseShellPresenterProps) {
+  const rows = table.getRowModel().rows;
+
+  let listDiagram;
+  if (loading) {
+    listDiagram = (
+      <p className="p-4 text-sm text-neutral-600">Loading offering courses…</p>
+    );
+  } else if (error) {
+    listDiagram = (
+      <p className="p-4 text-sm text-red-700" role="alert">
+        {error}
+      </p>
+    );
+  } else if (rows.length === 0) {
+    listDiagram = (
+      <p className="p-4 text-sm text-neutral-600">No offering courses found.</p>
+    );
+  } else {
+    listDiagram = (
+      <div className="flex h-full min-h-0 flex-col gap-2 overflow-y-auto pr-1 scrollbar-none">
+        {rows.map((row) => {
+          const course = row.original;
+          return (
+            <ScheduleClassCard
+              className="w-full shrink-0"
+              courseCode={course.keyCode}
+              courseNumber={course.keyNumber}
+              hours={course.hours}
+              key={row.id}
+              recommendedSemester={course.semester}
+              title={course.name}
+              totalStudents={course.estimatedNumber}
+            />
+          );
+        })}
+      </div>
+    );
+  }
+
+  return (
+    <aside
+      aria-label="Offering courses"
+      className={cn(
+        "flex w-60 min-w-0 flex-col border-r border-DividerMiddle p-2",
+        className,
+      )}
+    >
+      <ShellSection
+        className="min-h-0 flex-1"
+        defaultView="list"
+        enableView={["list"]}
+        listDiagram={listDiagram}
+        listTools={["sort", "filter"]}
+        metadata={metadata}
+        onSearchTextChange={onGlobalFilterChange}
+        presets={presets}
+        searchText={globalFilter}
+        showZoom={false}
+        table={table}
+        tableConfig={config}
+      />
+    </aside>
+  );
+}
+
+
+
+// import { useState } from "react";
+// import type { ComponentProps, ReactNode } from "react";
+// import type { Table } from "@tanstack/react-table";
+// import SearchPresetChip from "../../primitive/chip/SearchPresetChip";
+// import SearchBar from "../../primitive/searchbar/SearchBar";
+// import { cn } from "@/shared/lib/util";
+// import IconButton from "../../primitive/button/IconButton";
+// import Button from "../../primitive/button/Button";
+// import type { FilterPreset } from "@/shared/service/dataPipeline/filterPreset.type";
+// import type {
+//   DataViewConfig,
+//   DataViewMetadata,
+// } from "@/shared/types/dataView.types";
+// // import { TableFilterButtonGroup } from "@/components/table/DataTable";
+// import SortCard from "@/shared/component/primitive/SortCard";
+// import ButtonModal from "../../primitive/ButtonModal";
+// import { GraphSwitcher } from "./GraphSwitcher";
+// import type { SearchTool } from "./buttonmodal/type";
+// import HideButtonModal from "./buttonmodal/HideButtonModal";
+// import PivotButtonModal from "./buttonmodal/PivotButtonModal";
+// import FilterButtonGroup from "../../primitive/button/FilterButtonGroup";
+// import { DataSectionFilterProvider } from "./DataSectionFilterContext";
+// import { DataTable } from "../table/DataTable";
 
 type BaseDataSectionProps = ComponentProps<"div"> & {
   defaultView?: "list" | "card";
@@ -83,7 +195,7 @@ type CustomListDataSectionProps<TItem> = {
 export type DataSectionProps<TItem> = BaseDataSectionProps &
   (DefaultListDataSectionProps<TItem> | CustomListDataSectionProps<TItem>);
 
-export default function DataSection<TItem>({
+export default function ShellSection<TItem>({
   className,
   presets,
   onListClick,
@@ -144,16 +256,16 @@ export default function DataSection<TItem>({
     >
       <div className={cn("relative flex flex-col gap-2 min-h-0 flex-1 max-w-full", className)}>
         {/* 1st line */}
-        <div className="flex gap-4 w-full items-center max-w-full">
+        <div className="flex flex-col gap-1 w-full items-center">
           <SearchBar
-            className="w-64 max-w-3/5 min-w-32"
+            className="w-full max-w-full min-w-0"
             value={searchText}
             onChange={(event) => onSearchTextChange?.(event.target.value)}
             onClear={() => onSearchTextChange?.("")}
           />
 
           {/* when changed the chip size, still keep the height */}
-          <div className="flex flex-1 min-w-0 gap-3 items-center overflow-x-auto scrollbar-none">
+          <div className="flex w-full  gap-3 items-center overflow-x-auto scrollbar-none">
             {presets?.map((preset, index) => (
               <SearchPresetChip
                 key={`${preset.label}-${index}`}

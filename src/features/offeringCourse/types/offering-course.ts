@@ -39,6 +39,7 @@ export function toOfferingCourseUI(offeringCourse: OfferingCourseDto): OfferingC
 export function toUpdateOfferingCourseSelectionInput(
 	offeringCourse: OfferingCourse,
 	career: string,
+	period: string,
 	_sessionNumber: number,
 	isSelected: boolean,
 ): UpdateOfferingCourseSelectionInput {
@@ -46,5 +47,6 @@ export function toUpdateOfferingCourseSelectionInput(
 		career,
 		courseKey: offeringCourse.key,
 		isSelected,
+		period,
 	};
 }
