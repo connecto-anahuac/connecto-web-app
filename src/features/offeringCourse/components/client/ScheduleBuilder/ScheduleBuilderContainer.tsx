@@ -2,6 +2,7 @@
 
 import { useMemo } from "react";
 import OfferingCoursePanel from "../OfferingCoursePanel/OfferingCoursePanel";
+import { getOfferingCoursePanelTotal } from "../OfferingCoursePanel/useOfferingCoursePanel";
 import {
   getEnabledStudentTotal,
   ScheduleBuilderPresenter,
@@ -25,13 +26,16 @@ export function ScheduleBuilderContainer({ career, period }: Props) {
 
 function ScheduleBuilderContainerContent({ career, period }: Props) {
   const {
+    courseDetailsByKey,
     error,
     loading,
     offeringCourses,
     pendingCourseKeys,
     drafts,
     selectedCourseKeys,
-    isPanelOpen,
+    selectedCourseKey,
+    semesterEnabledByCourse,
+    closePanel,
     openCourse,
     offerCourse,
     unofferCourse,
@@ -42,15 +46,27 @@ function ScheduleBuilderContainerContent({ career, period }: Props) {
       offeringCourses.map((offeringCourse) => {
         const draft = drafts[offeringCourse.key];
         if (!draft) return offeringCourse;
+        const detail = courseDetailsByKey[offeringCourse.key];
+
+        const estimatedNumber = detail
+          ? getOfferingCoursePanelTotal(
+              detail,
+              draft.enabledStudentIdsByStudyPlan,
+              semesterEnabledByCourse[offeringCourse.key] ?? {},
+            )
+          : getEnabledStudentTotal(draft.enabledStudentIdsByStudyPlan);
 
         return {
           ...offeringCourse,
-          estimatedNumber: getEnabledStudentTotal(
-            draft.enabledStudentIdsByStudyPlan,
-          ),
+          estimatedNumber,
         };
       }),
-    [drafts, offeringCourses],
+    [
+      courseDetailsByKey,
+      drafts,
+      offeringCourses,
+      semesterEnabledByCourse,
+    ],
   );
   const {
     config,
@@ -60,10 +76,6 @@ function ScheduleBuilderContainerContent({ career, period }: Props) {
     globalFilter,
     setGlobalFilter,
   } = useScheduleBuilderFilters(displayOfferingCourses);
-
-  const sidePanel = isPanelOpen ? (
-    <OfferingCoursePanel className="h-full w-72 shrink-0" />
-  ) : null;
 
   return (
     <ScheduleBuilderPresenter
@@ -82,9 +94,11 @@ function ScheduleBuilderContainerContent({ career, period }: Props) {
       table={table}
 	  onOffer={(course) => void offerCourse(course)}
 	  onOpen={openCourse}
+	  onClosePanel={closePanel}
 	  onUnoffer={(course) => void unofferCourse(course)}
 	  onSessionCountChange={(course, sessionNumber) => void setCourseSessionNumber(course, sessionNumber)}
-	  sidePanel={sidePanel}
+	  panelContent={<OfferingCoursePanel className="h-full w-full" />}
+	  selectedCourseKey={selectedCourseKey}
     />
   );
 }

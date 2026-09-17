@@ -8,7 +8,10 @@ import type {
   EnabledStudentIdsByStudyPlan,
   SelectedStudentIdsByStudyPlan,
 } from "./types";
-import { useOfferingCoursePanel } from "./useOfferingCoursePanel";
+import {
+  toOfferingCoursePanelPlans,
+  useOfferingCoursePanel,
+} from "./useOfferingCoursePanel";
 
 export type OfferingCoursePanelProps = ComponentProps<"aside"> & {
   /** Fallback used by isolated stories; the provider detail takes precedence. */
@@ -95,23 +98,7 @@ export default function OfferingCoursePanel({
   const detailError = useScheduleBuilderStore((state) => state.detailError);
   const detailLoading = useScheduleBuilderStore((state) => state.detailLoading);
   const plans: OfferingCoursePanelPlan[] = selectedCourseDetail
-    ? selectedCourseDetail.studyPlans.map((studyPlan) => ({
-        id: studyPlan.studyPlanId,
-        label: studyPlan.studyPlanName,
-        recommendedSemester: studyPlan.recommendedSemester,
-        semesters: studyPlan.semesters.map((semester) => ({
-          expectedStudents: semester.eligibleStudents.map((student) => ({
-            fullName: student.name,
-            id: student.id,
-          })),
-          id: String(semester.semester),
-          label: `Semestre ${semester.semester}`,
-          semester: semester.semester,
-          studentsWithoutPrerequisites: semester.studentsWithoutPrerequisites.map(
-            (student) => ({ fullName: student.name, id: student.id }),
-          ),
-        })),
-      }))
+    ? toOfferingCoursePanelPlans(selectedCourseDetail)
     : (plansProp ?? []);
   const panel = useOfferingCoursePanel({
     initialSessionCount,

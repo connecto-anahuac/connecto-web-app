@@ -22,7 +22,6 @@ export function NavigationItem({
   hasLabel = true,
   ...props
 }: Props) {
-  const isRoot = tone === "root";
   const showLabel = hasLabel && label.length > 0;
   const IconComponent = icon && Icons[icon];
 
@@ -33,12 +32,10 @@ export function NavigationItem({
         "text-OnSurfaceVariant font-medium",
         "px-nav-left",
         // showLabel ? "pl-1 pr-1.5" : "px-1.5",
-         "justify-center",
+        "justify-center",
         showLabel && " pr-1.5 justify-start",
-        selected &&
-          isRoot &&
-          "bg-PrimaryContainerLow text-OnPrimaryContainerLow",
-        selected && !isRoot && "bg-DividerLow text-OnSurfaceVariant",
+        !selected && "hover:bg-PrimaryContainer/20",
+        selected && "bg-PrimaryContainerLow text-OnPrimaryContainerLow",
         // /!selected && "opacity-[0.84]",
         className,
       )}

@@ -1,5 +1,6 @@
 "use client";
 
+import type { OfferingCourseDetailDto } from "@/external/dto/offering-course/offering-course.dto";
 import { useMemo, useState } from "react";
 
 import type {
@@ -23,6 +24,28 @@ export type SemesterEnabledByStudyPlan = Record<
   string,
   Record<string, boolean>
 >;
+
+export function toOfferingCoursePanelPlans(
+  detail: OfferingCourseDetailDto,
+): OfferingCoursePanelPlan[] {
+  return detail.studyPlans.map((studyPlan) => ({
+    id: studyPlan.studyPlanId,
+    label: studyPlan.studyPlanName,
+    recommendedSemester: studyPlan.recommendedSemester,
+    semesters: studyPlan.semesters.map((semester) => ({
+      expectedStudents: semester.eligibleStudents.map((student) => ({
+        fullName: student.name,
+        id: student.id,
+      })),
+      id: String(semester.semester),
+      label: `Semestre ${semester.semester}`,
+      semester: semester.semester,
+      studentsWithoutPrerequisites: semester.studentsWithoutPrerequisites.map(
+        (student) => ({ fullName: student.name, id: student.id }),
+      ),
+    })),
+  }));
+}
 
 export function resolveSemesterEnabled(
   plan: OfferingCoursePanelPlan,
@@ -70,6 +93,18 @@ export function getTotalSelectedEligibleStudents(
         semesterEnabledByStudyPlan,
       ),
     0,
+  );
+}
+
+export function getOfferingCoursePanelTotal(
+  detail: OfferingCourseDetailDto,
+  enabledStudentIdsByStudyPlan: EnabledStudentIdsByStudyPlan,
+  semesterEnabledByStudyPlan: SemesterEnabledByStudyPlan,
+) {
+  return getTotalSelectedEligibleStudents(
+    toOfferingCoursePanelPlans(detail),
+    enabledStudentIdsByStudyPlan,
+    semesterEnabledByStudyPlan,
   );
 }
 

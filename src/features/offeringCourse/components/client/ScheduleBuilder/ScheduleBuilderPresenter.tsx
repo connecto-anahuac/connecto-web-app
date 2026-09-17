@@ -4,6 +4,7 @@ import Diagram from "@/features/offeringCourse/components/Diagram";
 import OfferingClassCardView from "@/features/offeringCourse/components/OfferingClassCardView";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import DataSection from "@/shared/component/composite/datasection/DataSection";
+import SidePanel from "@/shared/component/composite/sidePanel/SidePanel";
 import { DataTable } from "@/shared/component/composite/table/DataTable";
 import type { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 import type {
@@ -30,9 +31,11 @@ type Props = {
   table: Table<OfferingCourse>;
   onOffer: (offeringCourse: OfferingCourse) => void;
   onOpen: (offeringCourse: OfferingCourse) => void;
+  onClosePanel: () => void;
   onUnoffer: (offeringCourse: OfferingCourse) => void;
   onSessionCountChange: (offeringCourse: OfferingCourse, sessionNumber: number) => void;
-  sidePanel: ReactNode;
+  panelContent: ReactNode;
+  selectedCourseKey: string | null;
 };
 
 /** A student contributes once per study plan, even if IDs overlap between plans. */
@@ -61,9 +64,11 @@ export function ScheduleBuilderPresenter({
   table,
   onOffer,
   onOpen,
+  onClosePanel,
   onUnoffer,
   onSessionCountChange,
-  sidePanel,
+  panelContent,
+  selectedCourseKey,
 }: Props) {
   if (loading) {
     return <div>Loading...</div>;
@@ -85,8 +90,21 @@ export function ScheduleBuilderPresenter({
     Math.max(...offeringCourses.map((item) => item.position), 1) + 1;
 
   return (
-    <div className="flex flex-col gap-2 w-full h-full">
-      <div className="flex gap-3 w-full flex-1 min-h-0">
+    <SidePanel.Root
+      className="h-full w-full gap-3"
+      mode="push"
+      onPanelChange={(panel) => {
+        if (!panel) onClosePanel();
+      }}
+      panel={
+        selectedCourseKey
+          ? { id: selectedCourseKey, type: "offering-course" }
+          : null
+      }
+      side="right"
+    >
+      <SidePanel.Main className="flex h-full min-w-0 flex-1 flex-col gap-2">
+      <div className="flex w-full flex-1 min-h-0">
         <DataSection
           className="w-full h-full"
           defaultView="card"
@@ -135,8 +153,16 @@ export function ScheduleBuilderPresenter({
             </div>
           }
         />
-        {sidePanel}
       </div>
-    </div>
+      </SidePanel.Main>
+      <SidePanel.Viewport
+        aria-label="Oferta de asignatura"
+        className="h-full w-72"
+      >
+        <SidePanel.Content type="offering-course">
+          {() => panelContent}
+        </SidePanel.Content>
+      </SidePanel.Viewport>
+    </SidePanel.Root>
   );
 }

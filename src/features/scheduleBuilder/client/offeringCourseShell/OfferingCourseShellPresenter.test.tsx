@@ -1,35 +1,12 @@
-import type { ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { Table } from "@tanstack/react-table";
-import { describe, expect, it, vi } from "vitest";
-import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import { OFFERING_COURSE_VIEW_CONFIG } from "@/features/offeringCourse/types/offering-course-filter-fields";
+import { describe, expect, it } from "vitest";
+import { DataSearchProvider } from "@/shared/store/filter/FilterProvider";
 import { OfferingCourseShellPresenter } from "./OfferingCourseShellPresenter";
-
-vi.mock("@/shared/component/composite/datasection/DataSection", () => ({
-  default: ({
-    defaultView,
-    enableView,
-    listDiagram,
-    listTools,
-    showZoom,
-  }: {
-    defaultView: string;
-    enableView: string[];
-    listDiagram: ReactNode;
-    listTools: string[];
-    showZoom: boolean;
-  }) => (
-    <div
-      data-default-view={defaultView}
-      data-enabled-views={enableView.join(",")}
-      data-list-tools={listTools.join(",")}
-      data-show-zoom={String(showZoom)}
-    >
-      {listDiagram}
-    </div>
-  ),
-}));
+import {
+  SCHEDULE_BUILDER_OFFERING_COURSE_VIEW_CONFIG,
+  type ScheduleBuilderOfferingCourse,
+} from "./scheduleBuilderOfferingCourse";
 
 describe("OfferingCourseShellPresenter", () => {
   it("configures the shell with only list, sort, and filter capabilities", () => {
@@ -70,29 +47,31 @@ describe("OfferingCourseShellPresenter", () => {
 });
 
 function renderPresenter(
-  rows: OfferingCourse[],
+  rows: ScheduleBuilderOfferingCourse[],
   state: { error?: string | null; loading?: boolean } = {},
 ) {
   return renderToStaticMarkup(
-    <OfferingCourseShellPresenter
-      config={OFFERING_COURSE_VIEW_CONFIG}
-      error={state.error ?? null}
-      globalFilter=""
-      loading={state.loading ?? false}
-      metadata={{ fields: {} } as never}
-      onGlobalFilterChange={() => undefined}
-      presets={[]}
-      table={tableWithRows(rows)}
-    />,
+    <DataSearchProvider scopeId="offering-course-presenter-test">
+      <OfferingCourseShellPresenter
+        config={SCHEDULE_BUILDER_OFFERING_COURSE_VIEW_CONFIG}
+        error={state.error ?? null}
+        globalFilter=""
+        loading={state.loading ?? false}
+        metadata={{ optionsByFieldId: {} }}
+        onGlobalFilterChange={() => undefined}
+        presets={[]}
+        table={tableWithRows(rows)}
+      />
+    </DataSearchProvider>,
   );
 }
 
-function tableWithRows(rows: OfferingCourse[]) {
+function tableWithRows(rows: ScheduleBuilderOfferingCourse[]) {
   return {
     getRowModel: () => ({
       rows: rows.map((original) => ({ id: original.key, original })),
     }),
-  } as unknown as Table<OfferingCourse>;
+  } as unknown as Table<ScheduleBuilderOfferingCourse>;
 }
 
 function course(
@@ -102,7 +81,7 @@ function course(
   name: string,
   semester: number,
   estimatedNumber: number,
-): OfferingCourse {
+): ScheduleBuilderOfferingCourse {
   return {
     block: "A",
     credits: 6,

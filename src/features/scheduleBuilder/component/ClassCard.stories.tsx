@@ -42,3 +42,16 @@ export const UnscheduledOfferingCourse: Story = {
     classroom: undefined,
   },
 };
+
+export const SelectedWithWarning: Story = {
+  args: {
+    selected: true,
+    warning: true,
+  },
+};
+
+export const Completed: Story = {
+  args: {
+    completed: true,
+  },
+};

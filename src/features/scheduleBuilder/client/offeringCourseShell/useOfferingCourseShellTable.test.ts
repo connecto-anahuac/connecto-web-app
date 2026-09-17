@@ -1,8 +1,10 @@
 import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
-import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import { OFFERING_COURSE_FILTER_KEYS } from "@/features/offeringCourse/types/offering-course-filter-fields";
+import {
+  SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS,
+  type ScheduleBuilderOfferingCourse,
+} from "./scheduleBuilderOfferingCourse";
 import {
   FilterContext,
   FilterScopeContext,
@@ -24,13 +26,13 @@ describe("createRecommendedSemesterPresetConfigs", () => {
     expect(presets).toEqual([
       {
         label: "Semestre 2",
-        filterKey: OFFERING_COURSE_FILTER_KEYS.semester,
+        filterKey: SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS.semester,
         conditionValue: 2,
         operator: "eq",
       },
       {
         label: "Semestre 4",
-        filterKey: OFFERING_COURSE_FILTER_KEYS.semester,
+        filterKey: SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS.semester,
         conditionValue: 4,
         operator: "eq",
       },
@@ -53,7 +55,7 @@ describe("createRecommendedSemesterPresetConfigs", () => {
     result.setGlobalFilter("");
     result = renderTableHook(store, data);
     store.getState().upsertCondition("offering-course-shell-test", {
-      fieldId: OFFERING_COURSE_FILTER_KEYS.semester,
+      fieldId: SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS.semester,
       operator: "eq",
       value: 4,
     });
@@ -64,7 +66,7 @@ describe("createRecommendedSemesterPresetConfigs", () => {
       .getState()
       .removeCondition(
         "offering-course-shell-test",
-        OFFERING_COURSE_FILTER_KEYS.semester,
+        SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS.semester,
       );
     result = renderTableHook(store, data);
     const semesterTwo = result.presets.find(
@@ -88,7 +90,10 @@ describe("createRecommendedSemesterPresetConfigs", () => {
       ...previous,
       state: {
         ...previous.state,
-        sorting: [{ id: OFFERING_COURSE_FILTER_KEYS.name, desc: true }],
+        sorting: [{
+          id: SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS.name,
+          desc: true,
+        }],
       },
     }));
     expect(rowKeys(result)).toEqual(["C", "B", "A"]);
@@ -97,7 +102,7 @@ describe("createRecommendedSemesterPresetConfigs", () => {
 
 function renderTableHook(
   store: ReturnType<typeof createFilterStore>,
-  data: OfferingCourse[],
+  data: ScheduleBuilderOfferingCourse[],
 ) {
   let value: ReturnType<typeof useOfferingCourseShellTable> | undefined;
 
@@ -134,7 +139,7 @@ function course(
   key: string,
   semester: number,
   name = key,
-): OfferingCourse {
+): ScheduleBuilderOfferingCourse {
   return {
     block: "A",
     credits: 6,

@@ -1,12 +1,12 @@
 "use client";
 
 import { useMemo } from "react";
-import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
 import {
-  OFFERING_COURSE_FILTER_KEYS,
-  OFFERING_COURSE_VIEW_CONFIG,
-  type OfferingCourseFilterKey,
-} from "@/features/offeringCourse/types/offering-course-filter-fields";
+  SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS,
+  SCHEDULE_BUILDER_OFFERING_COURSE_VIEW_CONFIG,
+  type ScheduleBuilderOfferingCourse,
+  type ScheduleBuilderOfferingCourseFilterKey,
+} from "./scheduleBuilderOfferingCourse";
 import { useTable } from "@/shared/component/composite/table/hooks/useTable";
 import type { GetItemId } from "@/shared/service/dataPipeline/filterDefinition";
 import {
@@ -20,24 +20,24 @@ import {
   useDataSearchQuery,
 } from "@/shared/store/filter/useFilterStore";
 
-const getOfferingCourseRowId: GetItemId<OfferingCourse> = (course) =>
+const getOfferingCourseRowId: GetItemId<ScheduleBuilderOfferingCourse> = (course) =>
   course.key;
 
 export function createRecommendedSemesterPresetConfigs(
-  offeringCourses: readonly OfferingCourse[],
-): FilterPresetConfig<OfferingCourseFilterKey>[] {
+  offeringCourses: readonly ScheduleBuilderOfferingCourse[],
+): FilterPresetConfig<ScheduleBuilderOfferingCourseFilterKey>[] {
   return [...new Set(offeringCourses.map((course) => course.semester))]
     .sort((left, right) => left - right)
     .map((semester) => ({
       label: `Sem. ${semester}`,
-      filterKey: OFFERING_COURSE_FILTER_KEYS.semester,
+      filterKey: SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS.semester,
       conditionValue: semester,
       operator: "eq",
     }));
 }
 
 export function useOfferingCourseShellTable(
-  offeringCourses: readonly OfferingCourse[],
+  offeringCourses: readonly ScheduleBuilderOfferingCourse[],
 ) {
   const query = useDataSearchQuery();
   const {
@@ -47,7 +47,7 @@ export function useOfferingCourseShellTable(
     upsertCondition,
   } = useDataSearchActions();
   const { globalFilter, metadata, setGlobalFilter, table } = useTable({
-    config: OFFERING_COURSE_VIEW_CONFIG,
+    config: SCHEDULE_BUILDER_OFFERING_COURSE_VIEW_CONFIG,
     data: offeringCourses,
     getRowId: getOfferingCourseRowId,
     query,
@@ -77,7 +77,7 @@ export function useOfferingCourseShellTable(
   }));
 
   return {
-    config: OFFERING_COURSE_VIEW_CONFIG,
+    config: SCHEDULE_BUILDER_OFFERING_COURSE_VIEW_CONFIG,
     globalFilter,
     metadata,
     presets,

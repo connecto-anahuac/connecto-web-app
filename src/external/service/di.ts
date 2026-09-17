@@ -20,6 +20,7 @@ import { SetOfferingCourseSelectionService } from "@/external/service/offering-c
 import { GetStudentGradeService } from "@/external/service/student/get-student-plan.service";
 import { GetStudentCollectionSummariesService } from "@/external/service/students/get-student-collection-summaries.service";
 import { GetStudentsService } from "@/external/service/students/get-students.service";
+import { GetScheduleBuilderDataService } from "@/external/service/schedule-builder/get-schedule-builder-data.service";
 
 const studentRepository = new StudentRepository();
 const planRepository = new PlanRepository();
@@ -79,5 +80,14 @@ export const getSelectedOfferingCoursesService = new GetSelectedOfferingCoursesS
 export const setOfferingCourseSelectionService = new SetOfferingCourseSelectionService(
   offeringCourseRepository,
 );
+
+export const getScheduleBuilderDataService = new GetScheduleBuilderDataService({
+  offeringCourses: offeringCourseRepository,
+  courses: courseRepository,
+  plans: planRepository,
+  professors: professorRepository,
+  classrooms: classroomRepository,
+  timeSlots: timeSlotRepository,
+});
 
 export const studentQueryRepository = studentRepository;

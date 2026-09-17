@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
+import type { OfferingCourseDetailDto } from "@/external/dto/offering-course/offering-course.dto";
 import type { OfferingCoursePanelPlan } from "./types";
 import {
+  getOfferingCoursePanelTotal,
   getPlanSelectedEligibleStudentsTotal,
   getTotalSelectedEligibleStudents,
   resolveSemesterEnabled,
@@ -86,6 +88,57 @@ describe("offering course panel totals", () => {
         "plan-a": { "semester-2": false },
         "plan-b": { "semester-1": false },
       }),
+    ).toBe(0);
+  });
+
+  it("derives the card estimate from the same detail and state as the panel total", () => {
+    const detail: OfferingCourseDetailDto = {
+      block: "Base",
+      credits: 8,
+      estimatedNumber: 2,
+      hours: 4,
+      key: "TIND-101",
+      keyCode: "TIND",
+      keyNumber: "101",
+      name: "Programming",
+      position: 1,
+      preRequisites: [],
+      semester: 1,
+      sessionNumber: 1,
+      studyPlans: [
+        {
+          career: "TIND",
+          studyPlanId: "plan-a",
+          studyPlanName: "Plan A",
+          recommendedSemester: 2,
+          semesters: [
+            {
+              semester: 1,
+              eligibleStudents: [{ id: "a", name: "Student A", avatarColorRef: 0 }],
+              studentsWithoutPrerequisites: [],
+            },
+            {
+              semester: 2,
+              eligibleStudents: [
+                { id: "a", name: "Student A", avatarColorRef: 0 },
+                { id: "b", name: "Student B", avatarColorRef: 0 },
+              ],
+              studentsWithoutPrerequisites: [],
+            },
+          ],
+        },
+      ],
+    };
+
+    expect(
+      getOfferingCoursePanelTotal(detail, { "plan-a": ["a", "b"] }, {}),
+    ).toBe(2);
+    expect(
+      getOfferingCoursePanelTotal(
+        detail,
+        { "plan-a": ["a", "b"] },
+        { "plan-a": { "2": false } },
+      ),
     ).toBe(0);
   });
 });

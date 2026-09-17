@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import type { ComponentProps } from "react";
 
 import NavigationItem, {
@@ -34,6 +35,7 @@ export function SubNavigationSidebar({
 }: Props) {
   const isSidebarOpen = useSubMenu((state) => state.isSidebarOpen);
   const toggleSidebar = useSubMenu((state) => state.toggleSidebar);
+  const pathname = usePathname();
 
   return (
     <nav
@@ -55,17 +57,28 @@ export function SubNavigationSidebar({
           onClick={toggleSidebar}
         />
       </div>
-      {navigationEntries.map((item) => (
-        <Link key={item.href} href={item.href} className="w-full">
-          <NavigationItem
-            tone={type}
-            icon={item.icon}
-            label={item.label}
+      {navigationEntries.map((item) => {
+        const isActive =
+          pathname === item.href || pathname.startsWith(`${item.href}/`);
+
+        return (
+          <Link
+            key={item.href}
+            href={item.href}
             className="w-full"
-            hasLabel={isSidebarOpen}
-          />
-        </Link>
-      ))}
+            aria-current={isActive ? "page" : undefined}
+          >
+            <NavigationItem
+              tone={type}
+              icon={item.icon}
+              label={item.label}
+              className="w-full"
+              hasLabel={isSidebarOpen}
+              selected={isActive}
+            />
+          </Link>
+        );
+      })}
     </nav>
   );
 }

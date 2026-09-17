@@ -3,7 +3,12 @@ import SubNavigationSidebar, {
   NavigationEntry,
 } from "@/shared/component/layout/menu/sidebar/SubNavigationSidebar";
 import { DataSearchRootProvider } from "@/shared/store/filter/FilterProvider";
-// import Header from "@/features/header/components/Header";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Schedule Builder | Connecto",
+  description: "Construye y valida el horario académico por periodo.",
+};
 
 const SUB_NAVIGATION_ITEMS: NavigationEntry[] = [
   {
@@ -20,18 +25,18 @@ const SUB_NAVIGATION_ITEMS: NavigationEntry[] = [
     href: "/schedule-builder/builder",
   },
 ];
-export default async function NeutralSubLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function ScheduleBuilderLayout(
+  props: LayoutProps<"/schedule-builder">,
+) {
   return (
-    <div className="w-full h-full flex gap-0">
-      <SubNavigationSidebar
-        title={"Schedule builder"}
-        navigationEntries={SUB_NAVIGATION_ITEMS}
-      />
-      <div className="flex-1 h-full p-1 pl-0 min-w-0">{children}</div>
-    </div>
+    <DataSearchRootProvider>
+      <div className="w-full h-full flex gap-0">
+        <SubNavigationSidebar
+          title="Schedule builder"
+          navigationEntries={SUB_NAVIGATION_ITEMS}
+        />
+        <div className="flex-1 h-full p-1 pl-0 min-w-0">{props.children}</div>
+      </div>
+    </DataSearchRootProvider>
   );
 }

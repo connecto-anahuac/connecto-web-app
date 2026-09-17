@@ -3,15 +3,12 @@
 import { useEffect, useRef, useState } from "react";
 import type { OfferingCourseDto } from "@/external/dto/offering-course/offering-course.dto";
 import { fetchOfferingCoursesByCareer } from "@/external/handler/offering-course/query.client";
-import {
-  toOfferingCourseUI,
-  type OfferingCourse,
-} from "@/features/offeringCourse/types/offering-course";
+import type { ScheduleBuilderOfferingCourse } from "./scheduleBuilderOfferingCourse";
 
 type OfferingCoursesState = {
   error: string | null;
   loading: boolean;
-  offeringCourses: OfferingCourse[];
+  offeringCourses: ScheduleBuilderOfferingCourse[];
 };
 
 type StoredOfferingCoursesState = OfferingCoursesState & {
@@ -28,6 +25,22 @@ const INITIAL_STATE: OfferingCoursesState = {
   offeringCourses: [],
 };
 
+const toLocalOfferingCourse = (
+  item: OfferingCourseDto,
+): ScheduleBuilderOfferingCourse => ({
+  key: item.key,
+  keyCode: item.keyCode,
+  keyNumber: item.keyNumber,
+  hours: item.hours,
+  credits: item.credits,
+  block: item.block,
+  name: item.name,
+  semester: item.semester,
+  position: item.position,
+  preRequisites: [...item.preRequisites],
+  estimatedNumber: item.estimatedNumber,
+});
+
 /** Coordinates requests so only the most recently started career load wins. */
 export function createOfferingCoursesLoader(
   fetcher: OfferingCoursesFetcher = fetchOfferingCoursesByCareer,
@@ -43,7 +56,7 @@ export function createOfferingCoursesLoader(
         return {
           error: null,
           loading: false,
-          offeringCourses: items.map(toOfferingCourseUI),
+          offeringCourses: items.map(toLocalOfferingCourse),
         };
       } catch (cause) {
         if (requestId !== latestRequestId) return null;

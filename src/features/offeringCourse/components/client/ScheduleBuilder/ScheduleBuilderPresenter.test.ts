@@ -52,7 +52,9 @@ describe("ScheduleBuilderPresenter", () => {
         onOpen: () => undefined,
         onUnoffer: () => undefined,
         onSessionCountChange: () => undefined,
-        sidePanel: null,
+        onClosePanel: () => undefined,
+        panelContent: createElement("div", null, "Offering course panel"),
+        selectedCourseKey: null,
       }),
     );
 
@@ -65,6 +67,48 @@ describe("ScheduleBuilderPresenter", () => {
     expect(props.table).toBeDefined();
     expect(props.listDiagram).toBeDefined();
     expect(props.cardDiagram).toBeDefined();
+  });
+
+  it("renders the offering course panel only when a course is selected", () => {
+    const baseProps = {
+      career: "TIND",
+      config: { fields: [] },
+      metadata: { optionsByFieldId: {} },
+      error: null,
+      filterResult: { matches: new Map() },
+      loading: false,
+      onSearchTextChange: () => undefined,
+      offeringCourses: [offeringCourse()],
+      pendingCourseKeys: [],
+      drafts: {},
+      searchText: "",
+      selectedCourseKeys: [],
+      table: {} as Table<OfferingCourse>,
+      onOffer: () => undefined,
+      onOpen: () => undefined,
+      onClosePanel: () => undefined,
+      onUnoffer: () => undefined,
+      onSessionCountChange: () => undefined,
+      panelContent: createElement("div", null, "Offering course panel"),
+    };
+
+    const openMarkup = renderToStaticMarkup(
+      createElement(ScheduleBuilderPresenter, {
+        ...baseProps,
+        selectedCourseKey: "TIND-101",
+      }),
+    );
+    const closedMarkup = renderToStaticMarkup(
+      createElement(ScheduleBuilderPresenter, {
+        ...baseProps,
+        selectedCourseKey: null,
+      }),
+    );
+
+    expect(openMarkup).toContain('aria-label="Oferta de asignatura"');
+    expect(openMarkup).toContain("Offering course panel");
+    expect(closedMarkup).not.toContain('aria-label="Oferta de asignatura"');
+    expect(closedMarkup).not.toContain("Offering course panel");
   });
 });
 

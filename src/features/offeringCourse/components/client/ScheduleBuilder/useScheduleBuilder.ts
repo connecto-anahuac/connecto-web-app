@@ -17,6 +17,7 @@ export type { OfferingCourseDraft } from "./scheduleBuilderStore";
 
 type Result = {
   closePanel: () => void;
+  courseDetailsByKey: Readonly<Record<string, OfferingCourseDetailDto>>;
   detailError: string | null;
   detailLoading: boolean;
   drafts: Record<string, OfferingCourseDraft>;
@@ -29,7 +30,9 @@ type Result = {
   pendingCourseKeys: string[];
   selectedCourseDetail: OfferingCourseDetailDto | null;
   selectedDraft: OfferingCourseDraft | null;
+  selectedCourseKey: string | null;
   selectedCourseKeys: string[];
+  semesterEnabledByCourse: ScheduleBuilderStore["semesterEnabledByCourse"];
   setSelectedStudentIds: (planId: string, studentId: string, isSelected: boolean) => Promise<void>;
   setSessionNumber: (sessionNumber: number) => Promise<void>;
   setCourseSessionNumber: (course: OfferingCourse, sessionNumber: number) => Promise<void>;
@@ -67,6 +70,7 @@ const selectStore = (state: ScheduleBuilderStore) => ({
   selectedCourseDetail: state.selectedCourseDetail,
   selectedCourseKey: state.selectedCourseKey,
   selectedCourseKeys: state.selectedCourseKeys,
+  semesterEnabledByCourse: state.semesterEnabledByCourse,
   setDetailError: state.setDetailError,
   setDetailLoading: state.setDetailLoading,
   setDraft: state.setDraft,
@@ -322,6 +326,7 @@ export function useScheduleBuilder(career: string, period: string): Result {
 
   return {
     closePanel: () => { currentCourseKeyRef.current = null; store.closePanel(); },
+    courseDetailsByKey: details,
     detailError: store.detailError,
     detailLoading: store.detailLoading,
     drafts: store.drafts,
@@ -334,7 +339,9 @@ export function useScheduleBuilder(career: string, period: string): Result {
     pendingCourseKeys: store.pendingCourseKeys,
     selectedCourseDetail: store.selectedCourseDetail,
     selectedDraft: store.selectedCourseKey ? (store.drafts[store.selectedCourseKey] ?? null) : null,
+    selectedCourseKey: store.selectedCourseKey,
     selectedCourseKeys: store.selectedCourseKeys,
+    semesterEnabledByCourse: store.semesterEnabledByCourse,
     setSelectedStudentIds,
     setCourseSessionNumber,
     setSessionNumber,
