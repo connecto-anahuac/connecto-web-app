@@ -45,7 +45,7 @@ export function FileSelectorPanelPresenter({
   return (
     <div
       className={cn(
-        "flex h-full w-104 flex-col gap-4 rounded-lg bg-SurfaceContainerLowest p-5",
+        "flex h-full w-104 flex-col gap-4 rounded-lg bg-SurfaceContainerLowest ",
         className,
       )}
     >
