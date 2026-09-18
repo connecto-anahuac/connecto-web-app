@@ -34,7 +34,7 @@ export default function ScheduleEmptyCell({
   ...props
 }: ScheduleEmptyCellProps) {
   const isInvalid = status === "invalid";
-
+  const clickHandler = onAdd ?? onClick;
   return (
     <button
       type={type}
@@ -43,13 +43,17 @@ export default function ScheduleEmptyCell({
       data-invalid={isInvalid || undefined}
       data-drag-over={status === "drag-over" || undefined}
       aria-pressed={status === "highlighted" || status === "drag-over"}
-      onClick={onAdd ?? onClick}
+      onClick={(e) => {
+        if (isInvalid) return;
+        clickHandler?.(e);
+      }}
       className={cn(
         "flex h-24 w-56 min-w-56 flex-col items-start gap-2 rounded-lg border border-Primary px-2.5 pt-2.5 pb-2 text-Primary transition-colors",
-        "hover:bg-PrimaryContainerLow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-Primary disabled:pointer-events-none disabled:opacity-50",
+        "disabled:pointer-events-none disabled:opacity-50",
         status === "default" && "border-dashed",
         status === "highlighted" && "border-2 bg-PrimaryContainerLow",
-        isInvalid && "border-2 border-Error bg-ErrorContainerLow text-Error",
+        isInvalid && "opacity-35",
+        !isInvalid && "hover:bg-PrimaryContainerLow focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-Primary ",
         status === "drag-over" && "border-2 border-dashed bg-PrimaryContainerLow ring-2 ring-Primary ring-offset-2",
         className,
       )}

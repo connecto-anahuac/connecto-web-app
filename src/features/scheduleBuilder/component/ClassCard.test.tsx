@@ -19,7 +19,7 @@ describe("ScheduleClassCard", () => {
         {...baseProps}
         selected
         completed
-        warning
+        warning="high"
         dragging
         disabled
         aria-describedby="drag-instructions"
@@ -34,6 +34,19 @@ describe("ScheduleClassCard", () => {
     expect(markup).toContain('aria-describedby="drag-instructions"');
     expect(markup).toContain('aria-label="Mover clase"');
     expect(markup).not.toContain("Arrastrar clase");
+  });
+
+  it.each([
+    ["low", "bg-green-500"],
+    ["mid", "bg-yellow-500"],
+    ["high", "bg-red-500"],
+  ] as const)("maps the %s warning to its alert level", (warning, alertClass) => {
+    const markup = renderToStaticMarkup(
+      <ScheduleClassCard {...baseProps} warning={warning} />,
+    );
+
+    expect(markup).toContain('data-hasalert="true"');
+    expect(markup).toContain(alertClass);
   });
 });
 

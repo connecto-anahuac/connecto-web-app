@@ -10,11 +10,22 @@ import type {
 
 import {
   getProfessorAvatarColor,
+  getWarningLevel,
   ScheduleBuilderCanvasPresenter,
   type ScheduleCellLayout,
 } from "./ScheduleBuilderCanvasPresenter";
 
 describe("ScheduleBuilderCanvasPresenter", () => {
+  it.each([
+    [[], undefined],
+    [["professor_unassigned"], "mid"],
+    [["professor_unassigned", "classroom_unassigned"], "mid"],
+    [["professor_conflict"], "high"],
+    [["classroom_unassigned", "classroom_conflict"], "high"],
+  ] as const)("maps conflict codes %# to %s warnings", (conflictCodes, warning) => {
+    expect(getWarningLevel(conflictCodes)).toBe(warning);
+  });
+
   it("renders seven weekdays, ten DTO time slots, and all 70 cells", () => {
     const markup = renderCanvas();
 
@@ -51,8 +62,8 @@ describe("ScheduleBuilderCanvasPresenter", () => {
     });
 
     expect(markup).toContain(
-      "grid-template-columns:auto minmax(200px, 1fr) minmax(200px, 1fr) "
-      + "minmax(408px, 2fr) minmax(616px, 3fr) minmax(616px, 3fr) "
+      "grid-template-columns:auto minmax(200px, 1fr) minmax(408px, 2fr) "
+      + "minmax(616px, 3fr) minmax(616px, 3fr) minmax(616px, 3fr) "
       + "minmax(200px, 1fr) minmax(200px, 1fr)",
     );
   });
@@ -67,9 +78,9 @@ describe("ScheduleBuilderCanvasPresenter", () => {
     });
 
     expect(markup).toContain(
-      "grid-template-columns:auto minmax(200px, 1fr) minmax(200px, 1fr)",
+      "grid-template-columns:auto minmax(408px, 2fr) minmax(200px, 1fr)",
     );
-    expect(markup).not.toContain("grid-template-columns:auto minmax(408px, 2fr)");
+    expect(markup).not.toContain("grid-template-columns:auto minmax(616px, 3fr)");
   });
 
   it("uses three columns for four occurrences and maps occurrence states", () => {
@@ -88,14 +99,26 @@ describe("ScheduleBuilderCanvasPresenter", () => {
     expect(markup).toContain('data-completed="true"');
   });
 
-  it("passes weekday-wide layouts to each cell and the DND render hook", () => {
+  it("stretches empty cells to the schedule row height", () => {
+    const markup = renderCanvas();
+
+    expect(markup.match(/content-stretch/g)).toHaveLength(70);
+    expect(markup.match(/self-stretch/g)).toHaveLength(70);
+    expect(markup.match(/h-auto/g)).toHaveLength(70);
+  });
+
+  it("fills every remaining grid column for zero through six occurrences", () => {
     const layouts = new Map<ScheduleCellId, ScheduleCellLayout>();
 
     renderCanvas({
       courses: coursesWithOccurrences([
-        { day: "monday", timeSlotId: "T1" },
-        { day: "monday", timeSlotId: "T1" },
-        { day: "monday", timeSlotId: "T2" },
+        ...placementsForDay("tuesday", 1),
+        ...placementsForDay("wednesday", 2),
+        ...placementsForDay("thursday", 3),
+        { day: "thursday", timeSlotId: "T2" },
+        ...placementsForDay("friday", 4),
+        ...placementsForDay("saturday", 5),
+        ...placementsForDay("sunday", 6),
       ]),
       renderCell: (cellId, children, layout) => {
         layouts.set(cellId, layout);
@@ -104,20 +127,36 @@ describe("ScheduleBuilderCanvasPresenter", () => {
     });
 
     expect(layouts.get("monday:T1")).toEqual({
-      columnCount: 2,
-      emptyCellColumnSpan: 2,
-    });
-    expect(layouts.get("monday:T2")).toEqual({
-      columnCount: 2,
-      emptyCellColumnSpan: 1,
-    });
-    expect(layouts.get("monday:T3")).toEqual({
-      columnCount: 2,
-      emptyCellColumnSpan: 2,
-    });
-    expect(layouts.get("tuesday:T1")).toEqual({
       columnCount: 1,
       emptyCellColumnSpan: 1,
+    });
+    expect(layouts.get("tuesday:T1")).toEqual({
+      columnCount: 2,
+      emptyCellColumnSpan: 1,
+    });
+    expect(layouts.get("wednesday:T1")).toEqual({
+      columnCount: 3,
+      emptyCellColumnSpan: 1,
+    });
+    expect(layouts.get("thursday:T1")).toEqual({
+      columnCount: 3,
+      emptyCellColumnSpan: 3,
+    });
+    expect(layouts.get("thursday:T2")).toEqual({
+      columnCount: 3,
+      emptyCellColumnSpan: 2,
+    });
+    expect(layouts.get("friday:T1")).toEqual({
+      columnCount: 3,
+      emptyCellColumnSpan: 2,
+    });
+    expect(layouts.get("saturday:T1")).toEqual({
+      columnCount: 3,
+      emptyCellColumnSpan: 1,
+    });
+    expect(layouts.get("sunday:T1")).toEqual({
+      columnCount: 3,
+      emptyCellColumnSpan: 3,
     });
   });
 
@@ -249,4 +288,11 @@ function coursesWithOccurrences(
       })),
     }],
   }];
+}
+
+function placementsForDay(
+  day: ScheduleWeekDay,
+  occurrenceCount: number,
+): { day: ScheduleWeekDay; timeSlotId: string }[] {
+  return Array.from({ length: occurrenceCount }, () => ({ day, timeSlotId: "T1" }));
 }

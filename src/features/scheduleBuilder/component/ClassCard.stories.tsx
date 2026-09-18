@@ -46,7 +46,19 @@ export const UnscheduledOfferingCourse: Story = {
 export const SelectedWithWarning: Story = {
   args: {
     selected: true,
-    warning: true,
+    warning: "high",
+  },
+};
+
+export const MediumWarning: Story = {
+  args: {
+    warning: "mid",
+  },
+};
+
+export const LowWarning: Story = {
+  args: {
+    warning: "low",
   },
 };
 

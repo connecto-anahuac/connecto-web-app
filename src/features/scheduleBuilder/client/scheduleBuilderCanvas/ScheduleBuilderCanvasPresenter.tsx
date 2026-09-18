@@ -9,6 +9,7 @@ import ScheduleEmptyCell, {
 } from "@/features/scheduleBuilder/component/ScheduleEmptyCell";
 import type {
   ScheduleCellId,
+  ScheduleConflictCode,
   ScheduleCourseDraft,
   ScheduleOccurrence,
   ScheduleWeekDay,
@@ -95,16 +96,31 @@ const DAY_COLUMN_TRACKS = [
   "minmax(408px, 2fr)",
   "minmax(616px, 3fr)",
 ] as const;
+const UNASSIGNED_CONFLICT_CODES = new Set<ScheduleConflictCode>([
+  "professor_unassigned",
+  "classroom_unassigned",
+]);
+
+export function getWarningLevel(
+  conflictCodes: readonly ScheduleConflictCode[],
+): ScheduleClassCardProps["warning"] {
+  if (conflictCodes.length === 0) return undefined;
+
+  return conflictCodes.every((code) => UNASSIGNED_CONFLICT_CODES.has(code))
+    ? "mid"
+    : "high";
+}
 
 function getCellLayout(
   columnCount: ScheduleCellLayout["columnCount"],
   occurrenceCount: number,
 ): ScheduleCellLayout {
+  const occupiedColumns = occurrenceCount % columnCount;
   return {
     columnCount,
-    emptyCellColumnSpan: (occurrenceCount < columnCount
-      ? columnCount - occurrenceCount
-      : columnCount) as 1 | 2 | 3,
+    emptyCellColumnSpan: (occupiedColumns === 0
+      ? columnCount
+      : columnCount - occupiedColumns) as 1 | 2 | 3,
   };
 }
 
@@ -135,7 +151,7 @@ function getDayColumnCounts(
           Math.max(maximum, occurrenceCountByCell.get(createCellId(day, timeSlot.id)) ?? 0),
         0,
       );
-      return [day, toColumnCount(maximumOccurrenceCount)] as const;
+      return [day, toColumnCount(maximumOccurrenceCount + 1)] as const;
     }),
   );
 }
@@ -324,8 +340,8 @@ export function ScheduleBuilderCanvasPresenter({
                       professorColor={professor ? getProfessorAvatarColor(professor.id) : undefined}
                       classroom={classroom?.name}
                       selected={selectedOccurrenceId === occurrence.id}
-                      completed={session.occurrences.length >= session.requiredOccurrenceCount}
-                      warning={occurrence.conflictCodes.length > 0}
+                      // completed={session.occurrences.length >= session.requiredOccurrenceCount}
+                      warning={getWarningLevel(occurrence.conflictCodes)}
                       dragging={draggingOccurrenceId === occurrence.id}
                       onClick={() => onOccurrenceClick?.(occurrence.id)}
                       onContextMenu={(event) => onOccurrenceContextMenu?.(occurrence.id, event)}
@@ -343,7 +359,7 @@ export function ScheduleBuilderCanvasPresenter({
                   aria-label={`Añadir curso a ${day.label}, ${timeSlot.id}`}
                   onAdd={() => onAddCourse?.(cellId)}
                   className={cn(
-                    "h-full min-h-24 w-full min-w-0",
+                    "h-auto min-h-24 w-full min-w-0 self-stretch",
                     GRID_COLUMN_SPAN_CLASSES[layout.emptyCellColumnSpan - 1],
                   )}
                 />
@@ -358,7 +374,7 @@ export function ScheduleBuilderCanvasPresenter({
                 data-cell-id={cellId}
                 data-cell-state={status}
                 className={cn(
-                  "grid min-h-28 content-start gap-2",
+                  "grid min-h-28 content-stretch gap-2",
                   GRID_COLUMN_CLASSES[layout.columnCount - 1],
                 )}
               >

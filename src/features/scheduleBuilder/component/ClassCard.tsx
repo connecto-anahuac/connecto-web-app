@@ -4,6 +4,8 @@ import CourseKey from "@/shared/component/primitive/CourseKey";
 import { Icons } from "@/shared/component/primitive/icon";
 import { cn } from "@/shared/lib/util";
 import { getOrdinalNumberPrefix } from "@/shared/lib/tool";
+import Alert from "@/shared/component/primitive/Alert";
+import CompleteBadge from "@/shared/component/primitive/CompleteBadge";
 
 export type ScheduleClassCardProps = ComponentProps<"div"> & {
   courseCode: string;
@@ -20,7 +22,7 @@ export type ScheduleClassCardProps = ComponentProps<"div"> & {
   classroom?: string;
   selected?: boolean;
   completed?: boolean;
-  warning?: boolean;
+  warning?: "low" | "mid" | "high";
   dragging?: boolean;
   disabled?: boolean;
   type?: "shell" | "builder";
@@ -42,12 +44,13 @@ export default function ScheduleClassCard({
   professorColor = "var(--DividerMiddle)",
   selected = false,
   completed = false,
-  warning = false,
+  warning,
   dragging = false,
   disabled = false,
   type = "builder",
   ...props
 }: ScheduleClassCardProps) {
+  const alertLevel = warning === "mid" ? "medium" : warning;
   const semester =
     recommendedSemester + getOrdinalNumberPrefix(recommendedSemester);
   const hasStudentCount =
@@ -55,7 +58,7 @@ export default function ScheduleClassCard({
 
   return (
     <div
-      data-hasalert={warning}
+      data-hasalert={Boolean(warning)}
       data-hasmultisession={sessionNumber !== undefined}
       data-isdisable={disabled}
       data-isselected={selected}
@@ -64,27 +67,41 @@ export default function ScheduleClassCard({
       aria-disabled={disabled || undefined}
       data-property-1="1line"
       className={cn(
-        "relative flex w-64 flex-col gap-2 rounded-lg p-3 text-OnSurface text-xs transition-[opacity,box-shadow]",
+        "relative flex w-64 flex-col gap-2 rounded-lg p-2  text-OnSurface text-xs transition-[opacity,box-shadow]",
+        "border-3 border-transparent",
         selected && "border-3 border-Primary/50  shadow-md",
-        completed && "opacity-60",
-        warning && "ring-2 ring-Error",
+        // completed && "opacity-60",
+        // warning && "ring-2 ring-Error",
         dragging && "opacity-40 cursor-grabbing",
-        disabled && "pointer-events-none opacity-40",
+        disabled && "pointer-events-none",
         className,
       )}
       style={{ backgroundColor: `var(--${courseCode}-light)` }}
       {...props}
     >
-      <div className="flex w-full items-center justify-between">
+      {alertLevel && (
+        <Alert
+          level={alertLevel}
+          className="absolute top-0 right-0 -translate-y-1/5 translate-x-1/5"
+        />
+      )}
+      {completed && (
+        <CompleteBadge
+          isCompleted={completed}
+          className="absolute top-0 right-0 -translate-y-1/5 translate-x-1/5"
+        />
+      )}
+
+      <div className="flex w-full items-center justify-between  text-[0.625rem]">
         <CourseKey
           code={courseCode}
           number={courseNumber}
-          className="text-white"
+          className="text-white text-[0.625rem]"
         />
         {sessionNumber !== undefined ? (
           <span className="rounded-sm bg-gray-600/10 px-1 py-0.5 text-neutral-800">
             {type === "shell" ? (
-              <span >
+              <span>
                 {sessionNumber} sesion{sessionNumber > 1 ? "es" : ""}
               </span>
             ) : (
@@ -96,19 +113,25 @@ export default function ScheduleClassCard({
         )}
       </div>
 
-      <div className="flex h-8 w-full wrap-break-word items-center justify-start  font-medium">
+      <div
+        className={cn(
+          "flex h-8 w-full items-center justify-start  font-medium text-sm",
+          " wrap-break-word",
+         "break-all ",
+        )}
+      >
         <span className="w-full line-clamp-2">{title}</span>
       </div>
 
       <div className="flex w-full items-center justify-between">
         <span className="flex items-baseline gap-0.5">
           <span className="font-medium text-neutral-800">{semester}</span>
-          <span className="text-[10px] text-neutral-600"> sem.</span>
+          <span className="text-[10px] text-neutral-600"> semestre</span>
         </span>
         {classCount !== undefined && (
           <span className="flex items-baseline gap-0.5">
             <span className="font-medium text-neutral-800">{classCount}</span>
-            <span className="text-[10px] text-neutral-600">x sem.</span>
+            <span className="text-[10px] text-neutral-600">x semana</span>
           </span>
         )}
         {hasStudentCount && (

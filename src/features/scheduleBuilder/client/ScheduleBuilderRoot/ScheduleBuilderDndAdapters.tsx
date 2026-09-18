@@ -91,7 +91,7 @@ export function ScheduleCellDroppable({
   return (
     <div
       ref={droppable.setNodeRef}
-      className={`col-span-full grid min-h-24 content-start gap-2 ${CELL_GRID_COLUMNS[layout.columnCount - 1]}`}
+      className={`col-span-full grid min-h-24 content-stretch gap-2 ${CELL_GRID_COLUMNS[layout.columnCount - 1]}`}
       data-cell-drop-over={droppable.isOver || undefined}
     >
       <SortableContext

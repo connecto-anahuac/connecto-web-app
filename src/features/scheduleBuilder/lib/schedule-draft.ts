@@ -53,7 +53,12 @@ export function findNextIncompleteSession(course: ScheduleCourseDraft): Schedule
 export function isScheduleCourseComplete(course: ScheduleCourseDraft): boolean {
   return course.sessions.length > 0 && course.sessions.every(
     (session) => session.requiredOccurrenceCount > 0
-      && session.occurrences.length >= session.requiredOccurrenceCount,
+      && session.occurrences.length >= session.requiredOccurrenceCount
+      && Boolean(session.professorId)
+      && session.occurrences.every((occurrence) => Boolean(occurrence.day)
+        && Boolean(occurrence.timeSlotId)
+        && Boolean(occurrence.classroomId)
+        && occurrence.conflictCodes.length === 0),
   );
 }
 

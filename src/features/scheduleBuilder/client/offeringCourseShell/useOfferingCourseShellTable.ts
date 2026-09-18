@@ -19,6 +19,7 @@ import {
   useDataSearchActions,
   useDataSearchQuery,
 } from "@/shared/store/filter/useFilterStore";
+import { getOrdinalNumberPrefix } from "@/shared/lib/tool";
 
 const getOfferingCourseRowId: GetItemId<ScheduleBuilderOfferingCourse> = (course) =>
   course.key;
@@ -29,7 +30,7 @@ export function createRecommendedSemesterPresetConfigs(
   return [...new Set(offeringCourses.map((course) => course.semester))]
     .sort((left, right) => left - right)
     .map((semester) => ({
-      label: `Sem. ${semester}`,
+      label: `${semester+getOrdinalNumberPrefix(semester)} Sem.`,
       filterKey: SCHEDULE_BUILDER_OFFERING_COURSE_FILTER_KEYS.semester,
       conditionValue: semester,
       operator: "eq",

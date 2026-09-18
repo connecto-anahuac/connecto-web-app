@@ -44,6 +44,8 @@ const makeData = (overrides: Partial<ScheduleBuilderDataDto> = {}): ScheduleBuil
     availability: [
       { day: "monday", timeSlotId: "T1", isAvailable: true },
       { day: "tuesday", timeSlotId: "T1", isAvailable: true },
+      { day: "wednesday", timeSlotId: "T1", isAvailable: true },
+      { day: "thursday", timeSlotId: "T1", isAvailable: true },
     ],
   }],
   classrooms: [
@@ -103,16 +105,25 @@ describe("scheduleBuilderStore", () => {
     });
   });
 
-  it("copies into the lowest incomplete session, derives completion, and reopens after deletion", () => {
+  it("derives completion from every assignment and reverts when one becomes invalid", () => {
     const store = createScheduleBuilderStore();
     store.getState().resetForScope("IT", "202660");
     store.getState().hydrate(makeData());
 
-    const placed = Array.from({ length: 4 }, (_, index) =>
-      store.getState().placeCourse("C1", index % 2 === 0 ? "monday" : "tuesday", "T1"));
+    const days = ["monday", "tuesday", "wednesday", "thursday"] as const;
+    const placed = days.map((day) => store.getState().placeCourse("C1", day, "T1"));
 
     expect(placed.every(Boolean)).toBe(true);
     expect(store.getState().courses[0].sessions.map(({ occurrences }) => occurrences.length)).toEqual([2, 2]);
+    expect(selectIsCourseComplete("C1")(store.getState())).toBe(false);
+    expect(selectCompletedCourseKeys(store.getState())).not.toContain("C1");
+
+    store.getState().updateSessionProfessor("C1", 1, "P1");
+    store.getState().updateSessionProfessor("C1", 2, "P1");
+    for (const occurrence of placed) {
+      store.getState().updateOccurrence(occurrence!.id, { classroomId: "R1" });
+    }
+
     expect(selectIsCourseComplete("C1")(store.getState())).toBe(true);
     expect(selectCompletedCourseKeys(store.getState())).toContain("C1");
     expect(store.getState().placeCourse("C1", "monday", "T1")).toBeNull();
@@ -123,8 +134,21 @@ describe("scheduleBuilderStore", () => {
       isPanelOpen: true,
     });
 
+    store.getState().updateSessionProfessor("C1", 1, null);
+    expect(selectIsCourseComplete("C1")(store.getState())).toBe(false);
+    expect(selectCompletedCourseKeys(store.getState())).not.toContain("C1");
+
+    store.getState().updateSessionProfessor("C1", 1, "P1");
+    expect(selectIsCourseComplete("C1")(store.getState())).toBe(true);
+    store.getState().updateOccurrence(placed[0]!.id, { classroomId: null });
+    expect(selectIsCourseComplete("C1")(store.getState())).toBe(false);
+    expect(selectCompletedCourseKeys(store.getState())).not.toContain("C1");
+
+    store.getState().updateOccurrence(placed[0]!.id, { classroomId: "R1" });
+    expect(selectIsCourseComplete("C1")(store.getState())).toBe(true);
     expect(store.getState().removeOccurrence(placed[0]!.id)).toBe(true);
     expect(selectIsCourseComplete("C1")(store.getState())).toBe(false);
+    expect(selectCompletedCourseKeys(store.getState())).not.toContain("C1");
     const replacement = store.getState().placeCourse("C1", "monday", "T1");
     expect(replacement).toMatchObject({ id: placed[0]!.id, sessionNumber: 1 });
   });
