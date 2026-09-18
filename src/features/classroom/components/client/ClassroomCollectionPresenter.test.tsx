@@ -23,9 +23,9 @@ describe("ClassroomCollectionPresenter", () => {
       />,
     );
 
-    expect(markup).toContain('aria-label="Vista previa del aula"');
-    expect(markup).toContain('aria-label="Abrir detalle del aula"');
-    expect(markup).toContain('aria-label="Cerrar vista previa del aula"');
+    expect(markup).toContain('aria-label="Vista previa del salon"');
+    expect(markup).toContain('aria-label="Abrir detalle del salon"');
+    expect(markup).toContain('aria-label="Cerrar vista previa del salon"');
     expect(markup).toContain("Preview for classroom-1");
   });
 });

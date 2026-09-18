@@ -72,9 +72,9 @@ export const SCHEDULE_ASSIGNMENT_WARNING_MESSAGES: Record<ScheduleAssignmentWarn
   professor_not_capable: "El profesor no está habilitado para esta asignatura",
   professor_unavailable: "El profesor no está disponible en este horario",
   professor_conflict: "El profesor tiene otra clase en este horario",
-  classroom_unassigned: "Aula sin asignar",
-  classroom_not_found: "El aula asignada no existe",
-  classroom_conflict: "El aula tiene otra clase en este horario",
+  classroom_unassigned: "Salon sin asignar",
+  classroom_not_found: "El salon asignada no existe",
+  classroom_conflict: "El salon tiene otra clase en este horario",
   recommended_semester_conflict: "Otra clase del semestre recomendado ocupa este horario",
 };
 

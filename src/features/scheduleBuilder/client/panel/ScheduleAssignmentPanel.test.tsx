@@ -25,7 +25,7 @@ describe("ScheduleAssignmentPanel", () => {
     expect(markup).toContain('value="invalid-slot" selected=""');
     expect(markup).toContain("Horario inválido");
     expect(markup).toContain("El profesor no está disponible en este horario");
-    expect(markup).toContain("El aula asignada no existe");
+    expect(markup).toContain("El salon asignada no existe");
     expect(markup).toContain(">15<");
   });
 
@@ -107,7 +107,7 @@ const props: ScheduleAssignmentPanelProps = {
   ],
   dayOptions: [{ label: "Lunes", value: "monday" }],
   timeSlotOptions: [{ label: "T1 08:00-09:30", value: "T1" }],
-  classroomOptions: [{ label: "Aula 1", value: "room-1" }],
+  classroomOptions: [{ label: "Salon 1", value: "room-1" }],
   onCapacityChange: vi.fn(),
   onProfessorClick: vi.fn(),
   onOccurrenceDayChange: vi.fn(),

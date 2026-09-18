@@ -18,7 +18,7 @@ const SUB_NAVIGATION_ITEMS: NavigationEntry[] = [
   },
   // { label: "profesores", icon: "professor", href: "/professors" },
   // { label: "Materias", icon: "class", href: "/classes" },
-  // { label: "Aulas", icon: "door", href: "/classrooms" },
+  // { label: "Salones", icon: "door", href: "/classrooms" },
   {
     label: "Schedule builder",
     icon: "schedule",

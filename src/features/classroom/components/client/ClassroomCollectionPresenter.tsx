@@ -42,8 +42,8 @@ export function ClassroomCollectionPresenter({
   table,
   tableConfig,
 }: Props) {
-  if (loading) return <div role="status">Cargando aulas...</div>;
-  if (error) return <div role="alert">No se pudieron cargar las aulas.</div>;
+  if (loading) return <div role="status">Cargando salones...</div>;
+  if (error) return <div role="alert">No se pudieron cargar las salones.</div>;
   return (
     <SidePanel.Root
       className="h-full w-full"
@@ -53,9 +53,9 @@ export function ClassroomCollectionPresenter({
       panel={activeId ? { id: activeId, type: "classroom" } : null}
     >
       <SidePanel.Main className="flex h-full w-full flex-col gap-3">
-        <ContentTitleSection title="Aulas" />
+        <ContentTitleSection title="Salones" />
         {data.length === 0 ? (
-          <div>No hay aulas registradas.</div>
+          <div>No hay salones registradas.</div>
         ) : (
           <DataSection<ClassroomCollectionDto>
             enableView={["list"]}
@@ -72,7 +72,7 @@ export function ClassroomCollectionPresenter({
         )}
       </SidePanel.Main>
       <SidePanel.Viewport
-        aria-label="Vista previa del aula"
+        aria-label="Vista previa del salon"
         className="z-50 flex w-2/5 max-w-2xl flex-col gap-1 overflow-y-auto bg-SurfaceContainerLowest shadow-xl"
       >
         <SidePanel.Content type="classroom">
@@ -80,7 +80,7 @@ export function ClassroomCollectionPresenter({
             <>
               <div className="flex justify-between gap-1 p-2">
                 <PanelControllButton
-                  aria-label="Abrir detalle del aula"
+                  aria-label="Abrir detalle del salon"
                   appearance="text"
                   intent="lightInk"
                   isOpen
@@ -89,7 +89,7 @@ export function ClassroomCollectionPresenter({
                   type="button"
                 />
                 <IconButton
-                  aria-label="Cerrar vista previa del aula"
+                  aria-label="Cerrar vista previa del salon"
                   appearance="text"
                   icon="close"
                   intent="lightInk"

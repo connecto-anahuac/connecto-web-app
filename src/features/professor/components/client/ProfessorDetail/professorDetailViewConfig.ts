@@ -6,7 +6,7 @@ export const ASSIGNED_SUBJECTS_VIEW_CONFIG = {
     { fieldId: "courseId", label: "Clave", icon: "hashmark", valueType: "text", accessor: (item) => item.courseId, format: (item) => item.courseId || "--" },
     { fieldId: "course", label: "Materia", icon: "class", valueType: "text", accessor: (item) => item.course, format: (item) => item.course || "--" },
     { fieldId: "timeSlot", label: "Horario", icon: "schedule", valueType: "text", accessor: (item) => item.timeSlot, format: (item) => item.timeSlot || "--" },
-    { fieldId: "classroom", label: "Aula", icon: "door", valueType: "text", accessor: (item) => item.classroom, format: (item) => item.classroom || "--" },
+    { fieldId: "classroom", label: "Salon", icon: "door", valueType: "text", accessor: (item) => item.classroom, format: (item) => item.classroom || "--" },
   ],
 } satisfies DataViewConfig<ProfessorAssignedSubject>;
 

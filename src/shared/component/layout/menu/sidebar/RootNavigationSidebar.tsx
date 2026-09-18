@@ -23,7 +23,7 @@ const ROOT_NAVIGATION_ITEMS: RootNavigationEntry[] = [
   { label: "Alumnos", icon: "twoPersons", href: "/students" },
   { label: "Profesores", icon: "professor", href: "/professors" },
   { label: "Materias", icon: "class", href: "/classes" },
-  { label: "Aulas", icon: "door", href: "/classrooms" },
+  { label: "Salones", icon: "door", href: "/classrooms" },
   { label: "Plan de estudios", icon: "curriculum", href: "/plans" },
   { label: "Schedule builder", icon: "schedule", href: "/schedule-builder" },
   { label: "Data Import", icon: "filter", href: "/data" },

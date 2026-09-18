@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { DataSearchProvider } from "@/shared/store/filter/FilterProvider";
 
-export const metadata: Metadata = { title: "Aulas | Connecto" };
+export const metadata: Metadata = { title: "Salones | Connecto" };
 
 export default async function ClassroomsLayout(props: LayoutProps<"/classrooms">) {
   await props.params;

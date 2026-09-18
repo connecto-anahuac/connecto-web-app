@@ -12,9 +12,9 @@ export const SCHEDULE_CONFLICT_MESSAGES: Record<ScheduleConflictCode, string> = 
   professor_not_capable: "El profesor no puede impartir esta materia",
   professor_unavailable: "El profesor no está disponible en este horario",
   professor_conflict: "El profesor ya tiene otra clase en este horario",
-  classroom_unassigned: "Aula sin asignar",
-  classroom_not_found: "El aula asignada no existe",
-  classroom_conflict: "El aula ya está ocupada en este horario",
+  classroom_unassigned: "Salon sin asignar",
+  classroom_not_found: "El salon asignada no existe",
+  classroom_conflict: "El salon ya está ocupada en este horario",
   recommended_semester_conflict: "Otra materia del mismo semestre recomendado ocupa este horario",
 };
 

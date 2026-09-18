@@ -85,7 +85,7 @@ export const Interactive: Story = {
     await expect(args.onCapacityChange).toHaveBeenNthCalledWith(2, 16);
 
     await expect(canvas.getByRole("tab", { name: "sesión 3" })).toBeVisible();
-    await expect(canvas.getByText("El aula asignada no existe")).toBeVisible();
+    await expect(canvas.getByText("El salon asignada no existe")).toBeVisible();
     await expect(canvas.getByRole("option", { name: "Horario inválido" })).toBeInTheDocument();
 
     await userEvent.click(canvas.getByRole("button", { name: "Cerrar panel de asignación" }));
