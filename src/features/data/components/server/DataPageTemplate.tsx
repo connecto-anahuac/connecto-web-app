@@ -6,6 +6,7 @@ import SourceTable, {
 } from "@/features/data/components/SourceTable";
 import { ComponentProps } from "react";
 import ImportErrorSection from "../client/ErrorSection/ImportErrorSection";
+import { ImportValidationProvider } from "../client/ImportValidation/ImportValidationContext";
 
 const cappRecords: RecordProps[] = [
   {
@@ -40,46 +41,49 @@ const cappRecords: RecordProps[] = [
 
 export default function DataPageTemplate() {
   return (
-    <div className="w-full h-full flex gap-3 ">
-      <FileSelectorPanel className="w-80" />
+    <ImportValidationProvider>
+      <div className="w-full h-full flex gap-3 ">
+        <FileSelectorPanel className="w-80" />
 
-      <div className="flex-1 flex flex-col  min-w-0 h-full px-5   rounded-lg bg-SurfaceContainerLowest text-OnSurface">
-        <div className="flex flex-col gap-4">
-          {/* <span className="font-bold text-base">Fuente de los datos</span> */}
-          <div className="font-medium text-sm">Fuente de los datos</div>
-          <div className="h-0.5 w-full bg-Outline/20" />
-        </div>
+        <div className="flex-1 flex flex-col  min-w-0 h-full px-5   rounded-lg bg-SurfaceContainerLowest text-OnSurface">
+          <div className="flex flex-col gap-4">
+            {/* <span className="font-bold text-base">Fuente de los datos</span> */}
+            <div className="font-medium text-sm">Fuente de los datos</div>
+            <div className="h-0.5 w-full bg-Outline/20" />
+          </div>
 
-
-        <div className="flex flex-col gap-10 w-full h-full min-h-0 overflow-y-auto pt-6">
-         
-        <ImportErrorSection/> <TableSectionSample
-            title={"CAPP"}
-            dbNames={["Student", "StudentGrade"]}
-            records={cappRecords}
-          >
-            <Image
-              width={2048}
-              height={100}
-              alt="Sample Table"
-              className="max-w-none rounded-lg"
-              src="/image/CAPP_CSV_SAMPLE.png"
-            />
-          </TableSectionSample>  
-          <TableSectionSample
-            title={"Plan de Estudios"}
-            dbNames={["Course", "Prerequisito", "Plan"]}
-            records={cappRecords}
-          >   <Image
-              width={1150}
-              height={225}
-              alt="Sample Table"
-              className="max-w-none rounded-lg overflow-hidden"
-            src="/image/PLAN_DE_ESTUDIOS_SAMPLE.png"
-            /></TableSectionSample>
+          <div className="flex flex-col gap-10 w-full h-full min-h-0 overflow-y-auto pt-6">
+            <ImportErrorSection />
+            <TableSectionSample
+              title={"CAPP"}
+              dbNames={["Student", "StudentGrade"]}
+              records={cappRecords}
+            >
+              <Image
+                width={2048}
+                height={100}
+                alt="Sample Table"
+                className="max-w-none rounded-lg"
+                src="/image/CAPP_CSV_SAMPLE.png"
+              />
+            </TableSectionSample>
+            <TableSectionSample
+              title={"Plan de Estudios"}
+              dbNames={["Course", "Prerequisito", "Plan"]}
+              records={cappRecords}
+            >
+              <Image
+                width={1150}
+                height={225}
+                alt="Sample Table"
+                className="max-w-none rounded-lg overflow-hidden"
+                src="/image/PLAN_DE_ESTUDIOS_SAMPLE.png"
+              />
+            </TableSectionSample>
+          </div>
         </div>
       </div>
-    </div>
+    </ImportValidationProvider>
   );
 }
 

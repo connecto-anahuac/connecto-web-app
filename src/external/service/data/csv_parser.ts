@@ -1,8 +1,16 @@
 import Papa from "papaparse";
+import type { ParseError } from "papaparse";
+
+export type ParsedCsv = {
+  errors: ParseError[];
+  headers: string[];
+  renamedHeaders: Record<string, string>;
+  rows: Record<string, string>[];
+};
 
 export async function parseCsv(
   file: File,
-): Promise<Record<string, string>[]> {
+): Promise<ParsedCsv> {
   const text = await file.text();
 
   const result = Papa.parse<
@@ -12,5 +20,10 @@ export async function parseCsv(
     skipEmptyLines: false,
   });
 
-  return result.data;
+  return {
+    errors: result.errors,
+    headers: result.meta.fields ?? [],
+    renamedHeaders: result.meta.renamedHeaders ?? {},
+    rows: result.data,
+  };
 }

@@ -66,13 +66,15 @@ export function FileSelectorPanelPresenter({
           <div className="flex h-full w-full flex-col justify-start gap-2 overflow-y-auto p-2">
             {sources.map((source, index) => (
               <FileCardContainer
-                key={`${source.file.name}-${source.file.size}-${source.file.lastModified}-${index}`}
+                key={source.id}
                 career={source.career}
                 file={source.file}
                 fileType={source.fileType}
                 onCareerChange={(value) => onCareerChange(index, value)}
                 onFileTypeChange={(value) => onFileTypeChange(index, value)}
                 onRemove={() => onRemoveSource(index)}
+                isCompleted={source.isCompleted}
+                isError={source.error}
               />
             ))}
           </div>

@@ -13,6 +13,8 @@ type Props = {
   oncareerChange: (value: string) => void;
   onFileTypeChange: (value: FileType) => void;
   onRemove?: () => void;
+  isCompleted?: boolean;
+  isError?: boolean;
 };
 
 function formatSize(bytes: number) {
@@ -30,6 +32,8 @@ export function FileCardPresenter({
   oncareerChange,
   onFileTypeChange,
   onRemove,
+  isCompleted = false,
+  isError = false,
 }: Props) {
   const name = file.name ?? "archivo.csv";
   const size = file.size ?? 0;
@@ -59,26 +63,44 @@ export function FileCardPresenter({
           </div>
           <div className="min-w-0">
             <div className="truncate text-sm font-medium">{name}</div>
-            <div className="mt-0.5 text-xs text-gray-500">{formatSize(size)}</div>
+            <div className="flex gap-4 w-full">
+              {isCompleted ? (
+                <div className="rounded-3xl text-xs py-px px-1 bg-green-200 text-green-600">
+                  Completo
+                </div>
+              ) : isError ? (
+                <div className="rounded-3xl text-xs py-px px-1 bg-red-200 text-red-600">
+                  Error
+                </div>
+              ) : (
+                <div className="mt-0.5 text-xs text-gray-500">
+                  {formatSize(size)}
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
-        <div className="h-px w-full bg-[#BFBFBF]" />
-
-        <div className="flex w-full gap-2">
-          <FieldSelect
-            label="carrera:"
-            value={career}
-            options={CARRERAS}
-            onChange={oncareerChange}
-          />
-          <FieldSelect
-            label="tipo de archivo:"
-            value={fileType}
-            options={FILE_TYPES}
-            onChange={onFileTypeChange}
-          />
-        </div>
+        {!isCompleted && (
+          <>
+            {" "}
+            <div className="h-px w-full bg-[#BFBFBF]" />
+            <div className="flex w-full gap-2">
+              <FieldSelect
+                label="carrera:"
+                value={career}
+                options={CARRERAS}
+                onChange={oncareerChange}
+              />
+              <FieldSelect
+                label="tipo de archivo:"
+                value={fileType}
+                options={FILE_TYPES}
+                onChange={onFileTypeChange}
+              />
+            </div>
+          </>
+        )}
       </div>
 
       {typeof progress === "number" && (
