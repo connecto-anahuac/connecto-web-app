@@ -74,9 +74,11 @@ export function RootNavigationSidebar({
           aria-label={section.label}
           className="flex w-full flex-col gap-1"
         >
-          <div className="text-xs font-medium text-OnSurface/60">
-            {section.label}
-          </div>
+          {isSidebarOpen && (
+            <div className="text-xs font-medium text-OnSurface/60">
+              {section.label}
+            </div>
+          )}
           <div className="flex w-full flex-col gap-2.5">
             {section.entries.map((item) => {
               const isActive =

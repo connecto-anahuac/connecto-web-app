@@ -19,7 +19,13 @@ export type OfferingCoursePanelProps = ComponentProps<"aside"> & {
   errorMessage?: string;
   initialSessionCount?: number;
   isLoading?: boolean;
+  /** Whether the selected course has already been offered. */
+  isOffered?: boolean;
+  /** Whether the selected course is currently being persisted. */
+  isPending?: boolean;
   onClose?: () => void;
+  /** Offers the currently displayed course. */
+  onOffer?: () => void;
   onSelectedPlanChange?: (planId: string) => void;
   onSessionCountChange?: (count: number) => void;
   /** @deprecated Use onStudentEnabledChange. */
@@ -55,7 +61,10 @@ export default function OfferingCoursePanel({
   errorMessage,
   initialSessionCount = 1,
   isLoading = false,
+  isOffered = false,
+  isPending = false,
   onClose,
+  onOffer,
   onSelectedPlanChange,
   onSessionCountChange,
   onStudentEnabledChange,
@@ -118,10 +127,13 @@ export default function OfferingCoursePanel({
       courseName={selectedCourseDetail?.name ?? courseName ?? "Course details"}
       errorMessage={detailError ?? errorMessage}
       isLoading={detailLoading || isLoading}
+      isOffered={isOffered}
+      isPending={isPending}
       onClose={() => {
         closePanel();
         onClose?.();
       }}
+      onOffer={onOffer}
       onPlanChange={(planId) => {
         panel.setSelectedPlanId(planId);
         setSelectedStudyPlanId(planId);

@@ -14,12 +14,16 @@ import {
   resolveSemesterEnabled,
   type SemesterEnabledByStudyPlan,
 } from "./useOfferingCoursePanel";
+import { Icons } from "@/shared/component/primitive/icon";
 
 export type OfferingCoursePanelPresenterProps = ComponentProps<"aside"> & {
   courseName: string;
   errorMessage?: string;
   isLoading: boolean;
+  isOffered: boolean;
+  isPending: boolean;
   onClose?: () => void;
+  onOffer?: () => void;
   onPlanChange: (planId: string) => void;
   onSessionCountChange: (count: number) => void;
   onSemesterEnabledChange: (semesterId: string, isEnabled: boolean) => void;
@@ -44,7 +48,10 @@ export function OfferingCoursePanelPresenter({
   courseName,
   errorMessage,
   isLoading,
+  isOffered,
+  isPending,
   onClose,
+  onOffer,
   onPlanChange,
   onSessionCountChange,
   onSemesterEnabledChange,
@@ -186,8 +193,7 @@ export function OfferingCoursePanelPresenter({
         ) : null}
       </div>
       <footer className="border-t border-DividerMiddle px-5 pt-2 pb-5 flex flex-col gap-2">
-       
-       {/* 各プラン毎のトータル表示 */}
+        {/* 各プラン毎のトータル表示 */}
         {/* <div
           className="flex items-center gap-2  w-full overflow-y-auto scrollbar-none"
           // role="tablist"
@@ -213,7 +219,7 @@ export function OfferingCoursePanelPresenter({
             );
           })}
         </div> */}
-        <div className="flex items-end justify-between gap-4">
+        <div className="flex items-end justify-between gap-8">
           <div className="flex flex-col gap-0.5">
             <span className="text-xs font-medium text-Outline">
               Total general
@@ -225,9 +231,52 @@ export function OfferingCoursePanelPresenter({
               </span>
             </div>
           </div>
-          <div className="flex flex-col gap-0.5">
-            <span className="text-xs font-medium text-Outline">session</span>
-            <div className="flex h-5  items-center gap-1">
+          <div className="flex flex-col gap-0.5 flex-1 ">
+            {isOffered ? (
+              <>
+                <span className="text-xs font-medium text-Outline">
+                  session
+                </span>
+                <div className="flex h-5 items-center gap-1">
+                  <button
+                    aria-label="Decrease sessions"
+                    className="grid h-full w-7.75 place-items-center rounded bg-Primary text-OnPrimary"
+                    disabled={isPending}
+                    onClick={() =>
+                      onSessionCountChange(Math.max(0, sessionCount - 1))
+                    }
+                    type="button"
+                  >
+                    <Icons.minus className="size-4" />
+                  </button>
+                  <output
+                    aria-label={`${sessionCount} sessions`}
+                    className="grid h-full w-14 flex-1 place-items-center rounded border border-OnSurface text-xs font-medium"
+                  >
+                    {sessionCount}
+                  </output>
+                  <button
+                    aria-label="Increase sessions"
+                    className="grid h-full w-7.75 place-items-center rounded bg-Primary text-OnPrimary"
+                    disabled={isPending}
+                    onClick={() => onSessionCountChange(sessionCount + 1)}
+                    type="button"
+                  >
+                    <Icons.plus className="size-4" />
+                  </button>
+                </div>
+              </>
+            ) : (
+              <button
+                className="cursor-pointer h-fit w-full rounded-sm bg-InverseSurface p-1.5 flex items-center justify-center text-xs font-medium text-InverseOnSurface disabled:opacity-70"
+                disabled={isPending}
+                onClick={onOffer}
+                type="button"
+              >
+                ofertar
+              </button>
+            )}
+            {/* <div className="flex h-5  items-center gap-1">
               <button
                 aria-label="Decrease sessions"
                 className="grid h-full w-7.75 place-items-center rounded bg-Primary text-OnPrimary"
@@ -236,7 +285,7 @@ export function OfferingCoursePanelPresenter({
                 }
                 type="button"
               >
-                −
+                <Icons.minus className="size-4" />
               </button>
               <output className="grid h-full w-14 place-items-center rounded border border-OnSurface text-xs font-medium">
                 {sessionCount}
@@ -247,9 +296,9 @@ export function OfferingCoursePanelPresenter({
                 onClick={() => onSessionCountChange(sessionCount + 1)}
                 type="button"
               >
-                +
+                <Icons.plus className="size-4" />
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </footer>
