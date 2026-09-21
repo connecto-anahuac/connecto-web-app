@@ -143,6 +143,7 @@ function studentDetail(overrides: Partial<StudentDetail> = {}): StudentDetail {
       enrolledYear: 2024,
       enrolledSemester: "ago-dec",
       currentSemester: 3,
+      summerSemestersCount: 1,
       regularSemestersCount: 3,
       avatarColorRef: 0,
       career: "TIND"

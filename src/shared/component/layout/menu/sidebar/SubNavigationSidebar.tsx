@@ -11,6 +11,7 @@ import type { IconName } from "@/shared/component/primitive/icon";
 import { cn } from "@/shared/lib/util";
 import { useSubMenu } from "../useMenu";
 import PanelControllButton from "@/shared/component/primitive/button/PanelControllButton";
+import ToolTipWrapper from "@/shared/component/primitive/ToolTipWrapper";
 
 export type NavigationEntry = {
   label: string;
@@ -49,20 +50,25 @@ export function SubNavigationSidebar({
     >
       <div className="flex gap-2 h-11 items-center justify-between">
         <div className={cn("font-semibold text-xs", !isSidebarOpen && "hidden")}>{title}</div>
-        <PanelControllButton
+        <ToolTipWrapper hint={isSidebarOpen ? "Contraer sidebar" : "Expandir sidebar"}>
+            <PanelControllButton
           size="lg"
           appearance="text"
           intent="lightInk"
           isOpen={isSidebarOpen}
           onClick={toggleSidebar}
         />
+
+       </ToolTipWrapper>
+      
       </div>
       {navigationEntries.map((item) => {
         const isActive =
           pathname === item.href || pathname.startsWith(`${item.href}/`);
 
         return (
-          <Link
+          <ToolTipWrapper hint={item.label} disabled={isSidebarOpen} side="right" align="center">
+             <Link
             key={item.href}
             href={item.href}
             className="w-full"
@@ -77,6 +83,8 @@ export function SubNavigationSidebar({
               selected={isActive}
             />
           </Link>
+          </ToolTipWrapper>
+         
         );
       })}
     </nav>

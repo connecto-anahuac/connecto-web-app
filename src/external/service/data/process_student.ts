@@ -13,6 +13,7 @@ import { NULL_DATA_STRING } from "@/shared/types/consts";
 import { randomNumber } from "@/shared/lib/util";
 import { splitPeriod } from "@/shared/lib/tool";
 import { passGrade } from "@/external/domain/offering-course";
+import { Period } from "@/shared/types/Period";
 
 export async function processStudentCsv(
   rows: Record<string, string>[],
@@ -144,10 +145,11 @@ export async function processStudentCsv(
 
     studentGrades.push(...regionalGrades);
 
-    const currentSemester = uniquePeriods.size;
-    const currentSemesterWithoutSummer = [...uniquePeriods].filter(
-      (period) => period.slice(-2) !== "40",
+    const totalSemester = uniquePeriods.size;
+    const summerSemesterCount = [...uniquePeriods].filter(
+      (period) => Number(period.slice(-2)) >= 40 && Number(period.slice(-2)) < 60,
     ).length;
+    const currentSemester = Period.current().diff(new Period(Number( normalize(firstRow.Periodo)))) + 1;
 
     const failCount = studentGrades.filter((grade) => grade.grade !== null && grade.grade < passGrade).length;
 
@@ -157,9 +159,9 @@ export async function processStudentCsv(
       status: normalize(firstRow.Estatus) ?? NULL_DATA_STRING,
       career,
       enrolledPeriod: normalize(firstRow.Periodo) ?? NULL_DATA_STRING,
-      currentSemester: getCurrentSemester(normalize(firstRow.Periodo) ?? NULL_DATA_STRING),
-      regularSemestersCount: currentSemester,
-      summerSemestersCount: currentSemesterWithoutSummer,
+      currentSemester:currentSemester, //getCurrentSemester(normalize(firstRow.Periodo) ?? NULL_DATA_STRING),
+      regularSemestersCount: totalSemester - summerSemesterCount,
+      summerSemestersCount: summerSemesterCount,
       avatarColorRef: randomNumber(),
       failCount: failCount,
     });

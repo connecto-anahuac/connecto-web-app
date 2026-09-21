@@ -10,6 +10,7 @@ export type StudentProfile = {
   enrolledSemester: "ene-mayo" | "verano" | "ago-dec" | "semester";
   currentSemester: number;
   regularSemestersCount: number;
+  summerSemestersCount: number;
   career: string;
   avatarColorRef: number;
 };
@@ -34,6 +35,7 @@ export function toStudentProfileUI(student: StudentDto): StudentProfile {
             : "semester",
     currentSemester: student.currentSemester,
     regularSemestersCount: student.semesterCount.regular,
+    summerSemestersCount: student.semesterCount.summer,
     avatarColorRef: student.avatarColorRef,
   };
 }

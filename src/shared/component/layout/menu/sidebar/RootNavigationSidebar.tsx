@@ -10,6 +10,7 @@ import NavigationItem, {
 import type { IconName } from "@/shared/component/primitive/icon";
 import { cn } from "@/shared/lib/util";
 import { useMenu } from "../useMenu";
+import ToolTipWrapper from "@/shared/component/primitive/ToolTipWrapper";
 
 type RootNavigationEntry = {
   label: string;
@@ -85,7 +86,8 @@ export function RootNavigationSidebar({
                 pathname === item.href || pathname.startsWith(`${item.href}/`);
 
               return (
-                <Link
+                <ToolTipWrapper hint={item.label} disabled={isSidebarOpen} side="right" align="center">
+                   <Link
                   key={item.href}
                   href={item.href}
                   className="w-full"
@@ -100,6 +102,8 @@ export function RootNavigationSidebar({
                     selected={isActive}
                   />
                 </Link>
+                </ToolTipWrapper>
+               
               );
             })}
           </div>

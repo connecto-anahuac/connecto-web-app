@@ -110,7 +110,7 @@ export function buildStudentDetailOverviewCards(
           { label: "Regular", value: String(student.profile.regularSemestersCount) },
           {
             label: "Verano",
-            value:"--"
+            value:String(student.profile.summerSemestersCount),
             //   String(
             //   Math.max(0, totalSemesters - student.profile.regularSemestersCount),
             // ),
