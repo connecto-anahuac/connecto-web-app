@@ -26,7 +26,7 @@ export function ColumnToolMenu<TItem>({
 }:ColumnToolMenuProps<TItem>) { 
   // absolute left-0 top-9 z-40
   return (
-    <div  className=" flex min-w-56 flex-col rounded-md border border-Outline bg-InverseSurface p-1 text-InverseOnSurface shadow-lg"
+    <div  className=" flex min-w-56 flex-col rounded-md border border-Outline  p-1 bg-Surface  text-OnSurface  shadow-lg"
     {...props}>
       {columns.map((column) => {
         //TODO 配列、型問題ない？

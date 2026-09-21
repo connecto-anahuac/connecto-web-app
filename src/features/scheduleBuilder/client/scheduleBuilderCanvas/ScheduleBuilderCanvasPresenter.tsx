@@ -345,7 +345,7 @@ export function ScheduleBuilderCanvasPresenter({
                       dragging={draggingOccurrenceId === occurrence.id}
                       onClick={() => onOccurrenceClick?.(occurrence.id)}
                       onContextMenu={(event) => onOccurrenceContextMenu?.(occurrence.id, event)}
-                      className="w-full min-w-[200px] cursor-grab"
+                      className="w-full min-w-50 cursor-grab"
                     />
                   );
                   return renderOccurrence
@@ -359,7 +359,7 @@ export function ScheduleBuilderCanvasPresenter({
                   aria-label={`Añadir curso a ${day.label}, ${timeSlot.id}`}
                   onAdd={() => onAddCourse?.(cellId)}
                   className={cn(
-                    "h-auto min-h-24 w-full min-w-0 self-stretch",
+                    "h-auto min-h-24 w-full min-w-0 self-stretch max-w-full",
                     GRID_COLUMN_SPAN_CLASSES[layout.emptyCellColumnSpan - 1],
                   )}
                 />

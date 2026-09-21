@@ -1,4 +1,10 @@
-import { createElement, type ReactElement } from "react";
+import {
+  Children,
+  createElement,
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+} from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { Table } from "@tanstack/react-table";
 import { describe, expect, it, vi } from "vitest";
@@ -233,6 +239,77 @@ describe("ScheduleBuilderPresenter", () => {
     expect(offeringClassCardSpy.mock.calls[0]?.[0]).toMatchObject({
       offeringClass: firstCourse,
     });
+  });
+
+  it("enables locators for a filtered result and targets only matched cards", () => {
+    dataSectionSpy.mockClear();
+    const matchedCourse = offeringCourse();
+    const filteredCourse = {
+      ...offeringCourse(),
+      key: "TIND-202",
+      keyNumber: "202",
+      semester: 2,
+      position: 2,
+    };
+
+    renderToStaticMarkup(
+      createElement(ScheduleBuilderPresenter, {
+        career: "TIND",
+        config: { fields: [] },
+        metadata: { optionsByFieldId: {} },
+        error: null,
+        filterResult: {
+          matches: new Map([
+            [matchedCourse.key, { matched: true }],
+            [filteredCourse.key, { matched: false }],
+          ]),
+        },
+        loading: false,
+        onSearchTextChange: () => undefined,
+        offeringCourses: [matchedCourse, filteredCourse],
+        pendingCourseKeys: [],
+        drafts: {},
+        searchText: "",
+        selectedCourseKeys: [],
+        table: {} as Table<OfferingCourse>,
+        onOffer: () => undefined,
+        onOpen: () => undefined,
+        onClosePanel: () => undefined,
+        onUnoffer: () => undefined,
+        onSessionCountChange: () => undefined,
+        panelContent: createElement("div"),
+        selectedCourseKey: null,
+      }),
+    );
+
+    const props = dataSectionSpy.mock.calls[0]?.[0] as {
+      cardDiagram: (hiddenItemIds: ReadonlySet<string>) => ReactElement<{
+        children: ReactElement<{ children: ReactNode }>;
+        showLocators: boolean;
+      }>;
+    };
+    const viewport = props.cardDiagram(new Set());
+    expect(viewport.props.showLocators).toBe(true);
+
+    const contentElements = Children.toArray(
+      viewport.props.children.props.children,
+    ).filter(
+      (
+        child,
+      ): child is ReactElement<{
+        locatorTarget?: boolean;
+        x?: number;
+        y?: number;
+      }> =>
+        isValidElement<{ locatorTarget?: boolean; x?: number; y?: number }>(
+          child,
+        ) && "locatorTarget" in child.props,
+    );
+
+    expect(contentElements.map((content) => content.props)).toEqual([
+      expect.objectContaining({ locatorTarget: true, x: 1, y: 2 }),
+      expect.objectContaining({ locatorTarget: false, x: 2, y: 3 }),
+    ]);
   });
 });
 

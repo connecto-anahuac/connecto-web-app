@@ -36,7 +36,7 @@ export default function DiagramHideButtonModal({
         />
       </ButtonModal.Trigger>
       <ButtonModal.Content>
-        <div className="flex min-w-56 flex-col rounded-md border border-Outline bg-InverseSurface p-1 text-InverseOnSurface shadow-lg">
+        <div className="flex min-w-56 flex-col rounded-md border border-Outline  p-1 bg-Surface  text-OnSurface shadow-lg">
           {items.map((item) => {
             const Icon = hiddenItemIds.has(item.id)
               ? Icons.unvisible

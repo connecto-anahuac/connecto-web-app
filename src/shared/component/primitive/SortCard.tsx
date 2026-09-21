@@ -79,7 +79,7 @@ export default function SortCard({
       <button
         type="button"
         aria-label="Reorder sort rule"
-        className="inline-flex size-4 shrink-0 items-center justify-center rounded-sm  transition-colors hover:text-OnSurface"
+        className="cursor-grab active:cursor-grabbing inline-flex size-4 shrink-0 items-center justify-center rounded-sm  transition-colors hover:text-OnSurface"
       >
         <HandleGripIcon />
       </button>

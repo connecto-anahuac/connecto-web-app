@@ -64,14 +64,17 @@ export default function ScheduleEmptyCell({
         <span className="line-clamp-2">{label}</span>
       </span>
 
-      <span className="flex min-h-0 w-full flex-1 flex-wrap content-center items-center gap-2 pl-1">
+      <span className="flex min-h-0 w-full max-w-50 flex-1 flex-wrap content-center items-center justify-center gap-2 pl-1">
         {avatars.map((avatar, index) => (
           <Avator
             key={avatar.id ?? `${avatar.fullName}-${index}`}
             fullName={avatar.fullName}
             color={avatar.color}
             size="small"
-            className={!avatar.color ? "bg-Primary" : undefined}
+            className={cn(
+    "shrink-0",
+    !avatar.color && "bg-Primary",
+  )}
           />
         ))}
       </span>

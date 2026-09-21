@@ -21,11 +21,27 @@ type Props = ComponentProps<"div"> & {
 /** Accordion container; the caller owns all selection data. */
 export default function GenerationAcordion(props: Props) {
   const [isOpen, setIsOpen] = useState(false);
+
+  const handleSemesterEnabledChange = (isEnabled: boolean) => {
+    if (isEnabled) {
+      const selectedIds = new Set(props.selectedStudentIds);
+
+      props.expectedStudents.forEach((student) => {
+        if (student.isEligible !== false && !selectedIds.has(student.id)) {
+          props.onStudentSelectionChange(student.id, true);
+        }
+      });
+    }
+
+    props.onSemesterEnabledChange(isEnabled);
+  };
+
   return (
     <GenerationAcordionPresenter
       {...props}
       isOpen={isOpen}
       onOpenChange={setIsOpen}
+      onSemesterEnabledChange={handleSemesterEnabledChange}
     />
   );
 }
@@ -52,9 +68,9 @@ export function GenerationAcordionPresenter({
   const eligibleStudents = expectedStudents.filter(
     (student) => student.isEligible !== false,
   );
-  const selectedEligibleStudents = eligibleStudents.filter((student) =>
-    selectedIds.has(student.id),
-  );
+  const selectedEligibleStudents = isSemesterEnabled
+    ? eligibleStudents.filter((student) => selectedIds.has(student.id))
+    : eligibleStudents;
   const hasMixedEligibleSelection =
     selectedEligibleStudents.length > 0 &&
     selectedEligibleStudents.length < eligibleStudents.length;
@@ -80,7 +96,11 @@ export function GenerationAcordionPresenter({
                 isEnabled={
                   isSemesterEnabled && student.isEligible !== false
                 }
-                isSelected={selectedIds.has(student.id)}
+                isSelected={
+                  student.isEligible !== false && !isSemesterEnabled
+                    ? true
+                    : selectedIds.has(student.id)
+                }
                 key={student.id}
                 onSelectionChange={(isSelected) => {
                   if (isSemesterEnabled && student.isEligible !== false)

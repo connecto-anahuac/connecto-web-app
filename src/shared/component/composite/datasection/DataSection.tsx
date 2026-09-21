@@ -275,7 +275,7 @@ export default function DataSection<TItem>({
                 />
               </ButtonModal.Trigger>
               <ButtonModal.Content>
-                <div className=" flex min-w-72 w-fit flex-col gap-2 rounded-md border border-Outline bg-InverseSurface p-2 text-InverseOnSurface shadow-lg">
+                <div className=" flex min-w-72 w-fit flex-col gap-2 rounded-md border border-Outline bg-Surface p-2 text-OnSurface shadow-lg">
                   {table!.getState().sorting.map((sort) => {
                     const config = tableConfig!.fields.find(
                       (column) => column.fieldId === sort.id,

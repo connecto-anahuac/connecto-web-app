@@ -50,6 +50,7 @@ import ProfessorIcon from "./ProfessorIcon";
 import UnPinIcon from "./UnPinIcon";
 import ExclamationMarkIcon from "./ExclamationMark";
 import CheckIcon from "./Check";
+import RoundedPinIcon from "./RoundedPin";
 
 export const Icons = {
   admin: AdminIcon,
@@ -81,6 +82,7 @@ export const Icons = {
   professor:ProfessorIcon,
   twoPersons: TwoPersonsIcon,
   pin: PinIcon,
+  roundedPin: RoundedPinIcon,
   unpin:UnPinIcon,
   plus: PlusIcon,
   progress: ProgressIcon,
