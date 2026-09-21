@@ -1,8 +1,10 @@
 "use client";
 
-import Diagram from "@/features/offeringCourse/components/Diagram";
 import OfferingClassCardView from "@/features/offeringCourse/components/OfferingClassCardView";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
+import ColumnTitle from "@/shared/component/composite/diagram/ColumnTitle";
+import { Diagram } from "@/shared/component/composite/diagram/Diagram";
+import RowTitle from "@/shared/component/composite/diagram/RowTitle";
 import DataSection from "@/shared/component/composite/datasection/DataSection";
 import SidePanel from "@/shared/component/composite/sidePanel/SidePanel";
 import { DataTable } from "@/shared/component/composite/table/DataTable";
@@ -100,6 +102,10 @@ export function ScheduleBuilderPresenter({
       label: `Fila ${String.fromCharCode(65 + position)}`,
     })),
   ];
+  const showLocators = offeringCourses.some(
+    (offeringCourse) =>
+      filterResult.matches.get(offeringCourse.key)?.matched !== true,
+  );
 
   return (
     <SidePanel.Root
@@ -136,11 +142,28 @@ export function ScheduleBuilderPresenter({
               );
 
               return (
-                <div className="h-full w-full overflow-auto p-2.5">
-                  <Diagram
-                    semesters={visibleSemesters}
-                    positions={visiblePositions}
-                  >
+                <Diagram.Viewport
+                  className="h-full w-full"
+                  showLocators={showLocators}
+                  viewportClassName="p-2.5"
+                >
+                  <Diagram className="w-fit">
+                    <Diagram.Rows>
+                      {visiblePositions.map((position) => (
+                        <RowTitle
+                          key={`position-${position}`}
+                          text={String.fromCharCode(65 + position)}
+                        />
+                      ))}
+                    </Diagram.Rows>
+                    <Diagram.Columns>
+                      {visibleSemesters.map((semester) => (
+                        <ColumnTitle
+                          key={`semester-${semester}`}
+                          text={`Semestre ${semester}`}
+                        />
+                      ))}
+                    </Diagram.Columns>
                     {offeringCourses.map((offeringCourse) => {
                       const columnIndex = visibleSemesters.indexOf(
                         offeringCourse.semester,
@@ -151,19 +174,20 @@ export function ScheduleBuilderPresenter({
                       if (columnIndex < 0 || rowIndex < 0) return null;
 
                       const draft = drafts[offeringCourse.key];
+                      const isMatched =
+                        filterResult.matches.get(offeringCourse.key)
+                          ?.matched === true;
                       return (
-                        <div
+                        <Diagram.Content
                           key={`${offeringCourse.key}-${offeringCourse.semester}-${offeringCourse.position}`}
                           className={
-                            filterResult.matches.get(offeringCourse.key)
-                              ?.matched !== true
+                            !isMatched
                               ? "grayscale opacity-45 transition"
                               : "transition"
                           }
-                          style={{
-                            gridColumnStart: columnIndex + 2,
-                            gridRowStart: rowIndex + 2,
-                          }}
+                          locatorTarget={isMatched}
+                          x={columnIndex + 1}
+                          y={rowIndex + 1}
                         >
                           <OfferingClassCardView
                             offeringClass={offeringCourse}
@@ -187,11 +211,11 @@ export function ScheduleBuilderPresenter({
                             onUnoffer={() => onUnoffer(offeringCourse)}
                             sessionNumber={draft?.sessionNumber}
                           />
-                        </div>
+                        </Diagram.Content>
                       );
                     })}
                   </Diagram>
-                </div>
+                </Diagram.Viewport>
               );
             }}
           />

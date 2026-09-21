@@ -16,8 +16,14 @@ export function PlanCourseDiagram({
 }) {
   const maxSemester = Math.max(1, ...courses.map((item) => item.semester));
   const maxPosition = Math.max(1, ...courses.map((item) => item.position + 1));
+  const showLocators = courses.some(
+    (course) => filterResult.matches.get(course.id)?.matched !== true,
+  );
   return (
-    <div className="h-full w-full overflow-auto">
+    <Diagram.Viewport
+      className="h-full w-full"
+      showLocators={showLocators}
+    >
       <Diagram className="w-fit">
         <Diagram.Rows>
           {Array.from({ length: maxPosition }, (_, index) => (
@@ -35,6 +41,9 @@ export function PlanCourseDiagram({
         {courses.map((course) => (
           <Diagram.Content
             key={course.id}
+            locatorTarget={
+              filterResult.matches.get(course.id)?.matched === true
+            }
             x={course.semester}
             y={course.position + 1}
             className={cn(
@@ -54,6 +63,6 @@ export function PlanCourseDiagram({
           </Diagram.Content>
         ))}
       </Diagram>
-    </div>
+    </Diagram.Viewport>
   );
 }

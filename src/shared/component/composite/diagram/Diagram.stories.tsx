@@ -80,3 +80,36 @@ export const ExplicitCount: Story = {
     </div>
   ),
 };
+
+export const ConstrainedViewportWithLocators: Story = {
+  render: () => (
+    <Diagram.Viewport
+      showLocators
+      className="h-72 max-w-96 border"
+      viewportClassName="p-2"
+    >
+      <Diagram columnCount={5} rowCount={5} className="w-max">
+        <Diagram.Columns>
+          {Array.from({ length: 5 }, (_, index) => (
+            <ColumnTitle key={index} text={`Column ${index + 1}`} />
+          ))}
+        </Diagram.Columns>
+        <Diagram.Rows>
+          {Array.from({ length: 5 }, (_, index) => (
+            <RowTitle key={index} text={`${index + 1}`} />
+          ))}
+        </Diagram.Rows>
+        <Diagram.Content x={1} y={1} locatorTarget>
+          <div className="rounded-sm bg-PrimaryContainerLow p-4 text-sm">
+            Visible target
+          </div>
+        </Diagram.Content>
+        <Diagram.Content x={5} y={5} locatorTarget>
+          <div className="rounded-sm bg-PrimaryContainerLow p-4 text-sm">
+            Offscreen target
+          </div>
+        </Diagram.Content>
+      </Diagram>
+    </Diagram.Viewport>
+  ),
+};

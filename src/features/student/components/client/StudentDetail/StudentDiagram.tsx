@@ -52,10 +52,14 @@ export function StudentDiagram({
   const positions = axes.positions.filter(
     (position) => !hiddenItemIds.has(studentPositionHideId(position)),
   );
+  const showLocators = items.some(
+    (item) => filterResult.matches.get(item.id)?.matched !== true,
+  );
 
   return (
-    <div
-      className={cn("h-full w-full   overflow-auto relative", className)}
+    <Diagram.Viewport
+      className={cn("h-full w-full", className)}
+      showLocators={showLocators}
       {...props}
     >
       <Diagram className="w-fit">
@@ -89,6 +93,9 @@ export function StudentDiagram({
           return (
             <Diagram.Content
               key={item.id}
+              locatorTarget={
+                filterResult.matches.get(item.id)?.matched === true
+              }
               className={cn(
                 "transition",
                 !filterResult.matches.get(item.id)?.matched &&
@@ -112,6 +119,6 @@ export function StudentDiagram({
           );
         })}
       </Diagram>
-    </div>
+    </Diagram.Viewport>
   );
 }
