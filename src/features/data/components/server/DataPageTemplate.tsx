@@ -1,7 +1,12 @@
-
 import { cn } from "@/shared/lib/util";
+import Image from "next/image";
 import FileSelectorPanel from "@/features/data/components/client/FileSelectorPanel/FileSelectorPanelContainer";
-import SourceTable, { type RecordProps } from "@/features/data/components/SourceTable";
+import SourceTable, {
+  type RecordProps,
+} from "@/features/data/components/SourceTable";
+import { ComponentProps } from "react";
+import ImportErrorSection from "../client/ErrorSection/ImportErrorSection";
+import { ImportValidationProvider } from "../client/ImportValidation/ImportValidationContext";
 
 const cappRecords: RecordProps[] = [
   {
@@ -10,19 +15,22 @@ const cappRecords: RecordProps[] = [
     filePath: "C:/User/Downloads/anahuac/CAPP",
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2),
     updatedBy: "Irving Tlosa",
-  },{
+  },
+  {
     career: "Ambiental",
     fileName: "CAPP_Ambiental.csv",
     filePath: "C:/User/Downloads/anahuac/CAPP",
     updatedAt: new Date(Date.now() - 1000 * 60 * 60 * 13),
     updatedBy: "Xavier Garcia",
-  },{
+  },
+  {
     career: "TIND",
     fileName: "CAPP_TIND_(1).csv",
     filePath: "C:/User/Downloads/anahuac/CAPP",
     updatedAt: new Date(),
     updatedBy: "Benjamin Basulto",
-  },{
+  },
+  {
     career: "Civil",
     fileName: "CAPP_Civil.csv",
     filePath: "C:/User/Downloads/anahuac/CAPP",
@@ -33,26 +41,51 @@ const cappRecords: RecordProps[] = [
 
 export default function DataPageTemplate() {
   return (
-    <div className="w-full h-full flex gap-3 p-2.5">
-      <FileSelectorPanel className="w-80" />
-      
-      <div className="flex-1 flex flex-col  min-w-0 h-full px-5 py-5  rounded-lg bg-SurfaceContainerLowest text-OnSurface">
-        <div className="flex flex-col gap-4">
-          {/* <span className="font-bold text-base">Fuente de los datos</span> */}
-          <div className="font-medium text-sm">Fuente de los datos</div>
-          <div className="h-0.5 w-full bg-Outline/20" />
-        </div>
+    <ImportValidationProvider>
+      <div className="w-full h-full flex gap-3 ">
+        <FileSelectorPanel className="w-80" />
 
-        <div className="flex flex-col gap-10 w-full h-full min-h-0 overflow-y-auto pt-6">
-          <TableSection title={"CAPP"} dbNames={["Student", "StudentGrade"]} records={cappRecords}/>
-          <TableSection title={"Plan de Estudios"} dbNames={["Course", "Prerequisito", "Plan"]} records={cappRecords}/>
-        </div>
+        <div className="flex-1 flex flex-col  min-w-0 h-full px-5   rounded-lg bg-SurfaceContainerLowest text-OnSurface">
+          <div className="flex flex-col gap-4">
+            {/* <span className="font-bold text-base">Fuente de los datos</span> */}
+            <div className="font-medium text-sm">Fuente de los datos</div>
+            <div className="h-0.5 w-full bg-Outline/20" />
+          </div>
 
+          <div className="flex flex-col gap-10 w-full h-full min-h-0 overflow-y-auto pt-6">
+            <ImportErrorSection />
+            <TableSectionSample
+              title={"CAPP"}
+              dbNames={["Student", "StudentGrade"]}
+              records={cappRecords}
+            >
+              <Image
+                width={2048}
+                height={100}
+                alt="Sample Table"
+                className="max-w-none rounded-lg"
+                src="/image/CAPP_CSV_SAMPLE.png"
+              />
+            </TableSectionSample>
+            <TableSectionSample
+              title={"Plan de Estudios"}
+              dbNames={["Course", "Prerequisito", "Plan"]}
+              records={cappRecords}
+            >
+              <Image
+                width={1150}
+                height={225}
+                alt="Sample Table"
+                className="max-w-none rounded-lg overflow-hidden"
+                src="/image/PLAN_DE_ESTUDIOS_SAMPLE.png"
+              />
+            </TableSectionSample>
+          </div>
+        </div>
       </div>
-    </div>
+    </ImportValidationProvider>
   );
 }
-
 
 
 type TableSectionProps = {
@@ -60,13 +93,29 @@ type TableSectionProps = {
   dbNames: string[];
   records: RecordProps[];
 };
+type TableSectionSampleProps =ComponentProps<"div"> & {
+  title: string;
+  dbNames: string[];
+  records: RecordProps[];
+  // src: string;
 
-function TableSection({ title, dbNames, records }: TableSectionProps) {
+};
 
+function TableSectionSample({ title, dbNames, records,children }: TableSectionSampleProps) {
   return (
     <div className="w-full  flex flex-col gap-4 whitespace-nowrap">
-      <Title title={title} dbNames={dbNames}/>
-      <SourceTable records={records}/>
+      <Title title={title} dbNames={dbNames} />
+      <p className="text-xs ">La estructura del csv:</p>
+      {children && <div className="w-full overflow-auto">{children}</div>}
+    </div>
+  );
+}
+
+function TableSection({ title, dbNames, records }: TableSectionProps) {
+  return (
+    <div className="w-full  flex flex-col gap-4 whitespace-nowrap">
+      <Title title={title} dbNames={dbNames} />
+      <SourceTable records={records} />
     </div>
   );
 }
@@ -76,7 +125,7 @@ type TitleProps = {
   dbNames: string[];
 };
 
- function Title({  title, dbNames }: TitleProps) {
+function Title({ title, dbNames }: TitleProps) {
   return (
     <div className={cn("w-full flex gap-8 items-center")}>
       <div className="flex gap-2 items-center">

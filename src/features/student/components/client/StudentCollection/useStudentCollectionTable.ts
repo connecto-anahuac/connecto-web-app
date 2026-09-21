@@ -5,11 +5,12 @@ import {
   useDataSearchActions,
   useDataSearchQuery,
 } from "@/shared/store/filter/useFilterStore";
-import type {
-  FilterCondition,
-  GetItemId,
-} from "@/shared/service/dataPipeline/filterDefinition";
-import type { FilterPreset } from "@/shared/service/dataPipeline/filterPreset.type";
+import type { GetItemId } from "@/shared/service/dataPipeline/filterDefinition";
+import {
+  getFilterPresetNextCondition,
+  isFilterPresetSelected,
+  type FilterPreset,
+} from "@/shared/service/dataPipeline/filterPreset.type";
 import Avator from "@/shared/component/primitive/Avator";
 import Badge from "@/shared/component/primitive/Badge";
 import {
@@ -82,37 +83,21 @@ export function useStudentCollectionTable(data: readonly StudentCollectionItem[]
     setSearchText,
   });
 
-  //TODO Preset
-  const presets: FilterPreset[] = STUDENT_COLLECTION_PRESETS.map((preset) => {
-    const currentFilterValue = query.conditions.find(
-      (condition) => condition.fieldId === preset.columnId,
-    );
-    const selectedFilterValues =
-      currentFilterValue?.operator === "in" &&
-      Array.isArray(currentFilterValue.value)
-        ? currentFilterValue.value
-        : [];
-    const selected =
-      selectedFilterValues.length === preset.value.length &&
-      preset.value.every((value) => selectedFilterValues.includes(value));
-
-    return {
-      label: preset.label,
-      isSelected: selected,
-      onToggle: () => {
-        if (selected) {
-          removeCondition(preset.columnId);
-          return;
-        }
-
-        upsertCondition({
-          fieldId: preset.columnId,
-          operator: "in",
-          value: [...preset.value],
-        } satisfies FilterCondition);
-      },
-    };
-  });
+  const presets: FilterPreset[] = STUDENT_COLLECTION_PRESETS.map((preset) => ({
+    label: preset.label,
+    isSelected: isFilterPresetSelected(preset, query.conditions),
+    onToggle: () => {
+      const nextCondition = getFilterPresetNextCondition(
+        preset,
+        query.conditions,
+      );
+      if (nextCondition) {
+        upsertCondition(nextCondition);
+      } else {
+        removeCondition(preset.filterKey);
+      }
+    },
+  }));
 
   return {
     config: STUDENT_COLLECTION_VIEW_CONFIG,

@@ -11,28 +11,47 @@ type Props = ComponentProps<"div"> & {
   loading?: boolean;
   items: readonly StudentClassItem[];
   filterResult: FilterResult;
+  hiddenItemIds?: ReadonlySet<string>;
 };
+
+export const studentSemesterHideId = (semester: number) =>
+  `semester:${semester}`;
+export const studentPositionHideId = (position: number) =>
+  `position:${position}`;
+
+export function getStudentDiagramAxes(items: readonly StudentClassItem[]) {
+  const maxSemester = items.length
+    ? Math.max(...items.map((item) => item.semester), 1)
+    : 1;
+  const maxPosition = items.length
+    ? Math.max(...items.map((item) => item.position)) + 1
+    : 1;
+
+  return {
+    semesters: Array.from({ length: maxSemester }, (_, index) => index + 1),
+    positions: Array.from({ length: maxPosition }, (_, index) => index),
+  };
+}
 
 export function StudentDiagram({
   loading = false,
   items,
   className,
   filterResult,
+  hiddenItemIds = new Set(),
   ...props
 }: Props) {
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  const allGrades = items;
-
-  const semesters = Array.from(
-    new Set(allGrades.map((item) => item.semester).filter(Boolean)),
-  ).sort((left, right) => left - right);
-  const maxSemester = semesters.length ? Math.max(...semesters) : 1;
-  const maxPosition = allGrades.length
-    ? Math.max(...allGrades.map((item) => item.position)) + 1
-    : 1;
+  const axes = getStudentDiagramAxes(items);
+  const semesters = axes.semesters.filter(
+    (semester) => !hiddenItemIds.has(studentSemesterHideId(semester)),
+  );
+  const positions = axes.positions.filter(
+    (position) => !hiddenItemIds.has(studentPositionHideId(position)),
+  );
 
   return (
     <div
@@ -41,20 +60,18 @@ export function StudentDiagram({
     >
       <Diagram className="w-fit">
         <Diagram.Rows>
-          {Array.from({ length: maxPosition }, (_, index) => {
-            const position = index + 1;
+          {positions.map((position) => {
             return (
               <RowTitle
                 key={`position-${position}`}
-                text={String.fromCharCode(64 + position)}
+                text={String.fromCharCode(65 + position)}
               />
             );
           })}
         </Diagram.Rows>
 
         <Diagram.Columns>
-          {Array.from({ length: maxSemester }, (_, index) => {
-            const semester = index + 1;
+          {semesters.map((semester) => {
             return (
               <ColumnTitle
                 key={`semester-${semester}`}
@@ -64,30 +81,36 @@ export function StudentDiagram({
           })}
         </Diagram.Columns>
 
-        {items.map((item) => (
-          <Diagram.Content
-            key={item.id}
-            className={cn(
-              "transition",
-              !filterResult.matches.get(item.id)?.matched &&
-                "pointer-events-none opacity-10",
-            )}
-            x={item.semester}
-            y={item.position + 1}
-          >
-            <StudentClassCardView
-              className="w-full"
-              courseCode={item.keyCode || item.id}
-              courseNumber={item.keyNumber || ""}
-              title={item.name}
-              period={item.period}
-              grade={item.grade}
-              credits={item.credits ? item.credits.toString() : undefined}
-              hours={item.hours ? item.hours.toString() : undefined}
-              status={item.status}
-            />
-          </Diagram.Content>
-        ))}
+        {items.map((item) => {
+          const columnIndex = semesters.indexOf(item.semester);
+          const rowIndex = positions.indexOf(item.position);
+          if (columnIndex < 0 || rowIndex < 0) return null;
+
+          return (
+            <Diagram.Content
+              key={item.id}
+              className={cn(
+                "transition",
+                !filterResult.matches.get(item.id)?.matched &&
+                  "pointer-events-none opacity-10",
+              )}
+              x={columnIndex + 1}
+              y={rowIndex + 1}
+            >
+              <StudentClassCardView
+                className="w-full"
+                courseCode={item.keyCode || item.id}
+                courseNumber={item.keyNumber || ""}
+                title={item.name}
+                period={item.period}
+                grade={item.grade}
+                credits={item.credits ? item.credits.toString() : undefined}
+                hours={item.hours ? item.hours.toString() : undefined}
+                status={item.status}
+              />
+            </Diagram.Content>
+          );
+        })}
       </Diagram>
     </div>
   );

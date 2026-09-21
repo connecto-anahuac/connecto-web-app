@@ -11,7 +11,7 @@ import { PlanRepository } from "@/external/repository/plan.repository";
 import { PreRequisitoRepository } from "@/external/repository/prerequisito.repository";
 import { StudentRepository } from "@/external/repository/student.repository";
 import { StudyPlanRepository } from "@/external/repository/study-plan.repository";
-import { createOfferingCourseselectionId } from "@/external/domain/offering-course";
+import { createOfferingCourseSelectionId } from "@/external/domain/offering-course";
 
 const ACTIVE_STATUSES = new Set(["active", "activo"]);
 
@@ -31,7 +31,11 @@ export class GetOfferingCourseDetailService {
     private readonly offerings: OfferingCourseRepository,
   ) {}
 
-  async execute(career: string, courseKey: string): Promise<OfferingCourseDetail | undefined> {
+  async execute(
+    career: string,
+    courseKey: string,
+    period: string,
+  ): Promise<OfferingCourseDetail | undefined> {
     const coursePlans = (await this.plans.findByCourseKey(courseKey))
       .filter((plan) => plan.planId);
     if (!coursePlans.length) return undefined;
@@ -40,7 +44,7 @@ export class GetOfferingCourseDetailService {
       this.courses.findById(courseKey),
       this.studyPlans.findAll(),
       this.students.findAll(),
-      this.offerings.findById(createOfferingCourseselectionId(career, courseKey)),
+      this.offerings.findById(createOfferingCourseSelectionId(career, period, courseKey)),
     ]);
     const studyPlanById = new Map(allStudyPlans.map((plan) => [plan.id, plan]));
     const studentGrades = new Map(await Promise.all(allStudents.map(async (student) => [

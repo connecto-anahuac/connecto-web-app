@@ -3,17 +3,18 @@
 import type { InitializeUniversityDataDto } from "@/external/dto/data/initialize-university-data.dto";
 import { universityDb } from "@/external/client/university-db";
 import type {
-  ClassroomRecord,
-  CourseAssignmentRecord,
   CourseRecord,
   PlanRecord,
   PreRequisitoRecord,
-  ProfessorAvailabilityRecord,
-  ProfessorCourseCapabilityRecord,
-  ProfessorRecord,
   StudyPlanRecord,
   TimeSlotRecord,
 } from "@/external/domain/university";
+import {
+  dummyProfessorAvailabilities,
+  dummyProfessorCourseCapabilities,
+  dummyProfessors,
+} from "@/external/dummy/professors";
+import { dummyClassrooms } from "@/external/dummy/classrooms";
 
 const DIRECTORY_URL = "/dev_untrack/data/academic-directory.json";
 const PLAN_SOURCES = [
@@ -40,9 +41,7 @@ type MateriaSource = {
   position?: number | string;
 };
 type DirectorySource = {
-  professors: ProfessorRecord[]; classrooms: ClassroomRecord[]; studyPlans: StudyPlanRecord[];
-  capabilities: ProfessorCourseCapabilityRecord[]; assignments: CourseAssignmentRecord[];
-  availabilities: ProfessorAvailabilityRecord[];
+  studyPlans: StudyPlanRecord[];
 };
 
 export const TIME_SLOTS: TimeSlotRecord[] = Array.from({ length: 10 }, (_, index) => {
@@ -123,10 +122,10 @@ function toPlans(plans: MateriaSource[], career: string): PlanRecord[] {
 async function seedUniversityData(): Promise<InitializeUniversityDataDto> {
   await universityDb.open();
 
-  const [coursesCount, preRequisitosCount, professorsCount, capabilitiesCount, assignmentsCount, availabilitiesCount, timeSlotsCount, classroomsCount, studyPlansCount] = await Promise.all([
+  const [coursesCount, preRequisitosCount, professorsCount, capabilitiesCount, availabilitiesCount, timeSlotsCount, classroomsCount, studyPlansCount] = await Promise.all([
     universityDb.courses.count(),
     universityDb.preRequisitos.count(),
-    universityDb.professors.count(), universityDb.professorCourseCapabilities.count(), universityDb.courseAssignments.count(), universityDb.professorAvailabilities.count(), universityDb.timeSlots.count(), universityDb.classrooms.count(), universityDb.studyPlans.count(),
+    universityDb.professors.count(), universityDb.professorCourseCapabilities.count(), universityDb.professorAvailabilities.count(), universityDb.timeSlots.count(), universityDb.classrooms.count(), universityDb.studyPlans.count(),
   ]);
 
   const coursesMissing = coursesCount === 0;
@@ -141,10 +140,12 @@ async function seedUniversityData(): Promise<InitializeUniversityDataDto> {
   const plansMissing = missingPlanSources.length > 0;
   const preRequisitosMissing = preRequisitosCount === 0;
 
-  const directoryMissing = [professorsCount, capabilitiesCount, assignmentsCount, availabilitiesCount, classroomsCount, studyPlansCount].some((count) => count === 0);
+  const professorDataMissing = [professorsCount, capabilitiesCount, availabilitiesCount].some((count) => count === 0);
+  const classroomDataMissing = classroomsCount === 0;
+  const directoryMissing = studyPlansCount === 0;
   const timeSlotsMissing = timeSlotsCount === 0;
   const shouldLoadDirectory = directoryMissing || plansMissing;
-  if (!coursesMissing && !plansMissing && !preRequisitosMissing && !shouldLoadDirectory && !timeSlotsMissing) {
+  if (!coursesMissing && !plansMissing && !preRequisitosMissing && !professorDataMissing && !classroomDataMissing && !shouldLoadDirectory && !timeSlotsMissing) {
     return {
       coursesSeeded: false,
       plansSeeded: false,
@@ -200,7 +201,6 @@ async function seedUniversityData(): Promise<InitializeUniversityDataDto> {
     ...(preRequisitosToSeed.length > 0 ? [universityDb.preRequisitos] : []),
     ...(professorsCount === 0 ? [universityDb.professors] : []),
     ...(capabilitiesCount === 0 ? [universityDb.professorCourseCapabilities] : []),
-    ...(assignmentsCount === 0 ? [universityDb.courseAssignments] : []),
     ...(availabilitiesCount === 0 ? [universityDb.professorAvailabilities] : []),
     ...(timeSlotsMissing ? [universityDb.timeSlots] : []),
     ...(classroomsCount === 0 ? [universityDb.classrooms] : []),
@@ -219,12 +219,11 @@ async function seedUniversityData(): Promise<InitializeUniversityDataDto> {
     if (preRequisitosToSeed.length > 0) {
       await universityDb.preRequisitos.bulkPut(preRequisitosToSeed);
     }
-    if (professorsCount === 0) await universityDb.professors.bulkPut(directory?.professors ?? []);
-    if (capabilitiesCount === 0) await universityDb.professorCourseCapabilities.bulkPut(directory?.capabilities ?? []);
-    if (assignmentsCount === 0) await universityDb.courseAssignments.bulkPut(directory?.assignments ?? []);
-    if (availabilitiesCount === 0) await universityDb.professorAvailabilities.bulkPut(directory?.availabilities ?? []);
+    if (professorsCount === 0) await universityDb.professors.bulkPut(dummyProfessors);
+    if (capabilitiesCount === 0) await universityDb.professorCourseCapabilities.bulkPut(dummyProfessorCourseCapabilities);
+    if (availabilitiesCount === 0) await universityDb.professorAvailabilities.bulkPut(dummyProfessorAvailabilities);
     if (timeSlotsMissing) await universityDb.timeSlots.bulkPut(TIME_SLOTS);
-    if (classroomsCount === 0) await universityDb.classrooms.bulkPut(directory?.classrooms ?? []);
+    if (classroomsCount === 0) await universityDb.classrooms.bulkPut(dummyClassrooms);
     if (studyPlansToSeed.length > 0) await universityDb.studyPlans.bulkPut(studyPlansToSeed);
   });
 

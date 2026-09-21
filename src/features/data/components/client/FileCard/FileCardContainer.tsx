@@ -12,6 +12,8 @@ type Props = {
   onFileTypeChange: (value: FileType) => void;
   progress?: number;
   onRemove?: () => void;
+  isCompleted?: boolean;
+  isError?: boolean;
 };
 
 export function FileCardContainer({
@@ -23,6 +25,8 @@ export function FileCardContainer({
   onFileTypeChange,
   progress,
   onRemove,
+  isCompleted,
+  isError,
 }: Props) {
   return (
     <FileCardPresenter
@@ -34,6 +38,8 @@ export function FileCardContainer({
       oncareerChange={onCareerChange}
       onFileTypeChange={onFileTypeChange}
       onRemove={onRemove}
+      isCompleted={isCompleted}
+      isError={isError}
     />
   );
 }

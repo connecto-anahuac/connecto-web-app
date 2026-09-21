@@ -80,3 +80,19 @@ implemented by rendering `DataTableWithPreview` in the graph slot.
   missing local Playwright Chromium binary. The broad lint run also fails on
   pre-existing/generated files (including `storybook-static`), while all touched
   source files pass focused lint.
+
+
+
+
+
+
+
+
+OfferingCourseSemesterRow（親）
+OfferingClassStudentRow（子）
+状態は親のToggleButtonの表です
+
+|  |  isMulti=true  |   isMulti=false |  
+| --- | --- | --- |
+|  isSelected=true | 1.子が選択と非選択、 | 2.セル 1-3 |
+|  isSelected=false | 3.セル 2-2 | 4.セル 2-3 |

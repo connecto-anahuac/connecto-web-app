@@ -8,7 +8,10 @@ import type {
   EnabledStudentIdsByStudyPlan,
   SelectedStudentIdsByStudyPlan,
 } from "./types";
-import { useOfferingCoursePanel } from "./useOfferingCoursePanel";
+import {
+  toOfferingCoursePanelPlans,
+  useOfferingCoursePanel,
+} from "./useOfferingCoursePanel";
 
 export type OfferingCoursePanelProps = ComponentProps<"aside"> & {
   /** Fallback used by isolated stories; the provider detail takes precedence. */
@@ -16,7 +19,13 @@ export type OfferingCoursePanelProps = ComponentProps<"aside"> & {
   errorMessage?: string;
   initialSessionCount?: number;
   isLoading?: boolean;
+  /** Whether the selected course has already been offered. */
+  isOffered?: boolean;
+  /** Whether the selected course is currently being persisted. */
+  isPending?: boolean;
   onClose?: () => void;
+  /** Offers the currently displayed course. */
+  onOffer?: () => void;
   onSelectedPlanChange?: (planId: string) => void;
   onSessionCountChange?: (count: number) => void;
   /** @deprecated Use onStudentEnabledChange. */
@@ -36,6 +45,7 @@ export type OfferingCoursePanelProps = ComponentProps<"aside"> & {
     studentId: string,
     isEnabled: boolean,
   ) => void;
+  /** Initial selection fallback for isolated use without a store draft. */
   enabledStudentIdsByStudyPlan?: EnabledStudentIdsByStudyPlan;
   /** @deprecated Use enabledStudentIdsByStudyPlan. */
   selectedStudentIdsByStudyPlan?: SelectedStudentIdsByStudyPlan;
@@ -51,7 +61,10 @@ export default function OfferingCoursePanel({
   errorMessage,
   initialSessionCount = 1,
   isLoading = false,
+  isOffered = false,
+  isPending = false,
   onClose,
+  onOffer,
   onSelectedPlanChange,
   onSessionCountChange,
   onStudentEnabledChange,
@@ -65,6 +78,12 @@ export default function OfferingCoursePanel({
 }: OfferingCoursePanelProps) {
   const selectedCourseDetail = useScheduleBuilderStore(
     (state) => state.selectedCourseDetail,
+  );
+  const selectedCourseKey = useScheduleBuilderStore(
+    (state) => state.selectedCourseKey,
+  );
+  const semesterEnabledByCourse = useScheduleBuilderStore(
+    (state) => state.semesterEnabledByCourse,
   );
   const selectedStudyPlanId = useScheduleBuilderStore(
     (state) => state.selectedStudyPlanId,
@@ -81,35 +100,25 @@ export default function OfferingCoursePanel({
   const setSessionNumber = useScheduleBuilderStore(
     (state) => state.setSessionNumber,
   );
+  const setSemesterEnabled = useScheduleBuilderStore(
+    (state) => state.setSemesterEnabled,
+  );
   const closePanel = useScheduleBuilderStore((state) => state.closePanel);
   const detailError = useScheduleBuilderStore((state) => state.detailError);
   const detailLoading = useScheduleBuilderStore((state) => state.detailLoading);
   const plans: OfferingCoursePanelPlan[] = selectedCourseDetail
-    ? selectedCourseDetail.studyPlans.map((studyPlan) => ({
-        id: studyPlan.studyPlanId,
-        label: studyPlan.studyPlanName,
-        semesters: studyPlan.semesters.map((semester) => ({
-          expectedStudents: semester.eligibleStudents.map((student) => ({
-            fullName: student.name,
-            id: student.id,
-          })),
-          id: String(semester.semester),
-          label: `Semestre ${semester.semester}`,
-          studentsWithoutPrerequisites: semester.studentsWithoutPrerequisites.map(
-            (student) => ({ fullName: student.name, id: student.id }),
-          ),
-        })),
-      }))
+    ? toOfferingCoursePanelPlans(selectedCourseDetail)
     : (plansProp ?? []);
-  const enabledStudentIdsByStudyPlan =
-    storeDraft?.enabledStudentIdsByStudyPlan ??
-    enabledStudentIdsByStudyPlanProp ??
-    selectedStudentIdsByStudyPlanProp;
   const panel = useOfferingCoursePanel({
     initialSessionCount,
+    initialEnabledStudentIdsByStudyPlan:
+      enabledStudentIdsByStudyPlanProp ?? selectedStudentIdsByStudyPlanProp,
     plans,
     selectedPlanId: selectedStudyPlanId ?? selectedPlanIdProp,
-    enabledStudentIdsByStudyPlan,
+    enabledStudentIdsByStudyPlan: storeDraft?.enabledStudentIdsByStudyPlan,
+    semesterEnabledByStudyPlan: selectedCourseKey
+      ? (semesterEnabledByCourse[selectedCourseKey] ?? {})
+      : undefined,
     sessionCount: storeDraft?.sessionNumber ?? sessionCountProp,
   });
   return (
@@ -118,10 +127,13 @@ export default function OfferingCoursePanel({
       courseName={selectedCourseDetail?.name ?? courseName ?? "Course details"}
       errorMessage={detailError ?? errorMessage}
       isLoading={detailLoading || isLoading}
+      isOffered={isOffered}
+      isPending={isPending}
       onClose={() => {
         closePanel();
         onClose?.();
       }}
+      onOffer={onOffer}
       onPlanChange={(planId) => {
         panel.setSelectedPlanId(planId);
         setSelectedStudyPlanId(planId);
@@ -132,9 +144,28 @@ export default function OfferingCoursePanel({
         setSessionNumber(count);
         onSessionCountChange?.(count);
       }}
+      onSemesterEnabledChange={(semesterId, isEnabled) => {
+        const planId = panel.selectedPlanId;
+        if (selectedCourseKey) {
+          setSemesterEnabled(
+            selectedCourseKey,
+            planId,
+            semesterId,
+            isEnabled,
+          );
+        } else {
+          panel.setSemesterEnabledByStudyPlan((current) => ({
+            ...current,
+            [planId]: {
+              ...current[planId],
+              [semesterId]: isEnabled,
+            },
+          }));
+        }
+      }}
       onStudentSelectionChange={(semesterId, studentId, isSelected) => {
         const planId = panel.selectedPlanId;
-        if (!storeDraft && !enabledStudentIdsByStudyPlanProp && !selectedStudentIdsByStudyPlanProp)
+        if (!storeDraft)
           panel.setSelectedStudentIdsByStudyPlan((current) => ({
             ...current,
             [planId]: isSelected
@@ -151,6 +182,7 @@ export default function OfferingCoursePanel({
       selectedPlanId={panel.selectedPlanId}
       enabledStudentIdsByStudyPlan={panel.enabledStudentIdsByStudyPlan}
       sessionCount={panel.sessionCount}
+      semesterEnabledByStudyPlan={panel.semesterEnabledByStudyPlan}
       totalSelectedStudents={panel.totalSelectedStudents}
     />
   );

@@ -1,4 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import {
+  dummyProfessorAvailabilities,
+  dummyProfessorCourseCapabilities,
+  dummyProfessors,
+} from "@/external/dummy/professors";
+import { dummyClassrooms } from "@/external/dummy/classrooms";
 
 const mocks = vi.hoisted(() => {
   const courses = { count: vi.fn(), bulkPut: vi.fn(), bulkGet: vi.fn() };
@@ -92,6 +98,20 @@ describe("initializeUniversityData", () => {
     expect(mocks.universityDb.transaction).not.toHaveBeenCalled();
   });
 
+  it("does not initialize course assignments", async () => {
+    mocks.courseAssignments.count.mockResolvedValue(0);
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const { initializeUniversityData } = await import("./initialize-university-data");
+
+    await initializeUniversityData();
+
+    expect(mocks.courseAssignments.count).not.toHaveBeenCalled();
+    expect(mocks.courseAssignments.bulkPut).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(mocks.universityDb.transaction).not.toHaveBeenCalled();
+  });
+
   it("shares an in-flight initialization and writes only missing reference tables", async () => {
     mocks.courses.count.mockResolvedValue(0);
     mocks.plans.count.mockResolvedValue(2);
@@ -168,42 +188,33 @@ describe("initializeUniversityData", () => {
     ]);
   });
 
-  it("seeds only an empty directory table without overwriting populated peers", async () => {
+  it("seeds classrooms from the dummy definitions without loading the directory", async () => {
     mocks.classrooms.count.mockResolvedValue(0);
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue({
-        professors: [{ id: "P" }], capabilities: [], assignments: [], availabilities: [],
-        classrooms: [{ id: "A", name: "Aula", place: "", note: "", equipments: [], admin: "" }],
-        studyPlans: [],
-      }),
-    });
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     const { initializeUniversityData } = await import("./initialize-university-data");
 
     await initializeUniversityData();
 
-    expect(mocks.classrooms.bulkPut).toHaveBeenCalledTimes(1);
+    expect(mocks.classrooms.bulkPut).toHaveBeenCalledWith(dummyClassrooms);
     expect(mocks.professors.bulkPut).not.toHaveBeenCalled();
     expect(mocks.studyPlans.bulkPut).not.toHaveBeenCalled();
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
-  it("seeds weekday-aware professor availabilities", async () => {
+  it("seeds professor reference data from the dummy definitions", async () => {
+    mocks.professors.count.mockResolvedValue(0);
+    mocks.professorCourseCapabilities.count.mockResolvedValue(0);
     mocks.professorAvailabilities.count.mockResolvedValue(0);
-    const availabilities = [
-      { id: "AVL1", professorId: "P", period: "202520", day: "monday", timeSlotId: "T1", isAvailable: true },
-    ];
-    const fetchMock = vi.fn().mockResolvedValue({
-      ok: true,
-      json: vi.fn().mockResolvedValue({
-        professors: [], capabilities: [], assignments: [], availabilities, classrooms: [], studyPlans: [],
-      }),
-    });
+    const fetchMock = vi.fn();
     vi.stubGlobal("fetch", fetchMock);
     const { initializeUniversityData } = await import("./initialize-university-data");
 
     await initializeUniversityData();
 
-    expect(mocks.professorAvailabilities.bulkPut).toHaveBeenCalledWith(availabilities);
+    expect(mocks.professors.bulkPut).toHaveBeenCalledWith(dummyProfessors);
+    expect(mocks.professorCourseCapabilities.bulkPut).toHaveBeenCalledWith(dummyProfessorCourseCapabilities);
+    expect(mocks.professorAvailabilities.bulkPut).toHaveBeenCalledWith(dummyProfessorAvailabilities);
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 });

@@ -48,6 +48,8 @@ import FrascoOutlineIcon from "./FrascoOutlineIcon";
 import FailedClassIcon from "./FailedClassIcon";
 import ProfessorIcon from "./ProfessorIcon";
 import UnPinIcon from "./UnPinIcon";
+import ExclamationMarkIcon from "./ExclamationMark";
+import CheckIcon from "./Check";
 
 export const Icons = {
   admin: AdminIcon,
@@ -55,11 +57,13 @@ export const Icons = {
   bell: BellIcon,
   book:BookIcon,
   cardView: CardViewIcon,
+  check: CheckIcon,
   class: ClassIcon,
   close: CloseIcon,
   curriculum: CurriculumIcon,
   door: DoorIcon,
   edit: EditIcon,
+  exclamtion:ExclamationMarkIcon,
   email: EmailIcon,
   expandCenterColumn: ExpandCenterColumnIcon,
   failedClass: FailedClassIcon,

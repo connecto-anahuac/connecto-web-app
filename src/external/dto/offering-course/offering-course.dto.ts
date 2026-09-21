@@ -26,6 +26,7 @@ export type SelectedOfferingCourseDto = {
 
 export type UpdateOfferingCourseSelectionInput = {
   career: string;
+  period: string;
   courseKey: string;
   isSelected: boolean;
   enabledStudentIdsByStudyPlan?: Record<string, string[]>;

@@ -4,11 +4,14 @@ import { cn } from "@/shared/lib/util";
 type AvatorProps = React.ComponentPropsWithRef<"div"> & {
   fullName: string;
   size: "small" | "medium" | "large";
+  color?: string;
 };
 
-export default function Avator({ fullName,size ,className, ...props}: AvatorProps) { 
+export default function Avator({ fullName,size ,className,color, ...props}: AvatorProps) { 
     return (
-        <div className={cn(
+      <div
+        style={color ? { backgroundColor: color } : undefined}
+        className={cn(
           "text-xl relative aspect-square rounded-full flex items-center justify-center text-white font-semibold",
           size === "small" && "size-4.5 text-xs",
           size === "medium" && "size-6 text-[0.6875rem]",//11px
@@ -16,6 +19,7 @@ export default function Avator({ fullName,size ,className, ...props}: AvatorProp
           className
         )}
         {...props}
+
         >
            <span className="leading-none">{getInitials(size,fullName)}</span>
          

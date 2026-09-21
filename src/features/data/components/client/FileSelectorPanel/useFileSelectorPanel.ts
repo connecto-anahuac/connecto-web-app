@@ -1,10 +1,11 @@
 "use client";
 
-import { importCsvClient } from "@/external/handler/data/command.client";
 import { getCareerName } from "../FileCard/useFileCard";
 import { useRef, useState } from "react";
 import { CARRERAS } from "@/shared/types/consts";
 import type { FileType, UploadSource } from "@/features/data/types/file";
+import { useImportValidation } from "../ImportValidation/ImportValidationContext";
+import { importSelectedSources } from "./importSelectedSources";
 
 type UploadResult = {
   grades: number;
@@ -38,18 +39,33 @@ function filterCsvFiles(files: File[]) {
 }
 
 export function useFileSelectorPanel(): UseFileSelectorPanelResult {
+  const { setIssues } = useImportValidation();
   const inputRef = useRef<HTMLInputElement>(null);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<UploadResult | null>(null);
   const [sources, setSources] = useState<UploadSource[]>([]);
+  const sourceIdRef = useRef(0);
+  const result = sources.some((source) => source.isCompleted)
+    ? {
+        grades: sources.reduce((total, source) => total + source.grades, 0),
+        students: sources.reduce((total, source) => total + source.students, 0),
+      }
+    : null;
 
   function openPicker() {
+    if (isLoading) {
+      return;
+    }
+
     inputRef.current?.click();
   }
 
   function addSources(files: File[]) {
+    if (isLoading) {
+      return;
+    }
+
     const validFiles = filterCsvFiles(files);
     const hasInvalidFiles = validFiles.length !== files.length;
 
@@ -67,13 +83,23 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
       ...currentSources,
       ...validFiles.map((file) => ({
         career: getCareerName(file.name) ?? CARRERAS[0],
+		error: false,
         file,
         fileType: file.name.toLowerCase().includes("capp") ? ("CAPP" as const) : ("Plan de Estudios" as const),
+		grades: 0,
+		id: `upload-source-${sourceIdRef.current++}`,
+		isCompleted: false,
+		issues: [],
+		students: 0,
       })),
     ]);
   }
 
   function changeSourceCareer(index: number, value: string) {
+    if (isLoading) {
+      return;
+    }
+
     setSources((currentSources) =>
       currentSources.map((source, currentIndex) =>
         currentIndex === index ? { ...source, career: value } : source,
@@ -82,6 +108,10 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
   }
 
   function changeSourceFileType(index: number, value: FileType) {
+    if (isLoading) {
+      return;
+    }
+
     setSources((currentSources) =>
       currentSources.map((source, currentIndex) =>
         currentIndex === index ? { ...source, fileType: value } : source,
@@ -90,6 +120,11 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
   }
 
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+    if (isLoading) {
+      event.target.value = "";
+      return;
+    }
+
     const files = Array.from(event.target.files ?? []);
     if (files.length === 0) {
       return;
@@ -101,15 +136,27 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
 
   function handleDragOver(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+
     setIsDragging(true);
   }
 
   function handleDragLeave() {
+    if (isLoading) {
+      return;
+    }
+
     setIsDragging(false);
   }
 
   function handleDrop(event: React.DragEvent<HTMLDivElement>) {
     event.preventDefault();
+    if (isLoading) {
+      return;
+    }
+
     setIsDragging(false);
 
     const files = Array.from(event.dataTransfer.files ?? []);
@@ -121,10 +168,14 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
   }
 
   function removeSource(indexToRemove: number) {
+    if (isLoading) {
+      return;
+    }
+
     setErrorMessage(null);
-    setSources((currentSources) =>
-      currentSources.filter((_, index) => index !== indexToRemove),
-    );
+    const nextSources = sources.filter((_, index) => index !== indexToRemove);
+    setSources(nextSources);
+    setIssues(nextSources.flatMap((source) => source.issues));
   }
 
   async function handleUpload() {
@@ -132,36 +183,29 @@ export function useFileSelectorPanel(): UseFileSelectorPanelResult {
       return;
     }
 
-    const invalidFile = sources.find((source) => !isCsvFile(source.file));
+    const pendingSources = sources.filter((source) => !source.isCompleted);
+    if (pendingSources.length === 0) {
+      return;
+    }
+
+    const invalidFile = pendingSources.find((source) => !isCsvFile(source.file));
     if (invalidFile) {
       setErrorMessage(`El archivo ${invalidFile.file.name} no es un CSV valido.`);
       return;
     }
 
     setErrorMessage(null);
+    setIsDragging(false);
     setIsLoading(true);
 
-    try {
-      let students = 0;
-      let grades = 0;
-
-      for (const source of sources) {
-        const formData = new FormData();
-        formData.append("file", source.file);
-        formData.append("career", source.career);
-
-        const response = await importCsvClient(formData);
-        students += response.studentsCount;
-        grades += response.gradesCount;
-      }
-
-      setResult({ students, grades });
-    } catch (error) {
-      console.error(error);
-      setErrorMessage("Se produjo un error durante la carga.");
-    } finally {
-      setIsLoading(false);
-    }
+    const summary = await importSelectedSources(pendingSources);
+    const nextSources = sources.map((source) => {
+      const sourceResult = summary.sourceResults[source.id];
+      return sourceResult ? { ...source, ...sourceResult } : source;
+    });
+    setSources(nextSources);
+    setIssues(nextSources.flatMap((source) => source.issues));
+    setIsLoading(false);
   }
 
   return {

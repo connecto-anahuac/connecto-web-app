@@ -1,34 +1,24 @@
 "use client";
 
 import type { ComponentProps } from "react";
+import { useRouter } from "next/navigation";
 import Avator from "@/shared/component/primitive/Avator";
 
-import NavigationItem from "@/shared/component/primitive/NavigationItem";
-import type { IconName } from "@/shared/component/primitive/icon";
 import { cn } from "@/shared/lib/util";
-import IconButtonOLD from "@/shared/component/primitive/button/IconButton2";
 import SearchBar from "@/shared/component/primitive/searchbar/SearchBar";
 import ConnectoLogo from "@/shared/component/primitive/icon/logo/Connecto";
 import IconButton from "@/shared/component/primitive/button/IconButton";
 import PanelControllButton from "@/shared/component/primitive/button/PanelControllButton";
 import { useMenu } from "../useMenu";
-
-type RootNavigationEntry = {
-  label: string;
-  icon: IconName;
-};
+import ToolTipWrapper from "@/shared/component/primitive/ToolTipWrapper";
+import Breadcrumbs from "./Breadcrumbs";
+import { useNavigationAvailability } from "./useNavigationAvailability";
 
 type Props = ComponentProps<"div">;
 
-const ROOT_NAVIGATION_ITEMS: RootNavigationEntry[] = [
-  { label: "Alumnos", icon: "twoPersons" },
-  { label: "Profesores", icon: "professor" },
-  { label: "Materias", icon: "class" },
-  { label: "Plan de estudios", icon: "curriculum" },
-  { label: "Schedule builder", icon: "schedule" },
-];
-
 export default function Header({ className, ...props }: Props) {
+  const router = useRouter();
+  const { canGoBack, canGoForward } = useNavigationAvailability();
   const isSidebarOpen = useMenu((state) => state.isSidebarOpen);
   const toggleSidebar = useMenu((state) => state.toggleSidebar);
 
@@ -44,6 +34,7 @@ export default function Header({ className, ...props }: Props) {
           Connecto
         </span>
         {/* <IconButton icon="panelToLeft" size="lg" /> */}
+        <ToolTipWrapper hint={isSidebarOpen ? "Contraer sidebar" : "Expandir sidebar"}>
         <PanelControllButton
           size="lg"
           appearance="text"
@@ -51,33 +42,41 @@ export default function Header({ className, ...props }: Props) {
           isOpen={isSidebarOpen}
           onClick={toggleSidebar}
         />
+
+        </ToolTipWrapper>
       </div>
 
       {/* navigation */}
-      <div className="flex items-center gap-0 ml-8 mr-auto text-OnSurface">
-        <IconButton icon="arrow" size="lg" disabled={false} />
-        <IconButton
-          icon="arrow"
-          size="lg"
-          disabled={true}
-          className="transform rotate-180 "
-        />
-        {/* <IconButtonOLD icon="arrow" className="size-6" />
-        <IconButtonOLD
-          icon="arrow"
-          className="size-6 transform rotate-180 text-OnSurface/40"
-        /> */}
-        <span className="ml-5 font-semibold text-OnSurfaceVariant text-xs">
-          alumnos
-        </span>
+      <div className="flex min-w-0 items-center gap-0 ml-8 mr-auto text-OnSurface">
+        <ToolTipWrapper hint="Atrás">
+          <IconButton
+            type="button"
+            aria-label="戻る"
+            icon="arrow"
+            size="lg"
+            disabled={!canGoBack}
+            onClick={() => router.back()}
+          />
+        </ToolTipWrapper>
+        <ToolTipWrapper hint="Adelante">
+          <IconButton
+            type="button"
+            aria-label="進む"
+            icon="arrow"
+            size="lg"
+            disabled={!canGoForward}
+            className="transform rotate-180 "
+            onClick={() => router.forward()}
+          />
+        </ToolTipWrapper>
+
+        <Breadcrumbs className="ml-5 max-w-80" />
       </div>
 
       <SearchBar className="w-80" placeholder="buscar en todo el workspace" />
 
       {/* notification & avatar */}
       <div className="flex items-center gap-2 text-OnSurface ml-4">
-        {/* <IconButtonOLD icon="bell" className="size-6" /> */}
-
         <IconButton size="lg" intent="lightInk" appearance="text" icon="bell" />
         <button className="relative p-0 rounded-full size-fit overflow-hidden group">
           <Avator

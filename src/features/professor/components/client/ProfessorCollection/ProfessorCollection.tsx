@@ -18,7 +18,7 @@ type Props = {
   onPreviewClose: () => void;
   renderPreview: (id: string) => ReactNode;
 };
-
+// 
 export function ProfessorCollection({
   activeProfessorId,
   period,
@@ -58,7 +58,7 @@ export function ProfessorCollection({
           : null
       }
     >
-      <SidePanel.Main className="h-full w-full">
+      <SidePanel.Main className="h-full w-full flex flex-col">
         <ContentTitleSection title="Profesores" />
         <DataSection
           enableView={["list"]}

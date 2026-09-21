@@ -18,13 +18,13 @@ export function ClassroomDetail({ classroomId, className }: Props) {
     }
   }, [classroomId]);
 
-  if (!snapshot) return <div role="status">Cargando aula...</div>;
-  if ("error" in snapshot) return <div role="alert">No se pudo cargar el aula.</div>;
-  if (!snapshot.data) return <div role="alert">No se encontró el aula.</div>;
+  if (!snapshot) return <div role="status">Cargando salon...</div>;
+  if ("error" in snapshot) return <div role="alert">No se pudo cargar el salon.</div>;
+  if (!snapshot.data) return <div role="alert">No se encontró el salon.</div>;
   const classroom = snapshot.data;
 
   return <div className={cn("flex h-full w-full flex-col gap-3", className)}>
-    <ContentTitleSection title="Aula" />
+    <ContentTitleSection title="Salon" />
     <CommonProfileSummary
       className="w-full max-w-sm"
       name={classroom.name}

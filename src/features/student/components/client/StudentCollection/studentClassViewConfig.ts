@@ -1,4 +1,5 @@
 import type { DataViewConfig } from "@/shared/types/dataView.types";
+import type { FilterPresetConfig } from "@/shared/service/dataPipeline/filterPreset.type";
 import { generateAccentCombinations } from "@/shared/lib/util";
 import { StudentCollectionItem } from "./studentCollection.type";
 import { CARRERAS, StudentStatus } from "@/shared/types/consts";
@@ -28,17 +29,44 @@ const CAREER_OPTIONS =CARRERAS.map((career) => ({
 
 
 
-export const STUDENT_COLLECTION_PRESETS = [
-  { label: "Reprobado", columnId: "status", value: ["failed"] },
-  { label: "Aprobado", columnId: "status", value: ["passed"] },
-  { label: "Cruzado", columnId: "status", value: ["isTaking"] },
-  { label: "Posibles", columnId: "status", value: ["enrollable"] },
+export const STUDENT_COLLECTION_PRESETS: FilterPresetConfig<StudentCollectionFieldId>[] = [
   {
-    label: "Bloqueado",
-    columnId: "status",
-    value: ["lockedByPreRequisites", "lockedByOthers"],
+    label: "Activo",
+    filterKey: "status",
+    conditionValue: [StudentStatus.ACTIVE],
+    operator: "in",
   },
-] as const;
+  {
+    label: "Ambiental",
+    filterKey: "career",
+    conditionValue: ["Ambiental"],
+    operator: "in",
+  },
+  {
+    label: "Civil",
+    filterKey: "career",
+    conditionValue: ["Civil"],
+    operator: "in",
+  },
+  {
+    label: "Industrial",
+    filterKey: "career",
+    conditionValue: ["Industrial"],
+    operator: "in",
+  },
+  {
+    label: "TIND",
+    filterKey: "career",
+    conditionValue: ["TIND"],
+    operator: "in",
+  },
+  {
+    label: "Reprobado",
+    filterKey: "failedClassCount",
+    conditionValue: 0,
+    operator: "gt",
+  },
+];
 
 const displayNumber = (value: number | null) =>
   value === null || Number.isNaN(value) ? "--" : String(value);

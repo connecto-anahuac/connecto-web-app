@@ -123,7 +123,7 @@ export function HeaderCellPresenter<TItem>({
           className={cn(
             "inset-y-0",
             // "h-screen top-0 ",
-            "absolute right-0 z-30 w-3 translate-x-1/2 touch-none border-0 bg-transparent p-0 ",
+            "absolute -right-px z-30 w-3 translate-x-1/2 touch-none border-0 bg-transparent p-0 ",
             "cursor-col-resize ", // in table, useeffect bodt.importatn
             "group flex justify-center",
             //  isResizing && "bg-Primary/30",
@@ -139,11 +139,11 @@ export function HeaderCellPresenter<TItem>({
         >
           <div
             className={cn(
-              "w-1",
-              // "h-full",
-              " h-screen",
-              !isResizing && "group-hover:bg-Primary/20  ",
-              isResizing && "bg-Primary/40 w-0.5",
+              "w-0.5",
+              "h-full",
+              // " h-screen",
+              !isResizing && "group-hover:bg-Primary/50  ",
+              isResizing && "bg-Primary/90 w-0.5",
             )}
             style={
               isResizing

@@ -126,6 +126,7 @@ function getRowElement(
   rowProps: Partial<Parameters<typeof DataTablePresenter<Row>>[0]>,
 ) {
   const element = DataTablePresenter<Row>({
+    bgColor: "",
     className: undefined,
     config: { fields: [] },
     focusedResizeColumnId: null,

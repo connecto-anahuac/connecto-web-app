@@ -19,6 +19,9 @@ import ButtonModal from "../../primitive/ButtonModal";
 import { GraphSwitcher } from "./GraphSwitcher";
 import type { SearchTool } from "./buttonmodal/type";
 import HideButtonModal from "./buttonmodal/HideButtonModal";
+import DiagramHideButtonModal, {
+  type DiagramHideItem,
+} from "./buttonmodal/DiagramHideButtonModal";
 import PivotButtonModal from "./buttonmodal/PivotButtonModal";
 import FilterButtonGroup from "../../primitive/button/FilterButtonGroup";
 import { DataSectionFilterProvider } from "./DataSectionFilterContext";
@@ -29,7 +32,8 @@ type BaseDataSectionProps = ComponentProps<"div"> & {
   enableView?: ("list" | "card")[];
   listTools?: SearchTool[];
   cardviewTools?: SearchTool[];
-  cardDiagram?: ReactNode;
+  cardDiagram?: ReactNode | ((hiddenItemIds: ReadonlySet<string>) => ReactNode);
+  cardHideItems?: readonly DiagramHideItem[];
   onListClick?: () => void;
   onCardViewClick?: () => void;
   onViewChange?: (view: "list" | "card") => void;
@@ -37,6 +41,7 @@ type BaseDataSectionProps = ComponentProps<"div"> & {
   searchText?: string;
   onSearchTextChange?: (value: string) => void;
   metadata?: DataViewMetadata;
+  showZoom?: boolean;
 };
 
 type DefaultListDataSectionProps<TItem> = {
@@ -92,6 +97,7 @@ export default function DataSection<TItem>({
   cardviewTools = ["filter", "hide"],
   listDiagram,
   cardDiagram,
+  cardHideItems,
   defaultView = "list",
   enableView = ["list", "card"],
   searchText,
@@ -99,6 +105,7 @@ export default function DataSection<TItem>({
   table,
   tableConfig,
   metadata,
+  showZoom = true,
   selectedRowId,
   getRowId,
   onRowSelect,
@@ -110,6 +117,9 @@ export default function DataSection<TItem>({
   );
   const [openedTool, setOpenedTool] = useState<SearchTool | null>(null);
   const [openedFilterId, setOpenedFilterId] = useState<string | null>(null);
+  const [hiddenCardItemIds, setHiddenCardItemIds] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const [draggedSortId, setDraggedSortId] = useState<string | null>(null);
 
@@ -136,22 +146,31 @@ export default function DataSection<TItem>({
     table.setSorting(sorting);
   };
 
+  const toggleCardItem = (id: string) => {
+    setHiddenCardItemIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
   return (
     <DataSectionFilterProvider
       value={{ openFilter: (fieldId) => setOpenedFilterId(fieldId) }}
     >
-      <div className={cn("relative flex flex-col gap-2", className)}>
+      <div className={cn("relative flex flex-col gap-2 min-h-0 flex-1 max-w-full", className)}>
         {/* 1st line */}
-        <div className="flex gap-4 w-full items-center">
+        <div className="flex gap-4 w-full items-center max-w-full">
           <SearchBar
-            className="w-64"
+            className="w-64 max-w-3/5 min-w-32"
             value={searchText}
             onChange={(event) => onSearchTextChange?.(event.target.value)}
             onClear={() => onSearchTextChange?.("")}
           />
 
           {/* when changed the chip size, still keep the height */}
-          <div className="flex flex-1 gap-3 items-center overflow-x-auto scrollbar-none">
+          <div className="flex flex-1 min-w-0 gap-3 items-center overflow-x-auto scrollbar-none">
             {presets?.map((preset, index) => (
               <SearchPresetChip
                 key={`${preset.label}-${index}`}
@@ -178,7 +197,8 @@ export default function DataSection<TItem>({
         </div>
 
         {/* 2nd line */}
-        <div className="flex gap-1.5 w-full min-w-0 h-fit">
+        {isToolEnable("filter") && (
+          <div className="flex gap-1.5 w-full min-w-0 h-fit">
           {/* //TODO filter button　追加tと機能 */}
           {/* <Button
           icon="filter"
@@ -200,7 +220,8 @@ export default function DataSection<TItem>({
           ) : (
             <div>Filter button group. table couldn&apos;t have</div>
           )}
-        </div>
+          </div>
+        )}
 
         {/* <div className="flex gap-3 items-center h-5">
         {presets?.map((preset, index) => (
@@ -217,148 +238,170 @@ export default function DataSection<TItem>({
         {/* 3rd line */}
 
         <div className="flex gap-4 items-end">
-          <GraphSwitcher
-            onListClick={onListClick}
-            onCardViewClick={onCardViewClick}
-            onViewChange={viewChangeHandler}
-            isEnabled={enableView}
-          />
+          {enableView.length > 1 && (
+            <GraphSwitcher
+              selectedView={selectedView}
+              onListClick={onListClick}
+              onCardViewClick={onCardViewClick}
+              onViewChange={viewChangeHandler}
+              isEnabled={enableView}
+            />
+          )}
           {/* //TODO switch切り替え時のフィルター変更処理  */}
 
           {/* sort */}
-          <ButtonModal
-            open={
-              openedTool === "sort" &&
-              table !== undefined &&
-              tableConfig !== undefined
-            }
-            onOpenChange={() =>
-              setOpenedTool((tool) => (tool === "sort" ? null : "sort"))
-            }
-          >
-            <ButtonModal.Trigger>
-              <Button
-                icon="sort"
-                label="Sort"
-                intent="darkInk"
-                appearance="text"
-                size="md"
-                disabled={!isToolEnable("sort")}
-                hasBadge={
-                  table?.getState().sorting.length !== undefined &&
-                  table?.getState().sorting.length > 0
-                }
-                // onClick={() => setOpenedTool((tool) => tool === "sort" ? null : "sort")}
-              />
-            </ButtonModal.Trigger>
-            <ButtonModal.Content>
-              <div className=" flex min-w-72 w-fit flex-col gap-2 rounded-md border border-Outline bg-InverseSurface p-2 text-InverseOnSurface shadow-lg">
-                {table!.getState().sorting.map((sort) => {
-                  const config = tableConfig!.fields.find(
-                    (column) => column.fieldId === sort.id,
-                  );
-                  if (!config) return null;
-                  return (
-                    <SortCard
-                      descending={sort.desc}
-                      draggable
-                      fieldLabel={config.label}
-                      key={sort.id}
-                      onDirectionToggle={() =>
-                        table!.setSorting((current) =>
-                          current.map((item) =>
-                            item.id === sort.id
-                              ? { ...item, desc: !item.desc }
-                              : item,
-                          ),
-                        )
-                      }
-                      onDragOver={(event) => event.preventDefault()}
-                      onDragStart={() => setDraggedSortId(sort.id)}
-                      onDrop={() => {
-                        if (draggedSortId) moveSort(draggedSortId, sort.id);
-                        setDraggedSortId(null);
-                      }}
-                      onRemove={() =>
-                        table!.setSorting((current) =>
-                          current.filter((item) => item.id !== sort.id),
-                        )
-                      }
-                    />
-                  );
-                })}
-                <div className="border-t border-Outline pt-1">
-                  {tableConfig!.fields
-                    .filter(
-                      (column) =>
-                        !table!
-                          .getState()
-                          .sorting.some((sort) => sort.id === column.fieldId),
-                    )
-                    .map((column) => (
-                      <button
-                        className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm hover:bg-Primary hover:text-OnPrimary"
-                        key={column.fieldId}
-                        onClick={() =>
-                          table!.setSorting((current) => [
-                            ...current,
-                            { id: column.fieldId, desc: false },
-                          ])
+          {isToolEnable("sort") && (
+            <ButtonModal
+              open={
+                openedTool === "sort" &&
+                table !== undefined &&
+                tableConfig !== undefined
+              }
+              onOpenChange={() =>
+                setOpenedTool((tool) => (tool === "sort" ? null : "sort"))
+              }
+            >
+              <ButtonModal.Trigger>
+                <Button
+                  icon="sort"
+                  label="Sort"
+                  intent="darkInk"
+                  appearance="text"
+                  size="md"
+                  hasBadge={
+                    table?.getState().sorting.length !== undefined &&
+                    table?.getState().sorting.length > 0
+                  }
+                />
+              </ButtonModal.Trigger>
+              <ButtonModal.Content>
+                <div className=" flex min-w-72 w-fit flex-col gap-2 rounded-md border border-Outline bg-InverseSurface p-2 text-InverseOnSurface shadow-lg">
+                  {table!.getState().sorting.map((sort) => {
+                    const config = tableConfig!.fields.find(
+                      (column) => column.fieldId === sort.id,
+                    );
+                    if (!config) return null;
+                    return (
+                      <SortCard
+                        descending={sort.desc}
+                        draggable
+                        fieldLabel={config.label}
+                        key={sort.id}
+                        onDirectionToggle={() =>
+                          table!.setSorting((current) =>
+                            current.map((item) =>
+                              item.id === sort.id
+                                ? { ...item, desc: !item.desc }
+                                : item,
+                            ),
+                          )
                         }
-                        type="button"
-                      >
-                        <span className="text-base">+</span>
-                        {column.label}
-                      </button>
-                    ))}
+                        onDragOver={(event) => event.preventDefault()}
+                        onDragStart={() => setDraggedSortId(sort.id)}
+                        onDrop={() => {
+                          if (draggedSortId) moveSort(draggedSortId, sort.id);
+                          setDraggedSortId(null);
+                        }}
+                        onRemove={() =>
+                          table!.setSorting((current) =>
+                            current.filter((item) => item.id !== sort.id),
+                          )
+                        }
+                      />
+                    );
+                  })}
+                  <div className="border-t border-Outline pt-1">
+                    {tableConfig!.fields
+                      .filter(
+                        (column) =>
+                          !table!
+                            .getState()
+                            .sorting.some((sort) => sort.id === column.fieldId),
+                      )
+                      .map((column) => (
+                        <button
+                          className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left text-sm hover:bg-Primary hover:text-OnPrimary"
+                          key={column.fieldId}
+                          onClick={() =>
+                            table!.setSorting((current) => [
+                              ...current,
+                              { id: column.fieldId, desc: false },
+                            ])
+                          }
+                          type="button"
+                        >
+                          <span className="text-base">+</span>
+                          {column.label}
+                        </button>
+                      ))}
+                  </div>
                 </div>
-              </div>
-            </ButtonModal.Content>
-          </ButtonModal>
+              </ButtonModal.Content>
+            </ButtonModal>
+          )}
 
-          <HideButtonModal
-            open={
-              openedTool === "hide" &&
-              table !== undefined &&
-              tableConfig !== undefined
-            }
-            onOpenChange={() =>
-              setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
-            }
-            disabled={!isToolEnable("hide")}
-            table={table}
-            tableConfig={tableConfig}
-            hasBadge={table
-              ?.getAllLeafColumns()
-              .some((column) => !column.getIsVisible())}
-          />
+          {isToolEnable("hide") && selectedView === "card" && cardHideItems ? (
+            <DiagramHideButtonModal
+              open={openedTool === "hide"}
+              onOpenChange={() =>
+                setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
+              }
+              items={cardHideItems}
+              hiddenItemIds={hiddenCardItemIds}
+              onItemToggle={toggleCardItem}
+            />
+          ) : isToolEnable("hide") ? (
+            <HideButtonModal
+              open={
+                openedTool === "hide" &&
+                table !== undefined &&
+                tableConfig !== undefined
+              }
+              onOpenChange={() =>
+                setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
+              }
+              disabled={false}
+              table={table}
+              tableConfig={tableConfig}
+              hasBadge={table
+                ?.getAllLeafColumns()
+                .some((column) => !column.getIsVisible())}
+            />
+          ) : null}
 
-          <PivotButtonModal
-            open={
-              openedTool === "pivot" &&
-              table !== undefined &&
-              tableConfig !== undefined
-            }
-            onOpenChange={() =>
-              setOpenedTool((tool) => (tool === "pivot" ? null : "pivot"))
-            }
-            disabled={!isToolEnable("pivot")}
-            table={table}
-            tableConfig={tableConfig}
-            hasBadge={(table?.getState().columnPinning?.left?.length ?? 0) > 0}
-          />
+          {isToolEnable("pivot") && (
+            <PivotButtonModal
+              open={
+                openedTool === "pivot" &&
+                table !== undefined &&
+                tableConfig !== undefined
+              }
+              onOpenChange={() =>
+                setOpenedTool((tool) => (tool === "pivot" ? null : "pivot"))
+              }
+              disabled={false}
+              table={table}
+              tableConfig={tableConfig}
+              hasBadge={
+                (table?.getState().columnPinning?.left?.length ?? 0) > 0
+              }
+            />
+          )}
 
           <span className="ml-auto   text-xs font-medium">
             {table ? table.getFilteredRowModel().rows.length : "--"} registros
           </span>
           {/* //TODO zoom */}
-          <IconButton
-            icon="zoomIn"
-            intent="lightInk"
-            appearance="text"
-            size="md"
-            className="shrink-0 "
-          />
+          {showZoom && (
+            <IconButton
+              aria-label="Zoom in"
+              icon="zoomIn"
+              intent="lightInk"
+              appearance="text"
+              size="md"
+              className="shrink-0 "
+            />
+          )}
 
           {/* <ToggleButton label={"Sort"} icon="sort" isEnabled={isEnable("sort")} />
         <ToggleButton
@@ -392,7 +435,9 @@ export default function DataSection<TItem>({
                       onRowDoubleClick={(item) => onRowOpen(getRowId(item))}
                     />
                   )))
-            : cardDiagram}
+            : typeof cardDiagram === "function"
+              ? cardDiagram(hiddenCardItemIds)
+              : cardDiagram}
         </div>
       </div>
     </DataSectionFilterProvider>

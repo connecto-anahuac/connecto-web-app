@@ -19,8 +19,8 @@ type Props = ComponentProps<"div"> & {
 export default function OfferingCourseSemesterRow({
   semesterLabel,
   studentCount,
-  isSelected = false,
   isMulti = false,
+  isSelected = false,
   onSelectionChange,
   showLeadingArrow = true,
   isOpen = true,
@@ -51,13 +51,16 @@ export default function OfferingCourseSemesterRow({
 
       <div className="flex min-w-0 flex-1 items-center gap-2.5 rounded-md py-3">
         <span className="w-20 shrink-0 text-xs font-medium">{semesterLabel}</span>
-        <EstimatedStudentNumber isSelected value={studentCount} />
+        <EstimatedStudentNumber
+          isSelected={isSelected}
+          value={studentCount}
+        />
         {/* <div className="h-px min-w-0 flex-1 bg-DividerMiddle" aria-hidden="true" /> */}
         <ToggleButton
           className="ml-auto"
           aria-label={`Select ${semesterLabel}`}
-          isSelected={isSelected}
           isMulti={isMulti}
+          isSelected={isSelected}
           onClick={() => onSelectionChange?.(!isSelected)}
         />
       </div>

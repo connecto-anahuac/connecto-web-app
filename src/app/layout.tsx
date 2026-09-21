@@ -25,7 +25,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-dvh antialiased custom-scroll-bar`}
+      className={`${geistSans.variable} ${geistMono.variable} h-dvh antialiased custom-scroll-bar overscroll-none`}
     >
       <body className="h-dvh">{children}</body>
     </html>

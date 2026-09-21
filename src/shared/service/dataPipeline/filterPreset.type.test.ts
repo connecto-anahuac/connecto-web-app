@@ -41,7 +41,7 @@ describe("filter presets", () => {
       getFilterPresetNextCondition(failingPreset, [
         { fieldId: "grade", operator: "gte", value: 6 },
       ]),
-    ).toEqual({ columnId: "grade", operator: "lt", value: 6 });
+    ).toEqual({ fieldId: "grade", operator: "lt", value: 6 });
   });
 
   it("returns null when toggling an active preset off", () => {

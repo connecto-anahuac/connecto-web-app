@@ -17,7 +17,7 @@ export default function SearchPresetChip({
   return (
     <button
       className={cn(
-        "px-2 py-0.5 text-xs rounded-full font-semibold",
+        "px-2 py-0.5 text-xs rounded-full font-semibold whitespace-nowrap",
         "hover:opacity-80",
         "border border-OnSurface/60 bg-transparent text-OnSurface/60",
         selected && "bg-Secondary text-OnSecondary border-none",

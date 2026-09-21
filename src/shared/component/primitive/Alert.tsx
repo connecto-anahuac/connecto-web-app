@@ -1,4 +1,5 @@
 import { cn } from "@/shared/lib/util";
+import { Icons } from "./icon";
 
 type Props = {
   level: "low" | "medium" | "high";
@@ -12,7 +13,7 @@ export default function Alert({ level, className }: Props) {
       , className)
 
     }>
-     !
+      <Icons.exclamtion className=" h-3" />
     </div>
   );
 }

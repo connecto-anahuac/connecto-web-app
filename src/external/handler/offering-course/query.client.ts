@@ -5,13 +5,11 @@ import {
   type OfferingCourseDto,
   type OfferingCourseDetailDto,
   type SelectedOfferingCourseDto,
-  type UpdateOfferingCourseSelectionInput,
 } from "@/external/dto/offering-course/offering-course.dto";
 import {
   getOfferingCoursesByCareerService,
   getOfferingCourseDetailService,
   getSelectedOfferingCoursesService,
-  setOfferingCourseSelectionService,
 } from "@/external/service/di";
 export async function fetchOfferingCoursesByCareer(
   career: string,
@@ -22,21 +20,17 @@ export async function fetchOfferingCoursesByCareer(
 
 export async function fetchSelectedOfferingCourses(
   career: string,
+  period: string,
 ): Promise<SelectedOfferingCourseDto[]> {
-  const selectedOfferingCourses = await getSelectedOfferingCoursesService.execute(career);
+  const selectedOfferingCourses = await getSelectedOfferingCoursesService.execute(career, period);
   return selectedOfferingCourses.map(toSelectedOfferingCourseDto);
-}
-
-export async function updateOfferingCourseselection(
-  params: UpdateOfferingCourseSelectionInput,
-) {
-  return setOfferingCourseSelectionService.execute(params);
 }
 
 export async function fetchOfferingCourseDetail(
   career: string,
   courseKey: string,
+  period: string,
 ): Promise<OfferingCourseDetailDto | undefined> {
-  const detail = await getOfferingCourseDetailService.execute(career, courseKey);
+  const detail = await getOfferingCourseDetailService.execute(career, courseKey, period);
   return detail ? toOfferingCourseDetailDto(detail) : undefined;
 }

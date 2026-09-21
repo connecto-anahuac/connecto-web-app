@@ -34,7 +34,7 @@ export default function OfferingClassStudentNameRow({
         className="h-4.5 w-4.5 text-xs font-semibold"
         style={{ backgroundColor: avatarColor }}
       />
-      <span className="whitespace-nowrap text-xs font-medium text-OnStudentNumber">
+      <span className="w-full truncate text-xs font-medium text-OnStudentNumber">
         {fullName}
       </span>
     </div>

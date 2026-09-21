@@ -10,7 +10,8 @@ import type { OfferingCoursePanelStudent } from "../OfferingCoursePanel/types";
 
 type Props = ComponentProps<"div"> & {
   expectedStudents: OfferingCoursePanelStudent[];
-  isMulti?: boolean;
+  isSemesterEnabled: boolean;
+  onSemesterEnabledChange: (isEnabled: boolean) => void;
   onStudentSelectionChange: (studentId: string, isSelected: boolean) => void;
   selectedStudentIds: string[];
   semesterLabel: string;
@@ -37,9 +38,10 @@ type PresenterProps = Props & {
 export function GenerationAcordionPresenter({
   className,
   expectedStudents,
-  isMulti = false,
+  isSemesterEnabled,
   isOpen,
   onOpenChange,
+  onSemesterEnabledChange,
   onStudentSelectionChange,
   selectedStudentIds,
   semesterLabel,
@@ -53,34 +55,20 @@ export function GenerationAcordionPresenter({
   const selectedEligibleStudents = eligibleStudents.filter((student) =>
     selectedIds.has(student.id),
   );
-  const isSemesterSelected =
-    eligibleStudents.length > 0 &&
-    selectedEligibleStudents.length === eligibleStudents.length;
-  const hasPartialSelection =
-    selectedEligibleStudents.length > 0 && !isSemesterSelected;
+  const hasMixedEligibleSelection =
+    selectedEligibleStudents.length > 0 &&
+    selectedEligibleStudents.length < eligibleStudents.length;
   return (
     <section className={cn("flex w-full flex-col", className)} {...props}>
       <OfferingCourseSemesterRow
         className="w-full"
-        isMulti={isMulti || hasPartialSelection}
+        isMulti={hasMixedEligibleSelection}
         isOpen={isOpen}
-        isSelected={isSemesterSelected}
-        onDoubleClick={() => {
-          if (hasPartialSelection || isMulti)
-            eligibleStudents.forEach((student) => {
-              if (!selectedIds.has(student.id))
-                onStudentSelectionChange(student.id, true);
-            });
-        }}
+        isSelected={isSemesterEnabled}
         onOpenChange={onOpenChange}
-        onSelectionChange={(nextSelected) =>
-          eligibleStudents.forEach((student) => {
-            if (selectedIds.has(student.id) !== nextSelected)
-              onStudentSelectionChange(student.id, nextSelected);
-          })
-        }
+        onSelectionChange={onSemesterEnabledChange}
         semesterLabel={semesterLabel}
-        studentCount={expectedStudents.length}
+        studentCount={selectedEligibleStudents.length}
       />
       {isOpen ? (
         <div className="flex flex-col gap-2.5 pb-2">
@@ -89,12 +77,15 @@ export function GenerationAcordionPresenter({
               <OfferingClassStudentRow
                 avatarColor={student.avatarColor}
                 fullName={student.fullName}
-                isEnabled={student.isEligible !== false}
+                isEnabled={
+                  isSemesterEnabled && student.isEligible !== false
+                }
                 isSelected={selectedIds.has(student.id)}
                 key={student.id}
-                onSelectionChange={(isSelected) =>
-                  onStudentSelectionChange(student.id, isSelected)
-                }
+                onSelectionChange={(isSelected) => {
+                  if (isSemesterEnabled && student.isEligible !== false)
+                    onStudentSelectionChange(student.id, isSelected);
+                }}
               />
             ))}
           </StudentSection>
@@ -109,14 +100,14 @@ export function GenerationAcordionPresenter({
               ))}
             </StudentSection>
           ) : null}
-          <StudentSection label="Aprobados">
+          {/* <StudentSection label="Aprobados">
             <button
               className="ml-1 flex w-full items-center justify-center rounded bg-DividerMiddle px-2.5 py-1 text-xs text-Outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-Primary"
               type="button"
             >
               Mostrar todos los aprobados
             </button>
-          </StudentSection>
+          </StudentSection> */}
         </div>
       ) : null}
     </section>

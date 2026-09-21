@@ -4,26 +4,35 @@ import type { OfferingCourse } from "@/features/offeringCourse/types/offering-co
 import {
   OFFERING_COURSE_VIEW_CONFIG,
 } from "@/features/offeringCourse/types/offering-course-filter-fields";
-import { useDataSearch } from "@/shared/component/composite/searchtool/useDataSearch";
+import { useTable } from "@/shared/component/composite/table/hooks/useTable";
+import {
+  useDataSearchActions,
+  useDataSearchQuery,
+} from "@/shared/store/filter/useFilterStore";
+import type { GetItemId } from "@/shared/service/dataPipeline/filterDefinition";
 
-export function useScheduleBuilderFilters(offeringCourses: OfferingCourse[]) {
-  const {
-    config,
-    metadata,
-    gridEntries,
+const getOfferingCourseRowId: GetItemId<OfferingCourse> = (course) => course.key;
+
+export function useScheduleBuilderFilters(
+  offeringCourses: readonly OfferingCourse[],
+) {
+  const query = useDataSearchQuery();
+  const { setConditions, setSearchText } = useDataSearchActions();
+  const { filterResult, globalFilter, metadata, setGlobalFilter, table } = useTable({
+    config: OFFERING_COURSE_VIEW_CONFIG,
+    data: offeringCourses,
+    getRowId: getOfferingCourseRowId,
     query,
-    searchText,
+    setConditions,
     setSearchText,
-  } = useDataSearch(OFFERING_COURSE_VIEW_CONFIG, offeringCourses);
+  });
 
   return {
-    config,
+    config: OFFERING_COURSE_VIEW_CONFIG,
+    filterResult,
     metadata,
-    searchText,
-    setSearchText,
-    matchingCourseKeys: new Set(
-      gridEntries.filter((entry) => entry.isMatch).map((entry) => entry.item.key),
-    ),
-    hasActiveFilters: query.conditions.length > 0 || query.globalTextQuery.trim().length > 0,
+    globalFilter,
+    setGlobalFilter,
+    table,
   };
 }

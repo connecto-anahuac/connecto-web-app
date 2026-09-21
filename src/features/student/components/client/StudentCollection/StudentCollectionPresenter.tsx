@@ -70,10 +70,10 @@ export function StudentCollectionPresenter({
   }
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex flex-col">
       <ContentTitleSection title={"Alumnos"} />
       <DataSection
-        className={"w-full h-full"}
+        className={"w-full flex-1"}
         enableView={["list"]}
         presets={presets}
         getRowId={(student) => student.studentId}

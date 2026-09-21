@@ -3,13 +3,16 @@
 import Diagram from "@/features/offeringCourse/components/Diagram";
 import OfferingClassCardView from "@/features/offeringCourse/components/OfferingClassCardView";
 import type { OfferingCourse } from "@/features/offeringCourse/types/offering-course";
-import SearchBar from "@/shared/component/composite/searchtool/SearchTool";
-import SearchTool from "@/shared/component/composite/searchtool/search-tool/SearchTool";
+import DataSection from "@/shared/component/composite/datasection/DataSection";
+import SidePanel from "@/shared/component/composite/sidePanel/SidePanel";
+import { DataTable } from "@/shared/component/composite/table/DataTable";
+import type { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 import type {
   DataViewConfig,
   DataViewMetadata,
 } from "@/shared/types/dataView.types";
 import type { ReactNode } from "react";
+import type { Table } from "@tanstack/react-table";
 import type { OfferingCourseDraft } from "./scheduleBuilderStore";
 
 type Props = {
@@ -17,22 +20,22 @@ type Props = {
   config: DataViewConfig<OfferingCourse>;
   metadata: DataViewMetadata;
   error: string | null;
-  hasActiveFilters: boolean;
-  isFilterOpen: boolean;
+  filterResult: FilterResult;
   loading: boolean;
-  matchingCourseKeys: Set<string>;
-  onFilterToggle: () => void;
   onSearchTextChange: (value: string) => void;
   offeringCourses: OfferingCourse[];
   pendingCourseKeys: string[];
   drafts: Record<string, OfferingCourseDraft>;
   searchText: string;
   selectedCourseKeys: string[];
+  table: Table<OfferingCourse>;
   onOffer: (offeringCourse: OfferingCourse) => void;
   onOpen: (offeringCourse: OfferingCourse) => void;
+  onClosePanel: () => void;
   onUnoffer: (offeringCourse: OfferingCourse) => void;
   onSessionCountChange: (offeringCourse: OfferingCourse, sessionNumber: number) => void;
-  sidePanel: ReactNode;
+  panelContent: ReactNode;
+  selectedCourseKey: string | null;
 };
 
 /** A student contributes once per study plan, even if IDs overlap between plans. */
@@ -50,22 +53,22 @@ export function ScheduleBuilderPresenter({
   config,
   metadata,
   error,
-  hasActiveFilters,
-  isFilterOpen,
+  filterResult,
   loading,
-  matchingCourseKeys,
-  onFilterToggle,
   onSearchTextChange,
   offeringCourses,
   pendingCourseKeys,
   drafts,
   searchText,
   selectedCourseKeys,
+  table,
   onOffer,
   onOpen,
+  onClosePanel,
   onUnoffer,
   onSessionCountChange,
-  sidePanel,
+  panelContent,
+  selectedCourseKey,
 }: Props) {
   if (loading) {
     return <div>Loading...</div>;
@@ -85,66 +88,123 @@ export function ScheduleBuilderPresenter({
   );
   const maxPosition =
     Math.max(...offeringCourses.map((item) => item.position), 1) + 1;
+  const semesters = Array.from({ length: maxSemester }, (_, index) => index + 1);
+  const positions = Array.from({ length: maxPosition }, (_, index) => index);
+  const cardHideItems = [
+    ...semesters.map((semester) => ({
+      id: `semester:${semester}`,
+      label: `Semestre ${semester}`,
+    })),
+    ...positions.map((position) => ({
+      id: `position:${position}`,
+      label: `Fila ${String.fromCharCode(65 + position)}`,
+    })),
+  ];
 
   return (
-    <div className="flex flex-col gap-2 w-full h-full">
-      <div className="flex items-center gap-3 pt-3 pl-6 z-50">
-        <SearchBar
-          value={searchText}
-          onChange={(event) => onSearchTextChange(event.target.value)}
-          onFilterClick={onFilterToggle}
-          placeholder="buscar por nombre de clase"
-        />
-        <SearchTool
-          config={config}
-          metadata={metadata}
-          onClick={onFilterToggle}
-          isSelected={isFilterOpen}
-        />
-      </div>
-      <div className="flex gap-3 w-full flex-1 min-h-0">
-        <div className="h-full w-full overflow-auto p-2.5">
-          <Diagram maxSemester={maxSemester} maxPosition={maxPosition}>
-            {offeringCourses.map((offeringCourse) => {
-              const draft = drafts[offeringCourse.key];
-              const estimatedNumber = draft
-                ? getEnabledStudentTotal(draft.enabledStudentIdsByStudyPlan)
-                : offeringCourse.estimatedNumber;
-              return (
-              <div
-                key={`${offeringCourse.key}-${offeringCourse.semester}-${offeringCourse.position}`}
-                className={
-                  hasActiveFilters &&
-                  !matchingCourseKeys.has(offeringCourse.key)
-                    ? "grayscale opacity-45 transition"
-                    : "transition"
-                }
-                style={{
-                  gridColumnStart: offeringCourse.semester + 1 || 2,
-                  gridRowStart: offeringCourse.position + 2 || 2,
-                }}
-              >
-                <OfferingClassCardView
-                  offeringClass={offeringCourse}
-                  className="w-full"
-                  estimatedNumber={estimatedNumber}
-                  isSelected={selectedCourseKeys.includes(offeringCourse.key)}
-                  isPending={pendingCourseKeys.includes(offeringCourse.key)}
-                  onOffer={() => onOffer(offeringCourse)}
-                  onOpen={() => onOpen(offeringCourse)}
-				  onSessionCountChange={(sessionNumber) =>
-					  onSessionCountChange(offeringCourse, sessionNumber)
-				  }
-                  onUnoffer={() => onUnoffer(offeringCourse)}
-                  sessionNumber={draft?.sessionNumber}
-                />
-              </div>
+    <SidePanel.Root
+      className="h-full w-full gap-3"
+      mode="push"
+      onPanelChange={(panel) => {
+        if (!panel) onClosePanel();
+      }}
+      panel={
+        selectedCourseKey
+          ? { id: selectedCourseKey, type: "offering-course" }
+          : null
+      }
+      side="right"
+    >
+      <SidePanel.Main className="flex h-full min-w-0 flex-1 flex-col gap-2">
+        <div className="flex w-full flex-1 min-h-0 p-2">
+          <DataSection
+            className="w-full h-full"
+            defaultView="card"
+            searchText={searchText}
+            onSearchTextChange={onSearchTextChange}
+            table={table}
+            tableConfig={config}
+            metadata={metadata}
+            cardHideItems={cardHideItems}
+            listDiagram={<DataTable config={config} table={table} />}
+            cardDiagram={(hiddenItemIds) => {
+              const visibleSemesters = semesters.filter(
+                (semester) => !hiddenItemIds.has(`semester:${semester}`),
               );
-            })}
-          </Diagram>
+              const visiblePositions = positions.filter(
+                (position) => !hiddenItemIds.has(`position:${position}`),
+              );
+
+              return (
+                <div className="h-full w-full overflow-auto p-2.5">
+                  <Diagram
+                    semesters={visibleSemesters}
+                    positions={visiblePositions}
+                  >
+                    {offeringCourses.map((offeringCourse) => {
+                      const columnIndex = visibleSemesters.indexOf(
+                        offeringCourse.semester,
+                      );
+                      const rowIndex = visiblePositions.indexOf(
+                        offeringCourse.position,
+                      );
+                      if (columnIndex < 0 || rowIndex < 0) return null;
+
+                      const draft = drafts[offeringCourse.key];
+                      return (
+                        <div
+                          key={`${offeringCourse.key}-${offeringCourse.semester}-${offeringCourse.position}`}
+                          className={
+                            filterResult.matches.get(offeringCourse.key)
+                              ?.matched !== true
+                              ? "grayscale opacity-45 transition"
+                              : "transition"
+                          }
+                          style={{
+                            gridColumnStart: columnIndex + 2,
+                            gridRowStart: rowIndex + 2,
+                          }}
+                        >
+                          <OfferingClassCardView
+                            offeringClass={offeringCourse}
+                            className="w-full"
+                            estimatedNumber={offeringCourse.estimatedNumber}
+                            isActive={selectedCourseKey === offeringCourse.key}
+                            isOffered={selectedCourseKeys.includes(
+                              offeringCourse.key,
+                            )}
+                            isPending={pendingCourseKeys.includes(
+                              offeringCourse.key,
+                            )}
+                            onOffer={() => onOffer(offeringCourse)}
+                            onOpen={() => onOpen(offeringCourse)}
+                            onSessionCountChange={(sessionNumber) =>
+                              onSessionCountChange(
+                                offeringCourse,
+                                sessionNumber,
+                              )
+                            }
+                            onUnoffer={() => onUnoffer(offeringCourse)}
+                            sessionNumber={draft?.sessionNumber}
+                          />
+                        </div>
+                      );
+                    })}
+                  </Diagram>
+                </div>
+              );
+            }}
+          />
         </div>
-        {sidePanel}
-      </div>
-    </div>
+      </SidePanel.Main>
+      <SidePanel.Viewport
+        aria-label="Oferta de asignatura"
+        className="h-full w-72"
+      >
+        <SidePanel.Content type="offering-course">
+          {() => panelContent}
+        </SidePanel.Content>
+      </SidePanel.Viewport>
+    </SidePanel.Root>
   );
 }

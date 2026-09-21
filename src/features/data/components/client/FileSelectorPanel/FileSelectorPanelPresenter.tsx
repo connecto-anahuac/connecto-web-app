@@ -45,7 +45,7 @@ export function FileSelectorPanelPresenter({
   return (
     <div
       className={cn(
-        "flex h-full w-104 flex-col gap-4 rounded-lg bg-SurfaceContainerLowest p-5",
+        "flex h-full w-104 flex-col gap-4 rounded-lg bg-SurfaceContainerLowest ",
         className,
       )}
     >
@@ -57,7 +57,7 @@ export function FileSelectorPanelPresenter({
         onDragLeave={onDragLeave}
         onDrop={onDrop}
         className={cn(
-          "flex w-full flex-1 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed transition",
+          "flex w-full flex-1 min-h-0 cursor-pointer items-center justify-center rounded-lg border-2 border-dashed transition",
           "border-gray-300",
           isDragging && "border-blue-500 bg-blue-50",
         )}
@@ -66,13 +66,15 @@ export function FileSelectorPanelPresenter({
           <div className="flex h-full w-full flex-col justify-start gap-2 overflow-y-auto p-2">
             {sources.map((source, index) => (
               <FileCardContainer
-                key={`${source.file.name}-${source.file.size}-${source.file.lastModified}-${index}`}
+                key={source.id}
                 career={source.career}
                 file={source.file}
                 fileType={source.fileType}
                 onCareerChange={(value) => onCareerChange(index, value)}
                 onFileTypeChange={(value) => onFileTypeChange(index, value)}
                 onRemove={() => onRemoveSource(index)}
+                isCompleted={source.isCompleted}
+                isError={source.error}
               />
             ))}
           </div>

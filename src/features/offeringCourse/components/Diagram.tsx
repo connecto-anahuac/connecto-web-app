@@ -2,18 +2,18 @@ import ColumnTitle from "@/shared/component/composite/diagram/ColumnTitle";
 import RowTitle from "@/shared/component/composite/diagram/RowTitle";
 
 type Props = {
-	maxSemester: number;
-	maxPosition: number;
+	semesters: readonly number[];
+	positions: readonly number[];
 	children: React.ReactNode;
 };
 
-export default function Diagram({ maxSemester, maxPosition, children }: Props) {
+export default function Diagram({ semesters, positions, children }: Props) {
 	return (
 		<div
 			className="w-fit"
 			style={{
 				display: "grid",
-				gridTemplateColumns: `auto repeat(${maxSemester}, minmax(13rem, 1fr))`,
+				gridTemplateColumns: `auto repeat(${semesters.length}, minmax(13rem, 1fr))`,
 				gridAutoRows: "min-content",
 				gap: "1rem",
 			}}
@@ -34,33 +34,29 @@ export default function Diagram({ maxSemester, maxPosition, children }: Props) {
 				<div className="w-4" />
 			</div>
 
-			{Array.from({ length: maxPosition }, (_, index) => {
-				const position = index + 1;
-
+			{positions.map((position, index) => {
 				return (
 					<div
 						key={`position-${position}`}
 						style={{
 							gridColumnStart: 1,
-							gridRowStart: position + 1,
+							gridRowStart: index + 2,
 							position: "sticky",
 							left: 0,
 							zIndex: 20,
 						}}
 					>
-						<RowTitle text={String.fromCharCode(64 + position)} />
+						<RowTitle text={String.fromCharCode(65 + position)} />
 					</div>
 				);
 			})}
 
-			{Array.from({ length: maxSemester }, (_, index) => {
-				const semester = index + 1;
-
+			{semesters.map((semester, index) => {
 				return (
 					<div
 						key={`semester-${semester}`}
 						style={{
-							gridColumnStart: semester + 1,
+							gridColumnStart: index + 2,
 							gridRowStart: 1,
 							position: "sticky",
 							top: 0,
