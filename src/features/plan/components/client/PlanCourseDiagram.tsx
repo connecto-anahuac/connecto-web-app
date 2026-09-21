@@ -53,7 +53,7 @@ export function PlanCourseDiagram({
             )}
           >
             <PlanClassCardView
-              className="w-full"
+              className="w-full hover:shadow-md"
               title={course.name}
               courseCode={course.keyCode}
               courseNumber={course.keyNumber}

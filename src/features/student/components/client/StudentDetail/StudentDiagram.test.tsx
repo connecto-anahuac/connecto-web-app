@@ -9,7 +9,9 @@ import {
 } from "./StudentDiagram";
 
 vi.mock("@/features/student/components/ui/ClassCardView", () => ({
-  default: ({ title }: { title: string }) => <div>{title}</div>,
+  default: ({ title, className }: { title: string; className?: string }) => (
+    <div className={className}>{title}</div>
+  ),
 }));
 
 vi.mock("@/shared/component/composite/diagram/Diagram", () => {
@@ -95,6 +97,33 @@ describe("StudentDiagram", () => {
     expect(markup).toContain('data-show-locators="true"');
     expect(markup.match(/data-locator-target="true"/g)).toHaveLength(1);
     expect(markup.match(/data-locator-target="false"/g)).toHaveLength(1);
+  });
+
+  it("renders accessible selection buttons and keeps filtered cards disabled", () => {
+    const items = [
+      studentClass("matched", "Matched course", 1, 0),
+      studentClass("unmatched", "Unmatched course", 1, 1),
+    ];
+
+    const markup = renderToStaticMarkup(
+      <StudentDiagram
+        filterResult={{
+          matches: new Map([
+            ["matched", { matched: true }],
+            ["unmatched", { matched: false }],
+          ]),
+        }}
+        items={items}
+      />,
+    );
+
+    expect(markup.match(/<button/g)).toHaveLength(2);
+    expect(markup.match(/aria-pressed="false"/g)).toHaveLength(2);
+    expect(markup).toContain("Matched courseの前提科目を表示");
+    expect(markup).toContain("disabled");
+    expect(markup).toContain("opacity-10");
+    expect(markup.match(/data-student-diagram-card="true"/g)).toHaveLength(2);
+    expect(markup).toContain("w-full hover:shadow-md");
   });
 });
 
