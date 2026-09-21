@@ -36,7 +36,7 @@ const timeSlotRepository = new TimeSlotRepository();
 export const getCoursesService = new GetCoursesService(courseRepository, preRequisitoRepository);
 export const getClassroomsService = new GetClassroomsService(classroomRepository);
 export const getProfessorsService = new GetProfessorsService(professorRepository, courseRepository, classroomRepository, timeSlotRepository);
-export const getStudyPlansService = new GetStudyPlansService(studyPlanRepository, planRepository, courseRepository);
+export const getStudyPlansService = new GetStudyPlansService(studyPlanRepository, planRepository, courseRepository, preRequisitoRepository);
 
 export const getStudentsService = new GetStudentsService(studentRepository);
 

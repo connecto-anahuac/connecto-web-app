@@ -35,12 +35,27 @@ describe("catalog services", () => {
     expect(detail?.availability.find((row) => row.day === "tuesday" && row.timeSlotId === "T1")).toMatchObject({ submissionStatus: "unavailable", isAvailable: false });
   });
 
-  it("joins study-plan relations to course data", async () => {
+  it("joins study-plan relations to course data and direct prerequisites", async () => {
     const service = new GetStudyPlansService(
       { findById: async () => ({ id: "SP", name: "Plan", career: "TIND", firstPeriod: "", admin: "" }) } as never,
-      { findAll: async () => [{ id: "R", name: "Plan", career: "TIND", planId: "SP", courseKey: "A", semester: 2, position: 1 }] } as never,
-      { findAll: async () => [{ key: "A", keyCode: "MAT", keyNumber: "1", name: "Álgebra", hours: 3, credits: 4, block: "" }] } as never,
+      { findAll: async () => [
+        { id: "R1", name: "Plan", career: "TIND", planId: "SP", courseKey: "A", semester: 2, position: 1 },
+        { id: "R2", name: "Plan", career: "TIND", planId: "SP", courseKey: "B", semester: 1, position: 1 },
+      ] } as never,
+      { findAll: async () => [
+        { key: "A", keyCode: "MAT", keyNumber: "1", name: "Álgebra", hours: 3, credits: 4, block: "" },
+        { key: "B", keyCode: "MAT", keyNumber: "2", name: "Cálculo", hours: 3, credits: 4, block: "" },
+      ] } as never,
+      { findAll: async () => [
+        { id: "P1", currentCourseKey: "A", preCourseKey: "B" },
+        { id: "P2", currentCourseKey: "A", preCourseKey: "OUTSIDE" },
+      ] } as never,
     );
-    await expect(service.detail("SP")).resolves.toMatchObject({ courses: [{ courseKey: "A", name: "Álgebra", semester: 2 }] });
+    await expect(service.detail("SP")).resolves.toMatchObject({
+      courses: [
+        { courseKey: "B", name: "Cálculo", semester: 1, preRequisites: [] },
+        { courseKey: "A", name: "Álgebra", semester: 2, preRequisites: ["B", "OUTSIDE"] },
+      ],
+    });
   });
 });

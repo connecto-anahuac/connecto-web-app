@@ -2,20 +2,21 @@
 
 import ColumnTitle from "@/shared/component/composite/diagram/ColumnTitle";
 import { Diagram } from "@/shared/component/composite/diagram/Diagram";
+import {
+  getDiagramCardPresentation,
+  getVisiblePrerequisiteEdges,
+  prerequisiteDiagramCardAttribute,
+  useClearDiagramSelectionOnOutsidePointer,
+} from "@/shared/component/composite/diagram/prerequisiteDiagram";
 import RowTitle from "@/shared/component/composite/diagram/RowTitle";
+import { usePrerequisiteLines } from "@/shared/component/composite/diagram/usePrerequisiteLines";
 import { FilterResult } from "@/shared/service/dataPipeline/filterDefinition";
 import StudentClassCardView from "@/features/student/components/ui/ClassCardView";
 import type { StudentClassItem } from "@/features/student/types";
 import { cn } from "@/shared/lib/util";
 import { type ComponentProps, useMemo } from "react";
 
-import { usePrerequisiteLines } from "./usePrerequisiteLines";
-import {
-  getStudentDiagramCardPresentation,
-  getVisiblePrerequisiteEdges,
-  useClearStudentDiagramSelectionOnOutsidePointer,
-  useStudentDiagramSelection,
-} from "./useStudentDiagramSelection";
+import { useStudentDiagramSelection } from "./useStudentDiagramSelection";
 
 type Props = ComponentProps<"div"> & {
   loading?: boolean;
@@ -87,11 +88,7 @@ export function StudentDiagram({
   );
   const { lines, rootRef, setCardRef } =
     usePrerequisiteLines(visibleEdges);
-  useClearStudentDiagramSelectionOnOutsidePointer(
-    selectedId,
-    rootRef,
-    clearSelection,
-  );
+  useClearDiagramSelectionOnOutsidePointer(selectedId, rootRef, clearSelection);
   const showLocators = items.some(
     (item) => filterResult.matches.get(item.id)?.matched !== true,
   );
@@ -153,7 +150,7 @@ export function StudentDiagram({
           const matchesFilter =
             filterResult.matches.get(item.id)?.matched === true;
           const isHighlighted = highlightedIds.has(item.id);
-          const presentation = getStudentDiagramCardPresentation(
+          const presentation = getDiagramCardPresentation(
             selectedId,
             highlightedIds,
             item.id,
@@ -166,7 +163,7 @@ export function StudentDiagram({
               locatorTarget={matchesFilter}
               className={cn(
                 "relative z-10 transition-opacity",
-                presentation.dimmed && "opacity-40",
+                presentation.dimmed && "opacity-20",
                 presentation.filterHidden && "opacity-10",
               )}
               data-course-id={item.id}
@@ -177,9 +174,10 @@ export function StudentDiagram({
               <button
                 ref={setCardRef(item.id)}
                 type="button"
-                aria-label={`${item.name}prerequisitos`}
+                aria-label={`${item.name}の前提科目を表示`}
                 aria-pressed={selectedId === item.id}
                 className="block w-full rounded-lg text-left focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-default"
+                {...{ [prerequisiteDiagramCardAttribute]: "true" }}
                 data-student-diagram-card="true"
                 disabled={!presentation.interactive}
                 onClick={() => toggleSelection(item.id)}

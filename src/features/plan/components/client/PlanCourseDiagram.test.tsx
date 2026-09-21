@@ -82,6 +82,34 @@ describe("PlanCourseDiagram", () => {
 
     expect(markup).toContain('data-show-locators="false"');
   });
+
+  it("renders accessible selection buttons and disables unmatched courses", () => {
+    const courses = [
+      course("matched", "Matched course", 1, 0),
+      course("unmatched", "Unmatched course", 2, 0),
+    ];
+
+    const markup = renderToStaticMarkup(
+      <PlanCourseDiagram
+        courses={courses}
+        filterResult={{
+          matches: new Map([
+            ["matched", { matched: true }],
+            ["unmatched", { matched: false }],
+          ]),
+        }}
+      />,
+    );
+
+    expect(markup.match(/<button/g)).toHaveLength(2);
+    expect(markup.match(/aria-pressed="false"/g)).toHaveLength(2);
+    expect(markup).toContain("Matched courseの前提科目を表示");
+    expect(markup).toContain("disabled");
+    expect(markup).toContain("opacity-10");
+    expect(
+      markup.match(/data-prerequisite-diagram-card="true"/g),
+    ).toHaveLength(2);
+  });
 });
 
 function course(
@@ -92,6 +120,7 @@ function course(
 ): StudyPlanCourseDto {
   return {
     id,
+    courseKey: id,
     name,
     semester,
     position,
@@ -99,5 +128,6 @@ function course(
     keyNumber: id,
     credits: 3,
     hours: 4,
-  } as StudyPlanCourseDto;
+    preRequisites: [],
+  };
 }
