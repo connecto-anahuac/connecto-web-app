@@ -106,7 +106,8 @@ export function StudentDetailPresenter({
                   label="Generales"
                   selected={selectedTab === "overview"}
                   icon={<Icons.list />}
-                  className="data-[state=active]:bg-connecto-muted-panel data-[state=active]:text-connecto-ink"
+                  className="data-[state=active]:bg-DividerLow data-[state=active]:text-OnSurface
+                  text-OnSurface-60 hover:bg-DividerLowest"
                 />
               </Tabs.Trigger>
               <Tabs.Trigger value="curriculum" asChild>
@@ -114,8 +115,9 @@ export function StudentDetailPresenter({
                   label="Plan de estudios"
                   selected={selectedTab === "curriculum"}
                   icon={<Icons.curriculum />}
-                  className="data-[state=active]:bg-connecto-muted-panel data-[state=active]:text-connecto-ink"
-                />
+               
+                  className="data-[state=active]:bg-DividerLow data-[state=active]:text-OnSurface
+                  text-OnSurface-60 hover:bg-DividerLowest" />
               </Tabs.Trigger>
             </Tabs.List>
             <div className="w-full h-px bg-DividerMiddle" />
