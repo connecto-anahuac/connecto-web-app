@@ -11,6 +11,7 @@ import IconButton from "@/shared/component/primitive/button/IconButton";
 import PanelControllButton from "@/shared/component/primitive/button/PanelControllButton";
 import { useMenu } from "../useMenu";
 import ToolTipWrapper from "@/shared/component/primitive/ToolTipWrapper";
+import Breadcrumbs from "./Breadcrumbs";
 import { useNavigationAvailability } from "./useNavigationAvailability";
 
 type Props = ComponentProps<"div">;
@@ -46,7 +47,7 @@ export default function Header({ className, ...props }: Props) {
       </div>
 
       {/* navigation */}
-      <div className="flex items-center gap-0 ml-8 mr-auto text-OnSurface">
+      <div className="flex min-w-0 items-center gap-0 ml-8 mr-auto text-OnSurface">
         <ToolTipWrapper hint="Atrás">
           <IconButton
             type="button"
@@ -69,9 +70,7 @@ export default function Header({ className, ...props }: Props) {
           />
         </ToolTipWrapper>
 
-        <span className="ml-5 font-semibold text-OnSurfaceVariant text-xs">
-          alumnos
-        </span>
+        <Breadcrumbs className="ml-5 max-w-80" />
       </div>
 
       <SearchBar className="w-80" placeholder="buscar en todo el workspace" />

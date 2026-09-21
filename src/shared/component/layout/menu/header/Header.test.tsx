@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import Header from "./Header";
@@ -7,7 +7,7 @@ type NavigationButton = {
   ariaLabel?: string;
   disabled?: boolean;
   onClick?: () => void;
-  type?: string;
+  type?: ComponentProps<"button">["type"];
 };
 
 type MenuState = {
@@ -16,6 +16,7 @@ type MenuState = {
 };
 
 const mocks = vi.hoisted(() => ({
+  pathname: "/students",
   router: {
     back: vi.fn(),
     forward: vi.fn(),
@@ -28,6 +29,7 @@ const mocks = vi.hoisted(() => ({
 }));
 
 vi.mock("next/navigation", () => ({
+  usePathname: () => mocks.pathname,
   useRouter: () => mocks.router,
 }));
 
@@ -51,7 +53,7 @@ vi.mock("@/shared/component/primitive/button/IconButton", () => ({
     disabled?: boolean;
     icon: string;
     onClick?: () => void;
-    type?: string;
+    type?: ComponentProps<"button">["type"];
   }) => {
     if (icon === "arrow") {
       mocks.navigationButtons.push({ ariaLabel, disabled, onClick, type });
