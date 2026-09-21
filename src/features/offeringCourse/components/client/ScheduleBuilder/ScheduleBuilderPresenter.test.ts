@@ -1,4 +1,4 @@
-import { createElement } from "react";
+import { createElement, type ReactElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import type { Table } from "@tanstack/react-table";
 import { describe, expect, it, vi } from "vitest";
@@ -8,11 +8,21 @@ import {
   ScheduleBuilderPresenter,
 } from "./ScheduleBuilderPresenter";
 
-const { dataSectionSpy } = vi.hoisted(() => ({ dataSectionSpy: vi.fn() }));
+const { dataSectionSpy, offeringClassCardSpy } = vi.hoisted(() => ({
+  dataSectionSpy: vi.fn(),
+  offeringClassCardSpy: vi.fn(),
+}));
 
 vi.mock("@/shared/component/composite/datasection/DataSection", () => ({
   default: (props: unknown) => {
     dataSectionSpy(props);
+    return null;
+  },
+}));
+
+vi.mock("@/features/offeringCourse/components/OfferingClassCardView", () => ({
+  default: (props: unknown) => {
+    offeringClassCardSpy(props);
     return null;
   },
 }));
@@ -109,6 +119,120 @@ describe("ScheduleBuilderPresenter", () => {
     expect(openMarkup).toContain("Offering course panel");
     expect(closedMarkup).not.toContain('aria-label="Oferta de asignatura"');
     expect(closedMarkup).not.toContain("Offering course panel");
+  });
+
+  it("wires panel activity separately from offered state on each card", () => {
+    dataSectionSpy.mockClear();
+    offeringClassCardSpy.mockClear();
+    const activeCourse = offeringCourse();
+    const offeredCourse = { ...offeringCourse(), key: "TIND-102", keyNumber: "102" };
+
+    renderToStaticMarkup(
+      createElement(ScheduleBuilderPresenter, {
+        career: "TIND",
+        config: { fields: [] },
+        metadata: { optionsByFieldId: {} },
+        error: null,
+        filterResult: {
+          matches: new Map([
+            [activeCourse.key, { matched: true }],
+            [offeredCourse.key, { matched: true }],
+          ]),
+        },
+        loading: false,
+        onSearchTextChange: () => undefined,
+        offeringCourses: [activeCourse, offeredCourse],
+        pendingCourseKeys: [],
+        drafts: {},
+        searchText: "",
+        selectedCourseKeys: [offeredCourse.key],
+        table: {} as Table<OfferingCourse>,
+        onOffer: () => undefined,
+        onOpen: () => undefined,
+        onClosePanel: () => undefined,
+        onUnoffer: () => undefined,
+        onSessionCountChange: () => undefined,
+        panelContent: createElement("div"),
+        selectedCourseKey: activeCourse.key,
+      }),
+    );
+
+    const dataSectionProps = dataSectionSpy.mock.calls[0]?.[0] as {
+      cardDiagram: (hiddenItemIds: ReadonlySet<string>) => ReactElement;
+    };
+    renderToStaticMarkup(dataSectionProps.cardDiagram(new Set()));
+
+    expect(offeringClassCardSpy).toHaveBeenCalledTimes(2);
+    expect(offeringClassCardSpy.mock.calls[0]?.[0]).toMatchObject({
+      isActive: true,
+      isOffered: false,
+    });
+    expect(offeringClassCardSpy.mock.calls[1]?.[0]).toMatchObject({
+      isActive: false,
+      isOffered: true,
+    });
+  });
+
+  it("hides diagram semesters and positions independently from the list", () => {
+    dataSectionSpy.mockClear();
+    offeringClassCardSpy.mockClear();
+    const firstCourse = offeringCourse();
+    const secondCourse = {
+      ...offeringCourse(),
+      key: "TIND-202",
+      keyNumber: "202",
+      semester: 2,
+      position: 2,
+    };
+
+    renderToStaticMarkup(
+      createElement(ScheduleBuilderPresenter, {
+        career: "TIND",
+        config: { fields: [] },
+        metadata: { optionsByFieldId: {} },
+        error: null,
+        filterResult: {
+          matches: new Map([
+            [firstCourse.key, { matched: true }],
+            [secondCourse.key, { matched: true }],
+          ]),
+        },
+        loading: false,
+        onSearchTextChange: () => undefined,
+        offeringCourses: [firstCourse, secondCourse],
+        pendingCourseKeys: [],
+        drafts: {},
+        searchText: "",
+        selectedCourseKeys: [],
+        table: {} as Table<OfferingCourse>,
+        onOffer: () => undefined,
+        onOpen: () => undefined,
+        onClosePanel: () => undefined,
+        onUnoffer: () => undefined,
+        onSessionCountChange: () => undefined,
+        panelContent: createElement("div"),
+        selectedCourseKey: null,
+      }),
+    );
+
+    const props = dataSectionSpy.mock.calls[0]?.[0] as {
+      cardDiagram: (hiddenItemIds: ReadonlySet<string>) => ReactElement;
+      cardHideItems: { id: string; label: string }[];
+      listDiagram: ReactElement;
+    };
+    expect(props.cardHideItems).toEqual(
+      expect.arrayContaining([
+        { id: "semester:2", label: "Semestre 2" },
+        { id: "position:2", label: "Fila C" },
+      ]),
+    );
+    expect(props.listDiagram).toBeDefined();
+
+    renderToStaticMarkup(props.cardDiagram(new Set(["semester:2"])));
+    expect(offeringClassCardSpy).toHaveBeenCalledTimes(1);
+    expect(offeringClassCardSpy.mock.calls[0]?.[0]).toMatchObject({
+      offeringClass: firstCourse,
+    });
   });
 });
 

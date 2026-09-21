@@ -76,6 +76,9 @@ function ScheduleBuilderContainerContent({ career, period }: Props) {
     globalFilter,
     setGlobalFilter,
   } = useScheduleBuilderFilters(displayOfferingCourses);
+  const selectedOfferingCourse = selectedCourseKey
+    ? displayOfferingCourses.find((course) => course.key === selectedCourseKey)
+    : undefined;
 
   return (
     <ScheduleBuilderPresenter
@@ -97,7 +100,16 @@ function ScheduleBuilderContainerContent({ career, period }: Props) {
 	  onClosePanel={closePanel}
 	  onUnoffer={(course) => void unofferCourse(course)}
 	  onSessionCountChange={(course, sessionNumber) => void setCourseSessionNumber(course, sessionNumber)}
-	  panelContent={<OfferingCoursePanel className="h-full w-full" />}
+	  panelContent={
+        <OfferingCoursePanel
+          className="h-full w-full"
+          isOffered={selectedOfferingCourse ? selectedCourseKeys.includes(selectedOfferingCourse.key) : false}
+          isPending={selectedOfferingCourse ? pendingCourseKeys.includes(selectedOfferingCourse.key) : false}
+          onOffer={() => {
+            if (selectedOfferingCourse) void offerCourse(selectedOfferingCourse);
+          }}
+        />
+      }
 	  selectedCourseKey={selectedCourseKey}
     />
   );

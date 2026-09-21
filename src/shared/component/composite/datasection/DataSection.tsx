@@ -19,6 +19,9 @@ import ButtonModal from "../../primitive/ButtonModal";
 import { GraphSwitcher } from "./GraphSwitcher";
 import type { SearchTool } from "./buttonmodal/type";
 import HideButtonModal from "./buttonmodal/HideButtonModal";
+import DiagramHideButtonModal, {
+  type DiagramHideItem,
+} from "./buttonmodal/DiagramHideButtonModal";
 import PivotButtonModal from "./buttonmodal/PivotButtonModal";
 import FilterButtonGroup from "../../primitive/button/FilterButtonGroup";
 import { DataSectionFilterProvider } from "./DataSectionFilterContext";
@@ -29,7 +32,8 @@ type BaseDataSectionProps = ComponentProps<"div"> & {
   enableView?: ("list" | "card")[];
   listTools?: SearchTool[];
   cardviewTools?: SearchTool[];
-  cardDiagram?: ReactNode;
+  cardDiagram?: ReactNode | ((hiddenItemIds: ReadonlySet<string>) => ReactNode);
+  cardHideItems?: readonly DiagramHideItem[];
   onListClick?: () => void;
   onCardViewClick?: () => void;
   onViewChange?: (view: "list" | "card") => void;
@@ -93,6 +97,7 @@ export default function DataSection<TItem>({
   cardviewTools = ["filter", "hide"],
   listDiagram,
   cardDiagram,
+  cardHideItems,
   defaultView = "list",
   enableView = ["list", "card"],
   searchText,
@@ -112,6 +117,9 @@ export default function DataSection<TItem>({
   );
   const [openedTool, setOpenedTool] = useState<SearchTool | null>(null);
   const [openedFilterId, setOpenedFilterId] = useState<string | null>(null);
+  const [hiddenCardItemIds, setHiddenCardItemIds] = useState<Set<string>>(
+    () => new Set(),
+  );
 
   const [draggedSortId, setDraggedSortId] = useState<string | null>(null);
 
@@ -136,6 +144,15 @@ export default function DataSection<TItem>({
     const [moved] = sorting.splice(fromIndex, 1);
     sorting.splice(toIndex, 0, moved!);
     table.setSorting(sorting);
+  };
+
+  const toggleCardItem = (id: string) => {
+    setHiddenCardItemIds((current) => {
+      const next = new Set(current);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
   };
 
   return (
@@ -323,7 +340,17 @@ export default function DataSection<TItem>({
             </ButtonModal>
           )}
 
-          {isToolEnable("hide") && (
+          {isToolEnable("hide") && selectedView === "card" && cardHideItems ? (
+            <DiagramHideButtonModal
+              open={openedTool === "hide"}
+              onOpenChange={() =>
+                setOpenedTool((tool) => (tool === "hide" ? null : "hide"))
+              }
+              items={cardHideItems}
+              hiddenItemIds={hiddenCardItemIds}
+              onItemToggle={toggleCardItem}
+            />
+          ) : isToolEnable("hide") ? (
             <HideButtonModal
               open={
                 openedTool === "hide" &&
@@ -340,7 +367,7 @@ export default function DataSection<TItem>({
                 ?.getAllLeafColumns()
                 .some((column) => !column.getIsVisible())}
             />
-          )}
+          ) : null}
 
           {isToolEnable("pivot") && (
             <PivotButtonModal
@@ -408,7 +435,9 @@ export default function DataSection<TItem>({
                       onRowDoubleClick={(item) => onRowOpen(getRowId(item))}
                     />
                   )))
-            : cardDiagram}
+            : typeof cardDiagram === "function"
+              ? cardDiagram(hiddenCardItemIds)
+              : cardDiagram}
         </div>
       </div>
     </DataSectionFilterProvider>

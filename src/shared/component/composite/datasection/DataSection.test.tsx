@@ -96,6 +96,30 @@ describe("DataSection", () => {
     expect(markup).toMatch(/aria-label="List view"[^>]*aria-pressed="false"/);
   });
 
+  it("provides card visibility separately to a card diagram renderer", () => {
+    let receivedHiddenIds: ReadonlySet<string> | undefined;
+    const markup = renderToStaticMarkup(
+      <DataSection<Item>
+        cardDiagram={(hiddenItemIds) => {
+          receivedHiddenIds = hiddenItemIds;
+          return <div>Configurable card view</div>;
+        }}
+        cardHideItems={[
+          { id: "semester:1", label: "Semestre 1" },
+          { id: "position:0", label: "Fila A" },
+        ]}
+        defaultView="card"
+        listDiagram={<div>Custom list</div>}
+        table={createTable()}
+        tableConfig={config}
+      />,
+    );
+
+    expect(markup).toContain("Configurable card view");
+    expect(receivedHiddenIds).toBeInstanceOf(Set);
+    expect(receivedHiddenIds?.size).toBe(0);
+  });
+
   it("does not render an aside for a supplied custom list diagram", () => {
     const customProps = {
       listDiagram: <div>Custom list</div>,

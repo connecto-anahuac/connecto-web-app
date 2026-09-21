@@ -2,7 +2,12 @@ import type { StudentClassItem } from "@/features/student/types";
 import * as Tabs from "@radix-ui/react-tabs";
 import ContentTitleSection from "@/shared/component/primitive/ContentTitleSection";
 import DataSection from "@/shared/component/composite/datasection/DataSection";
-import { StudentDiagram } from "./StudentDiagram";
+import {
+  getStudentDiagramAxes,
+  StudentDiagram,
+  studentPositionHideId,
+  studentSemesterHideId,
+} from "./StudentDiagram";
 import type { FilterPreset } from "@/shared/service/dataPipeline/filterPreset.type";
 import type { Table } from "@tanstack/react-table";
 import type {
@@ -65,6 +70,18 @@ export function StudentDetailPresenter({
   onTabChange,
   className,
 }: StudentDetailPresenterProps) {
+  const diagramAxes = getStudentDiagramAxes(studentGrades);
+  const cardHideItems = [
+    ...diagramAxes.semesters.map((semester) => ({
+      id: studentSemesterHideId(semester),
+      label: `Semestre ${semester}`,
+    })),
+    ...diagramAxes.positions.map((position) => ({
+      id: studentPositionHideId(position),
+      label: `Fila ${String.fromCharCode(65 + position)}`,
+    })),
+  ];
+
   return (
     <div className={cn("flex flex-col gap-3 pb-0 w-full h-full @container", className)}>
       <ContentTitleSection title={"Alumno"} />
@@ -146,13 +163,15 @@ export function StudentDetailPresenter({
               table={table}
               tableConfig={tableConfig}
               metadata={metadata}
+              cardHideItems={cardHideItems}
               listDiagram={<DataTable config={tableConfig} table={table} />}
-              cardDiagram={
+              cardDiagram={(hiddenItemIds) => (
                 <StudentDiagram
                   items={studentGrades}
                   filterResult={filterResult}
+                  hiddenItemIds={hiddenItemIds}
                 />
-              }
+              )}
             />
           </Tabs.Content>
         </Tabs.Root>
